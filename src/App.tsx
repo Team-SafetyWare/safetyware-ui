@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
         <Switch>
-          {/* once login is complete, must add component={Login} to following route*/}
+          {/* no component for login yet*/}
           <Route exact path="/login"/>
           <Route exact path="/" component={Home}>
           </Route>
