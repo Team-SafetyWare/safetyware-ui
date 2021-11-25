@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit&display=swap");
+
 .App {
   text-align: center;
 }
@@ -35,4 +37,34 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Styling Specific to Sidebar */
+
+.sidebar {
+  display: flex;
+}
+
+.sidebar .MuiDrawer-root {
+  flex-shrink: 0;
+  width: 240px;
+}
+
+.sidebar .MuiListItemIcon-root {
+  color: white;
+}
+
+.sidebar .MuiPaper-root {
+  background-color: #d34949;
+  box-sizing: border-box;
+  color: white;
+  width: 240px;
+}
+
+.sidebar-menu {
+  overflow: auto;
+}
+
+.sidebar-footer {
+  margin-top: auto;
 }
