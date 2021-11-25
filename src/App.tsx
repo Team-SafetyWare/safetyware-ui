@@ -1,10 +1,9 @@
-import React from 'react';
-import { createTheme } from '@mui/material/styles';
-import { ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { Home } from './components/Home'
-import { Sidebar } from './components/Sidebar'
-import './App.css';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "./App.css";
+import { Home } from "./components/Home";
+import { Sidebar } from "./components/Sidebar";
 
 const theme = createTheme({
   typography: {
