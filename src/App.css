@@ -48,6 +48,7 @@
 .sidebar .MuiDrawer-root {
   flex-shrink: 0;
   width: 240px;
+  z-index: 1;
 }
 
 .sidebar .MuiListItemIcon-root {
@@ -68,3 +69,12 @@
 .sidebar-footer {
   margin-top: auto;
 }
+
+/* Styling Specific to Navbar */
+
+@font-face
+{
+  font-family: "Myriad";
+  src: local('Myriad'), url(./fonts/myriad-hebrew-bold-2.otf), format('opentype');
+}
+
