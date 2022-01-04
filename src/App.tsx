@@ -1,11 +1,10 @@
-import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { Home } from './components/Home'
-import { Sidebar } from './components/Sidebar'
-import { NavBar } from './components/NavBar'
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
+import { Home } from './components/Home';
+import { NavBar } from './components/NavBar';
+import { Sidebar } from './components/Sidebar';
 
 
 const theme = createTheme({
