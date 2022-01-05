@@ -12,9 +12,41 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { StyledEngineProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
+import { makeStyles } from "@mui/styles";
 import React from "react";
 
+const useStyles = makeStyles({
+  sidebar: {
+    display: "flex",
+
+    "& .MuiDrawer-root": {
+      flexShrink: 0,
+      width: 240,
+      zIndex: 1,
+    },
+
+    "& .MuiListItemIcon-root": {
+      color: "white",
+    },
+
+    "& .MuiPaper-root": {
+      backgroundColor: "#d34949",
+      boxSizing: "border-box",
+      color: "white",
+      width: 240,
+    },
+  },
+  sidebarMenu: {
+    overflow: "auto",
+  },
+  sidebarFooter: {
+    marginTop: "auto",
+  },
+});
+
 export const Sidebar: React.FC = () => {
+  const styles = useStyles();
+
   const sidebarItems = [
     { text: "Dashboard", icon: HomeOutlinedIcon },
     { text: "Locations", icon: ExploreOutlinedIcon },
@@ -23,11 +55,11 @@ export const Sidebar: React.FC = () => {
   ];
   return (
     <StyledEngineProvider injectFirst>
-      <Box className="sidebar">
+      <Box className={styles.sidebar}>
         <CssBaseline />
         <Drawer variant="permanent" anchor="left">
           <Toolbar />
-          <Box className="sidebar-menu">
+          <Box className={styles.sidebarMenu}>
             <List>
               {sidebarItems.map((sidebarItem) => (
                 <ListItem button key={sidebarItem.text}>
@@ -39,7 +71,7 @@ export const Sidebar: React.FC = () => {
               ))}
             </List>
           </Box>
-          <List className="sidebar-footer">
+          <List className={styles.sidebarFooter}>
             <ListItem button>
               <ListItemIcon>
                 <AccountCircleOutlinedIcon />
