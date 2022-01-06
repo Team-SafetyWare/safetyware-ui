@@ -1,6 +1,7 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import ProfilePicture from "../assets/183.png";
+import { TeamInfo } from "./UI/atoms/TeamInfo";
 import { UserInfo } from "./UI/atoms/UserInfo";
 
 const useStyles = makeStyles({
@@ -20,7 +21,8 @@ export const UserAccount: React.FC = () => {
         userPhone={"123-456-7890"}
         userEmail={"jane.doe@blackline.ca"}
         userTeam={"Team 123-ABC-456"}
-      ></UserInfo>
+      />
+      <TeamInfo />
     </div>
   );
 };
