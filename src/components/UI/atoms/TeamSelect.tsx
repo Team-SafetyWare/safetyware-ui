@@ -12,7 +12,7 @@ export const TeamSelect: React.FC<TeamSelectProps> = (props) => {
   const styles = useStyles();
 
   return (
-    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+    <FormControl variant="standard" sx={{ minWidth: 120 }}>
       <Select
         defaultValue={"123-ABC-456"}
         disableUnderline

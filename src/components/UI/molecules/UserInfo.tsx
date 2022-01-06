@@ -22,22 +22,10 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     alignContent: "center",
+    marginRight: "20px",
   },
   userDetails: {
     fontSize: "18px",
-  },
-  userName: {
-    fontSize: "30px",
-    margin: "5px 0",
-  },
-  userTitle: {
-    margin: 0,
-  },
-  userContact: {
-    margin: 0,
-  },
-  userTeam: {
-    margin: 0,
   },
 });
 
