@@ -7,13 +7,14 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { StyledEngineProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles({
   sidebar: {
@@ -48,10 +49,10 @@ export const Sidebar: React.FC = () => {
   const styles = useStyles();
 
   const sidebarItems = [
-    { text: "Dashboard", icon: HomeOutlinedIcon },
-    { text: "Locations", icon: ExploreOutlinedIcon },
-    { text: "Incidents", icon: BarChartOutlinedIcon },
-    { text: "Gases", icon: BubbleChartOutlinedIcon },
+    { text: "Home", icon: HomeOutlinedIcon, link: "/" },
+    { text: "Locations", icon: ExploreOutlinedIcon, link: "/locations" },
+    { text: "Incidents", icon: BarChartOutlinedIcon, link: "/incidents" },
+    { text: "Gases", icon: BubbleChartOutlinedIcon, link: "/gases" },
   ];
   return (
     <StyledEngineProvider injectFirst>
@@ -62,22 +63,26 @@ export const Sidebar: React.FC = () => {
           <Box className={styles.sidebarMenu}>
             <List>
               {sidebarItems.map((sidebarItem) => (
-                <ListItem button key={sidebarItem.text}>
+                <ListItemButton
+                  component={RouterLink}
+                  key={sidebarItem.text}
+                  to={sidebarItem.link}
+                >
                   <ListItemIcon>
                     <sidebarItem.icon />
                   </ListItemIcon>
                   <ListItemText primary={sidebarItem.text} />
-                </ListItem>
+                </ListItemButton>
               ))}
             </List>
           </Box>
           <List className={styles.sidebarFooter}>
-            <ListItem button>
+            <ListItemButton component={RouterLink} to="/user-account">
               <ListItemIcon>
                 <AccountCircleOutlinedIcon />
               </ListItemIcon>
               <ListItemText primary="User Account" />
-            </ListItem>
+            </ListItemButton>
           </List>
         </Drawer>
       </Box>
