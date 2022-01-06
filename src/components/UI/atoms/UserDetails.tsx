@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const UserInfo: React.FC<UserInfoProps> = (props) => {
+export const UserDetails: React.FC<UserInfoProps> = (props) => {
   const styles = useStyles();
 
   return (
