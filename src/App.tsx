@@ -10,6 +10,7 @@ import { Sidebar } from "./components/Sidebar";
 import { UserAccount } from "./components/UserAccount";
 
 const theme = createTheme({
+  // Use the system font instead of the default Roboto font.
   typography: {
     fontFamily: [
       "-apple-system",

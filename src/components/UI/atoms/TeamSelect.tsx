@@ -1,10 +1,18 @@
 import FormControl from "@mui/material/FormControl";
+import InputBase from "@mui/material/InputBase";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
 interface TeamSelectProps {}
+
+const BootstrapInput = styled(InputBase)(({ theme }) => ({
+  "& .MuiSelect-select": {
+    fontWeight: "bold",
+  },
+}));
 
 const useStyles = makeStyles({ selectBar: { fontWeight: "bold" } });
 
@@ -15,6 +23,7 @@ export const TeamSelect: React.FC<TeamSelectProps> = (props) => {
     <FormControl variant="standard" sx={{ minWidth: 120 }}>
       <Select
         defaultValue={"123-ABC-456"}
+        input={<BootstrapInput />}
         disableUnderline
         //   value={team}
         //   onChange={handleChange}
