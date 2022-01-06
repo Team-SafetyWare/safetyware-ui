@@ -49,6 +49,7 @@
   flex-shrink: 0;
   width: 240px;
   z-index: 1;
+
 }
 
 .sidebar .MuiListItemIcon-root {
@@ -64,10 +65,14 @@
 
 .sidebar-menu {
   overflow: auto;
+  margin-left: 20px;
+  margin-top: 10px;
 }
 
 .sidebar-footer {
   margin-top: auto;
+  margin-left: 20px;
+  margin-bottom: 10px;
 }
 
 /* Styling Specific to Navbar */
