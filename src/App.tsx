@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import { Home } from "./components/Home";
+import { NavBar } from "./components/NavBar";
 import { Sidebar } from "./components/Sidebar";
 
 const theme = createTheme({
@@ -15,8 +16,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        <NavBar />
         <Sidebar />
-        {/*<NavBar />*/}
         <Switch>
           {/* no component for login yet*/}
           <Route exact path="/login" />
