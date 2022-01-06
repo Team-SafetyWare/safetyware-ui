@@ -1,7 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import UndoIcon from "@mui/icons-material/Undo";
-import Button from "@mui/material/Button";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
@@ -10,10 +9,8 @@ import React from "react";
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
-  homeButton: {
-    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-    color: "red",
-    height: 69,
+  placeholderDiv: {
+    textAlign: "center",
   },
   fab: {
     backgroundColor: "#d34949",
@@ -28,7 +25,7 @@ const actions = [
 ];
 
 export const Home: React.FC = () => {
-  const classes = useStyles();
+  const styles = useStyles();
 
   return (
     <div>
@@ -46,11 +43,9 @@ export const Home: React.FC = () => {
           />
         ))}
       </SpeedDial>
-      <h1>Home</h1>
-      {/* you can add custom styling to MUI components using useStyles! yay! */}
-      <Button className={classes.homeButton} variant="contained">
-        wassup
-      </Button>
+      <div className={styles.placeholderDiv}>
+        <h1>Home</h1>
+      </div>
     </div>
   );
 };
