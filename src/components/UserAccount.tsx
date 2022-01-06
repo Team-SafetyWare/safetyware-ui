@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import ProfilePicture from "../assets/183.png";
 import { UserInfo } from "./UI/atoms/UserInfo";
 
 const useStyles = makeStyles({
@@ -13,6 +14,7 @@ export const UserAccount: React.FC = () => {
   return (
     <div className={styles.tempBody}>
       <UserInfo
+        userPhoto={ProfilePicture}
         userName={"Jane Doe"}
         userTitle={"Senior Manager at Blackline Safety"}
         userPhone={"123-456-7890"}
