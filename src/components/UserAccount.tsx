@@ -4,16 +4,8 @@ import ProfilePicture from "../assets/183.png";
 import { UserAccountTemplate } from "./templates/UserAccountTemplate";
 
 const useStyles = makeStyles({
-  tempBody: {
-    display: "flex",
-    flexDirection: "column",
-    width: "65vw",
-    marginLeft: "5vw",
-    marginTop: "5vh",
-  },
-  temp: {
+  UserAccountBody: {
     marginLeft: "240px",
-    backgroundColor: "#F8F8F8",
   },
 });
 
@@ -24,7 +16,7 @@ export const UserAccount: React.FC = () => {
   //       be easier
 
   return (
-    <div className={styles.temp}>
+    <div className={styles.UserAccountBody}>
       <UserAccountTemplate
         userPhoto={ProfilePicture}
         userName={"Jane Doe"}
