@@ -1,13 +1,9 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
-interface UserInfoProps {
+interface UserPictureProps {
   userPhoto?: string;
   userName?: string;
-  userTitle?: string;
-  userPhone?: string;
-  userEmail?: string;
-  userTeam?: string;
 }
 
 const useStyles = makeStyles({
@@ -19,7 +15,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const UserPicture: React.FC<UserInfoProps> = (props) => {
+export const UserPicture: React.FC<UserPictureProps> = (props) => {
   const styles = useStyles();
 
   return (
