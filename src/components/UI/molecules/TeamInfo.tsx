@@ -3,17 +3,28 @@ import React from "react";
 import { TeamSelect } from "../atoms/TeamSelect";
 import { TeamTable } from "../atoms/TeamTable";
 
-interface TeamInfoProps {}
+interface TeamInfoProps {
+  userPhoto?: string;
+  userName?: string;
+}
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+  teamInfo: {
+    width: "100%",
+    marginTop: "5vh",
+  },
+});
 
 export const TeamInfo: React.FC<TeamInfoProps> = (props) => {
   const styles = useStyles();
 
   return (
-    <>
+    <div className={styles.teamInfo}>
       <TeamSelect></TeamSelect>
-      <TeamTable></TeamTable>
-    </>
+      <TeamTable
+        userPhoto={props.userPhoto}
+        userName={props.userName}
+      ></TeamTable>
+    </div>
   );
 };

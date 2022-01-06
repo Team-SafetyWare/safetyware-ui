@@ -1,3 +1,4 @@
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
@@ -7,11 +8,14 @@ interface UserPictureProps {
 }
 
 const useStyles = makeStyles({
-  userPhoto: {
+  editBox: {
     display: "flex",
-    flexDirection: "column",
     alignItems: "center",
-    alignContent: "center",
+    margin: "0",
+  },
+  editText: {
+    height: "100%",
+    marginLeft: "5px",
   },
 });
 
@@ -21,7 +25,10 @@ export const UserPicture: React.FC<UserPictureProps> = (props) => {
   return (
     <>
       <img src={props.userPhoto} alt={props.userName} />
-      <p>Edit</p>
+      <div className={styles.editBox}>
+        <EditOutlinedIcon />
+        <div className={styles.editText}>Edit</div>
+      </div>
     </>
   );
 };

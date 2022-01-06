@@ -1,7 +1,11 @@
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
-interface TeamTableProps {}
+interface TeamTableProps {
+  userPhoto?: string;
+  userName?: string;
+}
 
 const useStyles = makeStyles({
   teamTable: {
@@ -19,6 +23,18 @@ const useStyles = makeStyles({
   tableColumn: {
     border: "1px solid black",
     padding: "10px",
+    backgroundColor: "white",
+  },
+  memberColumn: {
+    display: "flex",
+    height: "24px",
+    justifyContent: "center",
+  },
+  memberName: {
+    margin: "0 5px",
+  },
+  memberPicture: {
+    height: "24px",
   },
 });
 
@@ -33,17 +49,36 @@ export const TeamTable: React.FC<TeamTableProps> = (props) => {
         <td className={styles.tableColumn}>Role</td>
       </tr>
       <tr className={styles.tableRow}>
-        <td className={styles.tableColumn}>Jane Doe (You)</td>
+        <td className={styles.tableColumn}>
+          <div className={styles.memberColumn}>
+            <img
+              className={styles.memberPicture}
+              src={props.userPhoto}
+              alt={"test"}
+            />
+            <p className={styles.memberName}>{props.userName} (You)</p>
+          </div>
+        </td>
         <td className={styles.tableColumn}>jane.doe@blackline.ca</td>
         <td className={styles.tableColumn}>Manager</td>
       </tr>
       <tr className={styles.tableRow}>
-        <td className={styles.tableColumn}>Jeff Davids</td>
+        <td className={styles.tableColumn}>
+          <div className={styles.memberColumn}>
+            <AccountCircleOutlinedIcon />
+            <p className={styles.memberName}>Jeff Davids</p>
+          </div>
+        </td>
         <td className={styles.tableColumn}>jeff.davids@blackline.ca</td>
         <td className={styles.tableColumn}>Member</td>
       </tr>
       <tr className={styles.tableRow}>
-        <td className={styles.tableColumn}>John Hanley</td>
+        <td className={styles.tableColumn}>
+          <div className={styles.memberColumn}>
+            <AccountCircleOutlinedIcon />
+            <p className={styles.memberName}>John Hanley</p>
+          </div>
+        </td>
         <td className={styles.tableColumn}>john.hanley@blackline.ca</td>
         <td className={styles.tableColumn}>Member</td>
       </tr>
