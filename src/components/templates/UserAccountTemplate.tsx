@@ -20,9 +20,6 @@ const useStyles = makeStyles({
     marginLeft: "5vw",
     marginTop: "5vh",
   },
-  temp: {
-    marginLeft: "240px",
-  },
 });
 
 export const UserAccountTemplate: React.FC<UserAccountTemplateProps> = (
