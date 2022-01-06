@@ -1,8 +1,8 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import ProfilePicture from "../assets/183.png";
-import { TeamInfo } from "./UI/atoms/TeamInfo";
 import { UserInfo } from "./UI/atoms/UserInfo";
+import { TeamInfo } from "./UI/molecules/TeamInfo";
 
 const useStyles = makeStyles({
   tempBody: { marginLeft: "240px" },
