@@ -34,13 +34,13 @@ export const TeamInfo: React.FC<TeamInfoProps> = (props) => {
       <div className={styles.teamSelect}>
         <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
           <Select
-            defaultValue={10}
+            defaultValue={"123-ABC-456"}
             disableUnderline
             //   value={team}
             //   onChange={handleChange}
           >
-            <MenuItem value={10}>Team 123-ABC-456</MenuItem>
-            <MenuItem value={20}>Team 987-ZYX-321</MenuItem>
+            <MenuItem value={"123-ABC-456"}>Team 123-ABC-456</MenuItem>
+            <MenuItem value={"987-ZYX-321"}>Team 987-ZYX-321</MenuItem>
           </Select>
         </FormControl>
       </div>
