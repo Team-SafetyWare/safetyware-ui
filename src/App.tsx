@@ -10,8 +10,20 @@ import { Sidebar } from "./components/Sidebar";
 import { UserAccount } from "./components/UserAccount";
 
 const theme = createTheme({
+  // Use the system font instead of the default Roboto font.
   typography: {
-    fontFamily: "Outfit",
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
   },
 });
 
