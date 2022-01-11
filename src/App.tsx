@@ -6,6 +6,7 @@ import { Gases } from "./components/Gases";
 import { Home } from "./components/Home";
 import { Incidents } from "./components/Incidents";
 import { Locations } from "./components/Locations";
+import { NavBar } from "./components/NavBar";
 import { Sidebar } from "./components/Sidebar";
 import { UserAccount } from "./components/UserAccount";
 
@@ -31,8 +32,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        <NavBar />
         <Sidebar />
-        {/*<NavBar />*/}
         <Switch>
           {/* no component for login yet*/}
           <Route exact path="/login" />
