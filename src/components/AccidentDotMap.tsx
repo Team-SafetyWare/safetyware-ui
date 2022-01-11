@@ -2,9 +2,8 @@ import React, {Component} from "react";
 import GoogleMapReact from 'google-map-react'
 import {MarkerClusterer, MarkerClustererOptions} from "@googlemaps/markerclusterer";
 
-
-export class AccidentDotMap extends Component<any, any> {
-    static defaultSettings = {
+export function AccidentDotMap(props: any) {
+    const defaultSettings = {
         apiKey: "",
         center: {
             lat: 51.049999,
@@ -13,26 +12,24 @@ export class AccidentDotMap extends Component<any, any> {
         zoom: 11
     };
 
-    render() {
-        return (
-            <div style={{height: '50vh', width: '50%'}}>
-                <GoogleMapReact
-                    bootstrapURLKeys={{
-                        key: AccidentDotMap.defaultSettings.apiKey,
-                        libraries: ['visualization']
-                    }}
-                    yesIWantToUseGoogleMapApiInternals
-                    onGoogleApiLoaded={({map, maps}) => {
-                        handleApiLoaded(map, maps);
-                    }}
-                    defaultCenter={AccidentDotMap.defaultSettings.center}
-                    defaultZoom={AccidentDotMap.defaultSettings.zoom}
-                >
+    return (
+        <div style={{height: '50vh', width: '50%'}}>
+            <GoogleMapReact
+                bootstrapURLKeys={{
+                    key: defaultSettings.apiKey,
+                    libraries: ['visualization']
+                }}
+                yesIWantToUseGoogleMapApiInternals
+                onGoogleApiLoaded={({map, maps}) => {
+                    handleApiLoaded(map, maps);
+                }}
+                defaultCenter={defaultSettings.center}
+                defaultZoom={defaultSettings.zoom}
+            >
 
-                </GoogleMapReact>
-            </div>
-        )
-    }
+            </GoogleMapReact>
+        </div>
+    )
 }
 
 const handleApiLoaded = (map: any, maps: any) => {
