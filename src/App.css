@@ -39,32 +39,10 @@
   }
 }
 
-/* Styling Specific to Sidebar */
+/* Styling Specific to Navbar */
 
-.sidebar {
-  display: flex;
-}
-
-.sidebar .MuiDrawer-root {
-  flex-shrink: 0;
-  width: 240px;
-}
-
-.sidebar .MuiListItemIcon-root {
-  color: white;
-}
-
-.sidebar .MuiPaper-root {
-  background-color: #d34949;
-  box-sizing: border-box;
-  color: white;
-  width: 240px;
-}
-
-.sidebar-menu {
-  overflow: auto;
-}
-
-.sidebar-footer {
-  margin-top: auto;
+@font-face
+{
+  font-family: "Myriad";
+  src: local('Myriad'), url(./fonts/myriad-hebrew-bold-2.otf), format('opentype');
 }
