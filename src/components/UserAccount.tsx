@@ -6,6 +6,7 @@ import { UserAccountTemplate } from "./templates/UserAccountTemplate";
 const useStyles = makeStyles({
   UserAccountBody: {
     marginLeft: "240px",
+    marginTop: "64px"
   },
 });
 
