@@ -36,6 +36,11 @@ const useStyles = makeStyles({
     paddingLeft: "240px",
     paddingTop: "64px",
   },
+  innerContent: {
+    height: "100%",
+    width: "100%",
+    padding: "10px 25px",
+  },
 });
 
 function App() {
@@ -47,15 +52,17 @@ function App() {
         <NavBar />
         <Sidebar />
         <div className={styles.content}>
-          <Switch>
-            {/* no component for login yet*/}
-            <Route exact path="/login" />
-            <Route exact path="/" component={Home}></Route>
-            <Route exact path="/locations" component={Locations}></Route>
-            <Route exact path="/incidents" component={Incidents}></Route>
-            <Route exact path="/gases" component={Gases}></Route>
-            <Route exact path="/user-account" component={UserAccount}></Route>
-          </Switch>
+          <div className={styles.innerContent}>
+            <Switch>
+              {/* no component for login yet*/}
+              <Route exact path="/login" />
+              <Route exact path="/" component={Home}></Route>
+              <Route exact path="/locations" component={Locations}></Route>
+              <Route exact path="/incidents" component={Incidents}></Route>
+              <Route exact path="/gases" component={Gases}></Route>
+              <Route exact path="/user-account" component={UserAccount}></Route>
+            </Switch>
+          </div>
         </div>
       </Router>
     </ThemeProvider>
