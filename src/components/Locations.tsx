@@ -15,9 +15,6 @@ const path = [
 export const Locations: React.FC = () => {
   return (
     <>
-      <h1>Locations</h1>
-      {/* <AccidentDotMap /> */}
-
       <CustomAccordion
         accordionHeight={"400px"}
         accordionWidth={""}
