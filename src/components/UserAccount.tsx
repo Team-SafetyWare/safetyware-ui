@@ -1,18 +1,8 @@
-import { makeStyles } from "@mui/styles";
 import React from "react";
 import ProfilePicture from "../assets/183.png";
 import { UserAccountTemplate } from "./templates/UserAccountTemplate";
 
-const useStyles = makeStyles({
-  UserAccountBody: {
-    marginLeft: "240px",
-    marginTop: "64px"
-  },
-});
-
 export const UserAccount: React.FC = () => {
-  const styles = useStyles();
-
   //TO-DO: Add mock-data for different teams so implementing dynamic site features will
   //       be easier
   const mockData: string[][][] = [
@@ -30,7 +20,7 @@ export const UserAccount: React.FC = () => {
   ];
 
   return (
-    <div className={styles.UserAccountBody}>
+    <>
       <UserAccountTemplate
         userPhoto={ProfilePicture}
         userName={"Jane Doe"}
@@ -40,6 +30,6 @@ export const UserAccount: React.FC = () => {
         userTeam={"Team 123-ABC-456"}
         teamData={mockData}
       />
-    </div>
+    </>
   );
 };

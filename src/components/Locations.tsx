@@ -1,14 +1,6 @@
-import { makeStyles } from "@mui/styles";
 import React from "react";
 import { CustomAccordion } from "./UI/atoms/CustomAccordion";
 import { TravelHistoryTrail } from "./UI/atoms/TravelHistoryTrail";
-
-const useStyles = makeStyles({
-  placeholderDiv: {
-    textAlign: "center",
-    marginLeft: "300px",
-  },
-});
 
 const center = {
   lat: 51.049999,
@@ -21,10 +13,8 @@ const path = [
 ];
 
 export const Locations: React.FC = () => {
-  const styles = useStyles();
-
   return (
-    <div className={styles.placeholderDiv}>
+    <>
       <h1>Locations</h1>
       {/* <AccidentDotMap /> */}
 
@@ -32,6 +22,6 @@ export const Locations: React.FC = () => {
         accordionTitle={"Travel History Trail"}
         component={<TravelHistoryTrail center={center} path={path} />}
       />
-    </div>
+    </>
   );
 };
