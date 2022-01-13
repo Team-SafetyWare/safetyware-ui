@@ -42,8 +42,6 @@ export const CustomAccordion: React.FC<CustomAccordionProps> = (props) => {
       </AccordionSummary>
       <AccordionDetails classes={{ root: styles.accordionDetailsRoot }}>
         {props.component}
-        {props.accordionHeight}
-        {props.accordionWidth}
       </AccordionDetails>
     </Accordion>
   );
