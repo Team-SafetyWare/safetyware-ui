@@ -7,7 +7,7 @@ import { Gases } from "./components/Gases";
 import { Home } from "./components/Home";
 import { Incidents } from "./components/Incidents";
 import { Locations } from "./components/Locations";
-import { Sidebar } from "./components/Sidebar";
+import { Sidebar } from "./components/UI/atoms/Sidebar";
 import { UserAccount } from "./components/UserAccount";
 
 const theme = createTheme({
