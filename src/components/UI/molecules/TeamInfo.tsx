@@ -6,6 +6,7 @@ import { TeamTable } from "../atoms/TeamTable";
 interface TeamInfoProps {
   userPhoto?: string;
   userName?: string;
+  teamData?: string[][][];
 }
 
 const useStyles = makeStyles({
@@ -20,11 +21,12 @@ export const TeamInfo: React.FC<TeamInfoProps> = (props) => {
 
   return (
     <div className={styles.teamInfo}>
-      <TeamSelect></TeamSelect>
+      <TeamSelect />
       <TeamTable
         userPhoto={props.userPhoto}
         userName={props.userName}
-      ></TeamTable>
+        teamData={props.teamData}
+      />
     </div>
   );
 };

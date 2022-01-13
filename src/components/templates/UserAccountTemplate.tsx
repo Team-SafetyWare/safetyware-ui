@@ -10,6 +10,7 @@ interface UserAccountTemplateProps {
   userPhone?: string;
   userEmail?: string;
   userTeam?: string;
+  teamData?: string[][][];
 }
 
 const useStyles = makeStyles({
@@ -37,7 +38,11 @@ export const UserAccountTemplate: React.FC<UserAccountTemplateProps> = (
         userEmail={props.userEmail}
         userTeam={props.userTeam}
       />
-      <TeamInfo userPhoto={props.userPhoto} userName={props.userName} />
+      <TeamInfo
+        userPhoto={props.userPhoto}
+        userName={props.userName}
+        teamData={props.teamData}
+      />
     </div>
   );
 };

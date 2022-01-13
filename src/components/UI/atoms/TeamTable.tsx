@@ -5,6 +5,7 @@ import React from "react";
 interface TeamTableProps {
   userPhoto?: string;
   userName?: string;
+  teamData?: string[][][];
 }
 
 const useStyles = makeStyles({
@@ -54,7 +55,7 @@ export const TeamTable: React.FC<TeamTableProps> = (props) => {
             <img
               className={styles.memberPicture}
               src={props.userPhoto}
-              alt={"test"}
+              alt={props.userName}
             />
             <p className={styles.memberName}>{props.userName} (You)</p>
           </div>
@@ -62,6 +63,7 @@ export const TeamTable: React.FC<TeamTableProps> = (props) => {
         <td className={styles.tableColumn}>jane.doe@blackline.ca</td>
         <td className={styles.tableColumn}>Manager</td>
       </tr>
+
       <tr className={styles.tableRow}>
         <td className={styles.tableColumn}>
           <div className={styles.memberColumn}>
