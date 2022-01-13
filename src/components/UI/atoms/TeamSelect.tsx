@@ -3,7 +3,6 @@ import InputBase from "@mui/material/InputBase";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
-import { makeStyles } from "@mui/styles";
 import React from "react";
 
 interface TeamSelectProps {}
@@ -14,11 +13,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const useStyles = makeStyles({ selectBar: { fontWeight: "bold" } });
-
 export const TeamSelect: React.FC<TeamSelectProps> = (props) => {
-  const styles = useStyles();
-
   return (
     <FormControl variant="standard" sx={{ minWidth: 120 }}>
       <Select
