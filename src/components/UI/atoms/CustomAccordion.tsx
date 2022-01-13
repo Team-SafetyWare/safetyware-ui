@@ -20,6 +20,10 @@ const useStyles = makeStyles({
     width: (props: CustomAccordionProps) =>
       props.accordionWidth ? props.accordionWidth : "100%",
   },
+  accordionTitle: {
+    fontSize: "24px",
+    margin: 0,
+  },
 });
 
 export const CustomAccordion: React.FC<CustomAccordionProps> = (props) => {
@@ -32,7 +36,9 @@ export const CustomAccordion: React.FC<CustomAccordionProps> = (props) => {
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Typography>{props.accordionTitle}</Typography>
+        <Typography>
+          <h1 className={styles.accordionTitle}>{props.accordionTitle}</h1>
+        </Typography>
       </AccordionSummary>
       <AccordionDetails classes={{ root: styles.accordionDetailsRoot }}>
         {props.component}
