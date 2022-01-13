@@ -19,6 +19,8 @@ export const Locations: React.FC = () => {
       {/* <AccidentDotMap /> */}
 
       <CustomAccordion
+        accordionHeight={"400px"}
+        accordionWidth={""}
         accordionTitle={"Travel History Trail"}
         component={<TravelHistoryTrail center={center} path={path} />}
       />

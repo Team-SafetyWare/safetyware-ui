@@ -13,8 +13,8 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   const center = props.center;
 
   const mapContainerStyle = {
-    height: "400px",
-    width: "800px",
+    height: "100%",
+    width: "100%",
   };
 
   const options = {
