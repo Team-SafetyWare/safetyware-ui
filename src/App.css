@@ -38,11 +38,3 @@
     transform: rotate(360deg);
   }
 }
-
-/* Styling Specific to Navbar */
-
-@font-face
-{
-  font-family: "Myriad";
-  src: local('Myriad'), url(./fonts/myriad-hebrew-bold-2.otf), format('opentype');
-}
