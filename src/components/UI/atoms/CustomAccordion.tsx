@@ -7,14 +7,23 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 
 interface CustomAccordionProps {
+  accordionHeight?: any;
+  accordionWidth?: string;
   accordionTitle?: string;
   component?: any;
 }
 
-const useStyles = makeStyles({ selectBar: { fontWeight: "bold" } });
+const useStyles = makeStyles({
+  accordionDetailsRoot: {
+    height: (props: CustomAccordionProps) =>
+      props.accordionHeight ? props.accordionHeight : "400px",
+    width: (props: CustomAccordionProps) =>
+      props.accordionWidth ? props.accordionWidth : "100%",
+  },
+});
 
 export const CustomAccordion: React.FC<CustomAccordionProps> = (props) => {
-  const styles = useStyles();
+  const styles = useStyles(props);
 
   return (
     <Accordion>
@@ -25,7 +34,11 @@ export const CustomAccordion: React.FC<CustomAccordionProps> = (props) => {
       >
         <Typography>{props.accordionTitle}</Typography>
       </AccordionSummary>
-      <AccordionDetails>{props.component}</AccordionDetails>
+      <AccordionDetails classes={{ root: styles.accordionDetailsRoot }}>
+        {props.component}
+        {props.accordionHeight}
+        {props.accordionWidth}
+      </AccordionDetails>
     </Accordion>
   );
 };
