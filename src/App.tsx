@@ -1,7 +1,8 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.css';
+import { makeStyles } from "@mui/styles";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "./App.css";
 import { Gases } from "./components/Gases";
 import { Home } from "./components/Home";
 import { Incidents } from "./components/Incidents";
@@ -28,21 +29,34 @@ const theme = createTheme({
   },
 });
 
+const useStyles = makeStyles({
+  content: {
+    height: "100vh",
+    width: "100vw",
+    paddingLeft: "240px",
+    paddingTop: "64px",
+  },
+});
+
 function App() {
+  const styles = useStyles();
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <NavBar />
         <Sidebar />
-        <Switch>
-          {/* no component for login yet*/}
-          <Route exact path="/login" />
-          <Route exact path="/" component={Home}></Route>
-          <Route exact path="/locations" component={Locations}></Route>
-          <Route exact path="/incidents" component={Incidents}></Route>
-          <Route exact path="/gases" component={Gases}></Route>
-          <Route exact path="/user-account" component={UserAccount}></Route>
-        </Switch>
+        <div className={styles.content}>
+          <Switch>
+            {/* no component for login yet*/}
+            <Route exact path="/login" />
+            <Route exact path="/" component={Home}></Route>
+            <Route exact path="/locations" component={Locations}></Route>
+            <Route exact path="/incidents" component={Incidents}></Route>
+            <Route exact path="/gases" component={Gases}></Route>
+            <Route exact path="/user-account" component={UserAccount}></Route>
+          </Switch>
+        </div>
       </Router>
     </ThemeProvider>
   );
