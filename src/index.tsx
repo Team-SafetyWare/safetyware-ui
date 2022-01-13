@@ -1,8 +1,14 @@
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+
+const client = new ApolloClient({
+  uri: "https://func-api-nmisvbwuqreyq.azurewebsites.net/graphql",
+  cache: new InMemoryCache(),
+});
 
 ReactDOM.render(
   <React.StrictMode>
