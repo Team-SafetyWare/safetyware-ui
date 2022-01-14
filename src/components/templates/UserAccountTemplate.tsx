@@ -19,7 +19,6 @@ const useStyles = makeStyles({
     flexDirection: "column",
     width: "65vw",
     marginLeft: "5vw",
-    marginTop: "5vh",
   },
 });
 
