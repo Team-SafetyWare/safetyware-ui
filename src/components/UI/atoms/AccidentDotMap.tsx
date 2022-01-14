@@ -27,7 +27,7 @@ export const AccidentDotMap: React.FC<AccidentDotMapProps> = (props) => {
 
   return (
       <LoadScript
-          googleMapsApiKey="AIzaSyDhIdO6e613tOUvdV737val1-HWbmoL4s4"
+          googleMapsApiKey=""
       >
         <GoogleMap
             mapContainerStyle={containerStyle}
