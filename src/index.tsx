@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
@@ -9,6 +9,21 @@ const client = new ApolloClient({
   uri: "https://func-api-nmisvbwuqreyq.azurewebsites.net/graphql",
   cache: new InMemoryCache(),
 });
+
+console.log("this is client ", client);
+
+client
+  .query({
+    query: gql`
+      query {
+        people {
+          id
+          name
+        }
+      }
+    `,
+  })
+  .then((result) => console.log(result));
 
 ReactDOM.render(
   <React.StrictMode>
