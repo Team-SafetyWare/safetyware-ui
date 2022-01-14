@@ -3,6 +3,7 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import BubbleChartOutlinedIcon from "@mui/icons-material/BubbleChartOutlined";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Toolbar } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -18,6 +19,7 @@ import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/system";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import logo from "../../../assets/logo.png";
 
 const useStyles = makeStyles((theme: Theme) => ({
   sidebar: {
@@ -72,6 +74,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: "100%",
   },
 
+  sidebarlogo: {
+    width: "100%",
+  },
+
   sidebarMenu: {
     overflow: "auto",
   },
@@ -90,19 +96,30 @@ export const Sidebar: React.FC = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const sidebarItems = [
+  const sidebarTopItems = [
     { text: "Home", icon: HomeOutlinedIcon, link: "/" },
     { text: "Locations", icon: ExploreOutlinedIcon, link: "/locations" },
     { text: "Incidents", icon: BarChartOutlinedIcon, link: "/incidents" },
     { text: "Gases", icon: BubbleChartOutlinedIcon, link: "/gases" },
   ];
 
+  const sidebarBottomItems = [
+    {
+      text: "User Account",
+      icon: AccountCircleOutlinedIcon,
+      link: "/user-account",
+    },
+    { text: "Log Out", icon: LogoutIcon, link: "/login" },
+  ];
+
   const drawer = (
     <div className={styles.sidebarDiv}>
-      <Toolbar />
+      <Toolbar>
+        <img className={styles.sidebarlogo} src={logo} alt="Blackline Safety" />
+      </Toolbar>
       <Box className={styles.sidebarMenu}>
         <List>
-          {sidebarItems.map((sidebarItem) => (
+          {sidebarTopItems.map((sidebarItem) => (
             <ListItemButton
               component={RouterLink}
               key={sidebarItem.text}
@@ -117,12 +134,18 @@ export const Sidebar: React.FC = () => {
         </List>
       </Box>
       <List className={styles.sidebarFooter}>
-        <ListItemButton component={RouterLink} to="/user-account">
-          <ListItemIcon>
-            <AccountCircleOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText primary="User Account" />
-        </ListItemButton>
+        {sidebarBottomItems.map((sidebarItem) => (
+          <ListItemButton
+            component={RouterLink}
+            key={sidebarItem.text}
+            to={sidebarItem.link}
+          >
+            <ListItemIcon>
+              <sidebarItem.icon />
+            </ListItemIcon>
+            <ListItemText primary={sidebarItem.text} />
+          </ListItemButton>
+        ))}
       </List>
     </div>
   );
