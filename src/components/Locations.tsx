@@ -1,7 +1,7 @@
 import React from "react";
 import {CustomAccordion} from "./UI/atoms/CustomAccordion";
 import {TravelHistoryTrail} from "./UI/atoms/TravelHistoryTrail";
-import AccidentDotMap from "./UI/molecules/AccidentDotMap";
+import AccidentDotMap from "./UI/atoms/AccidentDotMap";
 
 const center = {
     lat: 51.049999,
@@ -26,7 +26,7 @@ export const Locations: React.FC = () => {
                 accordionHeight={"400px"}
                 accordionWidth={""}
                 accordionTitle={"Accident Dot Map"}
-                component={<AccidentDotMap accidents={path}/>}
+                component={<AccidentDotMap accidents={path} center={center} zoom={10}/>}
             />
         </>
     );
