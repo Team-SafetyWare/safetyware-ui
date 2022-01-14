@@ -10,22 +10,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-console.log("this is client ", client);
-
-// keeping this for now, in case I need to debug
-// client
-//   .query({
-//     query: gql`
-//       query {
-//         people {
-//           id
-//           name
-//         }
-//       }
-//     `,
-//   })
-//   .then((result) => console.log(result));
-
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>

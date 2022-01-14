@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -45,7 +45,6 @@ const useStyles = makeStyles({
 
 function App() {
   const styles = useStyles();
-
   return (
     <ThemeProvider theme={theme}>
       <Router>
