@@ -18,7 +18,7 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/system";
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../../../assets/logo.png";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -57,9 +57,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.up("sm")]: {
       display: "none",
     },
+
     "& .MuiListItemIcon-root": {
       color: "white",
     },
+
     "& .MuiPaper-root": {
       backgroundColor: "#d34949",
       boxSizing: "border-box",
@@ -80,6 +82,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   sidebarMenu: {
     overflow: "auto",
+  },
+
+  sidebarItemSelected: {
+    backgroundColor: "#ad172b",
+
+    "&:hover": { backgroundColor: "#ad172b80" },
   },
 
   sidebarFooter: {
@@ -121,9 +129,11 @@ export const Sidebar: React.FC = () => {
         <List>
           {sidebarTopItems.map((sidebarItem) => (
             <ListItemButton
-              component={RouterLink}
+              component={NavLink}
               key={sidebarItem.text}
               to={sidebarItem.link}
+              exact
+              activeClassName={styles.sidebarItemSelected}
             >
               <ListItemIcon>
                 <sidebarItem.icon />
@@ -136,9 +146,11 @@ export const Sidebar: React.FC = () => {
       <List className={styles.sidebarFooter}>
         {sidebarBottomItems.map((sidebarItem) => (
           <ListItemButton
-            component={RouterLink}
+            component={NavLink}
             key={sidebarItem.text}
             to={sidebarItem.link}
+            exact
+            activeClassName={styles.sidebarItemSelected}
           >
             <ListItemIcon>
               <sidebarItem.icon />

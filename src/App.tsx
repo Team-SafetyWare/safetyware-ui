@@ -33,7 +33,6 @@ const useStyles = makeStyles({
     height: "100vh",
     width: "100vw",
     paddingLeft: "240px",
-    paddingTop: "64px",
   },
   innerContent: {
     height: "100%",
