@@ -9,7 +9,7 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
   const data = props.data;
 
   return (
-    <XYPlot height={400} width={800}>
+    <XYPlot height={400} width={800} color="#d34949">
       <XAxis />
       <YAxis />
       <VerticalBarSeries data={data} barWidth={1} />
