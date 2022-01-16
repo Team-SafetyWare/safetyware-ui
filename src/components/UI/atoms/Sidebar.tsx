@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 
     "& .MuiPaper-root": {
-      backgroundColor: "#d34949",
+      backgroundColor: "#ad172b",
       boxSizing: "border-box",
       color: "white",
       width: 240,
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 
     "& .MuiPaper-root": {
-      backgroundColor: "#d34949",
+      backgroundColor: "#ad172b",
       boxSizing: "border-box",
       color: "white",
       width: 240,
@@ -85,9 +85,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 
   sidebarItemSelected: {
-    backgroundColor: "#ad172b",
+    backgroundColor: "#d34949",
 
-    "&:hover": { backgroundColor: "#ad172b80" },
+    "&:hover": { backgroundColor: "#d3494980" },
   },
 
   sidebarFooter: {
