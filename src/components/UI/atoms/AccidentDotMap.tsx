@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
-import {GoogleMap, LoadScript, Marker} from '@react-google-maps/api';
-import {MarkerClusterer} from "@react-google-maps/api";
+import React from 'react';
+import {GoogleMap, Marker} from '@react-google-maps/api';
 
 const containerStyle = {
   width: '100%',
@@ -26,9 +25,6 @@ export const AccidentDotMap: React.FC<AccidentDotMapProps> = (props) => {
   }
 
   return (
-      <LoadScript
-          googleMapsApiKey=""
-      >
         <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
@@ -36,7 +32,6 @@ export const AccidentDotMap: React.FC<AccidentDotMapProps> = (props) => {
         >
           {accidents.map((accident: google.maps.LatLng | google.maps.LatLngLiteral) => createMarker(accident))}
         </GoogleMap>
-      </LoadScript>
   )
 }
 
