@@ -19,8 +19,13 @@ import { Theme } from "@mui/system";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../../assets/logo.png";
-import ProfilePicture from "../../../assets/profilePicture.png";
-import { SidebarTemplate } from "../atoms/SidebarTemplate";
+import { SidebarUserName } from "../atoms/SidebarUserName";
+import { SidebarUserPicture } from "../atoms/SidebarUserPicture";
+
+interface SidebarProps {
+  userPhoto?: string;
+  userName?: string;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   sidebar: {
@@ -94,9 +99,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   sidebarFooter: {
     marginTop: "auto",
   },
+
+  sidebarUser: {
+    display: "flex",
+    alignItems: "center",
+  },
 }));
 
-export const Sidebar: React.FC = () => {
+export const Sidebar: React.FC<SidebarProps> = (props) => {
   const styles = useStyles();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -142,7 +152,13 @@ export const Sidebar: React.FC = () => {
           exact
           activeClassName={styles.sidebarItemSelected}
         >
-          <SidebarTemplate userPhoto={ProfilePicture} userName={"Jane Doe"} />
+          <div className={styles.sidebarUser}>
+            <SidebarUserPicture
+              userPhoto={props.userPhoto}
+              userName={props.userName}
+            />
+            <SidebarUserName userName={props.userName} />
+          </div>
         </ListItemButton>
         <ListItemButton
           component={NavLink}
