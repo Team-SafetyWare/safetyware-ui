@@ -20,7 +20,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../../assets/logo.png";
 import ProfilePicture from "../../../assets/profilePicture.png";
-import { SidebarTemplate } from "../../templates/SidebarTemplate";
+import { SidebarTemplate } from "../atoms/SidebarTemplate";
 
 const useStyles = makeStyles((theme: Theme) => ({
   sidebar: {
