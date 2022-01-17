@@ -3,11 +3,12 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
+import ProfilePicture from "./assets/profilePicture.png";
 import { Gases } from "./components/Gases";
 import { Home } from "./components/Home";
 import { Incidents } from "./components/Incidents";
 import { Locations } from "./components/Locations";
-import { Sidebar } from "./components/UI/atoms/Sidebar";
+import { Sidebar } from "./components/UI/molecules/Sidebar";
 import { UserAccount } from "./components/UserAccount";
 
 const theme = createTheme({
@@ -46,7 +47,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <Sidebar />
+        <Sidebar userName="Jane Doe" userPhoto={ProfilePicture} />
         <div className={styles.content}>
           <div className={styles.innerContent}>
             <Switch>
