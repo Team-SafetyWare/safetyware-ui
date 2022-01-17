@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     textAlign: "center",
   },
   fab: {
-    backgroundColor: "#d34949",
+    backgroundColor: "#ad172b",
   },
 });
 
@@ -33,7 +33,7 @@ export const Home: React.FC = () => {
         ariaLabel="SpeedDial"
         sx={{ position: "absolute", bottom: 16, right: 16 }}
         icon={<SpeedDialIcon />}
-        FabProps={{ style: { backgroundColor: "#d34949" } }}
+        FabProps={{ style: { backgroundColor: "#ad172b" } }}
       >
         {actions.map((action) => (
           <SpeedDialAction

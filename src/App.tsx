@@ -1,13 +1,14 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
+import ProfilePicture from "./assets/profilePicture.png";
 import { Gases } from "./components/Gases";
 import { Home } from "./components/Home";
 import { Incidents } from "./components/Incidents";
 import { Locations } from "./components/Locations";
-import { Sidebar } from "./components/UI/atoms/Sidebar";
+import { Sidebar } from "./components/UI/molecules/Sidebar";
 import { UserAccount } from "./components/UserAccount";
 
 const theme = createTheme({
@@ -33,7 +34,6 @@ const useStyles = makeStyles({
     height: "100vh",
     width: "100vw",
     paddingLeft: "240px",
-    paddingTop: "64px",
   },
   innerContent: {
     height: "100%",
@@ -44,11 +44,10 @@ const useStyles = makeStyles({
 
 function App() {
   const styles = useStyles();
-
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <Sidebar />
+        <Sidebar userName="Jane Doe" userPhoto={ProfilePicture} />
         <div className={styles.content}>
           <div className={styles.innerContent}>
             <Switch>
