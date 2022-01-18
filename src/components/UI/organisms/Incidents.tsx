@@ -1,6 +1,6 @@
 import React from "react";
-import { BarGraph } from "./UI/atoms/BarGraph";
-import { CustomAccordion } from "./UI/atoms/CustomAccordion";
+import { BarGraph } from "../atoms/BarGraph";
+import { CustomAccordion } from "../atoms/CustomAccordion";
 
 const data = [
   { x: 0, y: 8 },
