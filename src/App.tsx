@@ -4,12 +4,12 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import ProfilePicture from "./assets/profilePicture.png";
-import { Gases } from "./components/Gases";
-import { Home } from "./components/Home";
-import { Incidents } from "./components/Incidents";
-import { Locations } from "./components/Locations";
 import { Sidebar } from "./components/UI/molecules/Sidebar";
-import { UserAccount } from "./components/UserAccount";
+import { Gases } from "./components/UI/organisms/Gases";
+import { Home } from "./components/UI/organisms/Home";
+import { Incidents } from "./components/UI/organisms/Incidents";
+import { Locations } from "./components/UI/organisms/Locations";
+import { UserAccount } from "./components/UI/organisms/UserAccount";
 
 const theme = createTheme({
   // Use the system font instead of the default Roboto font.
