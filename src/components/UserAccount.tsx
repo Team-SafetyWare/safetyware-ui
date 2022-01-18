@@ -1,5 +1,5 @@
 import React from "react";
-import ProfilePicture from "../assets/183.png";
+import ProfilePicture from "../assets/profilePicture.png";
 import { UserAccountTemplate } from "./templates/UserAccountTemplate";
 
 export const UserAccount: React.FC = () => {

@@ -1,4 +1,4 @@
-import { GoogleMap, LoadScript, Polyline } from "@react-google-maps/api";
+import { GoogleMap, Polyline } from "@react-google-maps/api";
 import React from "react";
 
 interface TravelHistoryTrailProps {
@@ -33,7 +33,6 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   };
 
   return (
-    <LoadScript googleMapsApiKey="">
       <GoogleMap
         id="marker-example"
         mapContainerStyle={mapContainerStyle}
@@ -42,6 +41,5 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
       >
         <Polyline path={paths} options={options} />
       </GoogleMap>
-    </LoadScript>
   );
 };
