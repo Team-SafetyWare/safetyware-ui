@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import React from "react";
-import ProfilePicture from "../assets/183.png";
+import ProfilePicture from "../assets/profilePicture.png";
 import { GET_PEOPLE } from "../queryService";
 import { UserAccountTemplate } from "./templates/UserAccountTemplate";
 
