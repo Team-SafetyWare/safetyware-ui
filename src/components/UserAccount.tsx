@@ -1,20 +1,17 @@
 import { useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
 import ProfilePicture from "../assets/profilePicture.png";
-import { GET_USERS } from "../queryService";
+import { GET_PERSONS } from "../queryService";
 import { UserAccountTemplate } from "./templates/UserAccountTemplate";
 
 export const UserAccount: React.FC = () => {
-  //TO-DO: Add mock-data for different teams so implementing dynamic site features will
-  //       be easier
-
   // Set up interface to hold the data we will be gathering from backend
-  interface User {
+  interface Person {
     name: string;
     id: string;
   }
 
-  const { loading, error, data } = useQuery<User>(GET_USERS);
+  const { loading, error, data } = useQuery<Person>(GET_PERSONS);
 
   useEffect(() => {
     if (loading) console.log("Loading...");
