@@ -1,25 +1,11 @@
 import { useQuery } from "@apollo/client";
-import React, { useEffect } from "react";
+import React from "react";
 import ProfilePicture from "../assets/profilePicture.png";
 import { GET_PERSONS } from "../queryService";
 import { UserAccountTemplate } from "./templates/UserAccountTemplate";
 
 export const UserAccount: React.FC = () => {
-  // Set up interface to hold the data we will be gathering from backend
-  interface Person {
-    name: string;
-    id: string;
-  }
-
-  const { loading, error, data } = useQuery<Person>(GET_PERSONS);
-
-  useEffect(() => {
-    if (loading) console.log("Loading...");
-    if (error) console.log("Error :(");
-
-    console.log("this is data", data);
-  });
-
+  // TO-DO: create proper data with ALL data from backend
   const mockData: string[][][] = [
     [
       ["123-ABC-456"],
@@ -33,6 +19,23 @@ export const UserAccount: React.FC = () => {
       ["Stanley Winston", "stanley.winston@blackline.ca", "Member"],
     ],
   ];
+
+  // Set up interface to hold the data we will be gathering from backend
+  interface Person {
+    name: string;
+    id: string;
+  }
+
+  // https://www.apollographql.com/docs/react/data/queries/
+  // TO-DO: handle loading and error
+  let personList: Array<Person> = [];
+  const { loading, error, data } = useQuery(GET_PERSONS, {
+    onCompleted: () => {
+      data.people.map((person: Person) => {
+        personList.push(person);
+      });
+    },
+  });
 
   return (
     <>
