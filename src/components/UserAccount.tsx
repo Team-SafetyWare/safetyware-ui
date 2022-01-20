@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProfilePicture from "../assets/profilePicture.png";
 import { GET_PERSONS } from "../queryService";
 import { UserAccountTemplate } from "./templates/UserAccountTemplate";
@@ -37,11 +37,20 @@ export const UserAccount: React.FC = () => {
     },
   });
 
+  // Sample feed into UI components
+  // Probably a better way to handle this
+  const [name, setName] = useState("Jane Doe");
+  useEffect(() => {
+    if (data) {
+      setName(personList[0].name);
+    }
+  }, [data]);
+
   return (
     <>
       <UserAccountTemplate
         userPhoto={ProfilePicture}
-        userName={"Jane Doe"}
+        userName={name}
         userTitle={"Senior Manager at Blackline Safety"}
         userPhone={"123-456-7890"}
         userEmail={"jane.doe@blackline.ca"}
