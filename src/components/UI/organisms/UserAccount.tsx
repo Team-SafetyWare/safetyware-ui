@@ -1,6 +1,6 @@
 import React from "react";
-import ProfilePicture from "../assets/profilePicture.png";
-import { UserAccountTemplate } from "./templates/UserAccountTemplate";
+import ProfilePicture from "../../../assets/profilePicture.png";
+import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
 
 export const UserAccount: React.FC = () => {
   //TO-DO: Add mock-data for different teams so implementing dynamic site features will
