@@ -1,5 +1,5 @@
 import React from "react";
-import { VerticalBarSeries, XAxis, XYPlot, YAxis } from "react-vis";
+import { FlexibleXYPlot, VerticalBarSeries, XAxis, YAxis } from "react-vis";
 
 interface BarGraphProps {
   data?: any;
@@ -9,10 +9,10 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
   const data = props.data;
 
   return (
-    <XYPlot height={400} width={800} color="#ad172b">
+    <FlexibleXYPlot color="#ad172b">
       <XAxis />
       <YAxis />
       <VerticalBarSeries data={data} barWidth={1} />
-    </XYPlot>
+    </FlexibleXYPlot>
   );
 };
