@@ -1,8 +1,8 @@
 import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
-import ProfilePicture from "../assets/profilePicture.png";
-import { GET_PERSONS } from "../queryService";
-import { UserAccountTemplate } from "./templates/UserAccountTemplate";
+import ProfilePicture from "../../../assets/profilePicture.png";
+import { GET_PERSONS } from "../../../queryService";
+import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
 
 export const UserAccount: React.FC = () => {
   // TO-DO: create proper data with ALL data from backend
