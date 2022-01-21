@@ -1,9 +1,10 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import "./App.css";
 import ProfilePicture from "./assets/profilePicture.png";
+import { Page } from "./components/UI/atoms/Page";
 import { Sidebar } from "./components/UI/molecules/Sidebar";
 import { Gases } from "./components/UI/organisms/Gases";
 import { Home } from "./components/UI/organisms/Home";
@@ -51,13 +52,37 @@ function App() {
         <div className={styles.content}>
           <div className={styles.innerContent}>
             <Switch>
-              {/* no component for login yet*/}
-              <Route exact path="/login" />
-              <Route exact path="/" component={Home}></Route>
-              <Route exact path="/locations" component={Locations}></Route>
-              <Route exact path="/incidents" component={Incidents}></Route>
-              <Route exact path="/gases" component={Gases}></Route>
-              <Route exact path="/user-account" component={UserAccount}></Route>
+              <Page exact path="/login" />
+              <Page
+                exact
+                path="/"
+                title="Blackline Safety | Home"
+                component={Home}
+              />
+              <Page
+                exact
+                path="/locations"
+                title="Blackline Safety | Locations"
+                component={Locations}
+              />
+              <Page
+                exact
+                path="/incidents"
+                title="Blackline Safety | Incidents"
+                component={Incidents}
+              />
+              <Page
+                exact
+                path="/gases"
+                title="Blackline Safety | Gases"
+                component={Gases}
+              />
+              <Page
+                exact
+                path="/user-account"
+                title="Blackline Safety | My Account"
+                component={UserAccount}
+              />
             </Switch>
           </div>
         </div>
