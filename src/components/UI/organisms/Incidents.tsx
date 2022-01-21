@@ -1,7 +1,7 @@
 import React from "react";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
-import { CustomBox } from "../atoms/CustomBox";
+import { CustomBox } from "../molecules/CustomBox";
 
 const data = [
   { x: 0, y: 8 },

@@ -8,7 +8,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import BasicDatePicker from "./BasicDatePicker";
+import BasicDatePicker from "../atoms/BasicDatePicker";
 
 interface CustomBoxProps {
   view?: any;
