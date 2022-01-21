@@ -1,6 +1,5 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import useDocumentTitle from "../../../util/useDocumentTitle";
 
 const useStyles = makeStyles({
   placeholderDiv: {
@@ -9,7 +8,6 @@ const useStyles = makeStyles({
 });
 
 export const Gases: React.FC = () => {
-  useDocumentTitle("Blackline Safety | Gases");
   const styles = useStyles();
 
   return (

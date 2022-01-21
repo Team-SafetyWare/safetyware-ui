@@ -1,5 +1,4 @@
 import React from "react";
-import useDocumentTitle from "../../../util/useDocumentTitle";
 import AccidentDotMap from "../atoms/AccidentDotMap";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
@@ -16,8 +15,6 @@ const path = [
 ];
 
 export const Locations: React.FC = () => {
-  useDocumentTitle("Blackline Safety | Locations");
-
   return (
     <>
       <CustomAccordion
