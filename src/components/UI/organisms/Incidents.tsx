@@ -1,5 +1,4 @@
 import React from "react";
-import useDocumentTitle from "../../../util/useDocumentTitle";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 
@@ -17,8 +16,6 @@ const data = [
 ];
 
 export const Incidents: React.FC = () => {
-  useDocumentTitle("Blackline Safety | Incidents");
-
   return (
     <>
       <CustomAccordion

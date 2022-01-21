@@ -6,7 +6,6 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import useDocumentTitle from "../../../util/useDocumentTitle";
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
@@ -26,7 +25,6 @@ const actions = [
 ];
 
 export const Home: React.FC = () => {
-  useDocumentTitle("Blackline Safety | Home");
   const styles = useStyles();
 
   return (
