@@ -16,6 +16,10 @@ const data = [
   { x: 9, y: 0 },
 ];
 
+const user = "PersonA";
+const view = "User";
+const incidenttype = "All";
+
 export const Incidents: React.FC = () => {
   return (
     <>
@@ -25,7 +29,7 @@ export const Incidents: React.FC = () => {
         accordionTitle={"Incidents Bar Graph"}
         component={<BarGraph data={data} />}
       />
-      <CustomBox />
+      <CustomBox user={user} view={view} incidenttype={incidenttype} />
     </>
   );
 };
