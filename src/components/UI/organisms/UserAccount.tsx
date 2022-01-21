@@ -1,8 +1,11 @@
 import React from "react";
 import ProfilePicture from "../../../assets/profilePicture.png";
+import useDocumentTitle from "../../../util/useDocumentTitle";
 import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
 
 export const UserAccount: React.FC = () => {
+  useDocumentTitle("Blackline Safety | My Account");
+
   //TO-DO: Add mock-data for different teams so implementing dynamic site features will
   //       be easier
   const mockData: string[][][] = [
