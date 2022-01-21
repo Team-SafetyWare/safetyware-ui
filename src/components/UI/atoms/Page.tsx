@@ -10,6 +10,7 @@ interface PageProps {
   children?: React.ReactNode;
 }
 
+// https://stackoverflow.com/questions/52447828/is-there-a-way-to-modify-the-page-title-with-react-router-v4
 export const Page: React.FC<PageProps> = ({ title, ...rest }) => {
   useEffect(() => {
     document.title = title;
