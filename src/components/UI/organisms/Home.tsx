@@ -6,6 +6,8 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import { DashboardInfo } from "../atoms/DashboardInfo";
+import { DashboardSummary } from "../atoms/DashboardSummary";
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
@@ -14,6 +16,18 @@ const useStyles = makeStyles({
   },
   fab: {
     backgroundColor: "#ad172b",
+  },
+  greeting: {
+    margin: 0,
+  },
+  date: {
+    margin: 0,
+  },
+  pageLabel: {
+    margin: 0,
+  },
+  pageDescription: {
+    margin: 0,
   },
 });
 
@@ -43,9 +57,8 @@ export const Home: React.FC = () => {
           />
         ))}
       </SpeedDial>
-      <div className={styles.placeholderDiv}>
-        <h1>Home</h1>
-      </div>
+      <DashboardInfo />
+      <DashboardSummary />
     </div>
   );
 };
