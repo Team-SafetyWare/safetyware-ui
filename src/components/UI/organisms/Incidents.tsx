@@ -1,6 +1,7 @@
 import React from "react";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
+import { CustomBox } from "../atoms/CustomBox";
 
 const data = [
   { x: 0, y: 8 },
@@ -24,6 +25,7 @@ export const Incidents: React.FC = () => {
         accordionTitle={"Incidents Bar Graph"}
         component={<BarGraph data={data} />}
       />
+      <CustomBox />
     </>
   );
 };
