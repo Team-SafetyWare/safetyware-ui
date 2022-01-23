@@ -10,6 +10,7 @@ import { Gases } from "./components/UI/organisms/Gases";
 import { Home } from "./components/UI/organisms/Home";
 import { Incidents } from "./components/UI/organisms/Incidents";
 import { Locations } from "./components/UI/organisms/Locations";
+import { Login } from "./components/UI/organisms/Login";
 import { UserAccount } from "./components/UI/organisms/UserAccount";
 
 const theme = createTheme({
@@ -52,7 +53,12 @@ function App() {
         <div className={styles.content}>
           <div className={styles.innerContent}>
             <Switch>
-              <Page exact path="/login" />
+              <Page
+                exact
+                path="/login"
+                title="Blackline Safety | Login"
+                component={Login}
+              />
               <Page
                 exact
                 path="/"
