@@ -1,15 +1,8 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { makeStyles } from "@mui/styles";
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import ProfilePicture from "./assets/profilePicture.png";
-import { Sidebar } from "./components/UI/molecules/Sidebar";
-import { Gases } from "./components/UI/organisms/Gases";
-import { Home } from "./components/UI/organisms/Home";
-import { Incidents } from "./components/UI/organisms/Incidents";
-import { Locations } from "./components/UI/organisms/Locations";
-import { UserAccount } from "./components/UI/organisms/UserAccount";
+import { Pages } from "./components/Pages";
 
 const theme = createTheme({
   // Use the system font instead of the default Roboto font.
@@ -27,40 +20,22 @@ const theme = createTheme({
       '"Segoe UI Symbol"',
     ].join(","),
   },
-});
 
-const useStyles = makeStyles({
-  content: {
-    height: "100vh",
-    width: "100vw",
-    paddingLeft: "240px",
-  },
-  innerContent: {
-    height: "100%",
-    width: "100%",
-    padding: "10px 25px",
+  palette: {
+    primary: {
+      main: "#ad172b",
+    },
+    secondary: {
+      main: "#d34949",
+    },
   },
 });
 
 function App() {
-  const styles = useStyles();
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <Sidebar userName="Jane Doe" userPhoto={ProfilePicture} />
-        <div className={styles.content}>
-          <div className={styles.innerContent}>
-            <Switch>
-              {/* no component for login yet*/}
-              <Route exact path="/login" />
-              <Route exact path="/" component={Home}></Route>
-              <Route exact path="/locations" component={Locations}></Route>
-              <Route exact path="/incidents" component={Incidents}></Route>
-              <Route exact path="/gases" component={Gases}></Route>
-              <Route exact path="/user-account" component={UserAccount}></Route>
-            </Switch>
-          </div>
-        </div>
+        <Pages />
       </Router>
     </ThemeProvider>
   );
