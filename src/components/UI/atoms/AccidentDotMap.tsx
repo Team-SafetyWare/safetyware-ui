@@ -1,5 +1,7 @@
 import React from 'react';
-import {GoogleMap, Marker} from '@react-google-maps/api';
+import {GoogleMap, InfoWindow, Marker} from '@react-google-maps/api';
+import {setFlagsFromString} from "v8";
+import {LocationReading} from '../organisms/Locations';
 
 const containerStyle = {
   width: '100%',
@@ -14,15 +16,28 @@ interface AccidentDotMapProps {
   zoom?: any;
 }
 
-
 export const AccidentDotMap: React.FC<AccidentDotMapProps> = (props) => {
   const accidents = props.accidents
   const zoom = props.zoom
   const center = props.center
+  const [markerWindowLat, updateWindowLat] = React.useState(51.049999)
+  const [markerWindowLng, updateWindowLng] = React.useState(-114.1283)
+  const [markerWindowText, updateWindowText] = React.useState("Test")
+  // const [markerWindows, updateMarkerWindows] = React.useState([])
 
-  function createMarker(location: google.maps.LatLng | google.maps.LatLngLiteral) {
-    return <Marker position={location} />;
+  const handleHover = (location: any) => {
+    console.log("nothing")
   }
+
+
+  function createMarker(location: LocationReading) {
+    return <Marker position={location.coordinates}/>;
+  }
+
+  function createMarkerWindow(location: any) {
+
+  }
+
 
   return (
         <GoogleMap
@@ -30,7 +45,7 @@ export const AccidentDotMap: React.FC<AccidentDotMapProps> = (props) => {
             center={center}
             zoom={zoom}
         >
-          {accidents.map((accident: google.maps.LatLng | google.maps.LatLngLiteral) => createMarker(accident))}
+          {accidents.map((accident: LocationReading) => createMarker(accident))}
         </GoogleMap>
   )
 }
