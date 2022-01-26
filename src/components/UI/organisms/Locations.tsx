@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import AccidentDotMap from "../atoms/AccidentDotMap";
 import {CustomAccordion} from "../atoms/CustomAccordion";
 import {HazardousAreaHeatMap} from "../atoms/HazardousAreaHeatMap";
 import {TravelHistoryTrail} from "../atoms/TravelHistoryTrail";
 import {useQuery} from "@apollo/client";
-import {GET_LOCATIONS} from "../../../queryService";
+import {GET_LOCATIONS} from "../../../util/queryService";
 
 const center = {
     lat: 51.049999,
@@ -16,26 +16,33 @@ const path = [
     {lat: 51.046048773481786, lng: -114.02334120770176},
 ];
 
-interface Location {
-    lat: number
-    lng: number
+const pathAsLocation = [
+    {coordinates: {lat: 51.077763, lng: -114.140657}},
+    {coordinates: {lat: 51.046048773481786, lng: -114.02334120770176}},
+];
+
+export interface LocationReading {
+    coordinates: {
+        lng: number
+        lat: number
+    }
 }
 
 export const Locations: React.FC = () => {
-    const [locations, addLocation] = React.useState<Location[]>([]);
+    const [locations, addLocation] = React.useState<LocationReading[]>([]);
     const {loading, error, data} = useQuery(
         GET_LOCATIONS,
-        {
-            onCompleted: () => {
-                data.locationReadings.map(
-                    (location: any) => {
-                        addLocation([...locations, {lat: location.coordinates[1], lng: location.coordinates[0]}])
-                        // locations.push({lat: location.coordinates[1], lng: location.coordinates[0]})
-                    }
-                )
-            }
-        }
     );
+
+    useEffect(() => {
+        if (!loading && data) {
+            data.locationReadings.map(
+                (location: any) => {
+                    addLocation(locations => [...locations, {coordinates: {lng: location.coordinates[0], lat: location.coordinates[1]}}])
+                }
+            )
+        }
+    }, [loading, data])
 
     return (
         <>
@@ -63,4 +70,6 @@ export const Locations: React.FC = () => {
             />
         </>
     );
+
+
 };
