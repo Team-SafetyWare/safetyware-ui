@@ -12,6 +12,10 @@ export const GET_LOCATIONS = gql`
     query {
       locationReadings {
         coordinates
+        person {
+          id
+          name
+        }
       }
     }
 `;
