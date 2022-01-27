@@ -6,15 +6,12 @@ import RadioGroup from "@mui/material/RadioGroup";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
+
 interface CustomBoxIncidentSelectProps {
   incidentType?: string;
 }
 
-const useStyles = makeStyles({
-  incidentselect: {
-    fontSize: "11px",
-  },
-});
+const useStyles = makeStyles({});
 
 export const CustomBoxIncidentSelect: React.FC<CustomBoxIncidentSelectProps> = (
   props
@@ -24,52 +21,50 @@ export const CustomBoxIncidentSelect: React.FC<CustomBoxIncidentSelectProps> = (
 
   return (
     <>
-      <div className={styles.incidentselect}>
-        <FormControl>
-          <FormLabel id="incident-radio-group">Incident</FormLabel>
-          <RadioGroup
-            style={{
-              width: "100%",
-              height: "auto",
-              alignContent: "center",
-              display: "inline-block",
-              paddingRight: "20px",
-              paddingLeft: "20px",
-            }}
-            row
-            aria-labelledby="incident-radio-group"
-            defaultValue={incidentType}
-            name="incident-radio-buttons-group"
-          >
-            <FormControlLabel value="All" control={<Radio />} label="All" />
-            <FormControlLabel
-              value="LowBattery"
-              control={<Radio />}
-              label="Low Battery"
-            />
-            <FormControlLabel
-              value="LostSignal"
-              control={<Radio />}
-              label="Lost Signal"
-            />
-            <FormControlLabel
-              value="GasWarning"
-              control={<Radio />}
-              label="Gas Warning"
-            />
-            <FormControlLabel
-              value="UserFall"
-              control={<Radio />}
-              label="User Fall"
-            />
-            <FormControlLabel
-              value="LatchPulled"
-              control={<Radio />}
-              label="Latch Pulled"
-            />
-          </RadioGroup>
-        </FormControl>
-      </div>
+      <FormControl>
+        <FormLabel id="incident-radio-group">Incident</FormLabel>
+        <RadioGroup
+          style={{
+            width: "100%",
+            height: "auto",
+            alignContent: "center",
+            display: "inline-block",
+            paddingRight: "20px",
+            paddingLeft: "20px",
+          }}
+          row
+          aria-labelledby="incident-radio-group"
+          defaultValue={incidentType}
+          name="incident-radio-buttons-group"
+        >
+          <FormControlLabel value="All" control={<Radio />} label="All" />
+          <FormControlLabel
+            value="LowBattery"
+            control={<Radio />}
+            label="Low Battery"
+          />
+          <FormControlLabel
+            value="LostSignal"
+            control={<Radio />}
+            label="Lost Signal"
+          />
+          <FormControlLabel
+            value="GasWarning"
+            control={<Radio />}
+            label="Gas Warning"
+          />
+          <FormControlLabel
+            value="UserFall"
+            control={<Radio />}
+            label="User Fall"
+          />
+          <FormControlLabel
+            value="LatchPulled"
+            control={<Radio />}
+            label="Latch Pulled"
+          />
+        </RadioGroup>
+      </FormControl>
     </>
   );
 };

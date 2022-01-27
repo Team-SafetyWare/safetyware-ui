@@ -8,12 +8,14 @@ interface CustomBoxProps {
   view?: any;
   user?: any;
   incidentType?: any;
+  startDate?: any;
+  endDate?: any;
 }
 
 const useStyles = makeStyles({
   box: {
     textAlign: "center",
-    height: "50%",
+    height: "52%",
     width: "18%",
     backgroundColor: "#ffffff",
     borderRadius: "30px",
@@ -31,14 +33,16 @@ export const CustomBox: React.FC<CustomBoxProps> = (props) => {
   const view = props.view;
   const user = props.user;
   const incidentType = props.incidentType;
+  const startDate = props.startDate;
+  const endDate = props.endDate;
   const styles = useStyles();
 
   return (
     <div className={styles.box}>
       <h3>Customize</h3>
-      <CustomBoxDates></CustomBoxDates>
-      <CustomBoxUserSelect></CustomBoxUserSelect>
-      <CustomBoxIncidentSelect></CustomBoxIncidentSelect>
+      <CustomBoxDates startDate={startDate} endDate={endDate} />
+      <CustomBoxUserSelect user={user} view={view} />
+      <CustomBoxIncidentSelect incidentType={incidentType} />
     </div>
   );
 };
