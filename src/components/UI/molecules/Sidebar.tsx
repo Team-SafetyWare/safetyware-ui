@@ -18,7 +18,7 @@ import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/system";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/logo_white.png";
 import { SidebarUserName } from "../atoms/SidebarUserName";
 import { SidebarUserPicture } from "../atoms/SidebarUserPicture";
 
