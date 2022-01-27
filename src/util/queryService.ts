@@ -1,6 +1,6 @@
-import {gql} from "@apollo/client";
+import { gql } from "@apollo/client";
 
-export const GET_PEOPLE = gql`
+export const GET_PERSONS = gql`
   query {
     people {
       id
@@ -9,13 +9,13 @@ export const GET_PEOPLE = gql`
   }
 `;
 export const GET_LOCATIONS = gql`
-    query {
-      locationReadings {
-        coordinates
-        person {
-          id
-          name
-        }
+  query {
+    locationReadings {
+      coordinates
+      person {
+        id
+        name
       }
     }
+  }
 `;
