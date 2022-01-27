@@ -1,5 +1,4 @@
 import React from "react";
-import AccidentDotMap from "../atoms/AccidentDotMap";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
 import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
@@ -22,14 +21,6 @@ export const Locations: React.FC = () => {
         accordionWidth={""}
         accordionTitle={"Travel History Trail"}
         component={<TravelHistoryTrail center={center} path={path} />}
-      />
-      <CustomAccordion
-        accordionHeight={"400px"}
-        accordionWidth={""}
-        accordionTitle={"Accident Dot Map"}
-        component={
-          <AccidentDotMap accidents={path} center={center} zoom={10} />
-        }
       />
       <CustomAccordion
         accordionHeight={"400px"}
