@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import { PageHeader } from "../atoms/PageHeader";
 
 const BootstrapButton = styled(Button)({
   boxShadow: "none",
@@ -66,12 +67,12 @@ export const DashboardInfo: React.FC = () => {
 
   return (
     <>
-      <div className={styles.pageInfo}>
-        <h1 className={styles.pageLabel}>Home</h1>
-        <h2 className={styles.pageDescription}>
-          Description of the Home Page (Dashboard) and What it Does
-        </h2>
-      </div>
+      <PageHeader
+        pageTitle={"Home"}
+        pageDescription={
+          "Description of the Home Page (Dashboard) and What it Does"
+        }
+      />
       <div className={styles.pageGreeting}>
         <div className={styles.greetingDetails}>
           <p className={styles.greeting}>Good Afternoon, Jane</p>
