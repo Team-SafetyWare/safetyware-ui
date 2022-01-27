@@ -45,9 +45,9 @@ export const DashboardSummaryTile: React.FC<DashboardSummaryTileProps> = (
       <div className={styles.summaryTile}>
         <div className={styles.summaryInfo}>
           {props.summaryTileIcon}
-          <p className={styles.summaryName}>New Location Updates:</p>
+          <p className={styles.summaryName}>{props.summaryName}:</p>
         </div>
-        <p className={styles.summaryNumber}>3</p>
+        <p className={styles.summaryNumber}>{props.summaryNumber}</p>
         <p className={styles.summaryUnit}>Since Yesterday</p>
       </div>
     </>

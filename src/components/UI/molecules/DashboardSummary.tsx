@@ -35,14 +35,14 @@ export const DashboardSummary: React.FC = () => {
           <DashboardSummaryTile
             summaryTileIcon={<ExploreOutlinedIcon style={{ fontSize: 42 }} />}
             summaryName={"New Location Updates"}
-            summaryNumber={"3"}
+            summaryNumber={"2"}
           />
         </div>
         <div className={styles.summarySecond}>
           <DashboardSummaryTile
             summaryTileIcon={<BarChartOutlinedIcon style={{ fontSize: 42 }} />}
             summaryName={"New Incidents"}
-            summaryNumber={"2"}
+            summaryNumber={"3"}
           />
         </div>
         <div className={styles.summarySecond}>
