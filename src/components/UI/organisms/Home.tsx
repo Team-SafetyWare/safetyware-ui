@@ -6,8 +6,8 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import { DashboardInfo } from "../atoms/DashboardInfo";
-import { DashboardSummary } from "../atoms/DashboardSummary";
+import { DashboardInfo } from "../molecules/DashboardInfo";
+import { DashboardSummary } from "../molecules/DashboardSummary";
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({

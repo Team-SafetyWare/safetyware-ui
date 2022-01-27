@@ -14,7 +14,7 @@ export const DashboardInfo: React.FC = () => {
       <HomeGreeting
         userName={"Jane"}
         time={"Afternoon"}
-        date={"January, 27th, 2022"}
+        date={"January 27th, 2022"}
         day={"Thursday"}
       />
     </>
