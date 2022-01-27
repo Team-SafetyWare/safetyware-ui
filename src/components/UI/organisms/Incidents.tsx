@@ -4,7 +4,7 @@ import { CustomAccordion } from "../atoms/CustomAccordion";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import IncidentDotMap from "../atoms/IncidentDotMap";
 import { PageHeader } from "../atoms/PageHeader";
-import { PageSectionHeader } from "../atoms/PageSectionHeader";
+import {PageSectionHeader} from "../atoms/PageSectionHeader";
 import {useQuery} from "@apollo/client";
 import {GET_LOCATIONS} from "../../../util/queryService";
 
