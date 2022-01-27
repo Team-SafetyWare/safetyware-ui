@@ -3,8 +3,8 @@ import React from "react";
 import BasicDatePicker from "../atoms/BasicDatePicker";
 
 interface CustomBoxDatesProps {
-  startDate?: string;
-  endDate?: string;
+  startDate?: any;
+  endDate?: any;
 }
 
 const useStyles = makeStyles({});

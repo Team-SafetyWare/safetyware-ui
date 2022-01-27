@@ -19,6 +19,8 @@ const data = [
 const user = "PersonA";
 const view = "User";
 const incidentType = "All";
+const startDate = new Date("01/01/2022");
+const endDate = new Date("01/08/2022");
 
 export const Incidents: React.FC = () => {
   return (
@@ -29,7 +31,13 @@ export const Incidents: React.FC = () => {
         accordionTitle={"Incidents Bar Graph"}
         component={<BarGraph data={data} />}
       />
-      <CustomBox user={user} view={view} incidentType={incidentType} />
+      <CustomBox
+        user={user}
+        view={view}
+        incidentType={incidentType}
+        startDate={startDate}
+        endDate={endDate}
+      />
     </>
   );
 };
