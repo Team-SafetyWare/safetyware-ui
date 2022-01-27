@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   pageHeader: {
     backgroundColor: "white",
     padding: "24px 25px",
-    margin: "-10px -25px 15px", // Th is gross, I knowis
+    margin: "-10px -25px 15px",
   },
   pageTitle: {
     fontSize: "32px",
