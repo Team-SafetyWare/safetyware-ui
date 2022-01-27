@@ -1,8 +1,10 @@
 import React from "react";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
+import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import IncidentDotMap from "../atoms/IncidentDotMap";
 import { PageHeader } from "../atoms/PageHeader";
+import { PageSectionHeader } from "../atoms/PageSectionHeader";
 
 const data = [
   { x: 0, y: 8 },
@@ -33,6 +35,22 @@ export const Incidents: React.FC = () => {
       <PageHeader
         pageTitle={"Incidents"}
         pageDescription={"Description of the Incidents Page and What it Does"}
+      />
+      <PageSectionHeader
+        sectionTitle={"Raw Incidents Data"}
+        sectionDescription={"Explore and Download Raw Incidents Data"}
+        download={true}
+      />
+      <CustomAccordion
+        accordionHeight={"auto"}
+        accordionWidth={""}
+        accordionTitle={"Raw Incidents Data Table"}
+        component={<CustomCollapsibleTable />}
+      />
+      <PageSectionHeader
+        sectionTitle={"Incidents Visualizations"}
+        sectionDescription={"Visualize Incidents Data"}
+        download={false}
       />
       <CustomAccordion
         accordionHeight={"400px"}
