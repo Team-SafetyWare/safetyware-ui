@@ -7,11 +7,7 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 
 interface CustomAccordionProps {
-  // If the height of the accordion is given, use it. Note that it MUST be
-  // a string in the format "__px"
   accordionHeight?: string;
-  // If the height of the width is given, use it. Note that it MUST be
-  // a string in the format "__px"
   accordionWidth?: string;
   accordionTitle?: string;
   component?: any;
