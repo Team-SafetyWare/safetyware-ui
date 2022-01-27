@@ -26,6 +26,7 @@ export interface LocationReading {
         lng: number
         lat: number
     }
+    name?: string
 }
 
 export const Locations: React.FC = () => {
@@ -38,7 +39,10 @@ export const Locations: React.FC = () => {
         if (!loading && data) {
             data.locationReadings.map(
                 (location: any) => {
-                    addLocation(locations => [...locations, {coordinates: {lng: location.coordinates[0], lat: location.coordinates[1]}}])
+                    addLocation(locations => [...locations,
+                        {coordinates: {lng: location.coordinates[0], lat: location.coordinates[1]},
+                            name: location.person.name}
+                    ])
                 }
             )
         }
