@@ -21,7 +21,7 @@ export const Locations: React.FC = () => {
     <>
       <PageHeader
         pageTitle={"Locations"}
-        pageDescription={"Description of the Locations and What it Does"}
+        pageDescription={"Description of the Locations Page and What it Does"}
       />
       <PageSectionHeader
         sectionTitle={"Raw Locations Data"}
