@@ -1,7 +1,9 @@
 import React from "react";
 import { CustomAccordion } from "../atoms/CustomAccordion";
+import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
 import { PageHeader } from "../atoms/PageHeader";
+import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
 
 const center = {
@@ -20,6 +22,22 @@ export const Locations: React.FC = () => {
       <PageHeader
         pageTitle={"Locations"}
         pageDescription={"Description of the Locations and What it Does"}
+      />
+      <PageSectionHeader
+        sectionTitle={"Raw Locations Data"}
+        sectionDescription={"Explore and Download Raw Locations Data"}
+        download={true}
+      />
+      <CustomAccordion
+        accordionHeight={"auto"}
+        accordionWidth={""}
+        accordionTitle={"Raw Locations Data Table"}
+        component={<CustomCollapsibleTable />}
+      />
+      <PageSectionHeader
+        sectionTitle={"Locations Visualizations"}
+        sectionDescription={"Visualize Locations Data"}
+        download={false}
       />
       <CustomAccordion
         accordionHeight={"400px"}
