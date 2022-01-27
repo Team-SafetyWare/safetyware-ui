@@ -1,6 +1,7 @@
 import React from "react";
 import ProfilePicture from "../../../assets/profilePicture.png";
 import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
+import { PageHeader } from "../atoms/PageHeader";
 
 export const UserAccount: React.FC = () => {
   //TO-DO: Add mock-data for different teams so implementing dynamic site features will
@@ -21,6 +22,12 @@ export const UserAccount: React.FC = () => {
 
   return (
     <>
+      <PageHeader
+        pageTitle={"User Information"}
+        pageDescription={
+          "Description of the User Information Page and What it Does"
+        }
+      />
       <UserAccountTemplate
         userPhoto={ProfilePicture}
         userName={"Jane Doe"}
