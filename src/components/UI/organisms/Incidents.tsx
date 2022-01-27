@@ -1,12 +1,14 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import IncidentDotMap from "../atoms/IncidentDotMap";
 import { PageHeader } from "../atoms/PageHeader";
-import { PageSectionHeader } from "../atoms/PageSectionHeader";
+import {PageSectionHeader} from "../atoms/PageSectionHeader";
+import {useQuery} from "@apollo/client";
+import {GET_LOCATIONS} from "../../../util/queryService";
 
-const data = [
+const barGraphData = [
   { x: 0, y: 8 },
   { x: 1, y: 5 },
   { x: 2, y: 4 },
@@ -29,7 +31,33 @@ const center = {
   lng: -114.1283,
 };
 
+export interface LocationReading {
+    coordinates: {
+        lng: number
+        lat: number
+    }
+    name?: string
+}
+
 export const Incidents: React.FC = () => {
+    const [locations, addLocation] = React.useState<LocationReading[]>([]);
+    const {loading, error, data} = useQuery(
+        GET_LOCATIONS,
+    );
+
+    useEffect(() => {
+        if (!loading && data) {
+            data.locationReadings.map(
+                (location: any) => {
+                    addLocation(locations => [...locations,
+                        {coordinates: {lng: location.coordinates[0], lat: location.coordinates[1]},
+                            name: location.person.name}
+                    ])
+                }
+            )
+        }
+    }, [loading, data])
+
   return (
     <>
       <PageHeader
@@ -57,14 +85,14 @@ export const Incidents: React.FC = () => {
         accordionWidth={""}
         accordionTitle={"Incident Dot Map"}
         component={
-          <IncidentDotMap incidents={incidents} center={center} zoom={10} />
+          <IncidentDotMap incidents={locations} center={center} zoom={10} />
         }
       />
       <CustomAccordion
         accordionHeight={"400px"}
         accordionWidth={""}
         accordionTitle={"Incidents Bar Graph"}
-        component={<BarGraph data={data} />}
+        component={<BarGraph data={barGraphData} />}
       />
     </>
   );

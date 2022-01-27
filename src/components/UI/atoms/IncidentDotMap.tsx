@@ -1,38 +1,49 @@
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import {GoogleMap, InfoWindow, Marker} from "@react-google-maps/api";
 import React from "react";
+import {LocationReading} from "../organisms/Incidents";
+import MarkerIcon from "../../../assets/AccidentDotMapDot.png";
 
 const containerStyle = {
-  width: "100%",
-  height: "100%",
+    width: "100%",
+    height: "100%",
 };
 
 interface IncidentDotMapProps {
-  incidents?: any;
-  startDate?: any;
-  endDate?: any;
-  center?: any;
-  zoom?: any;
+    incidents?: any;
+    startDate?: any;
+    endDate?: any;
+    center?: any;
+    zoom?: any;
 }
 
 export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
-  const accidents = props.incidents;
-  const zoom = props.zoom;
-  const center = props.center;
+    const incidents = props.incidents
+    const zoom = props.zoom
+    const center = props.center
+    const [markerWindows, updateMarkerWindow] = React.useState<LocationReading[]>([]);
 
-  function createMarker(
-    location: google.maps.LatLng | google.maps.LatLngLiteral
-  ) {
-    return <Marker position={location} />;
-  }
+    function createMarker(location: LocationReading) {
+        return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {
+            updateMarkerWindow(markerWindows => [...markerWindows, location])
+        }}/>;
+    }
 
-  return (
-    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
-      {accidents.map(
-        (accident: google.maps.LatLng | google.maps.LatLngLiteral) =>
-          createMarker(accident)
-      )}
-    </GoogleMap>
-  );
+    function createMarkerWindow(location: LocationReading) {
+        return <InfoWindow position={location.coordinates}>
+            <div>{location.name}</div>
+        </InfoWindow>
+    }
+
+    return (
+        <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={zoom}
+        >
+            {markerWindows.map((markerWindow) => createMarkerWindow(markerWindow))}
+            {incidents.map((incident: LocationReading) => createMarker(incident))}
+        </GoogleMap>
+    )
 };
 
 export default React.memo(IncidentDotMap);

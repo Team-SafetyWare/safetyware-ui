@@ -1,5 +1,6 @@
 import React from 'react';
 import {GoogleMap, HeatmapLayer} from '@react-google-maps/api';
+import {LocationReading} from "../organisms/Incidents";
 
 
 const containerStyle = {
@@ -8,7 +9,7 @@ const containerStyle = {
 };
 
 interface HazardousAreaHeatMapProps {
-    accidents?: any;
+    accidents: LocationReading[];
     startDate?: any;
     endDate?: any;
     center?: any;
@@ -17,14 +18,14 @@ interface HazardousAreaHeatMapProps {
 
 
 export const HazardousAreaHeatMap: React.FC<HazardousAreaHeatMapProps> = (props) => {
-    const accidents = props.accidents == undefined ? [] : props.accidents
+    const accidents = props.accidents
     const center = props.center
     const zoom = props.zoom
 
     function createHeatMapData() {
         let data = []
         for (const accident of accidents) {
-            data.push(new google.maps.LatLng(accident.lat, accident.lng))
+            data.push(new google.maps.LatLng(accident.coordinates.lat, accident.coordinates.lng))
         }
         return data
     }
