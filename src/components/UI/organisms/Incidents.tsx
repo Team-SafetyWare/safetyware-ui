@@ -2,6 +2,7 @@ import React from "react";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import IncidentDotMap from "../atoms/IncidentDotMap";
+import { PageHeader } from "../atoms/PageHeader";
 
 const data = [
   { x: 0, y: 8 },
@@ -29,6 +30,10 @@ const center = {
 export const Incidents: React.FC = () => {
   return (
     <>
+      <PageHeader
+        pageTitle={"Incidents"}
+        pageDescription={"Description of the Incidents Page and What it Does"}
+      />
       <CustomAccordion
         accordionHeight={"400px"}
         accordionWidth={""}
