@@ -1,7 +1,9 @@
 import React from "react";
 import { CustomAccordion } from "../atoms/CustomAccordion";
-import GasesDotMap from "../atoms/GasesDotMap";
+import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
+import { GasesDotMap } from "../atoms/GasesDotMap";
 import { PageHeader } from "../atoms/PageHeader";
+import { PageSectionHeader } from "../atoms/PageSectionHeader";
 
 const gases = [
   { lat: 51.077763, lng: -114.140657 },
@@ -19,6 +21,22 @@ export const Gases: React.FC = () => {
       <PageHeader
         pageTitle={"Gases"}
         pageDescription={"Description of the Gases Page and What it Does"}
+      />
+      <PageSectionHeader
+        sectionTitle={"Raw Gases Data"}
+        sectionDescription={"Explore and Download Raw Gases Data"}
+        download={true}
+      />
+      <CustomAccordion
+        accordionHeight={"auto"}
+        accordionWidth={""}
+        accordionTitle={"Raw Gases Data Table"}
+        component={<CustomCollapsibleTable />}
+      />
+      <PageSectionHeader
+        sectionTitle={"Gas Visualizations"}
+        sectionDescription={"Visualize Gas Data Based on Location"}
+        download={false}
       />
       <CustomAccordion
         accordionHeight={"400px"}
