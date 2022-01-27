@@ -1,6 +1,5 @@
 import React from 'react';
 import {GoogleMap, InfoWindow, Marker} from '@react-google-maps/api';
-import {LocationReading} from '../organisms/Locations';
 import MarkerIcon from '../../../assets/AccidentDotMapDot.png';
 
 const containerStyle = {
@@ -17,33 +16,7 @@ interface AccidentDotMapProps {
 }
 
 export const AccidentDotMap: React.FC<AccidentDotMapProps> = (props) => {
-    const accidents = props.accidents
-    const zoom = props.zoom
-    const center = props.center
-    const [markerWindows, updateMarkerWindow] = React.useState<LocationReading[]>([]);
-
-    function createMarker(location: LocationReading) {
-        return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {
-            updateMarkerWindow(markerWindows => [...markerWindows, location])
-        }}/>;
-    }
-
-    function createMarkerWindow(location: LocationReading) {
-        return <InfoWindow position={location.coordinates} >
-            <div>{location.name}</div>
-        </InfoWindow>
-    }
-
-    return (
-        <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={zoom}
-        >
-            {markerWindows.map((markerWindow) => createMarkerWindow(markerWindow))}
-            {accidents.map((accident: LocationReading) => createMarker(accident))}
-        </GoogleMap>
-    )
+    return <div>loading</div>
 }
 
 export default React.memo(AccidentDotMap)
