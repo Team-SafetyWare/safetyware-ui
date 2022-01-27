@@ -5,36 +5,28 @@ import {
   Droppable,
   NotDraggingStyle,
 } from "react-beautiful-dnd";
-
-const grid = 8;
+import { DashboardSummaryTile } from "./DashboardSummaryTile";
 
 const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
-  background: isDraggingOver ? "lightblue" : "lightgrey",
-  padding: grid,
-  width: 250,
+  display: "flex",
+  background: isDraggingOver ? "" : "",
+  width: "100%",
 });
 
 const getItemStyle = (
   isDragging: boolean,
   draggableStyle: DraggingStyle | NotDraggingStyle | undefined
 ): React.CSSProperties => ({
-  // some basic styles to make the items look a bit nicer
-  userSelect: "none",
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
-
-  // change background colour if dragging
-  background: isDragging ? "lightgreen" : "grey",
-
-  // styles we need to apply on draggables
+  width: "100%",
+  marginLeft: "5px",
+  marginRight: "5px",
+  background: isDragging ? "" : "",
   ...draggableStyle,
 });
 
 export const HorizontalColumn = (props: { state: any[] }): JSX.Element => {
-  // Normally you would want to split things out into separate components.
-  // But in this example everything is just done in one place for simplicity
   return (
-    <Droppable droppableId="droppable">
+    <Droppable droppableId="droppable" direction="horizontal">
       {(provided, snapshot): JSX.Element => (
         <div
           {...provided.droppableProps}
@@ -42,7 +34,7 @@ export const HorizontalColumn = (props: { state: any[] }): JSX.Element => {
           style={getListStyle(snapshot.isDraggingOver)}
         >
           {props.state.map((item, index) => (
-            <Draggable key={item.id} draggableId={item.id} index={index}>
+            <Draggable key={index} draggableId={index.toString()} index={index}>
               {(provided, snapshot): JSX.Element => (
                 <div
                   ref={provided.innerRef}
@@ -53,7 +45,11 @@ export const HorizontalColumn = (props: { state: any[] }): JSX.Element => {
                     provided.draggableProps.style
                   )}
                 >
-                  {item.summaryTileIcon}
+                  <DashboardSummaryTile
+                    summaryTileIcon={item.summaryTileIcon}
+                    summaryName={item.summaryName}
+                    summaryNumber={item.summaryNumber}
+                  />
                 </div>
               )}
             </Draggable>
