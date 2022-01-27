@@ -1,6 +1,7 @@
 import React from "react";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
+import { PageHeader } from "../atoms/PageHeader";
 import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
 
 const center = {
@@ -16,6 +17,10 @@ const path = [
 export const Locations: React.FC = () => {
   return (
     <>
+      <PageHeader
+        pageTitle={"Locations"}
+        pageDescription={"Description of the Locations and What it Does"}
+      />
       <CustomAccordion
         accordionHeight={"400px"}
         accordionWidth={""}

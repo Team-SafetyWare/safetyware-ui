@@ -1,6 +1,7 @@
 import React from "react";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import GasesDotMap from "../atoms/GasesDotMap";
+import { PageHeader } from "../atoms/PageHeader";
 
 const gases = [
   { lat: 51.077763, lng: -114.140657 },
@@ -15,6 +16,10 @@ const center = {
 export const Gases: React.FC = () => {
   return (
     <>
+      <PageHeader
+        pageTitle={"Gases"}
+        pageDescription={"Description of the Gases Page and What it Does"}
+      />
       <CustomAccordion
         accordionHeight={"400px"}
         accordionWidth={""}
