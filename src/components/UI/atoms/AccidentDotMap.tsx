@@ -1,6 +1,5 @@
 import React from 'react';
 import {GoogleMap, InfoWindow, Marker} from '@react-google-maps/api';
-import {setFlagsFromString} from "v8";
 import {LocationReading} from '../organisms/Locations';
 
 const containerStyle = {
@@ -20,20 +19,28 @@ export const AccidentDotMap: React.FC<AccidentDotMapProps> = (props) => {
     const accidents = props.accidents
     const zoom = props.zoom
     const center = props.center
-    const [markerWindows, addMarkerWindow] = React.useState<LocationReading[]>([]);
+    const [markerWindows, updateMarkerWindow] = React.useState<LocationReading[]>([]);
 
     function createMarker(location: LocationReading) {
         return <Marker position={location.coordinates} onClick={() => {
-            addMarkerWindow(markerWindows => [...markerWindows, location])
+            updateMarkerWindow(markerWindows => [...markerWindows, location])
         }}/>;
     }
 
     function createMarkerWindow(location: LocationReading) {
-        return <InfoWindow position={location.coordinates}>
+        return <InfoWindow position={location.coordinates} onCloseClick={() => deleteMarkerWindow(location)}>
             <div>{location.name}</div>
         </InfoWindow>
     }
 
+    function deleteMarkerWindow(location: LocationReading) {
+        let temp = [...markerWindows]
+        let index = temp.indexOf(location)
+        if (index !== -1) {
+            temp.splice(index, 1)
+            updateMarkerWindow(temp)
+        }
+    }
 
     return (
         <GoogleMap
