@@ -5,6 +5,7 @@ interface DashboardSummaryTileProps {
   summaryTileIcon?: any;
   summaryName?: string;
   summaryNumber?: string;
+  innerRef?: any;
 }
 
 const useStyles = makeStyles({
