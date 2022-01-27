@@ -24,7 +24,7 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   summaryName: {
-    margin: "0 0 0 10px",
+    marginLeft: "10px",
   },
   summaryNumber: {
     fontSize: "32px",
