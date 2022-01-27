@@ -1,9 +1,15 @@
-import React from "react";
+import { useQuery } from "@apollo/client";
+import React, { useEffect } from "react";
+import { GET_LOCATIONS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
+import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
+import IncidentDotMap from "../atoms/IncidentDotMap";
+import { PageHeader } from "../atoms/PageHeader";
+import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { CustomBox } from "../molecules/CustomBox";
 
-const data = [
+const barGraphData = [
   { x: 0, y: 8 },
   { x: 1, y: 5 },
   { x: 2, y: 4 },
@@ -16,20 +22,85 @@ const data = [
   { x: 9, y: 0 },
 ];
 
+
+
+
 const user = "PersonA";
 const view = "User";
 const incidentType = "All";
 const startDate = new Date("01/01/2022");
 const endDate = new Date("01/08/2022");
+const incidents = [
+  { lat: 51.077763, lng: -114.140657 },
+  { lat: 51.046048773481786, lng: -114.02334120770176 },
+];
 
+const center = {
+  lat: 51.049999,
+  lng: -114.1283,
+};
+
+export interface LocationReading {
+    coordinates: {
+        lng: number
+        lat: number
+    }
+    name?: string
+}
 export const Incidents: React.FC = () => {
+    const [locations, addLocation] = React.useState<LocationReading[]>([]);
+    const {loading, error, data} = useQuery(
+        GET_LOCATIONS,
+    );
+
+    useEffect(() => {
+        if (!loading && data) {
+            data.locationReadings.map(
+                (location: any) => {
+                    addLocation(locations => [...locations,
+                        {coordinates: {lng: location.coordinates[0], lat: location.coordinates[1]},
+                            name: location.person.name}
+                    ])
+                }
+            )
+        }
+    }, [loading, data])
+
   return (
     <>
+      <PageHeader
+        pageTitle={"Incidents"}
+        pageDescription={"Description of the Incidents Page and What it Does"}
+      />
+      <PageSectionHeader
+        sectionTitle={"Raw Incidents Data"}
+        sectionDescription={"Explore and Download Raw Incidents Data"}
+        download={true}
+      />
+      <CustomAccordion
+        accordionHeight={"auto"}
+        accordionWidth={""}
+        accordionTitle={"Raw Incidents Data Table"}
+        component={<CustomCollapsibleTable />}
+      />
+      <PageSectionHeader
+        sectionTitle={"Incidents Visualizations"}
+        sectionDescription={"Visualize Incidents Data"}
+        download={false}
+      />
+      <CustomAccordion
+        accordionHeight={"400px"}
+        accordionWidth={""}
+        accordionTitle={"Incident Dot Map"}
+        component={
+          <IncidentDotMap incidents={locations} center={center} zoom={10} />
+        }
+      />
       <CustomAccordion
         accordionHeight={"400px"}
         accordionWidth={""}
         accordionTitle={"Incidents Bar Graph"}
-        component={<BarGraph data={data} />}
+        component={<BarGraph data={barGraphData} />}
       />
       <CustomBox
         user={user}
