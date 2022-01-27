@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {GoogleMap, InfoWindow, Marker} from '@react-google-maps/api';
 import {LocationReading} from '../organisms/Locations';
 import MarkerIcon from '../../../assets/AccidentDotMapDot.png';
