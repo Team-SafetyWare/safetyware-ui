@@ -10,8 +10,6 @@ interface CustomBoxDatesProps {
 const useStyles = makeStyles({});
 
 export const CustomBoxDates: React.FC<CustomBoxDatesProps> = (props) => {
-  const startDate = props.startDate;
-  const endDate = props.endDate;
   const styles = useStyles();
 
   return (
