@@ -1,12 +1,13 @@
-import React, {useEffect} from "react";
+import { useQuery } from "@apollo/client";
+import React, { useEffect } from "react";
+import { GET_LOCATIONS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import IncidentDotMap from "../atoms/IncidentDotMap";
 import { PageHeader } from "../atoms/PageHeader";
-import {PageSectionHeader} from "../atoms/PageSectionHeader";
-import {useQuery} from "@apollo/client";
-import {GET_LOCATIONS} from "../../../util/queryService";
+import { PageSectionHeader } from "../atoms/PageSectionHeader";
+import { CustomBox } from "../molecules/CustomBox";
 
 const barGraphData = [
   { x: 0, y: 8 },
@@ -21,6 +22,14 @@ const barGraphData = [
   { x: 9, y: 0 },
 ];
 
+
+
+
+const user = "PersonA";
+const view = "User";
+const incidentType = "All";
+const startDate = new Date("01/01/2022");
+const endDate = new Date("01/08/2022");
 const incidents = [
   { lat: 51.077763, lng: -114.140657 },
   { lat: 51.046048773481786, lng: -114.02334120770176 },
@@ -38,7 +47,6 @@ export interface LocationReading {
     }
     name?: string
 }
-
 export const Incidents: React.FC = () => {
     const [locations, addLocation] = React.useState<LocationReading[]>([]);
     const {loading, error, data} = useQuery(
@@ -93,6 +101,13 @@ export const Incidents: React.FC = () => {
         accordionWidth={""}
         accordionTitle={"Incidents Bar Graph"}
         component={<BarGraph data={barGraphData} />}
+      />
+      <CustomBox
+        user={user}
+        view={view}
+        incidentType={incidentType}
+        startDate={startDate}
+        endDate={endDate}
       />
     </>
   );
