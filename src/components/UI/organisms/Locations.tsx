@@ -3,7 +3,7 @@ import {CustomAccordion} from "../atoms/CustomAccordion";
 import {HazardousAreaHeatMap} from "../atoms/HazardousAreaHeatMap";
 import {TravelHistoryTrail} from "../atoms/TravelHistoryTrail";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
-import { PageHeader } from "../atoms/PageHeader";
+import {PageHeader} from "../atoms/PageHeader";
 import {PageSectionHeader} from "../atoms/PageSectionHeader";
 import {useQuery} from "@apollo/client";
 import {GET_LOCATIONS} from "../../../util/queryService";
@@ -21,6 +21,7 @@ const path = [
 
 export const Locations: React.FC = () => {
     const [locations, addLocation] = React.useState<LocationReading[]>([]);
+    const [travelTrail, updateTravelTrail] = React.useState<{ lat: number, lng: number }[]>([]);
     const {loading, error, data} = useQuery(
         GET_LOCATIONS,
     );
@@ -32,47 +33,51 @@ export const Locations: React.FC = () => {
                     addLocation(locations => [...locations,
                         {coordinates: {lng: location.coordinates[0], lat: location.coordinates[1]}}
                     ])
+                    updateTravelTrail(travelTrail => [...travelTrail, {
+                        lat: location.coordinates[1],
+                        lng: location.coordinates[0],
+                    }])
                 }
             )
         }
     }, [loading, data])
 
-  return (
-    <>
-      <PageHeader
-        pageTitle={"Locations"}
-        pageDescription={"Description of the Locations Page and What it Does"}
-      />
-      <PageSectionHeader
-        sectionTitle={"Raw Locations Data"}
-        sectionDescription={"Explore and Download Raw Locations Data"}
-        download={true}
-      />
-      <CustomAccordion
-        accordionHeight={"auto"}
-        accordionWidth={""}
-        accordionTitle={"Raw Locations Data Table"}
-        component={<CustomCollapsibleTable />}
-      />
-      <PageSectionHeader
-        sectionTitle={"Locations Visualizations"}
-        sectionDescription={"Visualize Locations Data"}
-        download={false}
-      />
-      <CustomAccordion
-        accordionHeight={"400px"}
-        accordionWidth={""}
-        accordionTitle={"Travel History Trail"}
-        component={<TravelHistoryTrail center={center} path={path} />}
-      />
-      <CustomAccordion
-        accordionHeight={"400px"}
-        accordionWidth={""}
-        accordionTitle={"Hazardous Area Heat Map"}
-        component={
-          <HazardousAreaHeatMap accidents={locations} center={center} zoom={10} />
-        }
-      />
-    </>
-  );
+    return (
+        <>
+            <PageHeader
+                pageTitle={"Locations"}
+                pageDescription={"Description of the Locations Page and What it Does"}
+            />
+            <PageSectionHeader
+                sectionTitle={"Raw Locations Data"}
+                sectionDescription={"Explore and Download Raw Locations Data"}
+                download={true}
+            />
+            <CustomAccordion
+                accordionHeight={"auto"}
+                accordionWidth={""}
+                accordionTitle={"Raw Locations Data Table"}
+                component={<CustomCollapsibleTable/>}
+            />
+            <PageSectionHeader
+                sectionTitle={"Locations Visualizations"}
+                sectionDescription={"Visualize Locations Data"}
+                download={false}
+            />
+            <CustomAccordion
+                accordionHeight={"400px"}
+                accordionWidth={""}
+                accordionTitle={"Travel History Trail"}
+                component={<TravelHistoryTrail center={center} path={travelTrail}/>}
+            />
+            <CustomAccordion
+                accordionHeight={"400px"}
+                accordionWidth={""}
+                accordionTitle={"Hazardous Area Heat Map"}
+                component={
+                    <HazardousAreaHeatMap accidents={locations} center={center} zoom={10}/>
+                }
+            />
+        </>
+    );
 };
