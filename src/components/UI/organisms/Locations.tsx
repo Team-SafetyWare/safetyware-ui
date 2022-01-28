@@ -1,23 +1,30 @@
 import React, {useEffect} from "react";
 import {CustomAccordion} from "../atoms/CustomAccordion";
-import {HazardousAreaHeatMap} from "../atoms/HazardousAreaHeatMap";
-import {TravelHistoryPoint, TravelHistoryTrail} from "../atoms/TravelHistoryTrail";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
-import {PageHeader} from "../atoms/PageHeader";
-import {PageSectionHeader} from "../atoms/PageSectionHeader";
 import {useQuery} from "@apollo/client";
 import {GET_LOCATIONS} from "../../../util/queryService";
-import {LocationReading} from "./Incidents";
+import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
+import { PageHeader } from "../atoms/PageHeader";
+import { PageSectionHeader } from "../atoms/PageSectionHeader";
+import { TravelHistoryTrail, TravelHistoryPoint } from "../atoms/TravelHistoryTrail";
+import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
+import { LocationReading } from "./Incidents";
 
 const center = {
-    lat: 51.049999,
-    lng: -114.1283,
+  lat: 51.049999,
+  lng: -114.1283,
 };
 
 const path = [
-    {lat: 51.077763, lng: -114.140657},
-    {lat: 51.046048773481786, lng: -114.02334120770176},
+  { lat: 51.077763, lng: -114.140657 },
+  { lat: 51.046048773481786, lng: -114.02334120770176 },
 ];
+
+const user = "PersonA";
+const view = "User";
+const incidentType = "All";
+const startDate = new Date("01/01/2022");
+const endDate = new Date("01/08/2022");
 
 export const Locations: React.FC = () => {
     const [locations, addLocation] = React.useState<LocationReading[]>([]);
@@ -25,6 +32,7 @@ export const Locations: React.FC = () => {
     const {loading, error, data} = useQuery(
         GET_LOCATIONS,
     );
+
 
     useEffect(() => {
         if (!loading && data) {
@@ -78,6 +86,12 @@ export const Locations: React.FC = () => {
                 component={
                     <HazardousAreaHeatMap accidents={locations} center={center} zoom={10}/>
                 }
+            />
+            <CustomBoxReduced
+                user={user}
+                view={view}
+                startDate={startDate}
+                endDate={endDate}
             />
         </>
     );
