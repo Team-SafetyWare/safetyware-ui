@@ -30,19 +30,15 @@ const useStyles = makeStyles({
 });
 
 export const CustomBox: React.FC<CustomBoxProps> = (props) => {
-  const view = props.view;
-  const user = props.user;
-  const incidentType = props.incidentType;
-  const startDate = props.startDate;
-  const endDate = props.endDate;
+
   const styles = useStyles();
 
   return (
     <div className={styles.box}>
       <h3>Customize</h3>
-      <CustomBoxDates startDate={startDate} endDate={endDate} />
-      <CustomBoxUserSelect user={user} view={view} />
-      <CustomBoxIncidentSelect incidentType={incidentType} />
+      <CustomBoxDates startDate={props.startDate} endDate={props.endDate} />
+      <CustomBoxUserSelect user={props.user} view={props.view} />
+      <CustomBoxIncidentSelect incidentType={props.incidentType} />
     </div>
   );
 };

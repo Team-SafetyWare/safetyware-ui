@@ -23,8 +23,7 @@ const useStyles = makeStyles({
 export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   props
 ) => {
-  const view = props.view;
-  const user = props.user;
+
   const styles = useStyles();
 
   return (
@@ -34,7 +33,7 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
         <RadioGroup
           row
           aria-labelledby="radio-group"
-          defaultValue={view}
+          defaultValue={props.view}
           name="radio-buttons-group"
         >
           <FormControlLabel value="User" control={<Radio />} label="User" />
@@ -54,7 +53,7 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
           labelId="simple-select-label"
           id="simple-select"
           label="Select"
-          defaultValue={user}
+          defaultValue={props.user}
         >
           <MenuItem value={"PersonA"}>Person A</MenuItem>
           <MenuItem value={"PersonB"}>Person B</MenuItem>
