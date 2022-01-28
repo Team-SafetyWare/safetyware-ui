@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {CustomAccordion} from "../atoms/CustomAccordion";
 import {HazardousAreaHeatMap} from "../atoms/HazardousAreaHeatMap";
-import {TravelHistoryTrail} from "../atoms/TravelHistoryTrail";
+import {TravelHistoryPoint, TravelHistoryTrail} from "../atoms/TravelHistoryTrail";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import {PageHeader} from "../atoms/PageHeader";
 import {PageSectionHeader} from "../atoms/PageSectionHeader";
@@ -21,7 +21,7 @@ const path = [
 
 export const Locations: React.FC = () => {
     const [locations, addLocation] = React.useState<LocationReading[]>([]);
-    const [travelTrail, updateTravelTrail] = React.useState<{ lat: number, lng: number }[]>([]);
+    const [travelTrail, updateTravelTrail] = React.useState<TravelHistoryPoint[]>([]);
     const {loading, error, data} = useQuery(
         GET_LOCATIONS,
     );
@@ -36,6 +36,7 @@ export const Locations: React.FC = () => {
                     updateTravelTrail(travelTrail => [...travelTrail, {
                         lat: location.coordinates[1],
                         lng: location.coordinates[0],
+                        timestamp: location.timestamp
                     }])
                 }
             )
