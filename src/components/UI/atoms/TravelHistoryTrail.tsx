@@ -3,7 +3,13 @@ import React from "react";
 
 interface TravelHistoryTrailProps {
   center?: any;
-  path?: any;
+  path?: TravelHistoryPoint[];
+}
+
+export interface TravelHistoryPoint {
+  lat: number,
+  lng:number,
+  timestamp: string,
 }
 
 export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
