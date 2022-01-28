@@ -12,19 +12,11 @@ export const GET_LOCATIONS = gql`
   query {
     locationReadings {
       coordinates
+      timestamp
       person {
         id
         name
       }
     }
   }
-`;
-
-export const GET_TRAVEL_TRAIL = gql`
-    query {
-      locationReadings {
-        coordinates
-        timestamp
-      }
-    }
 `;
