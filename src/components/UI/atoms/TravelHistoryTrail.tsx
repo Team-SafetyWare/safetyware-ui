@@ -1,6 +1,5 @@
 import {GoogleMap, InfoWindow, Polyline} from "@react-google-maps/api";
 import React from "react";
-import {LocationReading} from "../organisms/Incidents";
 
 interface TravelHistoryTrailProps {
     center?: any;
