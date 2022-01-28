@@ -30,22 +30,19 @@ export const UserAccount: React.FC = () => {
   // https://www.apollographql.com/docs/react/data/queries/
   // TO-DO: handle loading and error
   let personList: Array<Person> = [];
-  const { loading, error, data } = useQuery(GET_PERSONS, {
-    onCompleted: () => {
-      data.people.map((person: Person) => {
-        personList.push(person);
-      });
-    },
-  });
+  const { loading, error, data } = useQuery(GET_PERSONS);
 
   // Sample feed into UI components
   // Probably a better way to handle this
   const [name, setName] = useState("Jane Doe");
   useEffect(() => {
-    if (data) {
+    if (!loading && data) {
+      data.people.map((person:Person) => {
+        personList.push(person)
+      })
       setName(personList[0].name);
     }
-  }, [data]);
+  }, [loading, data]);
 
   return (
     <>
