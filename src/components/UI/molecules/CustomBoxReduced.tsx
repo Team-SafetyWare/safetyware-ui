@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import Draggable from "react-draggable";
 import { CustomBoxDates } from "../atoms/CustomBoxDates";
 import { CustomBoxUserSelect } from "../atoms/CustomBoxUserSelect";
 
@@ -28,14 +29,15 @@ const useStyles = makeStyles({
 });
 
 export const CustomBoxReduced: React.FC<CustomBoxReducedProps> = (props) => {
-
   const styles = useStyles();
 
   return (
-    <div className={styles.box}>
-      <h3>Customize</h3>
-      <CustomBoxDates startDate={props.startDate} endDate={props.endDate} />
-      <CustomBoxUserSelect user={props.user} view={props.view} />
-    </div>
+    <Draggable>
+      <div className={styles.box}>
+        <h3>Customize</h3>
+        <CustomBoxDates startDate={props.startDate} endDate={props.endDate} />
+        <CustomBoxUserSelect user={props.user} view={props.view} />
+      </div>
+    </Draggable>
   );
 };
