@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/client";
+import { useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ProfilePicture from "../../../assets/profilePicture.png";
 import { GET_PERSONS } from "../../../util/queryService";
@@ -37,21 +38,25 @@ export const UserAccount: React.FC = () => {
   const [name, setName] = useState("Jane Doe");
   useEffect(() => {
     if (!loading && data) {
-      data.people.map((person:Person) => {
-        personList.push(person)
-      })
+      data.people.map((person: Person) => {
+        personList.push(person);
+      });
       setName(personList[0].name);
     }
   }, [loading, data]);
 
+  const matches = useMediaQuery("(min-width:600px)");
+
   return (
     <>
-      <PageHeader
-        pageTitle={"User Information"}
-        pageDescription={
-          "Description of the User Information Page and What it Does"
-        }
-      />
+      {matches && (
+        <PageHeader
+          pageTitle={"User Information"}
+          pageDescription={
+            "Description of the User Information Page and What it Does"
+          }
+        />
+      )}
       <UserAccountTemplate
         userPhoto={ProfilePicture}
         userName={name}
