@@ -35,10 +35,10 @@ export const Pages: React.FC = () => {
   const { loading, error, data } = useQuery(GET_PERSONS);
 
   // Dummy name for sidebar, since we haven't handled authentication yet
-  const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   useEffect(() => {
     if (!loading && data) {
-      setName(data.people[0].name);
+      setUserName(data.people[0].name);
     }
   }, [loading, data]);
 
@@ -53,7 +53,7 @@ export const Pages: React.FC = () => {
         />
       ) : (
         <>
-          <Sidebar userName={name} userPhoto={ProfilePicture} />
+          <Sidebar userName={userName} userPhoto={ProfilePicture} />
           <div className={styles.content}>
             <div className={styles.innerContent}>
               <Switch>
