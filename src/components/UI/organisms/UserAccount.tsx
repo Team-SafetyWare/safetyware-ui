@@ -33,13 +33,12 @@ export const UserAccount: React.FC = () => {
   const { loading, error, data } = useQuery(GET_PERSONS);
 
   // Sample feed into UI components
-  // Probably a better way to handle this
   const [name, setName] = useState("Jane Doe");
   useEffect(() => {
     if (!loading && data) {
-      data.people.map((person:Person) => {
-        personList.push(person)
-      })
+      data.people.map((person: Person) => {
+        personList.push(person);
+      });
       setName(personList[0].name);
     }
   }, [loading, data]);
