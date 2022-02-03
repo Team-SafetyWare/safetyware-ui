@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import theme from "../../../Theme";
 import { UserDetails } from "../atoms/UserDetails";
 import { UserPicture } from "../atoms/UserPicture";
 
@@ -16,16 +17,23 @@ const useStyles = makeStyles({
   userInfo: {
     display: "flex",
     alignItems: "center",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+    },
   },
   userPhoto: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     alignContent: "center",
-    marginRight: "20px",
+    [theme.breakpoints.up("sm")]: {
+      marginRight: "20px",
+    },
   },
   userDetails: {
-    fontSize: "18px",
+    [theme.breakpoints.down("sm")]: {
+      textAlign: "center",
+    },
   },
 });
 
