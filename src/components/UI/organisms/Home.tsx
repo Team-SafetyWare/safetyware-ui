@@ -1,11 +1,18 @@
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import UndoIcon from "@mui/icons-material/Undo";
+import { Button } from "@mui/material";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import {
+  selectIsDashboard,
+  setIsDashboard,
+} from "../../../store/slices/dashboard";
+// Redux
+import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
 
@@ -41,8 +48,24 @@ const actions = [
 export const Home: React.FC = () => {
   const styles = useStyles();
 
+  // Redux dispatch example
+  const dispatch = useAppDispatch();
+  const isDashboard = useAppSelector(selectIsDashboard);
+
+  const toggleIsDashboard = () => {
+    dispatch(setIsDashboard(!isDashboard));
+
+    // Should toggle from true to false
+    // If you import const isDashboard = useAppSelector(selectIsDashboard); in any other file, it should retain whatever state you set
+    console.log("This is the dashboard state", isDashboard);
+  };
+
   return (
     <div>
+      <Button variant="contained" onClick={toggleIsDashboard}>
+        Set Dashboard state
+      </Button>
+
       <SpeedDial
         ariaLabel="SpeedDial"
         sx={{ position: "absolute", bottom: 16, right: 16 }}
