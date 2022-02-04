@@ -1,8 +1,7 @@
 import { makeStyles } from "@mui/styles";
-import { Theme } from "@mui/system";
 import React from "react";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles({
   loginTopLeftCorner: {
     "@media (max-height: 599px) or (max-width: 599px)": {
       display: "none",
@@ -10,7 +9,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: "absolute",
     top: 0,
   },
-}));
+});
 
 export const LoginTopLeftCornerPolygon: React.FC = () => {
   const styles = useStyles();
