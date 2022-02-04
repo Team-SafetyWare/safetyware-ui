@@ -63,7 +63,7 @@ export const Home: React.FC = () => {
   return (
     <div>
       <Button variant="contained" onClick={toggleIsDashboard}>
-        Set Dashboard state
+        <p>{isDashboard.toString()}</p>
       </Button>
 
       <SpeedDial
