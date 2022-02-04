@@ -14,8 +14,8 @@ interface CustomBoxReducedProps {
 const useStyles = makeStyles({
   box: {
     textAlign: "center",
-    height: "40%",
-    width: "18%",
+    height: "400px",
+    width: "370px",
     backgroundColor: "#ffffff",
     borderRadius: "30px",
     border: "1px solid rgba(0, 0, 0, 0.05)",
