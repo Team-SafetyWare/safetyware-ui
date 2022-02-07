@@ -14,6 +14,12 @@ import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { CustomBox } from "../molecules/CustomBox";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import {Runtime} from "inspector";
+import {selectIsDashboard} from "../../../store/slices/dashboard";
+import {
+  selectIncidentDotMapEndDate,
+  selectIncidentDotMapStartDate, setEndDate,
+  setStartDate
+} from "../../../store/slices/incidentDotMapSlice";
 // import {startDate, endDate} from "../../../store/slices/incidentDotMap";
 
 const barGraphData = [
@@ -68,6 +74,13 @@ export const Incidents: React.FC = () => {
 
   const [locations, addLocation] = useState<LocationReading[]>([]);
   const { loading, error, data } = useQuery(GET_LOCATIONS);
+
+  const dispatch = useAppDispatch();
+  const startDate = useAppSelector(selectIncidentDotMapStartDate);
+  const endDate = useAppSelector(selectIncidentDotMapEndDate);
+  const updateStartDate = dispatch(setStartDate)
+  const updateEndDate = dispatch(setEndDate)
+
 
   useEffect(() => {
     if (!loading && data) {

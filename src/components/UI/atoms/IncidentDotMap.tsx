@@ -3,8 +3,13 @@ import React from "react";
 import {LocationReading} from "../organisms/Incidents";
 import MarkerIcon from "../../../assets/AccidentDotMapDot.png";
 import {useAppDispatch, useAppSelector} from "../../../store/store";
-import {selectIsDashboard} from "../../../store/slices/dashboard";
-import {selectIncidentDotMapEndDate, selectIncidentDotMapStartDate} from "../../../store/slices/incidentDotMap";
+import {selectIsDashboard, setIsDashboard} from "../../../store/slices/dashboard";
+import {
+    selectIncidentDotMapEndDate,
+    selectIncidentDotMapStartDate, setEndDate,
+    setStartDate
+} from "../../../store/slices/incidentDotMapSlice";
+import {Button} from "@mui/material";
 
 const containerStyle = {
     width: "100%",
@@ -28,6 +33,18 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     const startDate = useAppSelector(selectIncidentDotMapStartDate);
     const endDate = useAppSelector(selectIncidentDotMapEndDate);
 
+    const setAllDates = () => {
+        dispatch(setStartDate(""));
+        dispatch(setEndDate(""));
+        console.log("Resetting Dates", startDate, endDate);
+    };
+
+    const setFilteredDates = () => {
+        dispatch(setStartDate("2021-05-18T08:00:00+00:00"))
+        dispatch(setEndDate("2021-05-18T12:00:00+00:00"))
+        console.log("filtered dates", startDate, endDate)
+    }
+
     function createMarker(location: LocationReading) {
         // if (location.)
         return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {
@@ -38,21 +55,40 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     function createMarkerWindow(location: LocationReading) {
         return <InfoWindow position={location.coordinates}>
             <div>
-                {location.name}
-                {location.date}
+                <div>
+                    {location.name}
+                </div>
+                <div>
+                    {location.date}
+                </div>
+                <div>
+                    {startDate}
+                </div>
+                <div>
+                    {endDate}
+                </div>
             </div>
         </InfoWindow>
     }
 
     return (
-        <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={zoom}
-        >
-            {markerWindows.map((markerWindow) => createMarkerWindow(markerWindow))}
-            {incidents.map((incident: LocationReading) => createMarker(incident))}
-        </GoogleMap>
+        <>
+            <Button variant="contained" onClick={() => setAllDates()}>
+                <p>All Dates</p>
+            </Button>
+            <Button variant="contained" onClick={() => setFilteredDates()}>
+                <p>Filter Dates</p>
+            </Button>
+            <GoogleMap
+                mapContainerStyle={containerStyle}
+
+                center={center}
+                zoom={zoom}
+            >
+                {markerWindows.map((markerWindow) => createMarkerWindow(markerWindow))}
+                {incidents.map((incident: LocationReading) => createMarker(incident))}
+            </GoogleMap>
+        </>
     )
 };
 

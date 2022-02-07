@@ -1,6 +1,6 @@
 import {combineReducers} from "@reduxjs/toolkit";
 import {dashboardDefaultState, dashboardSlice} from "./slices/dashboard";
-import {incidentDotMapSlice} from "./slices/incidentDotMap";
+import {incidentDotMapSlice} from "./slices/incidentDotMapSlice";
 
 export const initialRootState = {
     dashboard: dashboardDefaultState,
