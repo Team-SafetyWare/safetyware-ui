@@ -18,9 +18,11 @@ const useStyles = makeStyles({
   userAccountTemplateBody: {
     display: "flex",
     flexDirection: "column",
-    [theme.breakpoints.up("sm")]: {
-      width: "65vw",
-      marginLeft: "5vw",
+    marginLeft: "5vw",
+    width: "65vw",
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: "0",
+      width: "auto",
     },
   },
 });

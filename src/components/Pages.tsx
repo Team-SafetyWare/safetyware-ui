@@ -16,10 +16,9 @@ import { UserAccount } from "./UI/organisms/UserAccount";
 
 const useStyles = makeStyles({
   content: {
-    height: "100vh",
-    width: "100vw",
-    [theme.breakpoints.up("sm")]: {
-      paddingLeft: "240px",
+    paddingLeft: "240px",
+    [theme.breakpoints.down("sm")]: {
+      paddingLeft: "0",
     },
   },
   innerContent: {
