@@ -1,12 +1,19 @@
-import React, {useEffect} from "react";
-import {CustomAccordion} from "../atoms/CustomAccordion";
+import { useQuery } from "@apollo/client";
+import { useMediaQuery } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import React, { useEffect, useState } from "react";
+import theme from "../../../Theme";
+import { GET_LOCATIONS } from "../../../util/queryService";
+import { CustomAccordion } from "../atoms/CustomAccordion";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
-import {useQuery} from "@apollo/client";
-import {GET_LOCATIONS} from "../../../util/queryService";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
-import { TravelHistoryTrail, TravelHistoryPoint } from "../atoms/TravelHistoryTrail";
+import {
+  TravelHistoryPoint,
+  TravelHistoryTrail,
+} from "../atoms/TravelHistoryTrail";
+import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
 import { LocationReading } from "./Incidents";
 
@@ -26,73 +33,152 @@ const incidentType = "All";
 const startDate = new Date("01/01/2022");
 const endDate = new Date("01/08/2022");
 
+const useStyles = makeStyles({
+  locationsDropdown: {
+    [theme.breakpoints.down("sm")]: {
+      display: "flex",
+      justifyContent: "center",
+      left: "50%",
+      marginBottom: "20px",
+      position: "absolute",
+      top: "calc(0.5 * 60px)",
+      transform: "translate(-50%, -50%)",
+    },
+  },
+
+  visualization: {
+    [theme.breakpoints.down("sm")]: {
+      height: "calc(100vh - 60px)",
+      left: "0",
+      position: "absolute",
+      top: "60px",
+      width: "100vw",
+    },
+  },
+});
+
 export const Locations: React.FC = () => {
-    const [locations, addLocation] = React.useState<LocationReading[]>([]);
-    const [travelTrail, updateTravelTrail] = React.useState<TravelHistoryPoint[]>([]);
-    const {loading, error, data} = useQuery(
-        GET_LOCATIONS,
-    );
+  const matches = useMediaQuery("(min-width:600px)");
+  const styles = useStyles();
 
+  const [locations, addLocation] = useState<LocationReading[]>([]);
+  const [travelTrail, updateTravelTrail] = useState<TravelHistoryPoint[]>([]);
+  const { loading, error, data } = useQuery(GET_LOCATIONS);
 
-    useEffect(() => {
-        if (!loading && data) {
-            data.locationReadings.map(
-                (location: any) => {
-                    addLocation(locations => [...locations,
-                        {coordinates: {lng: location.coordinates[0], lat: location.coordinates[1]}}
-                    ])
-                    updateTravelTrail(travelTrail => [...travelTrail, {
-                        lat: location.coordinates[1],
-                        lng: location.coordinates[0],
-                        timestamp: location.timestamp
-                    }])
-                }
-            )
-        }
-    }, [loading, data])
+  useEffect(() => {
+    if (!loading && data) {
+      data.locationReadings.map((location: any) => {
+        addLocation((locations) => [
+          ...locations,
+          {
+            coordinates: {
+              lng: location.coordinates[0],
+              lat: location.coordinates[1],
+            },
+          },
+        ]);
+        updateTravelTrail((travelTrail) => [
+          ...travelTrail,
+          {
+            lat: location.coordinates[1],
+            lng: location.coordinates[0],
+            timestamp: location.timestamp,
+          },
+        ]);
+      });
+    }
+  }, [loading, data]);
 
-    return (
+  const visualizations = [
+    "Raw Locations Data Table",
+    "Travel History Trail",
+    "Hazardous Area Heat Map",
+  ];
+
+  const [visualization, setVisualization] = useState(visualizations[0]);
+
+  return (
+    <>
+      {matches ? (
         <>
-            <PageHeader
-                pageTitle={"Locations"}
-                pageDescription={"Description of the Locations Page and What it Does"}
-            />
-            <PageSectionHeader
-                sectionTitle={"Raw Locations Data"}
-                sectionDescription={"Explore and Download Raw Locations Data"}
-                download={true}
-            />
-            <CustomAccordion
-                accordionHeight={"auto"}
-                accordionWidth={""}
-                accordionTitle={"Raw Locations Data Table"}
-                component={<CustomCollapsibleTable/>}
-            />
-            <PageSectionHeader
-                sectionTitle={"Locations Visualizations"}
-                sectionDescription={"Visualize Locations Data"}
-                download={false}
-            />
-            <CustomAccordion
-                accordionHeight={"400px"}
-                accordionWidth={""}
-                accordionTitle={"Travel History Trail"}
-                component={<TravelHistoryTrail center={center} path={travelTrail}/>}
-            />
-            <CustomAccordion
-                accordionHeight={"400px"}
-                accordionWidth={""}
-                accordionTitle={"Hazardous Area Heat Map"}
-                component={
-                    <HazardousAreaHeatMap accidents={locations} center={center} zoom={10}/>
-                }
-            />
-            <CustomBoxReduced
-                user={user}
-                view={view}
-                startDate={startDate}
-                endDate={endDate}
-            />
+          <PageHeader
+            pageTitle={"Locations"}
+            pageDescription={
+              "Description of the Locations Page and What it Does"
+            }
+          />
+          <PageSectionHeader
+            sectionTitle={"Raw Locations Data"}
+            sectionDescription={"Explore and Download Raw Locations Data"}
+            download={true}
+          />
+          <CustomAccordion
+            accordionHeight={"auto"}
+            accordionWidth={""}
+            accordionTitle={visualizations[0]}
+            component={<CustomCollapsibleTable />}
+          />
+          <PageSectionHeader
+            sectionTitle={"Locations Visualizations"}
+            sectionDescription={"Visualize Locations Data"}
+            download={false}
+          />
+          <CustomAccordion
+            accordionHeight={"400px"}
+            accordionWidth={""}
+            accordionTitle={visualizations[1]}
+            component={
+              <TravelHistoryTrail center={center} path={travelTrail} />
+            }
+          />
+          <CustomAccordion
+            accordionHeight={"400px"}
+            accordionWidth={""}
+            accordionTitle={visualizations[2]}
+            component={
+              <HazardousAreaHeatMap
+                accidents={locations}
+                center={center}
+                zoom={10}
+              />
+            }
+          />
+          <CustomBoxReduced
+            user={user}
+            view={view}
+            startDate={startDate}
+            endDate={endDate}
+          />
         </>
-    );
+      ) : (
+        <>
+          <div className={styles.locationsDropdown}>
+            <VisualizationSelect
+              visualizations={visualizations}
+              setVisualization={setVisualization}
+            />
+          </div>
+          {visualization == visualizations[0] && (
+            <div className={styles.visualization}>
+              <CustomCollapsibleTable />
+            </div>
+          )}
+          {visualization == visualizations[1] && (
+            <div className={styles.visualization}>
+              <TravelHistoryTrail center={center} path={travelTrail} />
+            </div>
+          )}
+          {visualization == visualizations[2] && (
+            <div className={styles.visualization}>
+              <HazardousAreaHeatMap
+                accidents={locations}
+                center={center}
+                zoom={10}
+              />
+            </div>
+          )}
+        </>
+      )}
+    </>
+  );
 };
