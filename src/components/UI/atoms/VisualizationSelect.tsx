@@ -30,15 +30,9 @@ export const VisualizationSelect: React.FC<VisualizationSelectProps> = (
           props.setVisualization(selectedVisualization);
         }}
       >
-        <MenuItem value={props.visualizations[0]}>
-          {props.visualizations[0]}
-        </MenuItem>
-        <MenuItem value={props.visualizations[1]}>
-          {props.visualizations[1]}
-        </MenuItem>
-        <MenuItem value={props.visualizations[2]}>
-          {props.visualizations[2]}
-        </MenuItem>
+        {props.visualizations.map((visualization) => (
+          <MenuItem value={visualization}>{visualization}</MenuItem>
+        ))}
       </Select>
     </FormControl>
   );
