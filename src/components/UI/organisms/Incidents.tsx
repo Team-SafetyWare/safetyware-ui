@@ -8,9 +8,9 @@ import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import IncidentDotMap from "../atoms/IncidentDotMap";
-import { IncidentsSelect } from "../atoms/IncidentsSelect";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
+import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBox } from "../molecules/CustomBox";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
 import {
@@ -168,7 +168,7 @@ export const Incidents: React.FC = () => {
       ) : (
         <>
           <div className={styles.incidentsDropdown}>
-            <IncidentsSelect
+            <VisualizationSelect
               visualizations={visualizations}
               setVisualization={setVisualization}
             />
