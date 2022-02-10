@@ -53,15 +53,17 @@ const useStyles = makeStyles({
   },
 
   sidebarButton: {
+    display: "none",
     padding: 16,
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
+    [theme.breakpoints.down("sm")]: {
+      display: "inline-flex",
     },
   },
 
   sidebarDrawerMobile: {
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
+    display: "none",
+    [theme.breakpoints.down("sm")]: {
+      display: "block",
     },
 
     "& .MuiListItemIcon-root": {

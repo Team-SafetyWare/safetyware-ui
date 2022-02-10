@@ -52,7 +52,21 @@ const useStyles = makeStyles({
     [theme.breakpoints.down("sm")]: {
       display: "flex",
       justifyContent: "center",
+      left: "50%",
       marginBottom: "20px",
+      position: "absolute",
+      top: "calc(0.5 * 60px)",
+      transform: "translate(-50%, -50%)",
+    },
+  },
+
+  visualization: {
+    [theme.breakpoints.down("sm")]: {
+      height: "calc(100vh - 60px)",
+      left: "0",
+      position: "absolute",
+      top: "60px",
+      width: "100vw",
     },
   },
 });
@@ -159,12 +173,20 @@ export const Incidents: React.FC = () => {
               setVisualization={setVisualization}
             />
           </div>
-          {visualization == visualizations[0] && <CustomCollapsibleTable />}
+          {visualization == visualizations[0] && (
+            <div className={styles.visualization}>
+              <CustomCollapsibleTable />
+            </div>
+          )}
           {visualization == visualizations[1] && (
-            <IncidentDotMap incidents={locations} center={center} zoom={10} />
+            <div className={styles.visualization}>
+              <IncidentDotMap incidents={locations} center={center} zoom={10} />
+            </div>
           )}
           {visualization == visualizations[2] && (
-            <BarGraph data={barGraphData} />
+            <div className={styles.visualization}>
+              <BarGraph data={barGraphData} />
+            </div>
           )}
         </>
       )}

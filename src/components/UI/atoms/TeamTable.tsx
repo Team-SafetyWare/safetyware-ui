@@ -14,7 +14,6 @@ const useStyles = makeStyles({
     width: "100%",
     borderCollapse: "collapse",
     textAlign: "center",
-    marginBottom: "60px",
   },
   tableHeader: {
     border: "1px solid black",

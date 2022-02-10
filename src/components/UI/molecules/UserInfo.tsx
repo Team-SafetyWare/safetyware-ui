@@ -26,8 +26,9 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     alignContent: "center",
-    [theme.breakpoints.up("sm")]: {
-      marginRight: "20px",
+    marginRight: "20px",
+    [theme.breakpoints.down("sm")]: {
+      marginRight: "0",
     },
   },
   userDetails: {
