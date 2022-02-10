@@ -5,7 +5,7 @@ import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import React from "react";
 
-interface IncidentsSelectProps {
+interface VisualizationSelectProps {
   visualizations: string[];
   setVisualization(visualization: string): any;
 }
@@ -16,7 +16,9 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export const IncidentsSelect: React.FC<IncidentsSelectProps> = (props) => {
+export const VisualizationSelect: React.FC<VisualizationSelectProps> = (
+  props
+) => {
   return (
     <FormControl variant="standard" sx={{ minWidth: 120 }}>
       <Select
