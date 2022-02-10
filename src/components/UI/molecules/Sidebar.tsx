@@ -4,7 +4,7 @@ import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Toolbar } from "@mui/material";
+import { Toolbar, useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
@@ -107,6 +107,7 @@ const useStyles = makeStyles({
 });
 
 export const Sidebar: React.FC<SidebarProps> = (props) => {
+  const matches = useMediaQuery("(min-width:600px)");
   const styles = useStyles();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -136,6 +137,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
               to={sidebarItem.link}
               exact
               activeClassName={styles.sidebarItemSelected}
+              onClick={matches ? undefined : handleDrawerToggle}
             >
               <ListItemIcon>
                 <sidebarItem.icon />
@@ -151,6 +153,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
           to="/user-account"
           exact
           activeClassName={styles.sidebarItemSelected}
+          onClick={matches ? undefined : handleDrawerToggle}
         >
           <div className={styles.sidebarUser}>
             <SidebarUserPicture
@@ -165,6 +168,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
           to="/login"
           exact
           activeClassName={styles.sidebarItemSelected}
+          onClick={matches ? undefined : handleDrawerToggle}
         >
           <ListItemIcon>
             <LogoutIcon />
