@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 
 type IncidentDotMapState = {
-  startDate: String;
-  endDate: String;
+  startDate: string;
+  endDate: string;
 };
 
 export const incidentDotMapDefaultState: IncidentDotMapState = {
@@ -15,10 +15,10 @@ export const incidentDotMapSlice = createSlice({
   name: "incidentDotMap",
   initialState: incidentDotMapDefaultState,
   reducers: {
-    setStartDate: (state, action: PayloadAction<String>) => {
+    setStartDate: (state, action: PayloadAction<string>) => {
       state.startDate = action.payload;
     },
-    setEndDate: (state, action: PayloadAction<String>) => {
+    setEndDate: (state, action: PayloadAction<string>) => {
       state.endDate = action.payload;
     },
   },

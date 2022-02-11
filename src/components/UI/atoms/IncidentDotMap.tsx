@@ -1,5 +1,5 @@
 import {GoogleMap, InfoWindow, Marker} from "@react-google-maps/api";
-import React from "react";
+import React, {useEffect} from "react";
 import {LocationReading} from "../organisms/Incidents";
 import MarkerIcon from "../../../assets/AccidentDotMapDot.png";
 import {useAppDispatch, useAppSelector} from "../../../store/store";
@@ -25,10 +25,11 @@ interface IncidentDotMapProps {
 }
 
 export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
-    const incidents = props.incidents
+    const [incidents, updateIncidents] = React.useState<LocationReading[]>([])
     const zoom = props.zoom
     const center = props.center
-    const [markerWindows, updateMarkerWindow] = React.useState<LocationReading[]>([]);
+    const [markerWindows, updateMarkerWindows] = React.useState<LocationReading[]>([]);
+    const [filteredIncidents, updateFilteredIncidents] = React.useState<LocationReading[]>([]);
     const dispatch = useAppDispatch();
     const startDate = useAppSelector(selectIncidentDotMapStartDate);
     const endDate = useAppSelector(selectIncidentDotMapEndDate);
@@ -36,19 +37,22 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     const setAllDates = () => {
         dispatch(setStartDate(""));
         dispatch(setEndDate(""));
-        console.log("Resetting Dates", startDate, endDate);
     };
 
     const setFilteredDates = () => {
         dispatch(setStartDate("2021-05-18T08:00:00+00:00"))
         dispatch(setEndDate("2021-05-18T12:00:00+00:00"))
-        console.log("filtered dates", startDate, endDate)
+        // updateMarkerWindows(markerWindows => [])
     }
 
+    //Maybe pass in the filtered dates into a graphql query => this might be the best way to do it
+    //Or do the filtering one level up on the incidents page
+    //this would require a new query every time
+    //Use effect then depends on the new query and should theoretically update
+
     function createMarker(location: LocationReading) {
-        // if (location.)
         return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {
-            updateMarkerWindow(markerWindows => [...markerWindows, location])
+            updateMarkerWindows(markerWindows => [...markerWindows, location])
         }}/>;
     }
 
@@ -71,6 +75,44 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
         </InfoWindow>
     }
 
+    useEffect(() => {
+        console.log("useeffect1")
+        updateIncidents(incidents => props.incidents)
+    }, [props])
+
+    useEffect(() => {
+        console.log("useeffect2")
+        updateFilteredIncidents([])
+        console.log("dates", startDate, " delimiter ", endDate)
+        incidents.map((incident: any) => {
+            if (startDate && incident.date) {
+                const min = new Date(startDate).getTime()
+                if (new Date(incident.date).getTime() < min) {
+                    return
+                }
+            }
+            if (endDate && incident.date) {
+                const max = new Date(endDate).getTime()
+                if (new Date(incident.date).getTime() > max) {
+                    return
+                }
+            }
+            console.log(incident.date)
+            updateFilteredIncidents(filteredIncidents =>
+                [
+                    ...filteredIncidents,
+                    {
+                        coordinates: {
+                            lat: incident.coordinates.lat,
+                            lng: incident.coordinates.lng,
+                        },
+                        date: incident.date
+                    },
+                ]
+            )
+        })
+    }, [incidents, startDate, endDate])
+
     return (
         <>
             <Button variant="contained" onClick={() => setAllDates()}>
@@ -81,12 +123,11 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
             </Button>
             <GoogleMap
                 mapContainerStyle={containerStyle}
-
                 center={center}
                 zoom={zoom}
             >
-                {markerWindows.map((markerWindow) => createMarkerWindow(markerWindow))}
-                {incidents.map((incident: LocationReading) => createMarker(incident))}
+                {markerWindows.map((markerWindow: LocationReading) => createMarkerWindow(markerWindow))}
+                {filteredIncidents.map((incident: LocationReading) => createMarker(incident))}
             </GoogleMap>
         </>
     )
