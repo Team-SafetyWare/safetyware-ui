@@ -4,15 +4,36 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../../store/store";
-import {selectIncidentDotMapEndDate, selectIncidentDotMapStartDate, setStartDate} from "../../../store/slices/incidentDotMapSlice";
+import {
+    selectIncidentDotMapEndDate,
+    selectIncidentDotMapStartDate,
+    setEndDate,
+    setStartDate
+} from "../../../store/slices/incidentDotMapSlice";
 import {selectIsDashboard, setIsDashboard} from "../../../store/slices/dashboard";
+import {incidentDotMapEndDate, incidentDotMapStartDate} from "./CustomBoxDates";
 
 interface BasicDatePickerProps {
+    label?: string;
     date?: any;
 }
 
 export default function BasicDatePicker(props: BasicDatePickerProps) {
+    const label = props.label
     const [value, setValue] = React.useState<Date | null>(null);
+
+    const dispatch = useAppDispatch();
+
+    function changeDate(date: string) {
+        switch (label) {
+            case incidentDotMapStartDate:
+                dispatch(setStartDate(date))
+                break;
+            case incidentDotMapEndDate:
+                dispatch(setEndDate(date))
+                break;
+        }
+    }
 
         return (
             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -21,6 +42,11 @@ export default function BasicDatePicker(props: BasicDatePickerProps) {
                     value={value}
                     onChange={(newValue) => {
                         setValue(newValue)
+                        if (newValue) {
+                            changeDate(newValue.toDateString())
+                        } else {
+                            changeDate("")
+                        }
                     }}
                     renderInput={(params) => <TextField {...params} />}
                 />

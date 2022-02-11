@@ -65,6 +65,9 @@ export interface LocationReading {
   name?: string;
   date?: Date;
 }
+
+export const incidentDotMapLabel = "incidentDotMap";
+
 export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px)");
   const styles = useStyles();
@@ -145,6 +148,7 @@ export const Incidents: React.FC = () => {
             incidentType={incidentType}
             startDate={tempStartDate}
             endDate={tempEndDate}
+            pageLabel={incidentDotMapLabel}
           />
         </>
       ) : (
