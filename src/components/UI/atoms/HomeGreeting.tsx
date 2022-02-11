@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import theme from "../../../Theme";
 
 interface HomeGreetingProps {
   userName?: string;
@@ -41,6 +42,9 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     margin: "15px 0",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+    },
   },
   greetingDetails: {},
   greeting: {
@@ -51,7 +55,22 @@ const useStyles = makeStyles({
     fontSize: "16px",
     margin: 0,
   },
-  buttons: {},
+  buttons: {
+    [theme.breakpoints.down("sm")]: {
+      marginTop: "10px",
+      width: "100%",
+    },
+    "& .MuiStack-root": {
+      [theme.breakpoints.down("sm")]: {
+        display: "flex",
+      },
+    },
+    "& .MuiButton-root": {
+      [theme.breakpoints.down("sm")]: {
+        flexGrow: "1",
+      },
+    },
+  },
 });
 
 export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
