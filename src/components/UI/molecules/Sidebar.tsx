@@ -30,6 +30,9 @@ interface SidebarProps {
 const useStyles = makeStyles({
   sidebar: {
     display: "flex",
+    [theme.breakpoints.down("sm")]: {
+      backgroundColor: theme.palette.primary.main,
+    },
 
     "& .MuiDrawer-root": {
       flexShrink: 0,
@@ -45,7 +48,7 @@ const useStyles = makeStyles({
     },
 
     "& .MuiPaper-root": {
-      backgroundColor: "#ad172b",
+      backgroundColor: theme.palette.primary.main,
       boxSizing: "border-box",
       color: "white",
       width: 240,
@@ -56,6 +59,7 @@ const useStyles = makeStyles({
     display: "none",
     padding: 16,
     [theme.breakpoints.down("sm")]: {
+      color: "white",
       display: "inline-flex",
     },
   },
@@ -71,7 +75,7 @@ const useStyles = makeStyles({
     },
 
     "& .MuiPaper-root": {
-      backgroundColor: "#ad172b",
+      backgroundColor: theme.palette.primary.main,
       boxSizing: "border-box",
       color: "white",
       width: 240,
@@ -93,9 +97,9 @@ const useStyles = makeStyles({
   },
 
   sidebarItemSelected: {
-    backgroundColor: "#d34949",
+    backgroundColor: theme.palette.secondary.main,
 
-    "&:hover": { backgroundColor: "#d3494980" },
+    "&:hover": { backgroundColor: theme.palette.secondary.light },
   },
 
   sidebarFooter: {
