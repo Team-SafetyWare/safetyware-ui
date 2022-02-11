@@ -13,14 +13,11 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { CustomBox } from "../molecules/CustomBox";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
-import {Runtime} from "inspector";
-import {selectIsDashboard} from "../../../store/slices/dashboard";
 import {
   selectIncidentDotMapEndDate,
   selectIncidentDotMapStartDate, setEndDate,
   setStartDate
 } from "../../../store/slices/incidentDotMapSlice";
-// import {startDate, endDate} from "../../../store/slices/incidentDotMap";
 
 const barGraphData = [
   { x: 0, y: 8 },
@@ -72,20 +69,14 @@ export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px)");
   const styles = useStyles();
 
-  const [locations, addLocation] = useState<LocationReading[]>([]);
+  const [locations, updateLocations] = useState<LocationReading[]>([]);
   const { loading, error, data } = useQuery(GET_LOCATIONS);
 
-  const dispatch = useAppDispatch();
-  const startDate = useAppSelector(selectIncidentDotMapStartDate);
-  const endDate = useAppSelector(selectIncidentDotMapEndDate);
-  const updateStartDate = dispatch(setStartDate)
-  const updateEndDate = dispatch(setEndDate)
-
-
   useEffect(() => {
+    updateLocations([])
     if (!loading && data) {
       data.locationReadings.map((location: any) => {
-        addLocation((locations) => [
+        updateLocations((locations) => [
           ...locations,
           {
             coordinates: {
