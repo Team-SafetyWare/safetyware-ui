@@ -46,50 +46,8 @@ const actions = [
 ];
 
 export const Home: React.FC = () => {
-  const styles = useStyles();
-
-  // Redux dispatch example
-  const dispatch = useAppDispatch();
-  const isDashboard = useAppSelector(selectIsDashboard);
-
-  const toggleIsDashboard = () => {
-    dispatch(setIsDashboard(!isDashboard));
-    // let booleanPromise = testMethod()
-
-    // Should toggle from true to false
-    // If you import const isDashboard = useAppSelector(selectIsDashboard); in any other file, it should retain whatever state you set
-    console.log("This is the dashboard state", isDashboard);
-  };
-
-  const testMethod = () => new Promise<boolean>((resolve, reject) => {
-    dispatch(setIsDashboard(!isDashboard));
-    resolve(isDashboard);
-  })
-
-  const [someWord, setWord] = React.useState<String>("default")
-  const testPhrase = () => {
-    if (isDashboard) {
-      setWord("first")
-    } else {
-      setWord("second")
-    }
-  }
-
-  useEffect(() => {
-    if (isDashboard) {
-      setWord("first")
-    } else {
-      setWord("second")
-    }
-  }, [isDashboard])
-
   return (
     <div>
-      <Button variant="contained" onClick={toggleIsDashboard}>
-        <p>{isDashboard.toString()}</p>
-      </Button>
-      <p>{someWord}</p>
-
       <SpeedDial
         ariaLabel="SpeedDial"
         sx={{ position: "absolute", bottom: 16, right: 16 }}
