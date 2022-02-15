@@ -10,7 +10,6 @@ import {
     setEndDate,
     setStartDate
 } from "../../../store/slices/incidentDotMapSlice";
-import {selectIsDashboard, setIsDashboard} from "../../../store/slices/dashboard";
 import {incidentDotMapEndDate, incidentDotMapStartDate} from "./CustomBoxDates";
 
 interface BasicDatePickerProps {
@@ -35,21 +34,21 @@ export default function BasicDatePicker(props: BasicDatePickerProps) {
         }
     }
 
-        return (
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                    label="Date"
-                    value={value}
-                    onChange={(newValue) => {
-                        setValue(newValue)
-                        if (newValue) {
-                            changeDate(newValue.toDateString())
-                        } else {
-                            changeDate("")
-                        }
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                />
-            </LocalizationProvider>
-        );
-    }
+    return (
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+                label="Date"
+                value={value}
+                onChange={(newValue) => {
+                    setValue(newValue)
+                    if (newValue) {
+                        changeDate(new Date(newValue.toDateString()).toString())
+                    } else {
+                        changeDate("")
+                    }
+                }}
+                renderInput={(params) => <TextField {...params} />}
+            />
+        </LocalizationProvider>
+    );
+}

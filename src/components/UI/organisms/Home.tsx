@@ -6,7 +6,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, {useEffect} from "react";
 import {
   selectIsDashboard,
   setIsDashboard,
@@ -54,17 +54,41 @@ export const Home: React.FC = () => {
 
   const toggleIsDashboard = () => {
     dispatch(setIsDashboard(!isDashboard));
+    // let booleanPromise = testMethod()
 
     // Should toggle from true to false
     // If you import const isDashboard = useAppSelector(selectIsDashboard); in any other file, it should retain whatever state you set
     console.log("This is the dashboard state", isDashboard);
   };
 
+  const testMethod = () => new Promise<boolean>((resolve, reject) => {
+    dispatch(setIsDashboard(!isDashboard));
+    resolve(isDashboard);
+  })
+
+  const [someWord, setWord] = React.useState<String>("default")
+  const testPhrase = () => {
+    if (isDashboard) {
+      setWord("first")
+    } else {
+      setWord("second")
+    }
+  }
+
+  useEffect(() => {
+    if (isDashboard) {
+      setWord("first")
+    } else {
+      setWord("second")
+    }
+  }, [isDashboard])
+
   return (
     <div>
       <Button variant="contained" onClick={toggleIsDashboard}>
         <p>{isDashboard.toString()}</p>
       </Button>
+      <p>{someWord}</p>
 
       <SpeedDial
         ariaLabel="SpeedDial"

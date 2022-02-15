@@ -34,17 +34,6 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     const startDate = useAppSelector(selectIncidentDotMapStartDate);
     const endDate = useAppSelector(selectIncidentDotMapEndDate);
 
-    const setAllDates = () => {
-        dispatch(setStartDate(""));
-        dispatch(setEndDate(""));
-    };
-
-    const setFilteredDates = () => {
-        dispatch(setStartDate("2021-05-18T08:00:00+00:00"))
-        dispatch(setEndDate("2021-05-18T12:00:00+00:00"))
-        // updateMarkerWindows(markerWindows => [])
-    }
-
     //Maybe pass in the filtered dates into a graphql query => this might be the best way to do it
     //Or do the filtering one level up on the incidents page
     //this would require a new query every time
@@ -76,28 +65,25 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     }
 
     useEffect(() => {
-        console.log("useeffect1")
         updateIncidents(incidents => props.incidents)
     }, [props])
 
     useEffect(() => {
-        console.log("useeffect2")
         updateFilteredIncidents([])
-        console.log("dates", startDate, " delimiter ", endDate)
+        updateMarkerWindows([])
         incidents.map((incident: any) => {
             if (startDate && incident.date) {
-                const min = new Date(startDate).getTime()
-                if (new Date(incident.date).getTime() < min) {
+                const min = new Date(startDate).getDate()
+                if (new Date(incident.date).getDate() < min) {
                     return
                 }
             }
             if (endDate && incident.date) {
-                const max = new Date(endDate).getTime()
-                if (new Date(incident.date).getTime() > max) {
+                const max = new Date(endDate).getDate()
+                if (new Date(incident.date).getDate() > max) {
                     return
                 }
             }
-            console.log(incident.date)
             updateFilteredIncidents(filteredIncidents =>
                 [
                     ...filteredIncidents,
@@ -115,12 +101,6 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
 
     return (
         <>
-            <Button variant="contained" onClick={() => setAllDates()}>
-                <p>All Dates</p>
-            </Button>
-            <Button variant="contained" onClick={() => setFilteredDates()}>
-                <p>Filter Dates</p>
-            </Button>
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
