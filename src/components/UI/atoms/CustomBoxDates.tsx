@@ -1,23 +1,37 @@
-import { makeStyles } from "@mui/styles";
+import {makeStyles} from "@mui/styles";
 import React from "react";
 import BasicDatePicker from "../atoms/BasicDatePicker";
+import {useAppDispatch, useAppSelector} from "../../../store/store";
+import {selectIsDashboard} from "../../../store/slices/dashboard";
+import {selectIncidentDotMapEndDate, selectIncidentDotMapStartDate} from "../../../store/slices/incidentDotMapSlice";
+
 
 interface CustomBoxDatesProps {
-  startDate?: any;
-  endDate?: any;
+    pageLabel?: string;
+    startDate?: any;
+    endDate?: any;
 }
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+  text: { fontSize: "10px" },
+});
+
+export const incidentDotMapStartDate = "incidentDotMapStartDate"
+export const incidentDotMapEndDate = "incidentDotMapEndDate"
 
 export const CustomBoxDates: React.FC<CustomBoxDatesProps> = (props) => {
-  const styles = useStyles();
+    const styles = useStyles();
 
-  return (
-    <>
-      <h4> Start Date </h4>
-      <BasicDatePicker />
-      <h4> End Date </h4>
-      <BasicDatePicker></BasicDatePicker>
-    </>
-  );
+    const label = props.pageLabel;
+    const startDate = useAppSelector(selectIncidentDotMapStartDate);
+    const endDate = useAppSelector(selectIncidentDotMapEndDate);
+
+    return (
+        <>
+            <p> Start Date </p>
+            <BasicDatePicker date={startDate} label={incidentDotMapStartDate}/>
+            <p> End Date </p>
+            <BasicDatePicker date={endDate} label={incidentDotMapEndDate}/>
+        </>
+    );
 };

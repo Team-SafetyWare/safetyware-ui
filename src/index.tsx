@@ -1,9 +1,11 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+import { store } from "./store/store";
 
 const client = new ApolloClient({
   uri: "https://func-api-nmisvbwuqreyq.azurewebsites.net/graphql",
@@ -12,9 +14,11 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

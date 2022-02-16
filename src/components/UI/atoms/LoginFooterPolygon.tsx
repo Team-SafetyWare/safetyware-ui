@@ -1,8 +1,7 @@
 import { makeStyles } from "@mui/styles";
-import { Theme } from "@mui/system";
 import React from "react";
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles({
   loginFooter: {
     "@media (max-height: 599px) or (max-width: 599px)": {
       display: "none",
@@ -11,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: 0,
     width: "100vw",
   },
-}));
+});
 
 export const LoginFooterPolygon: React.FC = () => {
   const styles = useStyles();

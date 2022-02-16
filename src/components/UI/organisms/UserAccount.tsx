@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/client";
+import { useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ProfilePicture from "../../../assets/profilePicture.png";
 import { GET_PERSONS } from "../../../util/queryService";
@@ -43,14 +44,18 @@ export const UserAccount: React.FC = () => {
     }
   }, [loading, data]);
 
+  const matches = useMediaQuery("(min-width:600px)");
+
   return (
     <>
-      <PageHeader
-        pageTitle={"User Information"}
-        pageDescription={
-          "Description of the User Information Page and What it Does"
-        }
-      />
+      {matches && (
+        <PageHeader
+          pageTitle={"User Information"}
+          pageDescription={
+            "Description of the User Information Page and What it Does"
+          }
+        />
+      )}
       <UserAccountTemplate
         userPhoto={ProfilePicture}
         userName={name}
