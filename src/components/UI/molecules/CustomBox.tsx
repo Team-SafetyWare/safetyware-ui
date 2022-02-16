@@ -11,6 +11,7 @@ interface CustomBoxProps {
   incidentType?: any;
   startDate?: any;
   endDate?: any;
+  pageLabel?: string;
 }
 
 const useStyles = makeStyles({
@@ -37,7 +38,7 @@ export const CustomBox: React.FC<CustomBoxProps> = (props) => {
     <Draggable>
       <div className={styles.box}>
         <h3>Customize</h3>
-        <CustomBoxDates startDate={props.startDate} endDate={props.endDate} />
+        <CustomBoxDates startDate={props.startDate} endDate={props.endDate} pageLabel={props.pageLabel}/>
         <CustomBoxUserSelect user={props.user} view={props.view} />
         <CustomBoxIncidentSelect incidentType={props.incidentType} />
       </div>

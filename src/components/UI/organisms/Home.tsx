@@ -1,11 +1,18 @@
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import UndoIcon from "@mui/icons-material/Undo";
+import { Button } from "@mui/material";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, {useEffect} from "react";
+import {
+  selectIsDashboard,
+  setIsDashboard,
+} from "../../../store/slices/dashboard";
+// Redux
+import { useAppDispatch, useAppSelector } from "../../../store/store";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
 
@@ -39,8 +46,6 @@ const actions = [
 ];
 
 export const Home: React.FC = () => {
-  const styles = useStyles();
-
   return (
     <div>
       <SpeedDial
