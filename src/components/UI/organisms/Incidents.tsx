@@ -12,6 +12,12 @@ import { IncidentsSelect } from "../atoms/IncidentsSelect";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { CustomBox } from "../molecules/CustomBox";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
+import {
+  selectIncidentDotMapEndDate,
+  selectIncidentDotMapStartDate, setEndDate,
+  setStartDate
+} from "../../../store/slices/incidentDotMapSlice";
 
 const barGraphData = [
   { x: 0, y: 8 },
@@ -29,8 +35,8 @@ const barGraphData = [
 const user = "PersonA";
 const view = "User";
 const incidentType = "All";
-const startDate = new Date("01/01/2022");
-const endDate = new Date("01/08/2022");
+const tempStartDate = new Date("01/01/2022");
+const tempEndDate = new Date("01/08/2022");
 const incidents = [
   { lat: 51.077763, lng: -114.140657 },
   { lat: 51.046048773481786, lng: -114.02334120770176 },
@@ -57,18 +63,23 @@ export interface LocationReading {
     lat: number;
   };
   name?: string;
+  date?: Date;
 }
+
+export const incidentDotMapLabel = "incidentDotMap";
+
 export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px)");
   const styles = useStyles();
 
-  const [locations, addLocation] = useState<LocationReading[]>([]);
+  const [locations, updateLocations] = useState<LocationReading[]>([]);
   const { loading, error, data } = useQuery(GET_LOCATIONS);
 
   useEffect(() => {
+    updateLocations([])
     if (!loading && data) {
       data.locationReadings.map((location: any) => {
-        addLocation((locations) => [
+        updateLocations((locations) => [
           ...locations,
           {
             coordinates: {
@@ -76,6 +87,7 @@ export const Incidents: React.FC = () => {
               lat: location.coordinates[1],
             },
             name: location.person.name,
+            date: location.timestamp
           },
         ]);
       });
@@ -134,8 +146,9 @@ export const Incidents: React.FC = () => {
             user={user}
             view={view}
             incidentType={incidentType}
-            startDate={startDate}
-            endDate={endDate}
+            startDate={tempStartDate}
+            endDate={tempEndDate}
+            pageLabel={incidentDotMapLabel}
           />
         </>
       ) : (
