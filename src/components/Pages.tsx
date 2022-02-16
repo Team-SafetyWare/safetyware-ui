@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Switch, useLocation } from "react-router-dom";
 import ProfilePicture from "../assets/profilePicture.png";
 import { GET_PERSONS } from "../util/queryService";
+import theme from "../Theme";
 import { Page } from "./UI/atoms/Page";
 import { Sidebar } from "./UI/molecules/Sidebar";
 import { Gases } from "./UI/organisms/Gases";
@@ -17,7 +18,9 @@ const useStyles = makeStyles({
   content: {
     height: "100vh",
     width: "100vw",
-    paddingLeft: "240px",
+    [theme.breakpoints.up("sm")]: {
+      paddingLeft: "240px",
+    },
   },
   innerContent: {
     height: "100%",

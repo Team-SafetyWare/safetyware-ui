@@ -15,10 +15,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import { Theme } from "@mui/system";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../../assets/logo_white.png";
+import theme from "../../../Theme";
 import { SidebarUserName } from "../atoms/SidebarUserName";
 import { SidebarUserPicture } from "../atoms/SidebarUserPicture";
 
@@ -27,17 +27,17 @@ interface SidebarProps {
   userName?: string;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles({
   sidebar: {
     display: "flex",
 
     "& .MuiDrawer-root": {
-      [theme.breakpoints.down("sm")]: {
-        display: "none",
-      },
       flexShrink: 0,
       width: 240,
       zIndex: 1,
+      [theme.breakpoints.down("sm")]: {
+        display: "none",
+      },
     },
 
     "& .MuiListItemIcon-root": {
@@ -53,10 +53,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 
   sidebarButton: {
+    padding: 16,
     [theme.breakpoints.up("sm")]: {
       display: "none",
     },
-    padding: 16,
   },
 
   sidebarDrawerMobile: {
@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     alignItems: "center",
   },
-}));
+});
 
 export const Sidebar: React.FC<SidebarProps> = (props) => {
   const styles = useStyles();

@@ -11,7 +11,10 @@ interface CustomBoxIncidentSelectProps {
   incidentType?: string;
 }
 
-const useStyles = makeStyles({});
+const useStyles = makeStyles({
+  label: { fontSize: "10px" },
+  text: { fontSize: "10px" },
+});
 
 export const CustomBoxIncidentSelect: React.FC<CustomBoxIncidentSelectProps> = (
   props
