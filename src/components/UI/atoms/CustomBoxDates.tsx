@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 
 export const incidentPageStartDate = "incidentPageStartDate"
 export const incidentPageEndDate = "incidentPageEndDate"
-export const locationPageStartDate = "locationPageEndDate"
+export const locationPageStartDate = "locationPageStartDate"
 export const locationPageEndDate = "locationPageEndDate"
 
 export const CustomBoxDates: React.FC<CustomBoxDatesProps> = (props) => {
