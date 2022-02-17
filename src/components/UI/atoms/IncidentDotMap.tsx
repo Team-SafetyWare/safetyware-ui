@@ -4,9 +4,9 @@ import {LocationReading} from "../organisms/Incidents";
 import MarkerIcon from "../../../assets/AccidentDotMapDot.png";
 import {useAppSelector} from "../../../store/store";
 import {
-    selectIncidentDotMapEndDate,
-    selectIncidentDotMapStartDate,
-} from "../../../store/slices/incidentDotMapSlice";
+    selectIncidentPageEndDate,
+    selectIncidentPageStartDate,
+} from "../../../store/slices/incidentPageSlice";
 
 const containerStyle = {
     width: "100%",
@@ -27,8 +27,8 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     const center = props.center
     const [markerWindows, updateMarkerWindows] = React.useState<LocationReading[]>([]);
     const [filteredIncidents, updateFilteredIncidents] = React.useState<LocationReading[]>([]);
-    const startDate = useAppSelector(selectIncidentDotMapStartDate);
-    const endDate = useAppSelector(selectIncidentDotMapEndDate);
+    const startDate = useAppSelector(selectIncidentPageStartDate);
+    const endDate = useAppSelector(selectIncidentPageEndDate);
 
     function createMarker(location: LocationReading) {
         return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {

@@ -3,7 +3,7 @@ import React from "react";
 import BasicDatePicker from "../atoms/BasicDatePicker";
 import {useAppDispatch, useAppSelector} from "../../../store/store";
 import {selectIsDashboard} from "../../../store/slices/dashboard";
-import {selectIncidentDotMapEndDate, selectIncidentDotMapStartDate} from "../../../store/slices/incidentDotMapSlice";
+import {selectIncidentPageEndDate, selectIncidentPageStartDate} from "../../../store/slices/incidentPageSlice";
 
 
 interface CustomBoxDatesProps {
@@ -23,8 +23,8 @@ export const CustomBoxDates: React.FC<CustomBoxDatesProps> = (props) => {
     const styles = useStyles();
 
     const label = props.pageLabel;
-    const startDate = useAppSelector(selectIncidentDotMapStartDate);
-    const endDate = useAppSelector(selectIncidentDotMapEndDate);
+    const startDate = useAppSelector(selectIncidentPageStartDate);
+    const endDate = useAppSelector(selectIncidentPageEndDate);
 
     return (
         <>

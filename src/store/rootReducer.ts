@@ -1,6 +1,6 @@
 import {combineReducers} from "@reduxjs/toolkit";
 import {dashboardDefaultState, dashboardSlice} from "./slices/dashboard";
-import {incidentDotMapSlice} from "./slices/incidentDotMapSlice";
+import {incidentPageSlice} from "./slices/incidentPageSlice";
 
 export const initialRootState = {
     dashboard: dashboardDefaultState,
@@ -8,5 +8,5 @@ export const initialRootState = {
 
 export const rootReducer = combineReducers({
     dashboard: dashboardSlice.reducer,
-    incidentDotMap: incidentDotMapSlice.reducer,
+    incidentDotMap: incidentPageSlice.reducer,
 });

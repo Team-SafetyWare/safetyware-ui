@@ -6,11 +6,11 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../../store/store";
 import {
-    selectIncidentDotMapEndDate,
-    selectIncidentDotMapStartDate,
+    selectIncidentPageEndDate,
+    selectIncidentPageStartDate,
     setEndDate,
     setStartDate
-} from "../../../store/slices/incidentDotMapSlice";
+} from "../../../store/slices/incidentPageSlice";
 import {incidentDotMapEndDate, incidentDotMapStartDate} from "./CustomBoxDates";
 
 interface BasicDatePickerProps {
