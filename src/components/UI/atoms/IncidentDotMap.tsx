@@ -56,14 +56,12 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     }
 
     function inDateRange(date: Date, start:Date, end:Date): boolean {
-        if (date.getTime() < start.getTime() || date.getTime() > end.getTime()) {
-            return false;
-        }
-        return true;
+        return !(date.getTime() < start.getTime() || date.getTime() > end.getTime());
+
     }
 
     useEffect(() => {
-        updateIncidents(incidents => props.incidents)
+        updateIncidents(() => props.incidents)
     }, [props])
 
     useEffect(() => {
