@@ -15,16 +15,16 @@ export const incidentPageSlice = createSlice({
   name: "incidentPage",
   initialState: incidentPageDefaultState,
   reducers: {
-    setStartDate: (state, action: PayloadAction<string>) => {
+    setIncidentStartDate: (state, action: PayloadAction<string>) => {
       state.startDate = action.payload;
     },
-    setEndDate: (state, action: PayloadAction<string>) => {
+    setIncidentEndDate: (state, action: PayloadAction<string>) => {
       state.endDate = action.payload;
     },
   },
 });
 
-export const { setStartDate, setEndDate } = incidentPageSlice.actions;
+export const { setIncidentStartDate, setIncidentEndDate } = incidentPageSlice.actions;
 
 export const selectIncidentPageStartDate = (state: RootState) =>
   state.incidentPage.startDate;

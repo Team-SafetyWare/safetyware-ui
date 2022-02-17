@@ -26,6 +26,8 @@ const incidentType = "All";
 const startDate = new Date("01/01/2022");
 const endDate = new Date("01/08/2022");
 
+export const locationPageLabel = "locationPage";
+
 export const Locations: React.FC = () => {
     const [locations, addLocation] = React.useState<LocationReading[]>([]);
     const [travelTrail, updateTravelTrail] = React.useState<TravelHistoryPoint[]>([]);
@@ -92,6 +94,7 @@ export const Locations: React.FC = () => {
                 view={view}
                 startDate={startDate}
                 endDate={endDate}
+                pageLabel={locationPageLabel}
             />
         </>
     );

@@ -8,10 +8,11 @@ import {useAppDispatch, useAppSelector} from "../../../store/store";
 import {
     selectIncidentPageEndDate,
     selectIncidentPageStartDate,
-    setEndDate,
-    setStartDate
+    setIncidentEndDate,
+    setIncidentStartDate
 } from "../../../store/slices/incidentPageSlice";
-import {incidentDotMapEndDate, incidentDotMapStartDate} from "./CustomBoxDates";
+import {incidentPageEndDate, incidentPageStartDate, locationPageEndDate, locationPageStartDate} from "./CustomBoxDates";
+import {setLocationEndDate, setLocationStartDate} from "../../../store/slices/locationPageSlice";
 
 interface BasicDatePickerProps {
     label?: string;
@@ -32,11 +33,17 @@ export default function BasicDatePicker(props: BasicDatePickerProps) {
 
     function changeDate(date: string) {
         switch (label) {
-            case incidentDotMapStartDate:
-                dispatch(setStartDate(date))
+            case incidentPageStartDate:
+                dispatch(setIncidentStartDate(date))
                 break;
-            case incidentDotMapEndDate:
-                dispatch(setEndDate(date))
+            case incidentPageEndDate:
+                dispatch(setIncidentEndDate(date))
+                break;
+            case locationPageStartDate:
+                dispatch(setLocationStartDate(date))
+                break;
+            case locationPageEndDate:
+                dispatch(setLocationEndDate(date))
                 break;
         }
     }
