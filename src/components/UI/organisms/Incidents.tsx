@@ -2,7 +2,6 @@ import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import theme from "../../../Theme";
 import { GET_LOCATIONS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
@@ -12,12 +11,6 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBox } from "../molecules/CustomBox";
-import { useAppDispatch, useAppSelector } from "../../../store/store";
-import {
-  selectIncidentDotMapEndDate,
-  selectIncidentDotMapStartDate, setEndDate,
-  setStartDate
-} from "../../../store/slices/incidentDotMapSlice";
 
 const barGraphData = [
   { x: 0, y: 8 },
@@ -49,25 +42,27 @@ const center = {
 
 const useStyles = makeStyles({
   incidentsDropdown: {
-    [theme.breakpoints.down("sm")]: {
-      display: "flex",
-      justifyContent: "center",
-      left: "50%",
-      marginBottom: "20px",
-      position: "absolute",
-      top: "calc(0.5 * 60px)",
-      transform: "translate(-50%, -50%)",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        display: "flex",
+        justifyContent: "center",
+        left: "50%",
+        marginBottom: "20px",
+        position: "absolute",
+        top: "calc(0.5 * 60px)",
+        transform: "translate(-50%, -50%)",
+      },
   },
 
   visualization: {
-    [theme.breakpoints.down("sm")]: {
-      height: "calc(100vh - 60px)",
-      left: "0",
-      position: "absolute",
-      top: "60px",
-      width: "100vw",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        height: "calc(100vh - 60px)",
+        left: "0",
+        position: "absolute",
+        top: "60px",
+        width: "100vw",
+      },
   },
 });
 
@@ -83,14 +78,14 @@ export interface LocationReading {
 export const incidentDotMapLabel = "incidentDotMap";
 
 export const Incidents: React.FC = () => {
-  const matches = useMediaQuery("(min-width:600px)");
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
   const [locations, updateLocations] = useState<LocationReading[]>([]);
   const { loading, error, data } = useQuery(GET_LOCATIONS);
 
   useEffect(() => {
-    updateLocations([])
+    updateLocations([]);
     if (!loading && data) {
       data.locationReadings.map((location: any) => {
         updateLocations((locations) => [
@@ -101,7 +96,7 @@ export const Incidents: React.FC = () => {
               lat: location.coordinates[1],
             },
             name: location.person.name,
-            date: location.timestamp
+            date: location.timestamp,
           },
         ]);
       });

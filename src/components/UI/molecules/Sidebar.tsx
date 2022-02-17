@@ -30,17 +30,19 @@ interface SidebarProps {
 const useStyles = makeStyles({
   sidebar: {
     display: "flex",
-    [theme.breakpoints.down("sm")]: {
-      backgroundColor: theme.palette.primary.main,
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        backgroundColor: theme.palette.primary.main,
+      },
 
     "& .MuiDrawer-root": {
       flexShrink: 0,
       width: 240,
       zIndex: 1,
-      [theme.breakpoints.down("sm")]: {
-        display: "none",
-      },
+      "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+        {
+          display: "none",
+        },
     },
 
     "& .MuiListItemIcon-root": {
@@ -58,17 +60,19 @@ const useStyles = makeStyles({
   sidebarButton: {
     display: "none",
     padding: 16,
-    [theme.breakpoints.down("sm")]: {
-      color: "white",
-      display: "inline-flex",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        color: "white",
+        display: "inline-flex",
+      },
   },
 
   sidebarDrawerMobile: {
     display: "none",
-    [theme.breakpoints.down("sm")]: {
-      display: "block",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        display: "block",
+      },
 
     "& .MuiListItemIcon-root": {
       color: "white",
@@ -113,7 +117,7 @@ const useStyles = makeStyles({
 });
 
 export const Sidebar: React.FC<SidebarProps> = (props) => {
-  const matches = useMediaQuery("(min-width:600px)");
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);

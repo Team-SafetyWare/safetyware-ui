@@ -4,7 +4,7 @@ import { HomeGreeting } from "../atoms/HomeGreeting";
 import { PageHeader } from "../atoms/PageHeader";
 
 export const DashboardInfo: React.FC = () => {
-  const matches = useMediaQuery("(min-width:600px)");
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
 
   return (
     <>

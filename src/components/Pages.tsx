@@ -3,7 +3,6 @@ import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import { Switch, useLocation } from "react-router-dom";
 import ProfilePicture from "../assets/profilePicture.png";
-import theme from "../Theme";
 import { GET_PERSONS } from "../util/queryService";
 import { Page } from "./UI/atoms/Page";
 import { Sidebar } from "./UI/molecules/Sidebar";
@@ -17,17 +16,19 @@ import { UserAccount } from "./UI/organisms/UserAccount";
 const useStyles = makeStyles({
   content: {
     paddingLeft: "240px",
-    [theme.breakpoints.down("sm")]: {
-      paddingLeft: "0",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        paddingLeft: "0",
+      },
   },
   innerContent: {
     height: "100%",
     width: "100%",
     padding: "10px 25px",
-    [theme.breakpoints.down("sm")]: {
-      padding: "0",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        padding: "0",
+      },
   },
 });
 

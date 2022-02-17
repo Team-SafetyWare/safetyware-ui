@@ -1,6 +1,5 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import theme from "../../../Theme";
 
 interface UserPictureProps {
   userPhoto?: string;
@@ -11,9 +10,10 @@ const useStyles = makeStyles({
   userImage: {
     width: "270px",
 
-    [theme.breakpoints.down("sm")]: {
-      width: "calc(0.4 * 100vw)",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        width: "150px",
+      },
   },
 });
 

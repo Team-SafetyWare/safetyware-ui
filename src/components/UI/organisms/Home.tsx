@@ -43,7 +43,7 @@ const actions = [
 ];
 
 export const Home: React.FC = () => {
-  const matches = useMediaQuery("(min-width:600px)");
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
   return (
