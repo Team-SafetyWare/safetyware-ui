@@ -123,7 +123,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
   };
 
   const sidebarHeaderItems = [
-    { text: "Home", icon: HomeOutlinedIcon, link: "/" },
+    { text: "Home", icon: HomeOutlinedIcon, link: "/home" },
     { text: "Locations", icon: ExploreOutlinedIcon, link: "/locations" },
     { text: "Incidents", icon: BarChartOutlinedIcon, link: "/incidents" },
     { text: "Gases", icon: BubbleChartOutlinedIcon, link: "/gases" },
@@ -171,7 +171,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
         </ListItemButton>
         <ListItemButton
           component={NavLink}
-          to="/login"
+          to="/"
           exact
           activeClassName={styles.sidebarItemSelected}
           onClick={matches ? undefined : handleDrawerToggle}

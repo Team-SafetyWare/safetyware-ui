@@ -25,7 +25,7 @@ export const LoginButton: React.FC = () => {
       <Button
         className={styles.loginButton}
         component={Link}
-        to="/"
+        to="/home"
         variant="contained"
       >
         <img className={styles.loginButtonMicrosoftLogo} src={MicrosoftLogo} />
