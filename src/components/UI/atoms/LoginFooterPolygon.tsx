@@ -3,9 +3,10 @@ import React from "react";
 
 const useStyles = makeStyles({
   loginFooter: {
-    "@media (max-height: 599px) or (max-width: 599px)": {
-      display: "none",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        display: "none",
+      },
     position: "absolute",
     bottom: 0,
     width: "100vw",
