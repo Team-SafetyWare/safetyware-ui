@@ -12,6 +12,9 @@ import { DashboardSummary } from "../molecules/DashboardSummary";
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
+  dashboardContent: {
+    margin: "20px",
+  },
   placeholderDiv: {
     textAlign: "center",
   },
@@ -44,7 +47,7 @@ export const Home: React.FC = () => {
   const styles = useStyles();
 
   return (
-    <div>
+    <div className={styles.dashboardContent}>
       <SpeedDial
         ariaLabel="SpeedDial"
         sx={{ position: "absolute", bottom: 16, right: 16 }}
