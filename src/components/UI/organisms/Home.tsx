@@ -1,23 +1,20 @@
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import UndoIcon from "@mui/icons-material/Undo";
-import { Button } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { makeStyles } from "@mui/styles";
-import React, {useEffect} from "react";
-import {
-  selectIsDashboard,
-  setIsDashboard,
-} from "../../../store/slices/dashboard";
-// Redux
-import { useAppDispatch, useAppSelector } from "../../../store/store";
+import React from "react";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
+  dashboardContent: {
+    margin: "20px",
+  },
   placeholderDiv: {
     textAlign: "center",
   },
@@ -46,8 +43,11 @@ const actions = [
 ];
 
 export const Home: React.FC = () => {
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
+  const styles = useStyles();
+
   return (
-    <div>
+    <div className={styles.dashboardContent}>
       <SpeedDial
         ariaLabel="SpeedDial"
         sx={{ position: "absolute", bottom: 16, right: 16 }}
@@ -63,7 +63,7 @@ export const Home: React.FC = () => {
         ))}
       </SpeedDial>
       <DashboardInfo />
-      <DashboardSummary />
+      {matches && <DashboardSummary />}
     </div>
   );
 };
