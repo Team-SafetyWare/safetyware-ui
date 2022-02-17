@@ -2,14 +2,11 @@ import {GoogleMap, InfoWindow, Marker} from "@react-google-maps/api";
 import React, {useEffect} from "react";
 import {LocationReading} from "../organisms/Incidents";
 import MarkerIcon from "../../../assets/AccidentDotMapDot.png";
-import {useAppDispatch, useAppSelector} from "../../../store/store";
-import {selectIsDashboard, setIsDashboard} from "../../../store/slices/dashboard";
+import {useAppSelector} from "../../../store/store";
 import {
     selectIncidentDotMapEndDate,
-    selectIncidentDotMapStartDate, setEndDate,
-    setStartDate
+    selectIncidentDotMapStartDate,
 } from "../../../store/slices/incidentDotMapSlice";
-import {Button} from "@mui/material";
 
 const containerStyle = {
     width: "100%",
@@ -30,14 +27,8 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     const center = props.center
     const [markerWindows, updateMarkerWindows] = React.useState<LocationReading[]>([]);
     const [filteredIncidents, updateFilteredIncidents] = React.useState<LocationReading[]>([]);
-    const dispatch = useAppDispatch();
     const startDate = useAppSelector(selectIncidentDotMapStartDate);
     const endDate = useAppSelector(selectIncidentDotMapEndDate);
-
-    //Maybe pass in the filtered dates into a graphql query => this might be the best way to do it
-    //Or do the filtering one level up on the incidents page
-    //this would require a new query every time
-    //Use effect then depends on the new query and should theoretically update
 
     function createMarker(location: LocationReading) {
         return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {
