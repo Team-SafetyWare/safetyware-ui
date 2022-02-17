@@ -64,6 +64,13 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
         </InfoWindow>
     }
 
+    function inDateRange(date: Date, start:Date, end:Date): boolean {
+        if (date.getTime() < start.getTime() || date.getTime() > end.getTime()) {
+            return false;
+        }
+        return true;
+    }
+
     useEffect(() => {
         updateIncidents(incidents => props.incidents)
     }, [props])
@@ -72,17 +79,8 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
         updateFilteredIncidents([])
         updateMarkerWindows([])
         incidents.map((incident: any) => {
-            if (startDate && incident.date) {
-                const min = new Date(startDate).getDate()
-                if (new Date(incident.date).getDate() < min) {
-                    return
-                }
-            }
-            if (endDate && incident.date) {
-                const max = new Date(endDate).getDate()
-                if (new Date(incident.date).getDate() > max) {
-                    return
-                }
+            if (!inDateRange(new Date(incident.date), new Date(startDate), new Date(endDate))) {
+                return;
             }
             updateFilteredIncidents(filteredIncidents =>
                 [
