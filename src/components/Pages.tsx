@@ -3,8 +3,8 @@ import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import { Switch, useLocation } from "react-router-dom";
 import ProfilePicture from "../assets/profilePicture.png";
-import { GET_PERSONS } from "../util/queryService";
 import theme from "../Theme";
+import { GET_PERSONS } from "../util/queryService";
 import { Page } from "./UI/atoms/Page";
 import { Sidebar } from "./UI/molecules/Sidebar";
 import { Gases } from "./UI/organisms/Gases";
@@ -49,10 +49,10 @@ export const Pages: React.FC = () => {
 
   return (
     <>
-      {location.pathname === "/login" ? (
+      {location.pathname === "/" ? (
         <Page
           exact
-          path="/login"
+          path="/"
           title="Blackline Safety | Login"
           component={Login}
         />
@@ -64,7 +64,7 @@ export const Pages: React.FC = () => {
               <Switch>
                 <Page
                   exact
-                  path="/"
+                  path="/home"
                   title="Blackline Safety | Home"
                   component={Home}
                 />
