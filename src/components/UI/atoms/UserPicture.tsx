@@ -1,4 +1,3 @@
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import theme from "../../../Theme";
@@ -9,17 +8,12 @@ interface UserPictureProps {
 }
 
 const useStyles = makeStyles({
-  editBox: {
-    display: "flex",
-    alignItems: "center",
-    margin: "0",
+  userImage: {
+    width: "270px",
+
     [theme.breakpoints.down("sm")]: {
-      marginBottom: "20px",
+      width: "calc(0.4 * 100vw)",
     },
-  },
-  editText: {
-    height: "100%",
-    marginLeft: "5px",
   },
 });
 
@@ -28,11 +22,11 @@ export const UserPicture: React.FC<UserPictureProps> = (props) => {
 
   return (
     <>
-      <img src={props.userPhoto} alt={props.userName} />
-      <div className={styles.editBox}>
-        <EditOutlinedIcon />
-        <div className={styles.editText}>Edit</div>
-      </div>
+      <img
+        className={styles.userImage}
+        src={props.userPhoto}
+        alt={props.userName}
+      />
     </>
   );
 };

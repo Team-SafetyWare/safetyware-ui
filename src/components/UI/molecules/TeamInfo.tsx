@@ -11,18 +11,17 @@ interface TeamInfoProps {
 }
 
 const useStyles = makeStyles({
-  teamInfo: {
-    width: "100%",
-    marginTop: "5vh",
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "12px",
-      marginTop: "20px",
-    },
-  },
   teamInfoDropdown: {
     [theme.breakpoints.down("sm")]: {
       display: "flex",
       justifyContent: "center",
+    },
+  },
+  teamInfo: {
+    marginTop: "5vh",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "12px",
+      margin: "0px 20px 0px 20px",
     },
   },
 });
