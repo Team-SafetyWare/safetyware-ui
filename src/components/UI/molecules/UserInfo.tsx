@@ -18,12 +18,13 @@ const useStyles = makeStyles({
   userInfo: {
     display: "flex",
     alignItems: "center",
-    [theme.breakpoints.down("sm")]: {
-      backgroundColor: theme.palette.primary.main,
-      color: "white",
-      flexDirection: "column",
-      paddingBottom: "40px",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        backgroundColor: theme.palette.primary.main,
+        color: "white",
+        flexDirection: "column",
+        paddingBottom: "40px",
+      },
   },
   userPhoto: {
     display: "flex",
@@ -31,29 +32,32 @@ const useStyles = makeStyles({
     alignItems: "center",
     alignContent: "center",
     marginRight: "20px",
-    [theme.breakpoints.down("sm")]: {
-      marginRight: "0",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        marginRight: "0",
+      },
   },
   userDetails: {
-    [theme.breakpoints.down("sm")]: {
-      textAlign: "center",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        textAlign: "center",
+      },
   },
   editBox: {
     alignItems: "center",
     display: "flex",
     margin: "0 auto 0 calc(0.5 * 270px)",
     transform: "translate(-50%)",
-    [theme.breakpoints.down("sm")]: {
-      backgroundColor: "white",
-      borderRadius: "20px",
-      boxShadow: "0px 2px 2px #aaa",
-      fontWeight: "bold",
-      margin: "0 auto",
-      padding: "10px 50px 10px 50px",
-      transform: "translate(0%, -50%)",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        backgroundColor: "white",
+        borderRadius: "20px",
+        boxShadow: "0px 2px 2px #aaa",
+        fontWeight: "bold",
+        margin: "0 auto",
+        padding: "10px 50px 10px 50px",
+        transform: "translate(0%, -50%)",
+      },
   },
   editText: {
     height: "100%",

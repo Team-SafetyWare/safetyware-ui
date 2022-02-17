@@ -5,7 +5,6 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import theme from "../../../Theme";
 
 interface HomeGreetingProps {
   userName?: string;
@@ -42,9 +41,11 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     margin: "15px 0",
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        alignItems: "normal",
+        flexDirection: "column",
+      },
   },
   greetingDetails: {},
   greeting: {
@@ -56,19 +57,22 @@ const useStyles = makeStyles({
     margin: 0,
   },
   buttons: {
-    [theme.breakpoints.down("sm")]: {
-      marginTop: "10px",
-      width: "100%",
-    },
-    "& .MuiStack-root": {
-      [theme.breakpoints.down("sm")]: {
-        display: "flex",
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        marginTop: "10px",
+        width: "100%",
       },
+    "& .MuiStack-root": {
+      "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+        {
+          display: "flex",
+        },
     },
     "& .MuiButton-root": {
-      [theme.breakpoints.down("sm")]: {
-        flexGrow: "1",
-      },
+      "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+        {
+          flexGrow: "1",
+        },
     },
   },
 });

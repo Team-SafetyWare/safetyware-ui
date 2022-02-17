@@ -2,7 +2,6 @@ import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import theme from "../../../Theme";
 import { GET_LOCATIONS } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
@@ -35,30 +34,32 @@ const endDate = new Date("01/08/2022");
 
 const useStyles = makeStyles({
   locationsDropdown: {
-    [theme.breakpoints.down("sm")]: {
-      display: "flex",
-      justifyContent: "center",
-      left: "50%",
-      marginBottom: "20px",
-      position: "absolute",
-      top: "calc(0.5 * 60px)",
-      transform: "translate(-50%, -50%)",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        display: "flex",
+        justifyContent: "center",
+        left: "50%",
+        marginBottom: "20px",
+        position: "absolute",
+        top: "calc(0.5 * 60px)",
+        transform: "translate(-50%, -50%)",
+      },
   },
 
   visualization: {
-    [theme.breakpoints.down("sm")]: {
-      height: "calc(100vh - 60px)",
-      left: "0",
-      position: "absolute",
-      top: "60px",
-      width: "100vw",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        height: "calc(100vh - 60px)",
+        left: "0",
+        position: "absolute",
+        top: "60px",
+        width: "100vw",
+      },
   },
 });
 
 export const Locations: React.FC = () => {
-  const matches = useMediaQuery("(min-width:600px)");
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
   const [locations, addLocation] = useState<LocationReading[]>([]);

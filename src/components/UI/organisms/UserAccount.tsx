@@ -44,7 +44,7 @@ export const UserAccount: React.FC = () => {
     }
   }, [loading, data]);
 
-  const matches = useMediaQuery("(min-width:600px)");
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
 
   return (
     <>
