@@ -12,12 +12,6 @@ import { IncidentsSelect } from "../atoms/IncidentsSelect";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { CustomBox } from "../molecules/CustomBox";
-import { useAppDispatch, useAppSelector } from "../../../store/store";
-import {
-  selectIncidentDotMapEndDate,
-  selectIncidentDotMapStartDate, setEndDate,
-  setStartDate
-} from "../../../store/slices/incidentDotMapSlice";
 
 const barGraphData = [
   { x: 0, y: 8 },
