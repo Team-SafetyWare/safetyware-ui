@@ -9,6 +9,7 @@ interface CustomBoxReducedProps {
   user?: any;
   startDate?: any;
   endDate?: any;
+  pageLabel?: string;
 }
 
 const useStyles = makeStyles({
@@ -30,12 +31,13 @@ const useStyles = makeStyles({
 
 export const CustomBoxReduced: React.FC<CustomBoxReducedProps> = (props) => {
   const styles = useStyles();
+  const label = props.pageLabel;
 
   return (
     <Draggable>
       <div className={styles.box}>
         <h3>Customize</h3>
-        <CustomBoxDates startDate={props.startDate} endDate={props.endDate} />
+        <CustomBoxDates pageLabel={label} startDate={props.startDate} endDate={props.endDate} />
         <CustomBoxUserSelect user={props.user} view={props.view} />
       </div>
     </Draggable>

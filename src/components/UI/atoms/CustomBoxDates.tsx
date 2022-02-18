@@ -2,8 +2,10 @@ import {makeStyles} from "@mui/styles";
 import React from "react";
 import BasicDatePicker from "../atoms/BasicDatePicker";
 import {useAppDispatch, useAppSelector} from "../../../store/store";
-import {selectIsDashboard} from "../../../store/slices/dashboard";
-import {selectIncidentDotMapEndDate, selectIncidentDotMapStartDate} from "../../../store/slices/incidentDotMapSlice";
+import {selectIncidentPageEndDate, selectIncidentPageStartDate} from "../../../store/slices/incidentPageSlice";
+import {incidentPageLabel} from "../organisms/Incidents";
+import {locationPageLabel} from "../organisms/Locations";
+import {selectLocationPageEndDate, selectLocationPageStartDate} from "../../../store/slices/locationPageSlice";
 
 
 interface CustomBoxDatesProps {
@@ -16,22 +18,37 @@ const useStyles = makeStyles({
   text: { fontSize: "10px" },
 });
 
-export const incidentDotMapStartDate = "incidentDotMapStartDate"
-export const incidentDotMapEndDate = "incidentDotMapEndDate"
+export const incidentPageStartDate = "incidentPageStartDate"
+export const incidentPageEndDate = "incidentPageEndDate"
+export const locationPageStartDate = "locationPageStartDate"
+export const locationPageEndDate = "locationPageEndDate"
 
 export const CustomBoxDates: React.FC<CustomBoxDatesProps> = (props) => {
     const styles = useStyles();
-
     const label = props.pageLabel;
-    const startDate = useAppSelector(selectIncidentDotMapStartDate);
-    const endDate = useAppSelector(selectIncidentDotMapEndDate);
+
+    function getStartDateLabel() {
+        if (label == incidentPageLabel) {
+            return incidentPageStartDate
+        } else {
+            return locationPageStartDate
+        }
+    }
+
+    function getEndDateLabel() {
+        if (label == incidentPageLabel) {
+            return incidentPageEndDate
+        } else {
+            return locationPageEndDate
+        }
+    }
 
     return (
         <>
             <p> Start Date </p>
-            <BasicDatePicker date={startDate} label={incidentDotMapStartDate}/>
+            <BasicDatePicker label={getStartDateLabel()}/>
             <p> End Date </p>
-            <BasicDatePicker date={endDate} label={incidentDotMapEndDate}/>
+            <BasicDatePicker label={getEndDateLabel()}/>
         </>
     );
 };
