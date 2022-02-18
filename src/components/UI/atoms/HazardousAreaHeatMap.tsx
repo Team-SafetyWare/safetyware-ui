@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {GoogleMap, HeatmapLayer} from '@react-google-maps/api';
 import {LocationReading} from "../organisms/Incidents";
 import {useAppSelector} from "../../../store/store";
-import {selectIncidentPageEndDate, selectIncidentPageStartDate} from "../../../store/slices/incidentPageSlice";
 import {selectLocationPageEndDate, selectLocationPageStartDate} from "../../../store/slices/locationPageSlice";
 
 
@@ -38,7 +37,6 @@ export const HazardousAreaHeatMap: React.FC<HazardousAreaHeatMapProps> = (props)
 
     useEffect(() => {
         updateFilteredAccidents([])
-        console.log(startDate, "separator" ,endDate)
         accidents.map((accident: any) => {
             if (!inDateRange(new Date(accident.date), new Date(startDate), new Date(endDate))) {
                 return;
