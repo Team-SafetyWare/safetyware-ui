@@ -4,7 +4,7 @@ import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Toolbar } from "@mui/material";
+import { Toolbar, useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
@@ -30,14 +30,19 @@ interface SidebarProps {
 const useStyles = makeStyles({
   sidebar: {
     display: "flex",
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        backgroundColor: theme.palette.primary.main,
+      },
 
     "& .MuiDrawer-root": {
       flexShrink: 0,
       width: 240,
       zIndex: 1,
-      [theme.breakpoints.down("sm")]: {
-        display: "none",
-      },
+      "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+        {
+          display: "none",
+        },
     },
 
     "& .MuiListItemIcon-root": {
@@ -45,7 +50,7 @@ const useStyles = makeStyles({
     },
 
     "& .MuiPaper-root": {
-      backgroundColor: "#ad172b",
+      backgroundColor: theme.palette.primary.main,
       boxSizing: "border-box",
       color: "white",
       width: 240,
@@ -53,23 +58,28 @@ const useStyles = makeStyles({
   },
 
   sidebarButton: {
+    display: "none",
     padding: 16,
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        color: "white",
+        display: "inline-flex",
+      },
   },
 
   sidebarDrawerMobile: {
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
-    },
+    display: "none",
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        display: "block",
+      },
 
     "& .MuiListItemIcon-root": {
       color: "white",
     },
 
     "& .MuiPaper-root": {
-      backgroundColor: "#ad172b",
+      backgroundColor: theme.palette.primary.main,
       boxSizing: "border-box",
       color: "white",
       width: 240,
@@ -91,9 +101,9 @@ const useStyles = makeStyles({
   },
 
   sidebarItemSelected: {
-    backgroundColor: "#d34949",
+    backgroundColor: theme.palette.secondary.main,
 
-    "&:hover": { backgroundColor: "#d3494980" },
+    "&:hover": { backgroundColor: theme.palette.secondary.light },
   },
 
   sidebarFooter: {
@@ -107,6 +117,7 @@ const useStyles = makeStyles({
 });
 
 export const Sidebar: React.FC<SidebarProps> = (props) => {
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -116,7 +127,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
   };
 
   const sidebarHeaderItems = [
-    { text: "Home", icon: HomeOutlinedIcon, link: "/" },
+    { text: "Home", icon: HomeOutlinedIcon, link: "/home" },
     { text: "Locations", icon: ExploreOutlinedIcon, link: "/locations" },
     { text: "Incidents", icon: BarChartOutlinedIcon, link: "/incidents" },
     { text: "Gases", icon: BubbleChartOutlinedIcon, link: "/gases" },
@@ -136,6 +147,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
               to={sidebarItem.link}
               exact
               activeClassName={styles.sidebarItemSelected}
+              onClick={matches ? undefined : handleDrawerToggle}
             >
               <ListItemIcon>
                 <sidebarItem.icon />
@@ -151,6 +163,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
           to="/user-account"
           exact
           activeClassName={styles.sidebarItemSelected}
+          onClick={matches ? undefined : handleDrawerToggle}
         >
           <div className={styles.sidebarUser}>
             <SidebarUserPicture
@@ -162,9 +175,10 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
         </ListItemButton>
         <ListItemButton
           component={NavLink}
-          to="/login"
+          to="/"
           exact
           activeClassName={styles.sidebarItemSelected}
+          onClick={matches ? undefined : handleDrawerToggle}
         >
           <ListItemIcon>
             <LogoutIcon />

@@ -51,7 +51,6 @@ export const HazardousAreaHeatMap: React.FC<HazardousAreaHeatMapProps> = (props)
 
                 ])
         })
-        console.log(filteredAccidents.length)
     }, [accidents, startDate, endDate])
 
     return (
