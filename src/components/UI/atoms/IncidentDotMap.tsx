@@ -2,14 +2,11 @@ import {GoogleMap, InfoWindow, Marker} from "@react-google-maps/api";
 import React, {useEffect} from "react";
 import {LocationReading} from "../organisms/Incidents";
 import MarkerIcon from "../../../assets/AccidentDotMapDot.png";
-import {useAppDispatch, useAppSelector} from "../../../store/store";
-import {selectIsDashboard, setIsDashboard} from "../../../store/slices/dashboard";
+import {useAppSelector} from "../../../store/store";
 import {
-    selectIncidentDotMapEndDate,
-    selectIncidentDotMapStartDate, setEndDate,
-    setStartDate
-} from "../../../store/slices/incidentDotMapSlice";
-import {Button} from "@mui/material";
+    selectIncidentPageEndDate,
+    selectIncidentPageStartDate,
+} from "../../../store/slices/incidentPageSlice";
 
 const containerStyle = {
     width: "100%",
@@ -30,14 +27,8 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     const center = props.center
     const [markerWindows, updateMarkerWindows] = React.useState<LocationReading[]>([]);
     const [filteredIncidents, updateFilteredIncidents] = React.useState<LocationReading[]>([]);
-    const dispatch = useAppDispatch();
-    const startDate = useAppSelector(selectIncidentDotMapStartDate);
-    const endDate = useAppSelector(selectIncidentDotMapEndDate);
-
-    //Maybe pass in the filtered dates into a graphql query => this might be the best way to do it
-    //Or do the filtering one level up on the incidents page
-    //this would require a new query every time
-    //Use effect then depends on the new query and should theoretically update
+    const startDate = useAppSelector(selectIncidentPageStartDate);
+    const endDate = useAppSelector(selectIncidentPageEndDate);
 
     function createMarker(location: LocationReading) {
         return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {
@@ -64,25 +55,20 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
         </InfoWindow>
     }
 
+    function inDateRange(date: Date, start:Date, end:Date): boolean {
+        return !(date.getTime() < start.getTime() || date.getTime() > end.getTime());
+    }
+
     useEffect(() => {
-        updateIncidents(incidents => props.incidents)
+        updateIncidents(() => props.incidents)
     }, [props])
 
     useEffect(() => {
         updateFilteredIncidents([])
         updateMarkerWindows([])
         incidents.map((incident: any) => {
-            if (startDate && incident.date) {
-                const min = new Date(startDate).getDate()
-                if (new Date(incident.date).getDate() < min) {
-                    return
-                }
-            }
-            if (endDate && incident.date) {
-                const max = new Date(endDate).getDate()
-                if (new Date(incident.date).getDate() > max) {
-                    return
-                }
+            if (!inDateRange(new Date(incident.date), new Date(startDate), new Date(endDate))) {
+                return;
             }
             updateFilteredIncidents(filteredIncidents =>
                 [
