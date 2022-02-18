@@ -41,6 +41,11 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     margin: "15px 0",
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        alignItems: "normal",
+        flexDirection: "column",
+      },
   },
   greetingDetails: {},
   greeting: {
@@ -51,7 +56,25 @@ const useStyles = makeStyles({
     fontSize: "16px",
     margin: 0,
   },
-  buttons: {},
+  buttons: {
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        marginTop: "10px",
+        width: "100%",
+      },
+    "& .MuiStack-root": {
+      "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+        {
+          display: "flex",
+        },
+    },
+    "& .MuiButton-root": {
+      "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+        {
+          flexGrow: "1",
+        },
+    },
+  },
 });
 
 export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {

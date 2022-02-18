@@ -1,6 +1,5 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import theme from "../../../Theme";
 import { TeamSelect } from "../atoms/TeamSelect";
 import { TeamTable } from "../atoms/TeamTable";
 
@@ -11,19 +10,20 @@ interface TeamInfoProps {
 }
 
 const useStyles = makeStyles({
-  teamInfo: {
-    width: "100%",
-    marginTop: "5vh",
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "12px",
-      marginTop: "20px",
-    },
-  },
   teamInfoDropdown: {
-    [theme.breakpoints.down("sm")]: {
-      display: "flex",
-      justifyContent: "center",
-    },
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        display: "flex",
+        justifyContent: "center",
+      },
+  },
+  teamInfo: {
+    marginTop: "5vh",
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        fontSize: "12px",
+        margin: "0px 20px 0px 20px",
+      },
   },
 });
 

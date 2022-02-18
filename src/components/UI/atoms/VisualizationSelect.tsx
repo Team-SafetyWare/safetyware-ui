@@ -5,21 +5,30 @@ import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import React from "react";
 
-interface IncidentsSelectProps {
+interface VisualizationSelectProps {
   visualizations: string[];
   setVisualization(visualization: string): any;
 }
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
+  backgroundColor: "white",
+  borderRadius: "5px",
+  padding: "5px 10px 5px 10px",
+
   "& .MuiSelect-select": {
     fontWeight: "bold",
+
+    "&:focus": { backgroundColor: "white" },
   },
 }));
 
-export const IncidentsSelect: React.FC<IncidentsSelectProps> = (props) => {
+export const VisualizationSelect: React.FC<VisualizationSelectProps> = (
+  props
+) => {
   return (
-    <FormControl variant="standard" sx={{ minWidth: 120 }}>
+    <FormControl variant="standard" sx={{ minWidth: 240 }}>
       <Select
+        autoWidth={true}
         defaultValue={props.visualizations[0]}
         input={<BootstrapInput />}
         disableUnderline
@@ -28,15 +37,11 @@ export const IncidentsSelect: React.FC<IncidentsSelectProps> = (props) => {
           props.setVisualization(selectedVisualization);
         }}
       >
-        <MenuItem value={props.visualizations[0]}>
-          {props.visualizations[0]}
-        </MenuItem>
-        <MenuItem value={props.visualizations[1]}>
-          {props.visualizations[1]}
-        </MenuItem>
-        <MenuItem value={props.visualizations[2]}>
-          {props.visualizations[2]}
-        </MenuItem>
+        {props.visualizations.map((visualization) => (
+          <MenuItem value={visualization} sx={{ minWidth: 240 }}>
+            {visualization}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );
