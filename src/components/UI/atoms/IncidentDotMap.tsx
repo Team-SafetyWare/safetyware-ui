@@ -1,6 +1,6 @@
 import {GoogleMap, InfoWindow, Marker} from "@react-google-maps/api";
 import React, {useEffect} from "react";
-import {LocationReading} from "../organisms/Incidents";
+import {IncidentReadings} from "../organisms/Incidents";
 import MarkerIcon from "../../../assets/AccidentDotMapDot.png";
 import {useAppSelector} from "../../../store/store";
 import {
@@ -22,46 +22,65 @@ interface IncidentDotMapProps {
 }
 
 export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
-    const [incidents, updateIncidents] = React.useState<LocationReading[]>([])
+    const [incidents, updateIncidents] = React.useState<IncidentReadings[]>([])
     const zoom = props.zoom
     const center = props.center
-    const [markerWindows, updateMarkerWindows] = React.useState<LocationReading[]>([]);
-    const [filteredIncidents, updateFilteredIncidents] = React.useState<LocationReading[]>([]);
+    const [markerWindows, updateMarkerWindows] = React.useState<IncidentReadings[]>([]);
+    const [filteredIncidents, updateFilteredIncidents] = React.useState<IncidentReadings[]>([]);
     const startDate = useAppSelector(selectIncidentPageStartDate);
     const endDate = useAppSelector(selectIncidentPageEndDate);
+    const [hoverMarker, updateHoverMarker] = React.useState<IncidentReadings | undefined>(undefined)
 
-    function createMarker(location: LocationReading) {
-        return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {
-            updateMarkerWindows(markerWindows => [...markerWindows, location])
-        }}/>;
+    function createMarker(incident: IncidentReadings) {
+        return <Marker position={incident.coordinates} icon={MarkerIcon}
+                       onClick={() => {
+                           updateMarkerWindows(markerWindows => [...markerWindows, incident])
+                       }}
+                       onMouseOver={() => updateHoverMarker(incident)}
+        />;
     }
 
-    function createMarkerWindow(location: LocationReading) {
-        return <InfoWindow position={location.coordinates}>
+    function createHoverWindow(incident?: IncidentReadings) {
+        if (incident)
+            return createMarkerWindow(incident)
+    }
+
+    function createMarkerWindow(incident: IncidentReadings) {
+        return <InfoWindow position={incident.coordinates} onCloseClick={() => updateHoverMarker(undefined)}>
             <div>
+                <p>
+                    <b>Incident: {incident.type}</b>
+                </p>
                 <div>
-                    {location.name}
+                    Name: {incident.personName}
                 </div>
                 <div>
-                    {location.date}
-                </div>
-                <div>
-                    {startDate}
-                </div>
-                <div>
-                    {endDate}
+                    Time: {incident.timestamp}
                 </div>
             </div>
         </InfoWindow>
     }
 
-    function inDateRange(date: Date, start:Date, end:Date): boolean {
+    function inDateRange(date: Date, start: Date, end: Date): boolean {
         return !(date.getTime() < start.getTime() || date.getTime() > end.getTime());
     }
 
     useEffect(() => {
         updateIncidents(() => props.incidents)
     }, [props])
+
+    function createIncident(incident: any) {
+        return {
+            coordinates: {
+                lat: incident.coordinates.lat,
+                lng: incident.coordinates.lng,
+            },
+            timestamp: incident.timestamp,
+            personName: incident.personName,
+            companyName: incident.companyName,
+            type: incident.type,
+        };
+    }
 
     useEffect(() => {
         updateFilteredIncidents([])
@@ -73,13 +92,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
             updateFilteredIncidents(filteredIncidents =>
                 [
                     ...filteredIncidents,
-                    {
-                        coordinates: {
-                            lat: incident.coordinates.lat,
-                            lng: incident.coordinates.lng,
-                        },
-                        date: incident.date
-                    },
+                    createIncident(incident),
                 ]
             )
         })
@@ -92,8 +105,9 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
                 center={center}
                 zoom={zoom}
             >
-                {markerWindows.map((markerWindow: LocationReading) => createMarkerWindow(markerWindow))}
-                {filteredIncidents.map((incident: LocationReading) => createMarker(incident))}
+                {/*{markerWindows.map((markerWindow: IncidentReadings) => createMarkerWindow(markerWindow))}*/}
+                {filteredIncidents.map((incident: IncidentReadings) => createMarker(incident))}
+                {createHoverWindow(hoverMarker)}
             </GoogleMap>
         </>
     )
