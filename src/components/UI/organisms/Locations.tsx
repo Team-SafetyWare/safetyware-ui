@@ -13,7 +13,7 @@ import {
 } from "../atoms/TravelHistoryTrail";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-import { LocationReading } from "./Incidents";
+import { IncidentReadings } from "./Incidents";
 import {useQuery} from "@apollo/client";
 
 const center = {
@@ -64,7 +64,7 @@ export const Locations: React.FC = () => {
     const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
     const styles = useStyles();
 
-    const [locations, updateLocations] = React.useState<LocationReading[]>([]);
+    const [locations, updateLocations] = React.useState<IncidentReadings[]>([]);
     const [travelTrail, updateTravelTrail] = React.useState<TravelHistoryPoint[]>([]);
     const {loading, error, data} = useQuery(
         GET_LOCATIONS,
@@ -80,7 +80,7 @@ export const Locations: React.FC = () => {
                         [...locations,
                             {
                                 coordinates: {lng: location.coordinates[0], lat: location.coordinates[1]},
-                                date: location.timestamp,
+                                timestamp: location.timestamp,
                             },
                         ]
                     )
