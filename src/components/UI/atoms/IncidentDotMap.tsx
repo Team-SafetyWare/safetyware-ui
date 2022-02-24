@@ -29,15 +29,24 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     const [filteredIncidents, updateFilteredIncidents] = React.useState<IncidentReadings[]>([]);
     const startDate = useAppSelector(selectIncidentPageStartDate);
     const endDate = useAppSelector(selectIncidentPageEndDate);
+    const [hoverMarker, updateHoverMarker] = React.useState<IncidentReadings | undefined>(undefined)
 
     function createMarker(incident: IncidentReadings) {
-        return <Marker position={incident.coordinates} icon={MarkerIcon} onClick={() => {
-            updateMarkerWindows(markerWindows => [...markerWindows, incident])
-        }}/>;
+        return <Marker position={incident.coordinates} icon={MarkerIcon}
+                       onClick={() => {
+                           updateMarkerWindows(markerWindows => [...markerWindows, incident])
+                       }}
+                       onMouseOver={() => updateHoverMarker(incident)}
+        />;
+    }
+
+    function createHoverWindow(incident?: IncidentReadings) {
+        if (incident)
+            return createMarkerWindow(incident)
     }
 
     function createMarkerWindow(incident: IncidentReadings) {
-        return <InfoWindow position={incident.coordinates}>
+        return <InfoWindow position={incident.coordinates} onCloseClick={() => updateHoverMarker(undefined)}>
             <div>
                 <p>
                     <b>Incident: {incident.type}</b>
@@ -52,13 +61,26 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
         </InfoWindow>
     }
 
-    function inDateRange(date: Date, start:Date, end:Date): boolean {
+    function inDateRange(date: Date, start: Date, end: Date): boolean {
         return !(date.getTime() < start.getTime() || date.getTime() > end.getTime());
     }
 
     useEffect(() => {
         updateIncidents(() => props.incidents)
     }, [props])
+
+    function createIncident(incident: any) {
+        return {
+            coordinates: {
+                lat: incident.coordinates.lat,
+                lng: incident.coordinates.lng,
+            },
+            timestamp: incident.timestamp,
+            personName: incident.personName,
+            companyName: incident.companyName,
+            type: incident.type,
+        };
+    }
 
     useEffect(() => {
         updateFilteredIncidents([])
@@ -70,16 +92,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
             updateFilteredIncidents(filteredIncidents =>
                 [
                     ...filteredIncidents,
-                    {
-                        coordinates: {
-                            lat: incident.coordinates.lat,
-                            lng: incident.coordinates.lng,
-                        },
-                        timestamp: incident.timestamp,
-                        personName: incident.personName,
-                        companyName: incident.companyName,
-                        type: incident.type,
-                    },
+                    createIncident(incident),
                 ]
             )
         })
@@ -92,8 +105,9 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
                 center={center}
                 zoom={zoom}
             >
-                {markerWindows.map((markerWindow: IncidentReadings) => createMarkerWindow(markerWindow))}
+                {/*{markerWindows.map((markerWindow: IncidentReadings) => createMarkerWindow(markerWindow))}*/}
                 {filteredIncidents.map((incident: IncidentReadings) => createMarker(incident))}
+                {createHoverWindow(hoverMarker)}
             </GoogleMap>
         </>
     )
