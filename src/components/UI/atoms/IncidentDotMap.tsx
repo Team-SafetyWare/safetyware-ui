@@ -86,7 +86,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
         updateFilteredIncidents([])
         updateMarkerWindows([])
         incidents.map((incident: any) => {
-            if (!inDateRange(new Date(incident.date), new Date(startDate), new Date(endDate))) {
+            if (!inDateRange(new Date(incident.timestamp), new Date(startDate), new Date(endDate))) {
                 return;
             }
             updateFilteredIncidents(filteredIncidents =>
