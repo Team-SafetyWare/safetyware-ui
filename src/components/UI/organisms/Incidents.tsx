@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import { GET_LOCATIONS } from "../../../util/queryService";
+import {GET_INCIDENTS} from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
@@ -66,13 +66,15 @@ const useStyles = makeStyles({
   },
 });
 
-export interface LocationReading {
+export interface IncidentReadings {
   coordinates: {
     lng: number;
     lat: number;
   };
-  name?: string;
-  date?: Date;
+  personName?: string;
+  timestamp?: Date;
+  type?: string;
+  companyName?: string;
 }
 
 export const incidentPageLabel = "incidentPage";
@@ -81,22 +83,25 @@ export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
-  const [locations, updateLocations] = useState<LocationReading[]>([]);
-  const { loading, error, data } = useQuery(GET_LOCATIONS);
+  const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
+  const { loading, error, data } = useQuery(GET_INCIDENTS);
 
   useEffect(() => {
-    updateLocations([]);
+    updateIncidents([]);
     if (!loading && data) {
-      data.locationReadings.map((location: any) => {
-        updateLocations((locations) => [
-          ...locations,
+      console.log(data.incidents)
+      data.incidents.map((incident: any) => {
+        updateIncidents((incidents) => [
+          ...incidents,
           {
             coordinates: {
-              lng: location.coordinates[0],
-              lat: location.coordinates[1],
+              lng: incident.coordinates[0],
+              lat: incident.coordinates[1],
             },
-            name: location.person.name,
-            date: location.timestamp,
+            personName: incident.person.name,
+            timestamp: incident.timestamp,
+            type: incident.type,
+            companyName: incident.person.company.name,
           },
         ]);
       });
@@ -142,7 +147,7 @@ export const Incidents: React.FC = () => {
             accordionWidth={""}
             accordionTitle={visualizations[1]}
             component={
-              <IncidentDotMap incidents={locations} center={center} zoom={10} />
+              <IncidentDotMap incidents={incidents} center={center} zoom={10} />
             }
           />
           <CustomAccordion
@@ -175,7 +180,7 @@ export const Incidents: React.FC = () => {
           )}
           {visualization == visualizations[1] && (
             <div className={styles.visualization}>
-              <IncidentDotMap incidents={locations} center={center} zoom={10} />
+              <IncidentDotMap incidents={incidents} center={center} zoom={10} />
             </div>
           )}
           {visualization == visualizations[2] && (

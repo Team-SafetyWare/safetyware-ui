@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {GoogleMap, HeatmapLayer} from '@react-google-maps/api';
-import {LocationReading} from "../organisms/Incidents";
+import {IncidentReadings} from "../organisms/Incidents";
 import {useAppSelector} from "../../../store/store";
 import {selectLocationPageEndDate, selectLocationPageStartDate} from "../../../store/slices/locationPageSlice";
 
@@ -11,7 +11,7 @@ const containerStyle = {
 };
 
 interface HazardousAreaHeatMapProps {
-    accidents: LocationReading[];
+    accidents: IncidentReadings[];
     startDate?: any;
     endDate?: any;
     center?: any;
@@ -20,7 +20,7 @@ interface HazardousAreaHeatMapProps {
 
 
 export const HazardousAreaHeatMap: React.FC<HazardousAreaHeatMapProps> = (props) => {
-    const [accidents, updateAccidents] = React.useState<LocationReading[]>(props.accidents)
+    const [accidents, updateAccidents] = React.useState<IncidentReadings[]>(props.accidents)
     const [filteredAccidents, updateFilteredAccidents] = React.useState<google.maps.LatLng[]>([]);
     const center = props.center
     const zoom = props.zoom

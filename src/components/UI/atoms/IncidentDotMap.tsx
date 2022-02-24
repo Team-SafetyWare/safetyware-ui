@@ -1,6 +1,6 @@
 import {GoogleMap, InfoWindow, Marker} from "@react-google-maps/api";
 import React, {useEffect} from "react";
-import {LocationReading} from "../organisms/Incidents";
+import {IncidentReadings} from "../organisms/Incidents";
 import MarkerIcon from "../../../assets/AccidentDotMapDot.png";
 import {useAppSelector} from "../../../store/store";
 import {
@@ -22,28 +22,28 @@ interface IncidentDotMapProps {
 }
 
 export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
-    const [incidents, updateIncidents] = React.useState<LocationReading[]>([])
+    const [incidents, updateIncidents] = React.useState<IncidentReadings[]>([])
     const zoom = props.zoom
     const center = props.center
-    const [markerWindows, updateMarkerWindows] = React.useState<LocationReading[]>([]);
-    const [filteredIncidents, updateFilteredIncidents] = React.useState<LocationReading[]>([]);
+    const [markerWindows, updateMarkerWindows] = React.useState<IncidentReadings[]>([]);
+    const [filteredIncidents, updateFilteredIncidents] = React.useState<IncidentReadings[]>([]);
     const startDate = useAppSelector(selectIncidentPageStartDate);
     const endDate = useAppSelector(selectIncidentPageEndDate);
 
-    function createMarker(location: LocationReading) {
+    function createMarker(location: IncidentReadings) {
         return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {
             updateMarkerWindows(markerWindows => [...markerWindows, location])
         }}/>;
     }
 
-    function createMarkerWindow(location: LocationReading) {
+    function createMarkerWindow(location: IncidentReadings) {
         return <InfoWindow position={location.coordinates}>
             <div>
                 <div>
-                    {location.name}
+                    {location.personName}
                 </div>
                 <div>
-                    {location.date}
+                    {location.timestamp}
                 </div>
                 <div>
                     {startDate}
@@ -78,7 +78,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
                             lat: incident.coordinates.lat,
                             lng: incident.coordinates.lng,
                         },
-                        date: incident.date
+                        timestamp: incident.date
                     },
                 ]
             )
@@ -92,8 +92,8 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
                 center={center}
                 zoom={zoom}
             >
-                {markerWindows.map((markerWindow: LocationReading) => createMarkerWindow(markerWindow))}
-                {filteredIncidents.map((incident: LocationReading) => createMarker(incident))}
+                {markerWindows.map((markerWindow: IncidentReadings) => createMarkerWindow(markerWindow))}
+                {filteredIncidents.map((incident: IncidentReadings) => createMarker(incident))}
             </GoogleMap>
         </>
     )
