@@ -20,3 +20,19 @@ export const GET_LOCATIONS = gql`
     }
   }
 `;
+
+export const GET_INCIDENTS = gql`
+    query {
+      incidents{
+        coordinates
+        timestamp
+        type
+        person{
+          name
+          company{
+            name
+          }
+        }
+      }
+    }
+`;
