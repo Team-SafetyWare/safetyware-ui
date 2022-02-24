@@ -89,7 +89,6 @@ export const Incidents: React.FC = () => {
   useEffect(() => {
     updateIncidents([]);
     if (!loading && data) {
-      console.log(data.incidents)
       data.incidents.map((incident: any) => {
         updateIncidents((incidents) => [
           ...incidents,

@@ -30,26 +30,23 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     const startDate = useAppSelector(selectIncidentPageStartDate);
     const endDate = useAppSelector(selectIncidentPageEndDate);
 
-    function createMarker(location: IncidentReadings) {
-        return <Marker position={location.coordinates} icon={MarkerIcon} onClick={() => {
-            updateMarkerWindows(markerWindows => [...markerWindows, location])
+    function createMarker(incident: IncidentReadings) {
+        return <Marker position={incident.coordinates} icon={MarkerIcon} onClick={() => {
+            updateMarkerWindows(markerWindows => [...markerWindows, incident])
         }}/>;
     }
 
-    function createMarkerWindow(location: IncidentReadings) {
-        return <InfoWindow position={location.coordinates}>
+    function createMarkerWindow(incident: IncidentReadings) {
+        return <InfoWindow position={incident.coordinates}>
             <div>
+                <p>
+                    <b>Incident: {incident.type}</b>
+                </p>
                 <div>
-                    {location.personName}
+                    Name: {incident.personName}
                 </div>
                 <div>
-                    {location.timestamp}
-                </div>
-                <div>
-                    {startDate}
-                </div>
-                <div>
-                    {endDate}
+                    Time: {incident.timestamp}
                 </div>
             </div>
         </InfoWindow>
@@ -78,7 +75,10 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
                             lat: incident.coordinates.lat,
                             lng: incident.coordinates.lng,
                         },
-                        timestamp: incident.date
+                        timestamp: incident.timestamp,
+                        personName: incident.personName,
+                        companyName: incident.companyName,
+                        type: incident.type,
                     },
                 ]
             )
