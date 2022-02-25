@@ -9,9 +9,9 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
   const data = props.data;
 
   return (
-    <FlexibleXYPlot color="#ad172b">
+    <FlexibleXYPlot xType="ordinal" color="#ad172b">
       <XAxis />
-      <YAxis />
+      <YAxis tickFormat={(val) => (Math.round(val) === val ? val : "")} />
       <VerticalBarSeries data={data} barWidth={1} />
     </FlexibleXYPlot>
   );

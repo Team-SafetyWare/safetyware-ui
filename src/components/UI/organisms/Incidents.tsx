@@ -12,18 +12,7 @@ import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBox } from "../molecules/CustomBox";
 
-const barGraphData = [
-  { x: 0, y: 8 },
-  { x: 1, y: 5 },
-  { x: 2, y: 4 },
-  { x: 3, y: 9 },
-  { x: 4, y: 1 },
-  { x: 5, y: 7 },
-  { x: 6, y: 6 },
-  { x: 7, y: 3 },
-  { x: 8, y: 2 },
-  { x: 9, y: 0 },
-];
+const barGraphData: any = [];
 
 const user = "PersonA";
 const view = "User";
@@ -116,19 +105,23 @@ export const Incidents: React.FC = () => {
   useEffect(() => {
     updateIncidentStats([]);
     if (!resIncidentStats.loading && resIncidentStats.data) {
-      resIncidentStats.data.incidentStats.map((incidentStat: any) => {
-        updateIncidentStats((incidentStats) => [
-          ...incidentStats,
-          {
-            type: incidentStat.type,
-            count: incidentStat.count,
-          },
-        ]);
-      });
+      resIncidentStats.data.userAccount.company.incidentStats.map(
+        (incidentStat: any) => {
+          updateIncidentStats((incidentStats) => [
+            ...incidentStats,
+            {
+              type: incidentStat.type,
+              count: incidentStat.count,
+            },
+          ]);
+          barGraphData.push(...barGraphData, {
+            x: incidentStat.type,
+            y: incidentStat.count,
+          });
+        }
+      );
     }
   }, [resIncidentStats.loading, resIncidentStats.data]);
-
-  console.log(incidentStats);
 
   const visualizations = [
     "Raw Incidents Data Table",
