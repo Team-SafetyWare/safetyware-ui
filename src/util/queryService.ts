@@ -22,26 +22,32 @@ export const GET_LOCATIONS = gql`
 `;
 
 export const GET_INCIDENTS = gql`
-    query {
-      incidents{
-        coordinates
-        timestamp
-        type
-        person{
+  query {
+    incidents {
+      coordinates
+      timestamp
+      type
+      person {
+        name
+        company {
           name
-          company{
-            name
-          }
         }
       }
     }
+  }
 `;
 
 export const GET_INCIDENT_STATS = gql`
   query {
-    incidentStats {
-      type
-      count
+    userAccount(id: "1fh2ktnk5gd01c040d0vbc1z") {
+      company {
+        incidentStats {
+          type
+          count
+        }
+      }
     }
   }
 `;
+
+
