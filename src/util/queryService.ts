@@ -42,3 +42,12 @@ export const GET_INCIDENTS = gql`
     }
   }
 `;
+
+export const GET_INCIDENT_STATS = gql`
+  query {
+    incidentStats {
+      type
+      count
+    }
+  }
+`;

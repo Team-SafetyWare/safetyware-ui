@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import { GET_INCIDENTS } from "../../../util/queryService";
+import { GET_INCIDENTS, GET_INCIDENT_STATS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import IncidentDotMap from "../atoms/IncidentDotMap";
@@ -73,6 +73,11 @@ export interface IncidentReadings {
   companyName?: string;
 }
 
+export interface IncidentStat {
+  type: string;
+  count: number;
+}
+
 export const incidentPageLabel = "incidentPage";
 
 export const Incidents: React.FC = () => {
@@ -80,13 +85,15 @@ export const Incidents: React.FC = () => {
   const styles = useStyles();
 
   const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
-  const { loading, error, data } = useQuery(GET_INCIDENTS);
+  const [incidentStats, updateIncidentStats] = useState<IncidentStat[]>([]);
+  const resIncidents = useQuery(GET_INCIDENTS);
+  const resIncidentStats = useQuery(GET_INCIDENT_STATS);
 
   useEffect(() => {
     updateIncidents([]);
 
-    if (!loading && data) {
-      data.userAccount.company.people.map((person: any) => {
+    if (!resIncidents.loading && resIncidents.data) {
+      resIncidents.data.userAccount.company.people.map((person: any) => {
         person.incidents.map((incident: any) => {
           updateIncidents((incidents) => [
             ...incidents,
@@ -104,7 +111,24 @@ export const Incidents: React.FC = () => {
         });
       });
     }
-  }, [loading, data]);
+  }, [resIncidents.loading, resIncidents.data]);
+
+  useEffect(() => {
+    updateIncidentStats([]);
+    if (!resIncidentStats.loading && resIncidentStats.data) {
+      resIncidentStats.data.incidentStats.map((incidentStat: any) => {
+        updateIncidentStats((incidentStats) => [
+          ...incidentStats,
+          {
+            type: incidentStat.type,
+            count: incidentStat.count,
+          },
+        ]);
+      });
+    }
+  }, [resIncidentStats.loading, resIncidentStats.data]);
+
+  console.log(incidentStats);
 
   const visualizations = [
     "Raw Incidents Data Table",
