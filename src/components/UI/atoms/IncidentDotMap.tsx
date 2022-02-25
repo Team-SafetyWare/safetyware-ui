@@ -1,10 +1,10 @@
 import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
 import React, { useEffect } from "react";
-import GenericIcon from "../../../assets/AccidentDotMapDot.png";
 import BatteryIcon from "../../../assets/battery.png";
 import DeathIcon from "../../../assets/death.png";
 import FallIcon from "../../../assets/fall.png";
 import GasIcon from "../../../assets/gas.png";
+import GenericIcon from "../../../assets/generic.png";
 import LatchIcon from "../../../assets/latch.png";
 import SignalIcon from "../../../assets/signal.png";
 import {
@@ -45,105 +45,45 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
 
   function createMarker(incident: IncidentReadings) {
     let type = incident.type;
-    if (type == "Low battery") {
-      return (
-        <Marker
-          position={incident.coordinates}
-          icon={BatteryIcon}
-          onClick={() => {
-            updateMarkerWindows((markerWindows) => [
-              ...markerWindows,
-              incident,
-            ]);
-          }}
-          onMouseOver={() => updateHoverMarker(incident)}
-        />
-      );
-    } else if (type == "Fall") {
-      return (
-        <Marker
-          position={incident.coordinates}
-          icon={FallIcon}
-          onClick={() => {
-            updateMarkerWindows((markerWindows) => [
-              ...markerWindows,
-              incident,
-            ]);
-          }}
-          onMouseOver={() => updateHoverMarker(incident)}
-        />
-      );
-    } else if (type == "Gas detected") {
-      return (
-        <Marker
-          position={incident.coordinates}
-          icon={GasIcon}
-          onClick={() => {
-            updateMarkerWindows((markerWindows) => [
-              ...markerWindows,
-              incident,
-            ]);
-          }}
-          onMouseOver={() => updateHoverMarker(incident)}
-        />
-      );
-    } else if (type == "Latch pulled") {
-      return (
-        <Marker
-          position={incident.coordinates}
-          icon={LatchIcon}
-          onClick={() => {
-            updateMarkerWindows((markerWindows) => [
-              ...markerWindows,
-              incident,
-            ]);
-          }}
-          onMouseOver={() => updateHoverMarker(incident)}
-        />
-      );
-    } else if (type == "Signal lost") {
-      return (
-        <Marker
-          position={incident.coordinates}
-          icon={SignalIcon}
-          onClick={() => {
-            updateMarkerWindows((markerWindows) => [
-              ...markerWindows,
-              incident,
-            ]);
-          }}
-          onMouseOver={() => updateHoverMarker(incident)}
-        />
-      );
-    } else if (type == "Death") {
-      return (
-        <Marker
-          position={incident.coordinates}
-          icon={DeathIcon}
-          onClick={() => {
-            updateMarkerWindows((markerWindows) => [
-              ...markerWindows,
-              incident,
-            ]);
-          }}
-          onMouseOver={() => updateHoverMarker(incident)}
-        />
-      );
-    } else {
-      return (
-        <Marker
-          position={incident.coordinates}
-          icon={GenericIcon}
-          onClick={() => {
-            updateMarkerWindows((markerWindows) => [
-              ...markerWindows,
-              incident,
-            ]);
-          }}
-          onMouseOver={() => updateHoverMarker(incident)}
-        />
-      );
+    let markerIcon = GenericIcon;
+    switch (type) {
+      case "Low battery": {
+        markerIcon = BatteryIcon;
+        break;
+      }
+      case "Fall": {
+        markerIcon = FallIcon;
+        break;
+      }
+      case "Gas detected": {
+        markerIcon = GasIcon;
+        break;
+      }
+      case "Latch pulled": {
+        markerIcon = LatchIcon;
+        break;
+      }
+      case "Signal lost": {
+        markerIcon = SignalIcon;
+        break;
+      }
+      case "Death": {
+        markerIcon = DeathIcon;
+        break;
+      }
+      default:
+        markerIcon = GenericIcon;
     }
+    return (
+      <Marker
+        position={incident.coordinates}
+        icon={markerIcon}
+        onClick={() => {
+          updateMarkerWindows((markerWindows) => [...markerWindows, incident]);
+        }}
+        onMouseOver={() => updateHoverMarker(incident)}
+      />
+    );
   }
 
   function createHoverWindow(incident?: IncidentReadings) {
