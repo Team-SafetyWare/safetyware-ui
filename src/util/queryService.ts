@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client";
+import { gql } from "@apollo/client";
 
 export const GET_PERSONS = gql`
   query {
@@ -35,4 +35,13 @@ export const GET_INCIDENTS = gql`
         }
       }
     }
+`;
+
+export const GET_INCIDENT_STATS = gql`
+  query {
+    incidentStats {
+      type
+      count
+    }
+  }
 `;
