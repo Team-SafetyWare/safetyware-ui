@@ -16,15 +16,19 @@ const useStyles = makeStyles({
     backgroundColor: "white",
     height: "200px",
     width: "100%",
-    padding: "17.5px",
-    borderRadius: "25px",
+    boxShadow:
+      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
+    color: "rgba(0, 0, 0, 0.87)",
+    padding: "0px 16px 16px 16px",
   },
   summaryInfo: {
     display: "flex",
     alignItems: "center",
   },
   summaryName: {
-    marginLeft: "10px",
+    margin: "12px 0px 12px 10px",
+    fontWeight: "bold",
+    fontSize: "24px",
   },
   summaryNumber: {
     fontSize: "32px",
