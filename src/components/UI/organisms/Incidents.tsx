@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import {GET_INCIDENTS} from "../../../util/queryService";
+import { GET_INCIDENTS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
@@ -172,17 +172,17 @@ export const Incidents: React.FC = () => {
               setVisualization={setVisualization}
             />
           </div>
-          {visualization == visualizations[0] && (
+          {visualization === visualizations[0] && (
             <div className={styles.visualization}>
               <CustomCollapsibleTable />
             </div>
           )}
-          {visualization == visualizations[1] && (
+          {visualization === visualizations[1] && (
             <div className={styles.visualization}>
               <IncidentDotMap incidents={incidents} center={center} zoom={10} />
             </div>
           )}
-          {visualization == visualizations[2] && (
+          {visualization === visualizations[2] && (
             <div className={styles.visualization}>
               <BarGraph data={barGraphData} />
             </div>

@@ -45,7 +45,7 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
     <>
       <div className={styles.widgetTile}>
         <div className={styles.widgetInfo}>
-          <p className={styles.widgetName}>{props.widgetName}:</p>
+          <p className={styles.widgetName}>{props.widgetName}</p>
         </div>
         <div className={styles.widget}>{props.widget}</div>
       </div>
