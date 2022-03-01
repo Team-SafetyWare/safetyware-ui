@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -17,24 +18,33 @@ interface IncidentTableProps {
   incidents: IncidentReadings[];
 }
 
-function Row(props: { row: IncidentReadings }) {
-  const { row } = props;
+function Row(props: { row: IncidentReadings; matches: boolean }) {
+  const row = props.row;
 
   return (
     <Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>{row.type}</TableCell>
         <TableCell>{row.personName}</TableCell>
-        <TableCell>{row.timestamp?.toLocaleString()}</TableCell>
         <TableCell>
-          {row.coordinates.lng.toFixed(5)}, {row.coordinates.lat.toFixed(5)}
+          {row.timestamp?.toLocaleString([], {
+            dateStyle: props.matches ? "full" : "medium",
+            timeStyle: props.matches ? "short" : undefined,
+          })}
         </TableCell>
+        {props.matches && (
+          <TableCell>
+            {row.coordinates.lng.toFixed(5)}, {row.coordinates.lat.toFixed(5)}
+          </TableCell>
+        )}
       </TableRow>
     </Fragment>
   );
 }
 
 export default function IncidentTable(props: IncidentTableProps) {
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
+
   const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
   const [filteredIncidents, updateFilteredIncidents] = useState<
     IncidentReadings[]
@@ -98,12 +108,12 @@ export default function IncidentTable(props: IncidentTableProps) {
             <TableCell>Incident</TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Time</TableCell>
-            <TableCell>Coordinates</TableCell>
+            {matches && <TableCell>Coordinates</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <Row row={row} />
+            <Row row={row} matches={matches} />
           ))}
         </TableBody>
       </Table>
