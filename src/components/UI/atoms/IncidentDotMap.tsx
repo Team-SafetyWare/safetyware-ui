@@ -101,7 +101,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
             <b>Incident: {incident.type}</b>
           </p>
           <div>Name: {incident.personName}</div>
-          <div>Time: {incident.timestamp}</div>
+          <div>Time: {incident.timestamp?.toLocaleString()}</div>
         </div>
       </InfoWindow>
     );

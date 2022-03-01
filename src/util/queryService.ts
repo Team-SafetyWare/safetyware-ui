@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client";
+import { gql } from "@apollo/client";
 
 export const GET_PERSONS = gql`
   query {
@@ -22,17 +22,23 @@ export const GET_LOCATIONS = gql`
 `;
 
 export const GET_INCIDENTS = gql`
-    query {
-      incidents{
-        coordinates
-        timestamp
-        type
-        person{
-          name
-          company{
-            name
+  query {
+    userAccount(id: "1fh2ktnk5gd01c040d0vbc1z") {
+      company {
+        people {
+          incidents {
+            coordinates
+            timestamp
+            type
+            person {
+              name
+              company {
+                name
+              }
+            }
           }
         }
       }
     }
+  }
 `;

@@ -2,11 +2,11 @@ import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import {GET_INCIDENTS} from "../../../util/queryService";
+import { GET_INCIDENTS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
-import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import IncidentDotMap from "../atoms/IncidentDotMap";
+import IncidentTable from "../atoms/IncidentTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
@@ -30,10 +30,6 @@ const view = "User";
 const incidentType = "All";
 const tempStartDate = new Date("01/01/2022");
 const tempEndDate = new Date("01/08/2022");
-const incidents = [
-  { lat: 51.077763, lng: -114.140657 },
-  { lat: 51.046048773481786, lng: -114.02334120770176 },
-];
 
 const center = {
   lat: 51.049999,
@@ -88,21 +84,24 @@ export const Incidents: React.FC = () => {
 
   useEffect(() => {
     updateIncidents([]);
+
     if (!loading && data) {
-      data.incidents.map((incident: any) => {
-        updateIncidents((incidents) => [
-          ...incidents,
-          {
-            coordinates: {
-              lng: incident.coordinates[0],
-              lat: incident.coordinates[1],
+      data.userAccount.company.people.map((person: any) => {
+        person.incidents.map((incident: any) => {
+          updateIncidents((incidents) => [
+            ...incidents,
+            {
+              coordinates: {
+                lng: incident.coordinates[0],
+                lat: incident.coordinates[1],
+              },
+              personName: incident.person.name,
+              timestamp: new Date(incident.timestamp),
+              type: incident.type,
+              companyName: incident.person.company.name,
             },
-            personName: incident.person.name,
-            timestamp: incident.timestamp,
-            type: incident.type,
-            companyName: incident.person.company.name,
-          },
-        ]);
+          ]);
+        });
       });
     }
   }, [loading, data]);
@@ -134,7 +133,7 @@ export const Incidents: React.FC = () => {
             accordionHeight={"auto"}
             accordionWidth={""}
             accordionTitle={visualizations[0]}
-            component={<CustomCollapsibleTable />}
+            component={<IncidentTable incidents={incidents} />}
           />
           <PageSectionHeader
             sectionTitle={"Incidents Visualizations"}
@@ -174,7 +173,7 @@ export const Incidents: React.FC = () => {
           </div>
           {visualization == visualizations[0] && (
             <div className={styles.visualization}>
-              <CustomCollapsibleTable />
+              <IncidentTable incidents={incidents} />
             </div>
           )}
           {visualization == visualizations[1] && (
