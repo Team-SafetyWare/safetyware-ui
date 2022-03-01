@@ -12,7 +12,7 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
     <FlexibleXYPlot xType="ordinal" color="#ad172b">
       <XAxis />
       <YAxis tickFormat={(val) => (Math.round(val) === val ? val : "")} />
-      <VerticalBarSeries data={data} barWidth={0.75} />
+      <VerticalBarSeries data={data} barWidth={1} />
     </FlexibleXYPlot>
   );
 };
