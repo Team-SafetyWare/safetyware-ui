@@ -1,14 +1,6 @@
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import React from "react";
 
-const containerStyle = {
-  width: "100%",
-  height: "100%",
-  borderBottomLeftRadius: "25px",
-  borderBottomRightRadius: "25px",
-  overflow: "hidden",
-};
-
 interface IncidentDotMapWidgetProps {
   incidents?: any;
   startDate?: any;
@@ -16,6 +8,11 @@ interface IncidentDotMapWidgetProps {
   center?: any;
   zoom?: any;
 }
+
+const containerStyle = {
+  width: "100%",
+  height: "100%",
+};
 
 export const IncidentDotMapWidget: React.FC<IncidentDotMapWidgetProps> = (
   props

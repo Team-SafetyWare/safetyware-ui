@@ -12,9 +12,6 @@ interface TravelHistoryTrailWidgetProps {
 const containerStyle = {
   width: "100%",
   height: "100%",
-  borderBottomLeftRadius: "25px",
-  borderBottomRightRadius: "25px",
-  overflow: "hidden",
 };
 
 export const TravelHistoryTrailWidget: React.FC<
@@ -40,12 +37,7 @@ export const TravelHistoryTrailWidget: React.FC<
   };
 
   return (
-    <GoogleMap
-      id="marker-example"
-      mapContainerStyle={containerStyle}
-      zoom={zoom}
-      center={center}
-    >
+    <GoogleMap mapContainerStyle={containerStyle} zoom={zoom} center={center}>
       <Polyline path={paths} options={options} />
     </GoogleMap>
   );
