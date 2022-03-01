@@ -24,9 +24,10 @@ export const incidentPageSlice = createSlice({
   },
 });
 
-export const { setIncidentStartDate, setIncidentEndDate } = incidentPageSlice.actions;
+export const { setIncidentStartDate, setIncidentEndDate } =
+  incidentPageSlice.actions;
 
 export const selectIncidentPageStartDate = (state: RootState) =>
   state.incidentPage.startDate;
 export const selectIncidentPageEndDate = (state: RootState) =>
-    state.incidentPage.endDate;
+  state.incidentPage.endDate;
