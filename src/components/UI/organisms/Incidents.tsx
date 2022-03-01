@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import { GET_INCIDENTS } from "../../../util/queryService";
+import { GET_INCIDENTS, GET_INCIDENT_STATS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import IncidentDotMap from "../atoms/IncidentDotMap";
@@ -12,18 +12,7 @@ import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBox } from "../molecules/CustomBox";
 
-const barGraphData = [
-  { x: 0, y: 8 },
-  { x: 1, y: 5 },
-  { x: 2, y: 4 },
-  { x: 3, y: 9 },
-  { x: 4, y: 1 },
-  { x: 5, y: 7 },
-  { x: 6, y: 6 },
-  { x: 7, y: 3 },
-  { x: 8, y: 2 },
-  { x: 9, y: 0 },
-];
+const barGraphData: any = [];
 
 const user = "PersonA";
 const view = "User";
@@ -73,6 +62,11 @@ export interface IncidentReadings {
   companyName?: string;
 }
 
+export interface IncidentStat {
+  type: string;
+  count: number;
+}
+
 export const incidentPageLabel = "incidentPage";
 
 export const Incidents: React.FC = () => {
@@ -80,13 +74,15 @@ export const Incidents: React.FC = () => {
   const styles = useStyles();
 
   const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
-  const { loading, error, data } = useQuery(GET_INCIDENTS);
+  const [incidentStats, updateIncidentStats] = useState<IncidentStat[]>([]);
+  const resIncidents = useQuery(GET_INCIDENTS);
+  const resIncidentStats = useQuery(GET_INCIDENT_STATS);
 
   useEffect(() => {
     updateIncidents([]);
 
-    if (!loading && data) {
-      data.userAccount.company.people.map((person: any) => {
+    if (!resIncidents.loading && resIncidents.data) {
+      resIncidents.data.userAccount.company.people.map((person: any) => {
         person.incidents.map((incident: any) => {
           updateIncidents((incidents) => [
             ...incidents,
@@ -104,7 +100,28 @@ export const Incidents: React.FC = () => {
         });
       });
     }
-  }, [loading, data]);
+  }, [resIncidents.loading, resIncidents.data]);
+
+  useEffect(() => {
+    updateIncidentStats([]);
+    if (!resIncidentStats.loading && resIncidentStats.data) {
+      resIncidentStats.data.userAccount.company.incidentStats.map(
+        (incidentStat: any) => {
+          updateIncidentStats((incidentStats) => [
+            ...incidentStats,
+            {
+              type: incidentStat.type,
+              count: incidentStat.count,
+            },
+          ]);
+          barGraphData.push(...barGraphData, {
+            x: incidentStat.type,
+            y: incidentStat.count,
+          });
+        }
+      );
+    }
+  }, [resIncidentStats.loading, resIncidentStats.data]);
 
   const visualizations = [
     "Raw Incidents Data Table",
