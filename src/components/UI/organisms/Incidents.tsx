@@ -12,8 +12,6 @@ import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBox } from "../molecules/CustomBox";
 
-const barGraphData: any = [];
-
 const user = "PersonA";
 const view = "User";
 const incidentType = "All";
@@ -63,8 +61,8 @@ export interface IncidentReadings {
 }
 
 export interface IncidentStat {
-  type: string;
-  count: number;
+  x: string;
+  y: number;
 }
 
 export const incidentPageLabel = "incidentPage";
@@ -75,6 +73,7 @@ export const Incidents: React.FC = () => {
 
   const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
   const [incidentStats, updateIncidentStats] = useState<IncidentStat[]>([]);
+
   const resIncidents = useQuery(GET_INCIDENTS);
   const resIncidentStats = useQuery(GET_INCIDENT_STATS);
 
@@ -110,14 +109,10 @@ export const Incidents: React.FC = () => {
           updateIncidentStats((incidentStats) => [
             ...incidentStats,
             {
-              type: incidentStat.type,
-              count: incidentStat.count,
+              x: incidentStat.type,
+              y: incidentStat.count,
             },
           ]);
-          barGraphData.push(...barGraphData, {
-            x: incidentStat.type,
-            y: incidentStat.count,
-          });
         }
       );
     }
@@ -169,7 +164,7 @@ export const Incidents: React.FC = () => {
             accordionHeight={"400px"}
             accordionWidth={""}
             accordionTitle={visualizations[2]}
-            component={<BarGraph data={barGraphData} />}
+            component={<BarGraph data={incidentStats} />}
           />
           <CustomBox
             user={user}
@@ -200,7 +195,7 @@ export const Incidents: React.FC = () => {
           )}
           {visualization == visualizations[2] && (
             <div className={styles.visualization}>
-              <BarGraph data={barGraphData} />
+              <BarGraph data={incidentStats} />
             </div>
           )}
         </>
