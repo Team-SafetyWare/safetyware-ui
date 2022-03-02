@@ -130,25 +130,21 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     };
   }
 
-  useEffect(() => {
-    updateFilteredIncidents([]);
-    updateMarkerWindows([]);
-    incidents.map((incident: any) => {
-      if (
-        !inDateRange(
-          new Date(incident.date),
-          new Date(startDate),
-          new Date(endDate)
-        )
-      ) {
-        return;
-      }
-      updateFilteredIncidents((filteredIncidents) => [
-        ...filteredIncidents,
-        createIncident(incident),
-      ]);
-    });
-  }, [incidents, startDate, endDate]);
+    useEffect(() => {
+        updateFilteredIncidents([])
+        updateMarkerWindows([])
+        incidents.map((incident: any) => {
+            if (!inDateRange(new Date(incident.timestamp), new Date(startDate), new Date(endDate))) {
+                return;
+            }
+            updateFilteredIncidents(filteredIncidents =>
+                [
+                    ...filteredIncidents,
+                    createIncident(incident),
+                ]
+            )
+        })
+    }, [incidents, startDate, endDate])
 
   return (
     <>
