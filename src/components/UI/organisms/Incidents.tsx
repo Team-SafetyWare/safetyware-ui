@@ -1,7 +1,10 @@
 import { useQuery } from "@apollo/client";
-import { useMediaQuery } from "@mui/material";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { IconButton, Modal, useMediaQuery } from "@mui/material";
+import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
+import theme from "../../../Theme";
 import { GET_INCIDENTS, GET_INCIDENT_STATS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
@@ -46,6 +49,14 @@ const useStyles = makeStyles({
         top: "60px",
         width: "100vw",
       },
+  },
+
+  filterButton: {
+    backgroundColor: theme.palette.primary.main,
+    bottom: 16,
+    color: "white",
+    position: "absolute",
+    right: 16,
   },
 });
 
@@ -126,46 +137,98 @@ export const Incidents: React.FC = () => {
 
   const [visualization, setVisualization] = useState(visualizations[0]);
 
+  const [openFilterbox, setOpenFilterbox] = useState(false);
+  const handleOpenFilterBox = () => setOpenFilterbox(true);
+  const handleCloseFilterBox = () => setOpenFilterbox(false);
+
   return (
-    <>
-      {matches ? (
-        <>
-          <PageHeader
-            pageTitle={"Incidents"}
-            pageDescription={
-              "Description of the Incidents Page and What it Does"
-            }
-          />
-          <PageSectionHeader
-            sectionTitle={"Raw Incidents Data"}
-            sectionDescription={"Explore and Download Raw Incidents Data"}
-            download={true}
-          />
-          <CustomAccordion
-            accordionHeight={"auto"}
-            accordionWidth={""}
-            accordionTitle={visualizations[0]}
-            component={<IncidentTable incidents={incidents} />}
-          />
-          <PageSectionHeader
-            sectionTitle={"Incidents Visualizations"}
-            sectionDescription={"Visualize Incidents Data"}
-            download={false}
-          />
-          <CustomAccordion
-            accordionHeight={"400px"}
-            accordionWidth={""}
-            accordionTitle={visualizations[1]}
-            component={
-              <IncidentDotMap incidents={incidents} center={center} zoom={10} />
-            }
-          />
-          <CustomAccordion
-            accordionHeight={"400px"}
-            accordionWidth={""}
-            accordionTitle={visualizations[2]}
-            component={<BarGraph data={incidentStats} />}
-          />
+    <StyledEngineProvider injectFirst>
+      <>
+        {matches ? (
+          <>
+            <PageHeader
+              pageTitle={"Incidents"}
+              pageDescription={
+                "Description of the Incidents Page and What it Does"
+              }
+            />
+            <PageSectionHeader
+              sectionTitle={"Raw Incidents Data"}
+              sectionDescription={"Explore and Download Raw Incidents Data"}
+              download={true}
+            />
+            <CustomAccordion
+              accordionHeight={"auto"}
+              accordionWidth={""}
+              accordionTitle={visualizations[0]}
+              component={<IncidentTable incidents={incidents} />}
+            />
+            <PageSectionHeader
+              sectionTitle={"Incidents Visualizations"}
+              sectionDescription={"Visualize Incidents Data"}
+              download={false}
+            />
+            <CustomAccordion
+              accordionHeight={"400px"}
+              accordionWidth={""}
+              accordionTitle={visualizations[1]}
+              component={
+                <IncidentDotMap
+                  incidents={incidents}
+                  center={center}
+                  zoom={10}
+                />
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"400px"}
+              accordionWidth={""}
+              accordionTitle={visualizations[2]}
+              component={<BarGraph data={incidentStats} />}
+            />
+          </>
+        ) : (
+          <>
+            <div className={styles.incidentsDropdown}>
+              <VisualizationSelect
+                visualizations={visualizations}
+                setVisualization={setVisualization}
+              />
+            </div>
+            {visualization == visualizations[0] && (
+              <div className={styles.visualization}>
+                <IncidentTable incidents={incidents} />
+              </div>
+            )}
+            {visualization == visualizations[1] && (
+              <div className={styles.visualization}>
+                <IncidentDotMap
+                  incidents={incidents}
+                  center={center}
+                  zoom={10}
+                />
+              </div>
+            )}
+            {visualization == visualizations[2] && (
+              <div className={styles.visualization}>
+                <BarGraph data={incidentStats} />
+              </div>
+            )}
+          </>
+        )}
+        <IconButton
+          className={styles.filterButton}
+          onClick={handleOpenFilterBox}
+          size="large"
+        >
+          <FilterAltIcon fontSize="inherit" />
+        </IconButton>
+        <Modal
+          open={openFilterbox}
+          onClose={handleCloseFilterBox}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
           <CustomBox
             user={user}
             view={view}
@@ -174,32 +237,8 @@ export const Incidents: React.FC = () => {
             endDate={tempEndDate}
             pageLabel={incidentPageLabel}
           />
-        </>
-      ) : (
-        <>
-          <div className={styles.incidentsDropdown}>
-            <VisualizationSelect
-              visualizations={visualizations}
-              setVisualization={setVisualization}
-            />
-          </div>
-          {visualization == visualizations[0] && (
-            <div className={styles.visualization}>
-              <IncidentTable incidents={incidents} />
-            </div>
-          )}
-          {visualization == visualizations[1] && (
-            <div className={styles.visualization}>
-              <IncidentDotMap incidents={incidents} center={center} zoom={10} />
-            </div>
-          )}
-          {visualization == visualizations[2] && (
-            <div className={styles.visualization}>
-              <BarGraph data={incidentStats} />
-            </div>
-          )}
-        </>
-      )}
-    </>
+        </Modal>
+      </>
+    </StyledEngineProvider>
   );
 };
