@@ -58,11 +58,13 @@ export const Gases: React.FC = () => {
         <>
           <PageHeader
             pageTitle={"Gases"}
-            pageDescription={"Description of the Gases Page and What it Does"}
+            pageDescription={"Analyze data based on gases using a gas dot map."}
           />
           <PageSectionHeader
             sectionTitle={"Raw Gases Data"}
-            sectionDescription={"Explore and Download Raw Gases Data"}
+            sectionDescription={
+              "Explore raw gas readings data through a date-filtered data table."
+            }
             download={true}
           />
           <CustomAccordion
@@ -73,7 +75,9 @@ export const Gases: React.FC = () => {
           />
           <PageSectionHeader
             sectionTitle={"Gas Visualizations"}
-            sectionDescription={"Visualize Gas Data Based on Location"}
+            sectionDescription={
+              "Visualize gases data through a dot map showing gas type and location."
+            }
             download={false}
           />
           <CustomAccordion
