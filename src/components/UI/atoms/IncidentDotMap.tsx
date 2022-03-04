@@ -8,7 +8,7 @@ import GenericIcon from "../../../assets/generic.png";
 import LatchIcon from "../../../assets/latch.png";
 import SignalIcon from "../../../assets/signal.png";
 import {
-  selectIncidentPageEndDate,
+  selectIncidentPageEndDate, selectIncidentPageName,
   selectIncidentPageStartDate,
 } from "../../../store/slices/incidentPageSlice";
 import { useAppSelector } from "../../../store/store";
@@ -39,6 +39,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
   >([]);
   const startDate = useAppSelector(selectIncidentPageStartDate);
   const endDate = useAppSelector(selectIncidentPageEndDate);
+  const filterName = useAppSelector(selectIncidentPageName)
   const [hoverMarker, updateHoverMarker] = React.useState<
     IncidentReadings | undefined
   >(undefined);
@@ -107,6 +108,10 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     );
   }
 
+  function matchesPerson(name: string) : boolean {
+    return name === filterName || filterName === "All";
+  }
+
   function inDateRange(date: Date, start: Date, end: Date): boolean {
     return !(
       date.getTime() < start.getTime() || date.getTime() > end.getTime()
@@ -133,9 +138,13 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     useEffect(() => {
         updateFilteredIncidents([])
         updateMarkerWindows([])
+      updateHoverMarker(undefined)
         incidents.map((incident: any) => {
             if (!inDateRange(new Date(incident.timestamp), new Date(startDate), new Date(endDate))) {
                 return;
+            }
+            if (!matchesPerson(incident.personName)) {
+              return;
             }
             updateFilteredIncidents(filteredIncidents =>
                 [
@@ -144,12 +153,11 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
                 ]
             )
         })
-    }, [incidents, startDate, endDate])
+    }, [incidents, startDate, endDate, filterName])
 
   return (
     <>
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
-        {/*{markerWindows.map((markerWindow: IncidentReadings) => createMarkerWindow(markerWindow))}*/}
         {filteredIncidents.map((incident: IncidentReadings) =>
           createMarker(incident)
         )}

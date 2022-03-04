@@ -10,10 +10,15 @@ import {makeStyles} from "@mui/styles";
 import React, {useEffect, useState} from "react";
 import {useQuery} from "@apollo/client";
 import {GET_PERSONS} from "../../../util/queryService";
+import {useAppDispatch} from "../../../store/store";
+import {setIncidentName, setIncidentStartDate} from "../../../store/slices/incidentPageSlice";
+import {incidentPageStartDate} from "./CustomBoxDates";
+import {incidentPageLabel} from "../organisms/Incidents";
 
 interface CustomBoxUserSelectProps {
     view?: string;
     user?: string;
+    label?: string;
 }
 
 const useStyles = makeStyles({
@@ -27,6 +32,8 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
 ) => {
 
     const styles = useStyles();
+    const dispatch = useAppDispatch();
+    const label = props.label
 
     const [people, updatePeople] = useState<string[]>([]);
     const {loading, error, data} = useQuery(GET_PERSONS);
@@ -44,7 +51,16 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
     }, [loading, data]);
 
     function getMenuItemPerson(name: string) {
-        return <MenuItem value={name}>{name}</MenuItem>;
+        return <MenuItem value={name} onClick={() => updateNameFilter(name)}>{name}</MenuItem>;
+    }
+
+    function updateNameFilter(name: string) {
+        switch (label) {
+            case incidentPageLabel:
+                dispatch(setIncidentName(name));
+                break;
+        }
+
     }
 
     return (
@@ -76,7 +92,7 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
                     label="Select"
                     defaultValue={["All"]}
                 >
-                    <MenuItem value={"All"}>All</MenuItem>
+                    {getMenuItemPerson("All")}
                     {people.map((person: string) => getMenuItemPerson(person))}
                 </Select>
             </FormControl>
