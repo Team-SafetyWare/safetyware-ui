@@ -149,12 +149,14 @@ export const Incidents: React.FC = () => {
             <PageHeader
               pageTitle={"Incidents"}
               pageDescription={
-                "Description of the Incidents Page and What it Does"
+                "Analyze data based on incidents including a dot map and a bar graph showing incident frequencies."
               }
             />
             <PageSectionHeader
               sectionTitle={"Raw Incidents Data"}
-              sectionDescription={"Explore and Download Raw Incidents Data"}
+              sectionDescription={
+                "Explore raw incidents data through a date-filtered data table."
+              }
               download={true}
             />
             <CustomAccordion
@@ -165,7 +167,9 @@ export const Incidents: React.FC = () => {
             />
             <PageSectionHeader
               sectionTitle={"Incidents Visualizations"}
-              sectionDescription={"Visualize Incidents Data"}
+              sectionDescription={
+                "Visualize incidents data through a dot map showing incident type and location, and a bar graph indicating incident frequencies."
+              }
               download={false}
             />
             <CustomAccordion
