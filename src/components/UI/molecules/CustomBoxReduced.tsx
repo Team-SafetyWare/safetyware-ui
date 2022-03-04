@@ -38,7 +38,7 @@ export const CustomBoxReduced: React.FC<CustomBoxReducedProps> = (props) => {
       <div className={styles.box}>
         <h3>Customize</h3>
         <CustomBoxDates pageLabel={label} startDate={props.startDate} endDate={props.endDate} />
-        <CustomBoxUserSelect user={props.user} view={props.view} />
+        <CustomBoxUserSelect label={props.pageLabel} user={props.user} view={props.view} />
       </div>
     </Draggable>
   );

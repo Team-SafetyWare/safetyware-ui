@@ -4,10 +4,8 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import TextField from "@mui/material/TextField";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import {useAppDispatch, useAppSelector} from "../../../store/store";
+import {useAppDispatch} from "../../../store/store";
 import {
-    selectIncidentPageEndDate,
-    selectIncidentPageStartDate,
     setIncidentEndDate,
     setIncidentStartDate
 } from "../../../store/slices/incidentPageSlice";
