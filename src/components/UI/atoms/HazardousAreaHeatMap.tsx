@@ -38,7 +38,7 @@ export const HazardousAreaHeatMap: React.FC<HazardousAreaHeatMapProps> = (props)
     useEffect(() => {
         updateFilteredAccidents([])
         accidents.map((accident: any) => {
-            if (!inDateRange(new Date(accident.date), new Date(startDate), new Date(endDate))) {
+            if (!inDateRange(new Date(accident.timestamp), new Date(startDate), new Date(endDate))) {
                 return;
             }
             updateFilteredAccidents(filteredAccidents =>
