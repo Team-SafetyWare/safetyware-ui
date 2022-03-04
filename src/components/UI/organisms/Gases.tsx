@@ -10,7 +10,7 @@ import { GasesDotMap } from "../atoms/GasesDotMap";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
-import { CustomBox } from "../molecules/CustomBox";
+import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
 
 const gases = [
   { lat: 51.077763, lng: -114.140657 },
@@ -24,7 +24,6 @@ const center = {
 
 var user = "PersonA";
 var view = "User";
-var incidentType = "All";
 var tempStartDate = new Date("01/01/2022");
 var tempEndDate = new Date("01/08/2022");
 
@@ -147,10 +146,9 @@ export const Gases: React.FC = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <CustomBox
+          <CustomBoxReduced
             user={user}
             view={view}
-            incidentType={incidentType}
             startDate={tempStartDate}
             endDate={tempEndDate}
             pageLabel={gasesPageLabel}
