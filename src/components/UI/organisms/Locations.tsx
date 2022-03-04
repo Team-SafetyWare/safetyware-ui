@@ -20,15 +20,8 @@ const center = {
     lat: 51.049999,
     lng: -114.1283,
 };
-
-const path = [
-    {lat: 51.077763, lng: -114.140657},
-    {lat: 51.046048773481786, lng: -114.02334120770176},
-];
-
 const user = "PersonA";
 const view = "User";
-const incidentType = "All";
 const startDate = new Date("01/01/2022");
 const endDate = new Date("01/08/2022");
 
