@@ -1,11 +1,7 @@
 import {makeStyles} from "@mui/styles";
 import React from "react";
 import BasicDatePicker from "../atoms/BasicDatePicker";
-import {useAppDispatch, useAppSelector} from "../../../store/store";
-import {selectIncidentPageEndDate, selectIncidentPageStartDate} from "../../../store/slices/incidentPageSlice";
 import {incidentPageLabel} from "../organisms/Incidents";
-import {locationPageLabel} from "../organisms/Locations";
-import {selectLocationPageEndDate, selectLocationPageStartDate} from "../../../store/slices/locationPageSlice";
 
 
 interface CustomBoxDatesProps {

@@ -41,7 +41,7 @@ export const CustomBox: React.FC<CustomBoxProps> = (props) => {
         endDate={props.endDate}
         pageLabel={props.pageLabel}
       />
-      <CustomBoxUserSelect user={props.user} view={props.view} />
+      <CustomBoxUserSelect label={props.pageLabel} user={props.user} view={props.view} />
       <CustomBoxIncidentSelect incidentType={props.incidentType} />
     </div>
   );
