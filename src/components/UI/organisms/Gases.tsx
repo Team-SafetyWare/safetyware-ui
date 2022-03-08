@@ -89,7 +89,6 @@ export const Gases: React.FC = () => {
               sectionDescription={
                 "Explore raw gas readings data through a date-filtered data table."
               }
-              download={true}
             />
             <CustomAccordion
               accordionHeight={"auto"}
@@ -102,7 +101,6 @@ export const Gases: React.FC = () => {
               sectionDescription={
                 "Visualize gases data through a dot map showing gas type and location."
               }
-              download={false}
             />
             <CustomAccordion
               accordionHeight={"400px"}
