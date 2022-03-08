@@ -154,8 +154,7 @@ export const Incidents: React.FC = () => {
             />
             <PageSectionHeader
               sectionTitle={"Raw Incidents Data"}
-              sectionDescription={"Explore and Download Raw Incidents Data"}
-              download={true}
+              sectionDescription={"Explore Raw Incidents Data"}
             />
             <CustomAccordion
               accordionHeight={"auto"}
@@ -166,7 +165,6 @@ export const Incidents: React.FC = () => {
             <PageSectionHeader
               sectionTitle={"Incidents Visualizations"}
               sectionDescription={"Visualize Incidents Data"}
-              download={false}
             />
             <CustomAccordion
               accordionHeight={"400px"}

@@ -62,8 +62,7 @@ export const Gases: React.FC = () => {
           />
           <PageSectionHeader
             sectionTitle={"Raw Gases Data"}
-            sectionDescription={"Explore and Download Raw Gases Data"}
-            download={true}
+            sectionDescription={"Explore Raw Gases Data"}
           />
           <CustomAccordion
             accordionHeight={"auto"}
@@ -74,7 +73,6 @@ export const Gases: React.FC = () => {
           <PageSectionHeader
             sectionTitle={"Gas Visualizations"}
             sectionDescription={"Visualize Gas Data Based on Location"}
-            download={false}
           />
           <CustomAccordion
             accordionHeight={"400px"}
