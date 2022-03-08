@@ -157,7 +157,6 @@ export const Incidents: React.FC = () => {
               sectionDescription={
                 "Explore raw incidents data through a date-filtered data table."
               }
-              download={true}
             />
             <CustomAccordion
               accordionHeight={"auto"}
@@ -170,7 +169,6 @@ export const Incidents: React.FC = () => {
               sectionDescription={
                 "Visualize incidents data through a dot map showing incident type and location, and a bar graph indicating incident frequencies."
               }
-              download={false}
             />
             <CustomAccordion
               accordionHeight={"400px"}
