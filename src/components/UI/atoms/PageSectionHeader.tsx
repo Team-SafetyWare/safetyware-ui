@@ -7,8 +7,7 @@ interface PageSectionHeaderProps {
   sectionTitle?: string;
   sectionDescription?: string;
 }
-
-const BootstrapButton = styled(Button)({
+styled(Button)({
   boxShadow: "none",
   textTransform: "none",
   padding: "6px 12px",
@@ -28,7 +27,6 @@ const BootstrapButton = styled(Button)({
     '"Segoe UI Symbol"',
   ].join(","),
 });
-
 const useStyles = makeStyles({
   pageGreeting: {
     width: "100%",

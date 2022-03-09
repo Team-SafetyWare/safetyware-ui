@@ -11,11 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_PERSONS } from "../../../util/queryService";
 import { useAppDispatch } from "../../../store/store";
-import {
-  setIncidentName,
-  setIncidentStartDate,
-} from "../../../store/slices/incidentPageSlice";
-import { incidentPageStartDate } from "./CustomBoxDates";
+import { setIncidentName } from "../../../store/slices/incidentPageSlice";
 import { incidentPageLabel } from "../organisms/Incidents";
 
 interface CustomBoxUserSelectProps {
@@ -33,12 +29,12 @@ const useStyles = makeStyles({
 export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   props
 ) => {
-  const styles = useStyles();
+  useStyles();
   const dispatch = useAppDispatch();
   const label = props.label;
 
   const [people, updatePeople] = useState<string[]>([]);
-  const { loading, error, data } = useQuery(GET_PERSONS);
+  const { loading, data } = useQuery(GET_PERSONS);
 
   useEffect(() => {
     updatePeople([]);

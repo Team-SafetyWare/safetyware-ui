@@ -22,10 +22,10 @@ const center = {
   lng: -114.1283,
 };
 
-var user = "PersonA";
-var view = "User";
-var tempStartDate = new Date("01/01/2022");
-var tempEndDate = new Date("01/08/2022");
+const user = "PersonA";
+const view = "User";
+const tempStartDate = new Date("01/01/2022");
+const tempEndDate = new Date("01/08/2022");
 
 const useStyles = makeStyles({
   gasesDropdown: {

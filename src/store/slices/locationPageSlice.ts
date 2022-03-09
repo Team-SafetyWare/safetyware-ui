@@ -27,7 +27,7 @@ export const locationPageSlice = createSlice({
 export const { setLocationStartDate, setLocationEndDate } =
   locationPageSlice.actions;
 
-export const selectLocationPageStartDate = (state: RootState) =>
+export const selectLocationPageStartDate = (state: RootState): any =>
   state.locationPage.startDate;
-export const selectLocationPageEndDate = (state: RootState) =>
+export const selectLocationPageEndDate = (state: RootState): any =>
   state.locationPage.endDate;
