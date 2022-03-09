@@ -38,7 +38,7 @@ export const VisualizationSelect: React.FC<VisualizationSelectProps> = (
         }}
       >
         {props.visualizations.map((visualization) => (
-            // eslint-disable-next-line react/jsx-key
+          // eslint-disable-next-line react/jsx-key
           <MenuItem value={visualization} sx={{ minWidth: 240 }}>
             {visualization}
           </MenuItem>

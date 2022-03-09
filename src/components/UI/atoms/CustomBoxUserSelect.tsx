@@ -11,10 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_PERSONS } from "../../../util/queryService";
 import { useAppDispatch } from "../../../store/store";
-import {
-  setIncidentName,
-
-} from "../../../store/slices/incidentPageSlice";
+import { setIncidentName } from "../../../store/slices/incidentPageSlice";
 import { incidentPageLabel } from "../organisms/Incidents";
 
 interface CustomBoxUserSelectProps {
