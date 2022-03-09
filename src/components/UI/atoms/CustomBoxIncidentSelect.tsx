@@ -9,17 +9,14 @@ import React from "react";
 interface CustomBoxIncidentSelectProps {
   incidentType?: string;
 }
-
-const useStyles = makeStyles({
-  label: { fontSize: "10px" },
-  text: { fontSize: "10px" },
+makeStyles({
+    label: { fontSize: "10px" },
+    text: { fontSize: "10px" },
 });
-
 export const CustomBoxIncidentSelect: React.FC<CustomBoxIncidentSelectProps> = (
   props
 ) => {
   const incidentType = props.incidentType;
-  const styles = useStyles();
 
   return (
     <>

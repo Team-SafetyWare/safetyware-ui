@@ -30,7 +30,7 @@ const useStyles = makeStyles({
   text: { fontSize: "10px" },
 });
 
-export default function BasicDatePicker(props: BasicDatePickerProps) {
+export default function BasicDatePicker(props: BasicDatePickerProps): any {
   const label = props.label;
   const [value, setValue] = React.useState<Date | null>(null);
   const styles = useStyles();

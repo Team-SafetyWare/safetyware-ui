@@ -24,5 +24,5 @@ export const dashboardSlice = createSlice({
 
 export const { setIsDashboard } = dashboardSlice.actions;
 
-export const selectIsDashboard = (state: RootState) =>
+export const selectIsDashboard = (state: RootState): any =>
   state.dashboard.isDashboard;

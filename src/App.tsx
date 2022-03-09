@@ -5,7 +5,7 @@ import "./App.css";
 import { Pages } from "./components/Pages";
 import theme from "./Theme";
 
-function App() {
+function App(): any {
   return (
     <ThemeProvider theme={theme}>
       <Router>

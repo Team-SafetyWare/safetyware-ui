@@ -31,7 +31,7 @@ export const UserAccount: React.FC = () => {
   // https://www.apollographql.com/docs/react/data/queries/
   // TO-DO: handle loading and error
   const personList: Array<Person> = [];
-  const { loading, error, data } = useQuery(GET_PERSONS);
+  const { loading, data } = useQuery(GET_PERSONS);
 
   // Sample feed into UI components
   const [name, setName] = useState("Jane Doe");
