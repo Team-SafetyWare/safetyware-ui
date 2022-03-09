@@ -37,4 +37,4 @@ export const selectIncidentPageStartDate = (state: RootState) =>
 export const selectIncidentPageEndDate = (state: RootState) =>
   state.incidentPage.endDate;
 export const selectIncidentPageName = (state: RootState) =>
-    state.incidentPage.name;
+  state.incidentPage.name;
