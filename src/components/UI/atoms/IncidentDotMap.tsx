@@ -46,7 +46,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
   >(undefined);
 
   function createMarker(incident: IncidentReadings) {
-    let type = incident.type;
+    const type = incident.type;
     let markerIcon = GenericIcon;
     switch (type) {
       case "Low battery": {
