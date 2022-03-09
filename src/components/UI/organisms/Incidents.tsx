@@ -4,6 +4,12 @@ import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
+import { getCurrentAccountId } from "../../..";
+import {
+  selectIncidentPageEndDate,
+  selectIncidentPageStartDate,
+} from "../../../store/slices/incidentPageSlice";
+import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
 import { GET_INCIDENTS, GET_INCIDENT_STATS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
@@ -85,8 +91,20 @@ export const Incidents: React.FC = () => {
   const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
   const [incidentStats, updateIncidentStats] = useState<IncidentStat[]>([]);
 
+  const userAccountId = getCurrentAccountId();
+  const startDate = useAppSelector(selectIncidentPageStartDate);
+  const endDate = useAppSelector(selectIncidentPageEndDate);
+
   const resIncidents = useQuery(GET_INCIDENTS);
-  const resIncidentStats = useQuery(GET_INCIDENT_STATS);
+  const resIncidentStats = useQuery(GET_INCIDENT_STATS, {
+    variables: {
+      userAccountId: userAccountId,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
+    },
+  });
 
   useEffect(() => {
     updateIncidents([]);
@@ -128,6 +146,10 @@ export const Incidents: React.FC = () => {
       );
     }
   }, [resIncidentStats.loading, resIncidentStats.data]);
+
+  incidentStats.sort((a, b) =>
+    a.x.toLowerCase().localeCompare(b.x.toLocaleLowerCase())
+  );
 
   const visualizations = [
     "Raw Incidents Data Table",
