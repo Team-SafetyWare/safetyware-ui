@@ -27,7 +27,7 @@ var view = "User";
 var tempStartDate = new Date("01/01/2022");
 var tempEndDate = new Date("01/08/2022");
 
-const useStyles =                                 makeStyles({
+const useStyles = makeStyles({
   gasesDropdown: {
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
