@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import { useMediaQuery } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -114,7 +114,7 @@ export default function IncidentTable(props: IncidentTableProps): any {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-              // eslint-disable-next-line react/jsx-key
+            // eslint-disable-next-line react/jsx-key
             <Row row={row} matches={matches} />
           ))}
         </TableBody>

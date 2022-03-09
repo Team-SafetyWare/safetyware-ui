@@ -32,9 +32,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
   const [incidents, updateIncidents] = React.useState<IncidentReadings[]>([]);
   const zoom = props.zoom;
   const center = props.center;
-  const [, updateMarkerWindows] = React.useState<
-    IncidentReadings[]
-  >([]);
+  const [, updateMarkerWindows] = React.useState<IncidentReadings[]>([]);
   const [filteredIncidents, updateFilteredIncidents] = React.useState<
     IncidentReadings[]
   >([]);
