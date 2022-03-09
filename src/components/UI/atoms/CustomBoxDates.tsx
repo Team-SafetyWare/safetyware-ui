@@ -8,18 +8,15 @@ interface CustomBoxDatesProps {
   startDate?: any;
   endDate?: any;
 }
-
-const useStyles = makeStyles({
+makeStyles({
   text: { fontSize: "10px" },
 });
-
 export const incidentPageStartDate = "incidentPageStartDate";
 export const incidentPageEndDate = "incidentPageEndDate";
 export const locationPageStartDate = "locationPageStartDate";
 export const locationPageEndDate = "locationPageEndDate";
 
 export const CustomBoxDates: React.FC<CustomBoxDatesProps> = (props) => {
-  const styles = useStyles();
   const label = props.pageLabel;
 
   function getStartDateLabel() {

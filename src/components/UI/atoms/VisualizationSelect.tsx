@@ -10,7 +10,7 @@ interface VisualizationSelectProps {
   setVisualization(visualization: string): any;
 }
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
+const BootstrapInput = styled(InputBase)(() => ({
   backgroundColor: "white",
   borderRadius: "5px",
   padding: "5px 10px 5px 10px",

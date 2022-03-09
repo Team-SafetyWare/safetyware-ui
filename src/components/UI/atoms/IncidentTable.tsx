@@ -43,7 +43,7 @@ function Row(props: { row: IncidentReadings; matches: boolean }) {
   );
 }
 
-export default function IncidentTable(props: IncidentTableProps) {
+export default function IncidentTable(props: IncidentTableProps): any {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
 
   const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
