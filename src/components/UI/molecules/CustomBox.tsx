@@ -13,7 +13,7 @@ interface CustomBoxProps {
   pageLabel?: string;
 }
 
-const useStyles = makeStyles({
+const useStyles =                    makeStyles({
   box: {
     textAlign: "center",
     height: "530px",
