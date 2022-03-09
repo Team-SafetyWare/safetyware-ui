@@ -6,7 +6,6 @@ import RadioGroup from "@mui/material/RadioGroup";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
-
 interface CustomBoxIncidentSelectProps {
   incidentType?: string;
 }
