@@ -32,9 +32,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
   const [incidents, updateIncidents] = React.useState<IncidentReadings[]>([]);
   const zoom = props.zoom;
   const center = props.center;
-  const [markerWindows, updateMarkerWindows] = React.useState<
-    IncidentReadings[]
-  >([]);
+  const [, updateMarkerWindows] = React.useState<IncidentReadings[]>([]);
   const [filteredIncidents, updateFilteredIncidents] = React.useState<
     IncidentReadings[]
   >([]);
@@ -46,7 +44,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
   >(undefined);
 
   function createMarker(incident: IncidentReadings) {
-    let type = incident.type;
+    const type = incident.type;
     let markerIcon = GenericIcon;
     switch (type) {
       case "Low battery": {

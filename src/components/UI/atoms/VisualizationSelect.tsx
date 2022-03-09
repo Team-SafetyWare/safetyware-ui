@@ -10,7 +10,7 @@ interface VisualizationSelectProps {
   setVisualization(visualization: string): any;
 }
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
+const BootstrapInput = styled(InputBase)(() => ({
   backgroundColor: "white",
   borderRadius: "5px",
   padding: "5px 10px 5px 10px",
@@ -38,6 +38,7 @@ export const VisualizationSelect: React.FC<VisualizationSelectProps> = (
         }}
       >
         {props.visualizations.map((visualization) => (
+          // eslint-disable-next-line react/jsx-key
           <MenuItem value={visualization} sx={{ minWidth: 240 }}>
             {visualization}
           </MenuItem>

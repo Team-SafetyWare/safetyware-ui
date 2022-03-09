@@ -1,3 +1,4 @@
+import React from "react";
 import { useMediaQuery } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -42,7 +43,7 @@ function Row(props: { row: IncidentReadings; matches: boolean }) {
   );
 }
 
-export default function IncidentTable(props: IncidentTableProps) {
+export default function IncidentTable(props: IncidentTableProps): any {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
 
   const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
@@ -113,6 +114,7 @@ export default function IncidentTable(props: IncidentTableProps) {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
+            // eslint-disable-next-line react/jsx-key
             <Row row={row} matches={matches} />
           ))}
         </TableBody>

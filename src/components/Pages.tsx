@@ -38,7 +38,7 @@ export const Pages: React.FC = () => {
 
   // https://www.apollographql.com/docs/react/data/queries/
   // TO-DO: handle loading and error
-  const { loading, error, data } = useQuery(GET_PERSONS);
+  const { loading, data } = useQuery(GET_PERSONS);
 
   // Dummy name for sidebar, since we haven't handled authentication yet
   const [userName, setUserName] = useState("");

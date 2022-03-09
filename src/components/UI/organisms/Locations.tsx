@@ -61,7 +61,7 @@ export const Locations: React.FC = () => {
   const [travelTrail, updateTravelTrail] = React.useState<TravelHistoryPoint[]>(
     []
   );
-  const { loading, error, data } = useQuery(GET_LOCATIONS);
+  const { loading, data } = useQuery(GET_LOCATIONS);
 
   useEffect(() => {
     updateLocations([]);
