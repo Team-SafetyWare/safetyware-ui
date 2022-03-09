@@ -5,6 +5,7 @@ import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import React from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TeamSelectProps {}
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
