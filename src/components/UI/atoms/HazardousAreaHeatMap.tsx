@@ -1,69 +1,76 @@
-import React, {useEffect} from 'react';
-import {GoogleMap, HeatmapLayer} from '@react-google-maps/api';
-import {IncidentReadings} from "../organisms/Incidents";
-import {useAppSelector} from "../../../store/store";
-import {selectLocationPageEndDate, selectLocationPageStartDate} from "../../../store/slices/locationPageSlice";
-
+import React, { useEffect } from "react";
+import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
+import { IncidentReadings } from "../organisms/Incidents";
+import { useAppSelector } from "../../../store/store";
+import {
+  selectLocationPageEndDate,
+  selectLocationPageStartDate,
+} from "../../../store/slices/locationPageSlice";
 
 const containerStyle = {
-    width: '100%',
-    height: '100%',
+  width: "100%",
+  height: "100%",
 };
 
 interface HazardousAreaHeatMapProps {
-    accidents: IncidentReadings[];
-    startDate?: any;
-    endDate?: any;
-    center?: any;
-    zoom?: any;
+  accidents: IncidentReadings[];
+  startDate?: any;
+  endDate?: any;
+  center?: any;
+  zoom?: any;
 }
 
+export const HazardousAreaHeatMap: React.FC<HazardousAreaHeatMapProps> = (
+  props
+) => {
+  const [accidents, updateAccidents] = React.useState<IncidentReadings[]>(
+    props.accidents
+  );
+  const [filteredAccidents, updateFilteredAccidents] = React.useState<
+    google.maps.LatLng[]
+  >([]);
+  const center = props.center;
+  const zoom = props.zoom;
+  const startDate = useAppSelector(selectLocationPageStartDate);
+  const endDate = useAppSelector(selectLocationPageEndDate);
 
-export const HazardousAreaHeatMap: React.FC<HazardousAreaHeatMapProps> = (props) => {
-    const [accidents, updateAccidents] = React.useState<IncidentReadings[]>(props.accidents)
-    const [filteredAccidents, updateFilteredAccidents] = React.useState<google.maps.LatLng[]>([]);
-    const center = props.center
-    const zoom = props.zoom
-    const startDate = useAppSelector(selectLocationPageStartDate);
-    const endDate = useAppSelector(selectLocationPageEndDate);
+  function inDateRange(date: Date, start: Date, end: Date): boolean {
+    return !(
+      date.getTime() < start.getTime() || date.getTime() > end.getTime()
+    );
+  }
 
-    function inDateRange(date: Date, start: Date, end: Date): boolean {
-        return !(date.getTime() < start.getTime() || date.getTime() > end.getTime());
-    }
+  useEffect(() => {
+    updateAccidents(() => props.accidents);
+  }, [props]);
 
-    useEffect(() => {
-        updateAccidents(() => props.accidents)
-    }, [props])
+  useEffect(() => {
+    updateFilteredAccidents([]);
+    accidents.map((accident: any) => {
+      if (
+        !inDateRange(
+          new Date(accident.timestamp),
+          new Date(startDate),
+          new Date(endDate)
+        )
+      ) {
+        return;
+      }
+      updateFilteredAccidents((filteredAccidents) => [
+        ...filteredAccidents,
+        new google.maps.LatLng(
+          accident.coordinates.lat,
+          accident.coordinates.lng
+        ),
+      ]);
+    });
+  }, [accidents, startDate, endDate]);
 
-    useEffect(() => {
-        updateFilteredAccidents([])
-        accidents.map((accident: any) => {
-            if (!inDateRange(new Date(accident.timestamp), new Date(startDate), new Date(endDate))) {
-                return;
-            }
-            updateFilteredAccidents(filteredAccidents =>
-                [
-                    ...filteredAccidents,
-                    new google.maps.LatLng(
-                        accident.coordinates.lat,
-                        accident.coordinates.lng
-                    )
+  return (
+    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
+      <HeatmapLayer data={filteredAccidents} />
+    </GoogleMap>
+  );
+};
 
-                ])
-        })
-    }, [accidents, startDate, endDate])
-
-    return (
-        <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={zoom}
-        >
-            <HeatmapLayer
-                data={filteredAccidents}
-            />
-        </GoogleMap>
-    )
-}
-
-export default React.memo(HazardousAreaHeatMap)
+export default React.memo(HazardousAreaHeatMap);

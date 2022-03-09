@@ -13,7 +13,7 @@ interface CustomBoxProps {
   pageLabel?: string;
 }
 
-const useStyles =                    makeStyles({
+const useStyles = makeStyles({
   box: {
     textAlign: "center",
     height: "530px",
@@ -41,7 +41,11 @@ export const CustomBox: React.FC<CustomBoxProps> = (props) => {
         endDate={props.endDate}
         pageLabel={props.pageLabel}
       />
-      <CustomBoxUserSelect label={props.pageLabel} user={props.user} view={props.view} />
+      <CustomBoxUserSelect
+        label={props.pageLabel}
+        user={props.user}
+        view={props.view}
+      />
       <CustomBoxIncidentSelect incidentType={props.incidentType} />
     </div>
   );

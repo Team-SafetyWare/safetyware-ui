@@ -8,7 +8,8 @@ import GenericIcon from "../../../assets/generic.png";
 import LatchIcon from "../../../assets/latch.png";
 import SignalIcon from "../../../assets/signal.png";
 import {
-  selectIncidentPageEndDate, selectIncidentPageName,
+  selectIncidentPageEndDate,
+  selectIncidentPageName,
   selectIncidentPageStartDate,
 } from "../../../store/slices/incidentPageSlice";
 import { useAppSelector } from "../../../store/store";
@@ -39,7 +40,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
   >([]);
   const startDate = useAppSelector(selectIncidentPageStartDate);
   const endDate = useAppSelector(selectIncidentPageEndDate);
-  const filterName = useAppSelector(selectIncidentPageName)
+  const filterName = useAppSelector(selectIncidentPageName);
   const [hoverMarker, updateHoverMarker] = React.useState<
     IncidentReadings | undefined
   >(undefined);
@@ -108,7 +109,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     );
   }
 
-  function matchesPerson(name: string) : boolean {
+  function matchesPerson(name: string): boolean {
     return name === filterName || filterName === "All";
   }
 
@@ -135,25 +136,29 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     };
   }
 
-    useEffect(() => {
-        updateFilteredIncidents([])
-        updateMarkerWindows([])
-      updateHoverMarker(undefined)
-        incidents.map((incident: any) => {
-            if (!inDateRange(new Date(incident.timestamp), new Date(startDate), new Date(endDate))) {
-                return;
-            }
-            if (!matchesPerson(incident.personName)) {
-              return;
-            }
-            updateFilteredIncidents(filteredIncidents =>
-                [
-                    ...filteredIncidents,
-                    createIncident(incident),
-                ]
-            )
-        })
-    }, [incidents, startDate, endDate, filterName])
+  useEffect(() => {
+    updateFilteredIncidents([]);
+    updateMarkerWindows([]);
+    updateHoverMarker(undefined);
+    incidents.map((incident: any) => {
+      if (
+        !inDateRange(
+          new Date(incident.timestamp),
+          new Date(startDate),
+          new Date(endDate)
+        )
+      ) {
+        return;
+      }
+      if (!matchesPerson(incident.personName)) {
+        return;
+      }
+      updateFilteredIncidents((filteredIncidents) => [
+        ...filteredIncidents,
+        createIncident(incident),
+      ]);
+    });
+  }, [incidents, startDate, endDate, filterName]);
 
   return (
     <>
