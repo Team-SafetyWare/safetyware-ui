@@ -4,7 +4,7 @@ import React from "react";
 import { GET_USER_ACCOUNT } from "../../../util/queryService";
 import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
 import { PageHeader } from "../atoms/PageHeader";
-import { API_URL } from "../../../index";
+import { API_URL, getCurrentAccountId } from "../../../index";
 
 export const UserAccount: React.FC = () => {
   // TO-DO: create proper data with ALL data from backend
@@ -22,7 +22,10 @@ export const UserAccount: React.FC = () => {
     ],
   ];
 
-  const { data: userAccountData } = useQuery(GET_USER_ACCOUNT);
+  const userAccountId = getCurrentAccountId();
+  const { data: userAccountData } = useQuery(GET_USER_ACCOUNT, {
+    variables: { userAccountId: userAccountId },
+  });
   const userAccount = userAccountData?.userAccount;
   const profileImageUrl =
     userAccount && `${API_URL}/v1/userAccount/${userAccount.id}/profile.png`;
