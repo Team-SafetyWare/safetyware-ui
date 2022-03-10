@@ -1,11 +1,10 @@
 import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import ProfilePicture from "../../../assets/profilePicture.png";
-import { GET_PERSONS, GET_USER_ACCOUNT } from "../../../util/queryService";
+import React from "react";
+import { GET_USER_ACCOUNT } from "../../../util/queryService";
 import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
 import { PageHeader } from "../atoms/PageHeader";
-import { API_URL } from "../../../index";
+import { API_URL, getCurrentAccountId } from "../../../index";
 
 export const UserAccount: React.FC = () => {
   // TO-DO: create proper data with ALL data from backend
@@ -23,13 +22,10 @@ export const UserAccount: React.FC = () => {
     ],
   ];
 
-  // Set up interface to hold the data we will be gathering from backend
-  interface Person {
-    name: string;
-    id: string;
-  }
-
-  const { data: userAccountData } = useQuery(GET_USER_ACCOUNT);
+  const userAccountId = getCurrentAccountId();
+  const { data: userAccountData } = useQuery(GET_USER_ACCOUNT, {
+    variables: { userAccountId: userAccountId },
+  });
   const userAccount = userAccountData?.userAccount;
   const profileImageUrl =
     userAccount && `${API_URL}/v1/userAccount/${userAccount.id}/profile.png`;

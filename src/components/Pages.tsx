@@ -11,7 +11,7 @@ import { Incidents } from "./UI/organisms/Incidents";
 import { Locations } from "./UI/organisms/Locations";
 import { Login } from "./UI/organisms/Login";
 import { UserAccount } from "./UI/organisms/UserAccount";
-import { API_URL } from "../index";
+import { API_URL, getCurrentAccountId } from "../index";
 
 const useStyles = makeStyles({
   content: {
@@ -36,7 +36,10 @@ export const Pages: React.FC = () => {
   const styles = useStyles();
   const location = useLocation();
 
-  const { data: userAccountData } = useQuery(GET_USER_ACCOUNT);
+  const userAccountId = getCurrentAccountId();
+  const { data: userAccountData } = useQuery(GET_USER_ACCOUNT, {
+    variables: { userAccountId: userAccountId },
+  });
   const userAccount = userAccountData?.userAccount;
   const profileImageUrl =
     userAccount && `${API_URL}/v1/userAccount/${userAccount.id}/profile.png`;
