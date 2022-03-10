@@ -9,6 +9,10 @@ import { store } from "./store/store";
 
 export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
 
+export const getCurrentAccountId = (): string | null => {
+  return localStorage.getItem("user_account_id");
+};
+
 const client = new ApolloClient({
   uri: `${API_URL}/graphql`,
   cache: new InMemoryCache(),

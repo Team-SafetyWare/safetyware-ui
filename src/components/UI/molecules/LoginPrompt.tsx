@@ -9,6 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import { useQuery } from "@apollo/client";
 import { GET_USER_ACCOUNTS } from "../../../util/queryService";
 import MenuItem from "@mui/material/MenuItem";
+import { getCurrentAccountId } from "../../../index";
 
 const useStyles = makeStyles({
   loginBox: {
