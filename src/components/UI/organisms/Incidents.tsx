@@ -4,6 +4,11 @@ import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
+import {
+  selectIncidentPageEndDate,
+  selectIncidentPageStartDate,
+} from "../../../store/slices/incidentPageSlice";
+import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
 import { GET_INCIDENTS, GET_INCIDENT_STATS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
@@ -106,8 +111,17 @@ export const Incidents: React.FC = () => {
       )
       .flat() ?? [];
 
+  const startDate = useAppSelector(selectIncidentPageStartDate);
+  const endDate = useAppSelector(selectIncidentPageEndDate);
+
   const { data: incidentStatsData } = useQuery(GET_INCIDENT_STATS, {
-    variables: { companyId: user?.company.id },
+    variables: {
+      companyId: user?.company.id,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
+    },
   });
 
   const incidentStats: any[] =
@@ -119,6 +133,10 @@ export const Incidents: React.FC = () => {
         };
       })
       .sort((s1: any, s2: any) => (s1.x > s2.x ? 1 : -1)) ?? [];
+
+  incidentStats.sort((a, b) =>
+    a.x.toLowerCase().localeCompare(b.x.toLocaleLowerCase())
+  );
 
   const visualizations = [
     "Raw Incidents Data Table",
