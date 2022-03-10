@@ -32,6 +32,8 @@ export const LoginPrompt: React.FC = () => {
   const { data: userAccountsData } = useQuery(GET_USER_ACCOUNTS);
   const userAccounts = userAccountsData?.userAccounts ?? [];
 
+  const selectLabel = "Select account";
+
   const handleChange = (event: SelectChangeEvent<any>) => {
     setAccount(event.target.value);
   };
@@ -41,8 +43,8 @@ export const LoginPrompt: React.FC = () => {
       <div className={styles.loginDiv}>
         <img src={Logo} alt="Blackline Safety" />
         <FormControl fullWidth>
-          <InputLabel>Select account</InputLabel>
-          <Select value={account} onChange={handleChange}>
+          <InputLabel>{selectLabel}</InputLabel>
+          <Select label={selectLabel} value={account} onChange={handleChange}>
             {userAccounts.map((account: any) => (
               <MenuItem key={account.id} value={account.name}>
                 {account.name}
