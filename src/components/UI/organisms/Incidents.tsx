@@ -182,10 +182,6 @@ export const Incidents: React.FC = () => {
       })
       .sort((s1: any, s2: any) => (s1.x > s2.x ? 1 : -1)) ?? [];
 
-  incidentStats.sort((a, b) =>
-    a.x.toLowerCase().localeCompare(b.x.toLocaleLowerCase())
-  );
-
   const visualizations = [
     "Raw Incidents Data Table",
     "Incidents Dot Map",
