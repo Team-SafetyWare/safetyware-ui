@@ -57,13 +57,11 @@ export const GET_INCIDENTS = gql`
 `;
 
 export const GET_INCIDENT_STATS = gql`
-  {
-    userAccount(id: "1fh2ktnk5gd01c040d0vbc1z") {
-      company {
-        incidentStats {
-          type
-          count
-        }
+  query ($companyId: ID!) {
+    company(id: $companyId) {
+      incidentStats {
+        type
+        count
       }
     }
   }
