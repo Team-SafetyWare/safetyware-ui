@@ -21,11 +21,12 @@ const useStyles = makeStyles({
     borderRadius: "30px",
     border: "1px solid rgba(0, 0, 0, 0.05)",
     position: "absolute",
-    bottom: "20px",
-    right: "20px",
     fontSize: "14px",
     paddingRight: "1.5%",
     paddingLeft: "1.5%",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
   },
 });
 
