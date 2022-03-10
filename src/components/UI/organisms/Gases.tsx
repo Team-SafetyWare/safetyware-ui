@@ -1,12 +1,15 @@
+import { useQuery } from "@apollo/client";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
+import { getCurrentUser } from "../../..";
 import theme from "../../../Theme";
+import { GET_GAS_READINGS } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
-import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import { GasesDotMap } from "../atoms/GasesDotMap";
+import GasesTable from "../atoms/GasesTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
@@ -60,11 +63,50 @@ const useStyles = makeStyles({
   },
 });
 
+export interface GasReading {
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  density: number;
+  gas: string;
+  personName: string;
+  timestamp: Date;
+}
+
 export const gasesPageLabel = "gasesPage";
 
 export const Gases: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
+
+  const user = getCurrentUser();
+
+  const { data: gasReadingsData } = useQuery(GET_GAS_READINGS, {
+    variables: {
+      companyId: user?.company.id,
+      minTimestamp: tempStartDate,
+      maxTimestamp: tempEndDate,
+    },
+  });
+
+  const gasReadings: any[] =
+    gasReadingsData?.company.people
+      .map((person: any) =>
+        person.gasReadings.map((gasReading: any) => {
+          return {
+            coordinates: {
+              lat: gasReading.coordinates[1],
+              lng: gasReading.coordinates[0],
+            },
+            density: gasReading.density,
+            gas: gasReading.gas,
+            personName: person.name,
+            timestamp: new Date(gasReading.timestamp),
+          };
+        })
+      )
+      .flat() ?? [];
 
   const visualizations = ["Raw Gases Data Table", "Gases Dot Map"];
 
@@ -94,7 +136,7 @@ export const Gases: React.FC = () => {
               accordionHeight={"auto"}
               accordionWidth={""}
               accordionTitle={visualizations[0]}
-              component={<CustomCollapsibleTable />}
+              component={<GasesTable gasReadings={gasReadings} />}
             />
             <PageSectionHeader
               sectionTitle={"Gas Visualizations"}
@@ -121,7 +163,7 @@ export const Gases: React.FC = () => {
             </div>
             {visualization == visualizations[0] && (
               <div className={styles.visualization}>
-                <CustomCollapsibleTable />
+                <GasesTable gasReadings={gasReadings} />
               </div>
             )}
             {visualization == visualizations[1] && (
