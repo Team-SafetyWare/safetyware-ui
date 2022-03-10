@@ -1,9 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Switch, useLocation } from "react-router-dom";
 import ProfilePicture from "../assets/profilePicture.png";
-import { GET_PERSONS } from "../util/queryService";
+import { GET_USER_ACCOUNT } from "../util/queryService";
 import { Page } from "./UI/atoms/Page";
 import { Sidebar } from "./UI/molecules/Sidebar";
 import { Gases } from "./UI/organisms/Gases";
@@ -38,15 +38,8 @@ export const Pages: React.FC = () => {
 
   // https://www.apollographql.com/docs/react/data/queries/
   // TO-DO: handle loading and error
-  const { loading, data } = useQuery(GET_PERSONS);
-
-  // Dummy name for sidebar, since we haven't handled authentication yet
-  const [userName, setUserName] = useState("");
-  useEffect(() => {
-    if (!loading && data) {
-      setUserName(data.people[0].name);
-    }
-  }, [loading, data]);
+  const { data: userAccountData } = useQuery(GET_USER_ACCOUNT);
+  const userAccount = userAccountData?.userAccount;
 
   return (
     <>
@@ -59,7 +52,7 @@ export const Pages: React.FC = () => {
         />
       ) : (
         <>
-          <Sidebar userName={userName} userPhoto={ProfilePicture} />
+          <Sidebar userName={userAccount?.name} userPhoto={ProfilePicture} />
           <div className={styles.content}>
             <div className={styles.innerContent}>
               <Switch>
