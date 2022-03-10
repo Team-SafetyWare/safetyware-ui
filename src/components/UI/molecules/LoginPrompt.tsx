@@ -1,10 +1,10 @@
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../../../assets/logo.png";
 import { LoginButton } from "../atoms/LoginButton";
 import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import { useQuery } from "@apollo/client";
 import { GET_USER_ACCOUNTS } from "../../../util/queryService";
@@ -27,17 +27,23 @@ const useStyles = makeStyles({
 export const LoginPrompt: React.FC = () => {
   const styles = useStyles();
 
+  const [account, setAccount] = useState("");
+
   const { data: userAccountsData } = useQuery(GET_USER_ACCOUNTS);
-  const userAccounts = userAccountsData?.userAccounts || [];
+  const userAccounts = userAccountsData?.userAccounts ?? [];
+
+  const handleChange = (event: SelectChangeEvent<any>) => {
+    setAccount(event.target.value);
+  };
 
   return (
     <Box className={styles.loginBox}>
       <div className={styles.loginDiv}>
         <img src={Logo} alt="Blackline Safety" />
         <FormControl fullWidth>
-          <InputLabel id="account-select-label">Select account</InputLabel>
-          <Select labelId="account-select-label" value="">
-            {userAccounts?.map((account: any) => (
+          <InputLabel>Select account</InputLabel>
+          <Select value={account} onChange={handleChange}>
+            {userAccounts.map((account: any) => (
               <MenuItem key={account.id} value={account.name}>
                 {account.name}
               </MenuItem>
