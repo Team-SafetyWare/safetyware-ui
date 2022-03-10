@@ -3,7 +3,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import theme from "../../../Theme";
 import { GET_INCIDENTS, GET_INCIDENT_STATS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
@@ -106,25 +106,19 @@ export const Incidents: React.FC = () => {
       )
       .flat() ?? [];
 
-  const [incidentStats, updateIncidentStats] = useState<IncidentStat[]>([]);
-  const resIncidentStats = useQuery(GET_INCIDENT_STATS);
+  const { data: incidentStatsData } = useQuery(GET_INCIDENT_STATS, {
+    variables: { companyId: user?.company.id },
+  });
 
-  useEffect(() => {
-    updateIncidentStats([]);
-    if (!resIncidentStats.loading && resIncidentStats.data) {
-      resIncidentStats.data.userAccount.company.incidentStats.map(
-        (incidentStat: any) => {
-          updateIncidentStats((incidentStats) => [
-            ...incidentStats,
-            {
-              x: incidentStat.type,
-              y: incidentStat.count,
-            },
-          ]);
-        }
-      );
-    }
-  }, [resIncidentStats.loading, resIncidentStats.data]);
+  const incidentStats: any[] =
+    incidentStatsData?.company.incidentStats
+      .map((stat: any) => {
+        return {
+          x: stat.type,
+          y: stat.count,
+        };
+      })
+      .flat() ?? [];
 
   const visualizations = [
     "Raw Incidents Data Table",
