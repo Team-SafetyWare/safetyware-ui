@@ -5,6 +5,11 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import { getCurrentUser } from "../../..";
+import {
+  selectGasPageEndDate,
+  selectGasPageStartDate,
+} from "../../../store/slices/gasPageSlice";
+import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
 import { GET_GAS_READINGS } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
@@ -25,7 +30,6 @@ const center = {
   lng: -114.1283,
 };
 
-const user = "PersonA";
 const view = "User";
 const tempStartDate = new Date("01/01/2022");
 const tempEndDate = new Date("01/08/2022");
@@ -82,11 +86,16 @@ export const Gases: React.FC = () => {
 
   const user = getCurrentUser();
 
+  const startDate = useAppSelector(selectGasPageStartDate);
+  const endDate = useAppSelector(selectGasPageEndDate);
+
   const { data: gasReadingsData } = useQuery(GET_GAS_READINGS, {
     variables: {
       companyId: user?.company.id,
-      minTimestamp: tempStartDate,
-      maxTimestamp: tempEndDate,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
     },
   });
 
