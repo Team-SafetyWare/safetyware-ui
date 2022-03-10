@@ -118,7 +118,8 @@ export const Incidents: React.FC = () => {
           y: stat.count,
         };
       })
-      .flat() ?? [];
+      .flat()
+      .sort((s1: any, s2: any) => (s1.x > s2.x ? 1 : -1)) ?? [];
 
   const visualizations = [
     "Raw Incidents Data Table",
