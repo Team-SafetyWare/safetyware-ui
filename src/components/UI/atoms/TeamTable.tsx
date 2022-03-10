@@ -35,6 +35,7 @@ const useStyles = makeStyles({
   },
   memberPicture: {
     height: "24px",
+    "border-radius": "50%;",
   },
 });
 
