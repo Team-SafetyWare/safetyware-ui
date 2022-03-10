@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import Draggable, { ControlPosition } from "react-draggable";
+import Draggable from "react-draggable";
 import { CustomBoxDates } from "../atoms/CustomBoxDates";
 import { CustomBoxUserSelect } from "../atoms/CustomBoxUserSelect";
 
@@ -26,16 +26,14 @@ const useStyles = makeStyles({
     paddingLeft: "1.5%",
     left: "50%",
     top: "50%",
-    transform: "translate(-50%, -50%)",
   },
 });
 
 export const CustomBoxReduced: React.FC<CustomBoxReducedProps> = (props) => {
   const styles = useStyles();
   const label = props.pageLabel;
-  const centerPosition = { x: "-50%", y: "-50%" } as unknown as ControlPosition;
   return (
-    <Draggable defaultPosition={centerPosition}>
+    <Draggable positionOffset={{ x: "-50%", y: "-50%" }}>
       <div className={styles.box}>
         <h3>Customize</h3>
         <CustomBoxDates
