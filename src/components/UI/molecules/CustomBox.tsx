@@ -3,7 +3,7 @@ import React from "react";
 import { CustomBoxDates } from "../atoms/CustomBoxDates";
 import { CustomBoxIncidentSelect } from "../atoms/CustomBoxIncidentSelect";
 import { CustomBoxUserSelect } from "../atoms/CustomBoxUserSelect";
-import Draggable from "react-draggable";
+import Draggable, { ControlPosition } from "react-draggable";
 
 interface CustomBoxProps {
   view?: any;
@@ -34,8 +34,9 @@ const useStyles = makeStyles({
 
 export const CustomBox: React.FC<CustomBoxProps> = (props) => {
   const styles = useStyles();
+  const centerPosition = { x: "-50%", y: "-50%" } as unknown as ControlPosition;
   return (
-    <Draggable>
+    <Draggable defaultPosition={centerPosition}>
       <div className={styles.box}>
         <h3>Customize</h3>
         <CustomBoxDates
