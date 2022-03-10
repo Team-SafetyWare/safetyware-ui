@@ -7,8 +7,9 @@ import InputLabel from "@mui/material/InputLabel";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import { useQuery } from "@apollo/client";
-import { GET_USER_ACCOUNTS } from "../../../util/queryService";
+import { GET_USERS } from "../../../util/queryService";
 import MenuItem from "@mui/material/MenuItem";
+import { setCurrentUser } from "../../../index";
 
 const useStyles = makeStyles({
   loginBox: {
@@ -28,26 +29,28 @@ export const LoginPrompt: React.FC = () => {
   const styles = useStyles();
 
   // eslint-disable-next-line prefer-const
-  let [account, setAccount]: [any, any] = useState("");
+  let [user, setUser]: [any, any] = useState("");
 
-  const { data: userAccountsData } = useQuery(GET_USER_ACCOUNTS);
-  let userAccounts = userAccountsData?.userAccounts ?? [];
-  userAccounts = Array.from(userAccounts).sort().reverse();
+  const { data: usersData } = useQuery(GET_USERS);
+  let users = usersData?.userAccounts ?? [];
+  users = Array.from(users).sort((a1: any, a2: any) =>
+    a1.name > a2.name ? 1 : -1
+  );
 
-  const setAndStoreAccount = (account: any) => {
-    setAccount(account);
-    localStorage.setItem("user_account_id", account.id);
+  const setAndStoreUser = (user: any) => {
+    setUser(user);
+    setCurrentUser(user);
   };
 
-  if (account === "" && userAccounts.length > 0) {
-    account = userAccounts[0];
-    setAndStoreAccount(account);
+  if (user === "" && users.length > 0) {
+    user = users[0];
+    setAndStoreUser(user);
   }
 
-  const selectLabel = "Account";
+  const selectLabel = "User";
 
   const handleChange = (event: SelectChangeEvent<any>) => {
-    setAndStoreAccount(event.target.value);
+    setAndStoreUser(event.target.value);
   };
 
   return (
@@ -56,10 +59,10 @@ export const LoginPrompt: React.FC = () => {
         <img src={Logo} alt="Blackline Safety" />
         <FormControl fullWidth>
           <InputLabel>{selectLabel}</InputLabel>
-          <Select label={selectLabel} value={account} onChange={handleChange}>
-            {userAccounts.map((account: any) => (
-              <MenuItem key={account.id} value={account}>
-                {account.name}
+          <Select label={selectLabel} value={user} onChange={handleChange}>
+            {users.map((user: any) => (
+              <MenuItem key={user.id} value={user}>
+                {user.name}
               </MenuItem>
             ))}
           </Select>

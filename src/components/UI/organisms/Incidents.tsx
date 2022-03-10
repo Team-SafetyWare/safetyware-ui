@@ -3,7 +3,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import theme from "../../../Theme";
 import { GET_INCIDENTS, GET_INCIDENT_STATS } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
@@ -14,8 +14,8 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBox } from "../molecules/CustomBox";
+import { getCurrentUser } from "../../../index";
 
-const user = "PersonA";
 const view = "User";
 const incidentType = "All";
 const tempStartDate = new Date("01/01/2022");
@@ -82,52 +82,43 @@ export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
-  const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
-  const [incidentStats, updateIncidentStats] = useState<IncidentStat[]>([]);
+  const user = getCurrentUser();
 
-  const resIncidents = useQuery(GET_INCIDENTS);
-  const resIncidentStats = useQuery(GET_INCIDENT_STATS);
+  const { data: incidentsData } = useQuery(GET_INCIDENTS, {
+    variables: { companyId: user?.company.id },
+  });
 
-  useEffect(() => {
-    updateIncidents([]);
-
-    if (!resIncidents.loading && resIncidents.data) {
-      resIncidents.data.userAccount.company.people.map((person: any) => {
+  const incidents: any[] =
+    incidentsData?.company.people
+      .map((person: any) =>
         person.incidents.map((incident: any) => {
-          updateIncidents((incidents) => [
-            ...incidents,
-            {
-              coordinates: {
-                lng: incident.coordinates[0],
-                lat: incident.coordinates[1],
-              },
-              personName: incident.person.name,
-              timestamp: new Date(incident.timestamp),
-              type: incident.type,
-              companyName: incident.person.company.name,
+          return {
+            coordinates: {
+              lng: incident.coordinates[0],
+              lat: incident.coordinates[1],
             },
-          ]);
-        });
-      });
-    }
-  }, [resIncidents.loading, resIncidents.data]);
+            personName: person.name,
+            timestamp: new Date(incident.timestamp),
+            type: incident.type,
+            companyName: incidentsData.company.name,
+          };
+        })
+      )
+      .flat() ?? [];
 
-  useEffect(() => {
-    updateIncidentStats([]);
-    if (!resIncidentStats.loading && resIncidentStats.data) {
-      resIncidentStats.data.userAccount.company.incidentStats.map(
-        (incidentStat: any) => {
-          updateIncidentStats((incidentStats) => [
-            ...incidentStats,
-            {
-              x: incidentStat.type,
-              y: incidentStat.count,
-            },
-          ]);
-        }
-      );
-    }
-  }, [resIncidentStats.loading, resIncidentStats.data]);
+  const { data: incidentStatsData } = useQuery(GET_INCIDENT_STATS, {
+    variables: { companyId: user?.company.id },
+  });
+
+  const incidentStats: any[] =
+    incidentStatsData?.company.incidentStats
+      .map((stat: any) => {
+        return {
+          x: stat.type,
+          y: stat.count,
+        };
+      })
+      .sort((s1: any, s2: any) => (s1.x > s2.x ? 1 : -1)) ?? [];
 
   const visualizations = [
     "Raw Incidents Data Table",

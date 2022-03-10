@@ -1,8 +1,6 @@
-import { useQuery } from "@apollo/client";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { Switch, useLocation } from "react-router-dom";
-import { GET_USER_ACCOUNT } from "../util/queryService";
 import { Page } from "./UI/atoms/Page";
 import { Sidebar } from "./UI/molecules/Sidebar";
 import { Gases } from "./UI/organisms/Gases";
@@ -11,7 +9,7 @@ import { Incidents } from "./UI/organisms/Incidents";
 import { Locations } from "./UI/organisms/Locations";
 import { Login } from "./UI/organisms/Login";
 import { UserAccount } from "./UI/organisms/UserAccount";
-import { API_URL, getCurrentAccountId } from "../index";
+import { API_URL, getCurrentUser } from "../index";
 
 const useStyles = makeStyles({
   content: {
@@ -36,13 +34,9 @@ export const Pages: React.FC = () => {
   const styles = useStyles();
   const location = useLocation();
 
-  const userAccountId = getCurrentAccountId();
-  const { data: userAccountData } = useQuery(GET_USER_ACCOUNT, {
-    variables: { userAccountId: userAccountId },
-  });
-  const userAccount = userAccountData?.userAccount;
+  const user = getCurrentUser();
   const profileImageUrl =
-    userAccount && `${API_URL}/v1/userAccount/${userAccount.id}/profile.png`;
+    user && `${API_URL}/v1/userAccount/${user.id}/profile.png`;
 
   return (
     <>
@@ -55,7 +49,7 @@ export const Pages: React.FC = () => {
         />
       ) : (
         <>
-          <Sidebar userName={userAccount?.name} userPhoto={profileImageUrl} />
+          <Sidebar userName={user?.name} userPhoto={profileImageUrl} />
           <div className={styles.content}>
             <div className={styles.innerContent}>
               <Switch>

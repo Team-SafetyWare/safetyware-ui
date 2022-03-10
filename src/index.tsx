@@ -9,8 +9,15 @@ import { store } from "./store/store";
 
 export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
 
-export const getCurrentAccountId = (): string | null => {
-  return localStorage.getItem("user_account_id");
+const CURRENT_USER_KEY = "current_user";
+
+export const getCurrentUser = (): any | null => {
+  const json = localStorage.getItem(CURRENT_USER_KEY);
+  return json && JSON.parse(json);
+};
+
+export const setCurrentUser = (user: any): void => {
+  localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
 };
 
 const client = new ApolloClient({
