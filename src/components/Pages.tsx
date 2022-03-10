@@ -2,7 +2,6 @@ import { useQuery } from "@apollo/client";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { Switch, useLocation } from "react-router-dom";
-import ProfilePicture from "../assets/profilePicture.png";
 import { GET_USER_ACCOUNT } from "../util/queryService";
 import { Page } from "./UI/atoms/Page";
 import { Sidebar } from "./UI/molecules/Sidebar";
