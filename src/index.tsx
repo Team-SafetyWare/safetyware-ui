@@ -7,8 +7,10 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 
+export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
+
 const client = new ApolloClient({
-  uri: "https://func-api-nmisvbwuqreyq.azurewebsites.net/graphql",
+  uri: `${API_URL}/graphql`,
   cache: new InMemoryCache(),
 });
 

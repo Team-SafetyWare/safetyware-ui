@@ -10,6 +10,7 @@ const useStyles = makeStyles(() => ({
   sidebarUserPicture: {
     height: "64px",
     margin: "8px 34px 8px 0px",
+    "border-radius": "50%;",
   },
 }));
 
