@@ -1,15 +1,25 @@
 import { gql } from "@apollo/client";
 
+export const GET_USER_ACCOUNT = gql`
+  {
+    userAccount(id: "1fh2ktnk5gd01c040d0vbc1z") {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_PERSONS = gql`
-  query {
+  {
     people {
       id
       name
     }
   }
 `;
+
 export const GET_LOCATIONS = gql`
-  query {
+  {
     people {
       id
       name
@@ -22,7 +32,7 @@ export const GET_LOCATIONS = gql`
 `;
 
 export const GET_INCIDENTS = gql`
-  query {
+  {
     userAccount(id: "1fh2ktnk5gd01c040d0vbc1z") {
       company {
         people {
@@ -44,7 +54,7 @@ export const GET_INCIDENTS = gql`
 `;
 
 export const GET_INCIDENT_STATS = gql`
-  query {
+  {
     userAccount(id: "1fh2ktnk5gd01c040d0vbc1z") {
       company {
         incidentStats {
