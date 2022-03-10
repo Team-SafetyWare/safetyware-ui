@@ -17,7 +17,6 @@ const center = {
   lat: 51.049999,
   lng: -114.1283,
 };
-const user = "PersonA";
 const view = "User";
 const startDate = new Date("01/01/2022");
 const endDate = new Date("01/08/2022");
@@ -47,18 +46,6 @@ const useStyles = makeStyles({
       },
   },
 });
-
-// Todo: Location, delete.
-// coordinates: {
-//   lng: location.coordinates[0],
-//   lat: location.coordinates[1],
-// },
-// timestamp: location.timestamp,
-
-// Todo: Travel trait, delete.
-// lat: location.coordinates[1],
-// lng: location.coordinates[0],
-// timestamp: location.timestamp,
 
 export const locationPageLabel = "locationPage";
 
@@ -98,10 +85,6 @@ export const Locations: React.FC = () => {
         })
       )
       .flat() ?? [];
-
-  // Todo: Delete.
-  console.log(locationsData);
-  console.log(locations);
 
   const visualizations = [
     "Raw Locations Data Table",
