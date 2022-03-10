@@ -26,13 +26,15 @@ export const GET_PERSONS = gql`
 `;
 
 export const GET_LOCATIONS = gql`
-  {
-    people {
-      id
-      name
-      locationReadings {
-        coordinates
-        timestamp
+  query ($companyId: ID!) {
+    company(id: $companyId) {
+      people {
+        id
+        name
+        locationReadings {
+          coordinates
+          timestamp
+        }
       }
     }
   }

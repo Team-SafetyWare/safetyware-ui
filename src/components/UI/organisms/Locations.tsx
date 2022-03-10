@@ -1,20 +1,17 @@
 import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GET_LOCATIONS } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
-import {
-  TravelHistoryPoint,
-  TravelHistoryTrail,
-} from "../atoms/TravelHistoryTrail";
+import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-import { IncidentReadings } from "./Incidents";
+import { getCurrentUser } from "../../../index";
 
 const center = {
   lat: 51.049999,
@@ -51,45 +48,60 @@ const useStyles = makeStyles({
   },
 });
 
+// Todo: Location, delete.
+// coordinates: {
+//   lng: location.coordinates[0],
+//   lat: location.coordinates[1],
+// },
+// timestamp: location.timestamp,
+
+// Todo: Travel trait, delete.
+// lat: location.coordinates[1],
+// lng: location.coordinates[0],
+// timestamp: location.timestamp,
+
 export const locationPageLabel = "locationPage";
 
 export const Locations: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
-  const [locations, updateLocations] = React.useState<IncidentReadings[]>([]);
-  const [travelTrail, updateTravelTrail] = React.useState<TravelHistoryPoint[]>(
-    []
-  );
-  const { loading, data } = useQuery(GET_LOCATIONS);
+  const user = getCurrentUser();
+  const { data: locationsData } = useQuery(GET_LOCATIONS, {
+    variables: { companyId: user?.company.id },
+  });
 
-  useEffect(() => {
-    updateLocations([]);
-    if (!loading && data) {
-      data.people.map((person: any) => {
+  const locations: any[] =
+    locationsData?.company.people
+      .map((person: any) =>
         person.locationReadings.map((location: any) => {
-          updateLocations((locations) => [
-            ...locations,
-            {
-              coordinates: {
-                lng: location.coordinates[0],
-                lat: location.coordinates[1],
-              },
-              timestamp: location.timestamp,
-            },
-          ]);
-          updateTravelTrail((travelTrail) => [
-            ...travelTrail,
-            {
-              lat: location.coordinates[1],
+          return {
+            coordinates: {
               lng: location.coordinates[0],
-              timestamp: location.timestamp,
+              lat: location.coordinates[1],
             },
-          ]);
-        });
-      });
-    }
-  }, [loading, data]);
+            timestamp: location.timestamp,
+          };
+        })
+      )
+      .flat() ?? [];
+
+  const travelTrail: any[] =
+    locationsData?.company.people
+      .map((person: any) =>
+        person.locationReadings.map((location: any) => {
+          return {
+            lng: location.coordinates[0],
+            lat: location.coordinates[1],
+            timestamp: location.timestamp,
+          };
+        })
+      )
+      .flat() ?? [];
+
+  // Todo: Delete.
+  console.log(locationsData);
+  console.log(locations);
 
   const visualizations = [
     "Raw Locations Data Table",
