@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
-import { useMediaQuery } from "@mui/material";
+import { IconButton, Modal, useMediaQuery } from "@mui/material";
+import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import { GET_LOCATIONS } from "../../../util/queryService";
@@ -12,6 +13,8 @@ import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
 import { getCurrentUser } from "../../../index";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import theme from "../../../Theme";
 
 const center = {
   lat: 51.049999,
@@ -44,6 +47,14 @@ const useStyles = makeStyles({
         top: "60px",
         width: "100vw",
       },
+  },
+
+  filterButton: {
+    backgroundColor: theme.palette.primary.main,
+    bottom: 16,
+    color: "white",
+    position: "absolute",
+    right: 16,
   },
 });
 
@@ -94,91 +105,111 @@ export const Locations: React.FC = () => {
 
   const [visualization, setVisualization] = useState(visualizations[0]);
 
+  const [openFilterbox, setOpenFilterbox] = useState(false);
+  const handleOpenFilterBox = () => setOpenFilterbox(true);
+  const handleCloseFilterBox = () => setOpenFilterbox(false);
+
   return (
-    <>
-      {matches ? (
-        <>
-          <PageHeader
-            pageTitle={"Locations"}
-            pageDescription={
-              "Analyze data based on locations including a travel history trail and a heat map of common incident locations."
-            }
-          />
-          <PageSectionHeader
-            sectionTitle={"Raw Locations Data"}
-            sectionDescription={
-              "Explore raw locations data through a date-filtered data table."
-            }
-          />
-          <CustomAccordion
-            accordionHeight={"auto"}
-            accordionWidth={""}
-            accordionTitle={visualizations[0]}
-            component={<CustomCollapsibleTable />}
-          />
-          <PageSectionHeader
-            sectionTitle={"Locations Visualizations"}
-            sectionDescription={
-              "Visualize locations data through a travel trail and a heat map indicating incident frequency based on location."
-            }
-          />
-          <CustomAccordion
-            accordionHeight={"400px"}
-            accordionWidth={""}
-            accordionTitle={visualizations[1]}
-            component={
-              <TravelHistoryTrail center={center} path={travelTrail} />
-            }
-          />
-          <CustomAccordion
-            accordionHeight={"400px"}
-            accordionWidth={""}
-            accordionTitle={visualizations[2]}
-            component={
-              <HazardousAreaHeatMap
-                accidents={locations}
-                center={center}
-                zoom={10}
-              />
-            }
-          />
-          <CustomBoxReduced
-            user={user}
-            view={view}
-            startDate={startDate}
-            endDate={endDate}
-            pageLabel={locationPageLabel}
-          />
-        </>
-      ) : (
-        <>
-          <div className={styles.locationsDropdown}>
-            <VisualizationSelect
-              visualizations={visualizations}
-              setVisualization={setVisualization}
+    <StyledEngineProvider injectFirst>
+      <>
+        {matches ? (
+          <>
+            <PageHeader
+              pageTitle={"Locations"}
+              pageDescription={
+                "Analyze data based on locations including a travel history trail and a heat map of common incident locations."
+              }
             />
-          </div>
-          {visualization == visualizations[0] && (
-            <div className={styles.visualization}>
-              <CustomCollapsibleTable />
-            </div>
-          )}
-          {visualization == visualizations[1] && (
-            <div className={styles.visualization}>
-              <TravelHistoryTrail center={center} path={travelTrail} />
-            </div>
-          )}
-          {visualization == visualizations[2] && (
-            <div className={styles.visualization}>
-              <HazardousAreaHeatMap
-                accidents={locations}
-                center={center}
-                zoom={10}
+            <PageSectionHeader
+              sectionTitle={"Raw Locations Data"}
+              sectionDescription={
+                "Explore raw locations data through a date-filtered data table."
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"auto"}
+              accordionWidth={""}
+              accordionTitle={visualizations[0]}
+              component={<CustomCollapsibleTable />}
+            />
+            <PageSectionHeader
+              sectionTitle={"Locations Visualizations"}
+              sectionDescription={
+                "Visualize locations data through a travel trail and a heat map indicating incident frequency based on location."
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"400px"}
+              accordionWidth={""}
+              accordionTitle={visualizations[1]}
+              component={
+                <TravelHistoryTrail center={center} path={travelTrail} />
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"400px"}
+              accordionWidth={""}
+              accordionTitle={visualizations[2]}
+              component={
+                <HazardousAreaHeatMap
+                  accidents={locations}
+                  center={center}
+                  zoom={10}
+                />
+              }
+            />
+            <IconButton
+              className={styles.filterButton}
+              onClick={handleOpenFilterBox}
+              size="large"
+            >
+              <FilterAltIcon fontSize="inherit" />
+            </IconButton>
+            <Modal
+              open={openFilterbox}
+              onClose={handleCloseFilterBox}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <CustomBoxReduced
+                user={user}
+                view={view}
+                startDate={startDate}
+                endDate={endDate}
+                pageLabel={locationPageLabel}
+              />
+            </Modal>
+          </>
+        ) : (
+          <>
+            <div className={styles.locationsDropdown}>
+              <VisualizationSelect
+                visualizations={visualizations}
+                setVisualization={setVisualization}
               />
             </div>
-          )}
-        </>
-      )}
-    </>
+            {visualization == visualizations[0] && (
+              <div className={styles.visualization}>
+                <CustomCollapsibleTable />
+              </div>
+            )}
+            {visualization == visualizations[1] && (
+              <div className={styles.visualization}>
+                <TravelHistoryTrail center={center} path={travelTrail} />
+              </div>
+            )}
+            {visualization == visualizations[2] && (
+              <div className={styles.visualization}>
+                <HazardousAreaHeatMap
+                  accidents={locations}
+                  center={center}
+                  zoom={10}
+                />
+              </div>
+            )}
+          </>
+        )}
+      </>
+    </StyledEngineProvider>
   );
 };
