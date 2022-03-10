@@ -15,6 +15,21 @@ export const GET_USER_ACCOUNT = gql`
   }
 `;
 
+export const GET_USER_ACCOUNTS = gql`
+  {
+    userAccounts {
+      id
+      name
+      title
+      email
+      phone
+      company {
+        name
+      }
+    }
+  }
+`;
+
 export const GET_PERSONS = gql`
   {
     people {
