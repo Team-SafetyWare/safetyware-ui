@@ -17,10 +17,12 @@ export const GET_USERS = gql`
 `;
 
 export const GET_PERSONS = gql`
-  {
-    people {
-      id
-      name
+  query ($companyId: ID!) {
+    company(id: $companyId) {
+      people {
+        id
+        name
+      }
     }
   }
 `;

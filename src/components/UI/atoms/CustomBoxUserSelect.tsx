@@ -7,12 +7,13 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useQuery } from "@apollo/client";
 import { GET_PERSONS } from "../../../util/queryService";
 import { useAppDispatch } from "../../../store/store";
 import { setIncidentName } from "../../../store/slices/incidentPageSlice";
 import { incidentPageLabel } from "../organisms/Incidents";
+import { getCurrentUser } from "../../../index";
 
 interface CustomBoxUserSelectProps {
   view?: string;
@@ -33,22 +34,18 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   const dispatch = useAppDispatch();
   const label = props.label;
 
-  const [people, updatePeople] = useState<string[]>([]);
-  const { loading, data } = useQuery(GET_PERSONS);
+  const user = getCurrentUser();
 
-  useEffect(() => {
-    updatePeople([]);
-    if (!loading && data) {
-      data.people.map((person: any) => {
-        updatePeople((people) => [...people, person.name]);
-      });
-    }
-  }, [loading, data]);
+  const { data: personData } = useQuery(GET_PERSONS, {
+    variables: { companyId: user?.company.id },
+  });
 
-  function getMenuItemPerson(name: string) {
+  const people: any[] = personData?.company.people ?? [];
+
+  function getMenuItemPerson(person: any) {
     return (
-      <MenuItem value={name} onClick={() => updateNameFilter(name)}>
-        {name}
+      <MenuItem value={person} onClick={() => updateNameFilter(person.name)}>
+        {person.name}
       </MenuItem>
     );
   }
@@ -80,8 +77,6 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
           />
         </RadioGroup>
       </FormControl>
-      <div></div>
-      <div></div>
       <FormControl fullWidth>
         <InputLabel id="simple-select-label">Select</InputLabel>
         <Select
