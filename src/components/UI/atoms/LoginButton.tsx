@@ -2,7 +2,6 @@ import { Button, StyledEngineProvider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { Link } from "react-router-dom";
-import MicrosoftLogo from "../../../assets/microsoft-brands.svg"; // https://fontawesome.com/license
 
 const useStyles = makeStyles({
   loginButton: {
@@ -28,8 +27,7 @@ export const LoginButton: React.FC = () => {
         to="/home"
         variant="contained"
       >
-        <img className={styles.loginButtonMicrosoftLogo} src={MicrosoftLogo} />
-        Log In with Microsoft
+        Log In
       </Button>
     </StyledEngineProvider>
   );
