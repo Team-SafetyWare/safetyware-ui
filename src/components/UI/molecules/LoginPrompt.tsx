@@ -33,7 +33,9 @@ export const LoginPrompt: React.FC = () => {
 
   const { data: usersData } = useQuery(GET_USERS);
   let users = usersData?.userAccounts ?? [];
-  users = Array.from(users).sort().reverse();
+  users = Array.from(users).sort((a1: any, a2: any) =>
+    a1.name > a2.name ? 1 : -1
+  );
 
   const setAndStoreUser = (user: any) => {
     setUser(user);
