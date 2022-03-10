@@ -59,9 +59,9 @@ export const GET_INCIDENTS = gql`
 `;
 
 export const GET_INCIDENT_STATS = gql`
-  query ($companyId: ID!) {
+  query ($companyId: ID!, $filter: IncidentStatsFilter) {
     company(id: $companyId) {
-      incidentStats {
+      incidentStats(filter: $filter) {
         type
         count
       }
