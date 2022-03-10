@@ -41,21 +41,15 @@ export const GET_LOCATIONS = gql`
 `;
 
 export const GET_INCIDENTS = gql`
-  {
-    userAccount(id: "1fh2ktnk5gd01c040d0vbc1z") {
-      company {
-        people {
-          incidents {
-            coordinates
-            timestamp
-            type
-            person {
-              name
-              company {
-                name
-              }
-            }
-          }
+  query ($companyId: ID!) {
+    company(id: $companyId) {
+      name
+      people {
+        name
+        incidents {
+          coordinates
+          timestamp
+          type
         }
       }
     }

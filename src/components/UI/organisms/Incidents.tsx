@@ -14,8 +14,8 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBox } from "../molecules/CustomBox";
+import { getCurrentUser } from "../../../index";
 
-const user = "PersonA";
 const view = "User";
 const incidentType = "All";
 const tempStartDate = new Date("01/01/2022");
@@ -82,35 +82,32 @@ export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
-  const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
-  const [incidentStats, updateIncidentStats] = useState<IncidentStat[]>([]);
+  const user = getCurrentUser();
 
-  const resIncidents = useQuery(GET_INCIDENTS);
-  const resIncidentStats = useQuery(GET_INCIDENT_STATS);
+  const { data: incidentsData } = useQuery(GET_INCIDENTS, {
+    variables: { companyId: user?.company.id },
+  });
 
-  useEffect(() => {
-    updateIncidents([]);
-
-    if (!resIncidents.loading && resIncidents.data) {
-      resIncidents.data.userAccount.company.people.map((person: any) => {
+  const incidents: any[] =
+    incidentsData?.company.people
+      .map((person: any) =>
         person.incidents.map((incident: any) => {
-          updateIncidents((incidents) => [
-            ...incidents,
-            {
-              coordinates: {
-                lng: incident.coordinates[0],
-                lat: incident.coordinates[1],
-              },
-              personName: incident.person.name,
-              timestamp: new Date(incident.timestamp),
-              type: incident.type,
-              companyName: incident.person.company.name,
+          return {
+            coordinates: {
+              lng: incident.coordinates[0],
+              lat: incident.coordinates[1],
             },
-          ]);
-        });
-      });
-    }
-  }, [resIncidents.loading, resIncidents.data]);
+            personName: person.name,
+            timestamp: new Date(incident.timestamp),
+            type: incident.type,
+            companyName: incidentsData.company.name,
+          };
+        })
+      )
+      .flat() ?? [];
+
+  const [incidentStats, updateIncidentStats] = useState<IncidentStat[]>([]);
+  const resIncidentStats = useQuery(GET_INCIDENT_STATS);
 
   useEffect(() => {
     updateIncidentStats([]);
