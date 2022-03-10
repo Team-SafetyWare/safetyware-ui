@@ -5,6 +5,12 @@ export const GET_USER_ACCOUNT = gql`
     userAccount(id: "1fh2ktnk5gd01c040d0vbc1z") {
       id
       name
+      title
+      email
+      phone
+      company {
+        name
+      }
     }
   }
 `;

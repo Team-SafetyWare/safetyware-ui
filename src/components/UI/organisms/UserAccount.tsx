@@ -49,9 +49,9 @@ export const UserAccount: React.FC = () => {
       <UserAccountTemplate
         userPhoto={profileImageUrl}
         userName={userAccount?.name}
-        userTitle={"Senior Manager at Blackline Safety"}
-        userPhone={"123-456-7890"}
-        userEmail={"jane.doe@blackline.ca"}
+        userTitle={`${userAccount?.title} at ${userAccount?.company?.name}`}
+        userPhone={userAccount?.phone}
+        userEmail={userAccount?.email}
         userTeam={"Team 123-ABC-456"}
         teamData={mockData}
       />
