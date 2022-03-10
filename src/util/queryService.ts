@@ -82,3 +82,19 @@ export const GET_INCIDENT_STATS = gql`
     }
   }
 `;
+
+export const GET_GAS_READINGS = gql`
+  query ($companyId: ID!, $filter: GasReadingFilter) {
+    company(id: $companyId) {
+      people {
+        name
+        gasReadings(filter: $filter) {
+          coordinates
+          density
+          gas
+          timestamp
+        }
+      }
+    }
+  }
+`;
