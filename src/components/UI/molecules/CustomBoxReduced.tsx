@@ -21,20 +21,19 @@ const useStyles = makeStyles({
     borderRadius: "30px",
     border: "1px solid rgba(0, 0, 0, 0.05)",
     position: "absolute",
-    bottom: "20px",
-    right: "20px",
     fontSize: "14px",
     paddingRight: "1.5%",
     paddingLeft: "1.5%",
+    left: "50%",
+    top: "50%",
   },
 });
 
 export const CustomBoxReduced: React.FC<CustomBoxReducedProps> = (props) => {
   const styles = useStyles();
   const label = props.pageLabel;
-
   return (
-    <Draggable>
+    <Draggable positionOffset={{ x: "-50%", y: "-50%" }}>
       <div className={styles.box}>
         <h3>Customize</h3>
         <CustomBoxDates
