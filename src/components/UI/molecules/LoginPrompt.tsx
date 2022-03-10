@@ -28,13 +28,13 @@ export const LoginPrompt: React.FC = () => {
   const styles = useStyles();
 
   // eslint-disable-next-line prefer-const
-  let [account, setAccount] = useState("");
+  let [account, setAccount]: [any, any] = useState("");
 
   const { data: userAccountsData } = useQuery(GET_USER_ACCOUNTS);
   const userAccounts = userAccountsData?.userAccounts ?? [];
 
   if (account === "" && userAccounts.length > 0) {
-    account = userAccounts[0];
+    account = Array.from(userAccounts).sort()[0];
     setAccount(account);
   }
 
