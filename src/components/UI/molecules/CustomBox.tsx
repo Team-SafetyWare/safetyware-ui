@@ -3,6 +3,7 @@ import React from "react";
 import { CustomBoxDates } from "../atoms/CustomBoxDates";
 import { CustomBoxIncidentSelect } from "../atoms/CustomBoxIncidentSelect";
 import { CustomBoxUserSelect } from "../atoms/CustomBoxUserSelect";
+import Draggable from "react-draggable";
 
 interface CustomBoxProps {
   view?: any;
@@ -34,19 +35,21 @@ const useStyles = makeStyles({
 export const CustomBox: React.FC<CustomBoxProps> = (props) => {
   const styles = useStyles();
   return (
-    <div className={styles.box}>
-      <h3>Customize</h3>
-      <CustomBoxDates
-        startDate={props.startDate}
-        endDate={props.endDate}
-        pageLabel={props.pageLabel}
-      />
-      <CustomBoxUserSelect
-        label={props.pageLabel}
-        user={props.user}
-        view={props.view}
-      />
-      <CustomBoxIncidentSelect incidentType={props.incidentType} />
-    </div>
+    <Draggable>
+      <div className={styles.box}>
+        <h3>Customize</h3>
+        <CustomBoxDates
+          startDate={props.startDate}
+          endDate={props.endDate}
+          pageLabel={props.pageLabel}
+        />
+        <CustomBoxUserSelect
+          label={props.pageLabel}
+          user={props.user}
+          view={props.view}
+        />
+        <CustomBoxIncidentSelect incidentType={props.incidentType} />
+      </div>
+    </Draggable>
   );
 };
