@@ -2,7 +2,6 @@ import { Button, StyledEngineProvider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { Link } from "react-router-dom";
-import MicrosoftLogo from "../../../assets/microsoft-brands.svg"; // https://fontawesome.com/license
 
 const useStyles = makeStyles({
   loginButton: {

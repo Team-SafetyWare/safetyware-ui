@@ -1,8 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import ProfilePicture from "../../../assets/profilePicture.png";
-import { GET_PERSONS, GET_USER_ACCOUNT } from "../../../util/queryService";
+import React from "react";
+import { GET_USER_ACCOUNT } from "../../../util/queryService";
 import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
 import { PageHeader } from "../atoms/PageHeader";
 import { API_URL } from "../../../index";
@@ -22,12 +21,6 @@ export const UserAccount: React.FC = () => {
       ["Stanley Winston", "stanley.winston@blackline.ca", "Member"],
     ],
   ];
-
-  // Set up interface to hold the data we will be gathering from backend
-  interface Person {
-    name: string;
-    id: string;
-  }
 
   const { data: userAccountData } = useQuery(GET_USER_ACCOUNT);
   const userAccount = userAccountData?.userAccount;
