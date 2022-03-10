@@ -36,8 +36,6 @@ export const Pages: React.FC = () => {
   const styles = useStyles();
   const location = useLocation();
 
-  // https://www.apollographql.com/docs/react/data/queries/
-  // TO-DO: handle loading and error
   const { data: userAccountData } = useQuery(GET_USER_ACCOUNT);
   const userAccount = userAccountData?.userAccount;
   const profileImageUrl =
