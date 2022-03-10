@@ -12,6 +12,7 @@ import { Incidents } from "./UI/organisms/Incidents";
 import { Locations } from "./UI/organisms/Locations";
 import { Login } from "./UI/organisms/Login";
 import { UserAccount } from "./UI/organisms/UserAccount";
+import { API_URL } from "../index";
 
 const useStyles = makeStyles({
   content: {
@@ -40,6 +41,8 @@ export const Pages: React.FC = () => {
   // TO-DO: handle loading and error
   const { data: userAccountData } = useQuery(GET_USER_ACCOUNT);
   const userAccount = userAccountData?.userAccount;
+  const profileImageUrl =
+    userAccount && `${API_URL}/v1/userAccount/${userAccount.id}/profile.png`;
 
   return (
     <>
@@ -52,7 +55,7 @@ export const Pages: React.FC = () => {
         />
       ) : (
         <>
-          <Sidebar userName={userAccount?.name} userPhoto={ProfilePicture} />
+          <Sidebar userName={userAccount?.name} userPhoto={profileImageUrl} />
           <div className={styles.content}>
             <div className={styles.innerContent}>
               <Switch>
