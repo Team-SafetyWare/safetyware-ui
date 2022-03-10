@@ -2,9 +2,10 @@ import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ProfilePicture from "../../../assets/profilePicture.png";
-import { GET_PERSONS } from "../../../util/queryService";
+import { GET_PERSONS, GET_USER_ACCOUNT } from "../../../util/queryService";
 import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
 import { PageHeader } from "../atoms/PageHeader";
+import { API_URL } from "../../../index";
 
 export const UserAccount: React.FC = () => {
   // TO-DO: create proper data with ALL data from backend
@@ -28,21 +29,10 @@ export const UserAccount: React.FC = () => {
     id: string;
   }
 
-  // https://www.apollographql.com/docs/react/data/queries/
-  // TO-DO: handle loading and error
-  const personList: Array<Person> = [];
-  const { loading, data } = useQuery(GET_PERSONS);
-
-  // Sample feed into UI components
-  const [name, setName] = useState("Jane Doe");
-  useEffect(() => {
-    if (!loading && data) {
-      data.people.map((person: Person) => {
-        personList.push(person);
-      });
-      setName(personList[0].name);
-    }
-  }, [loading, data]);
+  const { data: userAccountData } = useQuery(GET_USER_ACCOUNT);
+  const userAccount = userAccountData?.userAccount;
+  const profileImageUrl =
+    userAccount && `${API_URL}/v1/userAccount/${userAccount.id}/profile.png`;
 
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
 
@@ -57,8 +47,8 @@ export const UserAccount: React.FC = () => {
         />
       )}
       <UserAccountTemplate
-        userPhoto={ProfilePicture}
-        userName={name}
+        userPhoto={profileImageUrl}
+        userName={userAccount?.name}
         userTitle={"Senior Manager at Blackline Safety"}
         userPhone={"123-456-7890"}
         userEmail={"jane.doe@blackline.ca"}
