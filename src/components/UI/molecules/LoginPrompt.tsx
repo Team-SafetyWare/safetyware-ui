@@ -27,12 +27,18 @@ const useStyles = makeStyles({
 export const LoginPrompt: React.FC = () => {
   const styles = useStyles();
 
-  const [account, setAccount] = useState("");
+  // eslint-disable-next-line prefer-const
+  let [account, setAccount] = useState("");
 
   const { data: userAccountsData } = useQuery(GET_USER_ACCOUNTS);
   const userAccounts = userAccountsData?.userAccounts ?? [];
 
-  const selectLabel = "Select account";
+  if (account === "" && userAccounts.length > 0) {
+    account = userAccounts[0];
+    setAccount(account);
+  }
+
+  const selectLabel = "Account";
 
   const handleChange = (event: SelectChangeEvent<any>) => {
     setAccount(event.target.value);
@@ -46,7 +52,7 @@ export const LoginPrompt: React.FC = () => {
           <InputLabel>{selectLabel}</InputLabel>
           <Select label={selectLabel} value={account} onChange={handleChange}>
             {userAccounts.map((account: any) => (
-              <MenuItem key={account.id} value={account.name}>
+              <MenuItem key={account.id} value={account}>
                 {account.name}
               </MenuItem>
             ))}
