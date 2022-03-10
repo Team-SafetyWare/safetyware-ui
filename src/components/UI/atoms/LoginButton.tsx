@@ -28,8 +28,7 @@ export const LoginButton: React.FC = () => {
         to="/home"
         variant="contained"
       >
-        <img className={styles.loginButtonMicrosoftLogo} src={MicrosoftLogo} />
-        Log In with Microsoft
+        Log In
       </Button>
     </StyledEngineProvider>
   );
