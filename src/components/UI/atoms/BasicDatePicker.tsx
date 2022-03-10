@@ -4,21 +4,27 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import TextField from "@mui/material/TextField";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import { useAppDispatch } from "../../../store/store";
+import {
+  setGasEndDate,
+  setGasStartDate,
+} from "../../../store/slices/gasPageSlice";
 import {
   setIncidentEndDate,
   setIncidentStartDate,
 } from "../../../store/slices/incidentPageSlice";
 import {
+  setLocationEndDate,
+  setLocationStartDate,
+} from "../../../store/slices/locationPageSlice";
+import { useAppDispatch } from "../../../store/store";
+import {
+  gasPageEndDate,
+  gasPageStartDate,
   incidentPageEndDate,
   incidentPageStartDate,
   locationPageEndDate,
   locationPageStartDate,
 } from "./CustomBoxDates";
-import {
-  setLocationEndDate,
-  setLocationStartDate,
-} from "../../../store/slices/locationPageSlice";
 
 interface BasicDatePickerProps {
   label?: string;
@@ -50,6 +56,12 @@ export default function BasicDatePicker(props: BasicDatePickerProps): any {
         break;
       case locationPageEndDate:
         dispatch(setLocationEndDate(date));
+        break;
+      case gasPageStartDate:
+        dispatch(setGasStartDate(date));
+        break;
+      case gasPageEndDate:
+        dispatch(setGasEndDate(date));
         break;
     }
   }
