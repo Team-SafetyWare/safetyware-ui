@@ -9,7 +9,6 @@ import FormControl from "@mui/material/FormControl";
 import { useQuery } from "@apollo/client";
 import { GET_USER_ACCOUNTS } from "../../../util/queryService";
 import MenuItem from "@mui/material/MenuItem";
-import { getCurrentAccountId } from "../../../index";
 
 const useStyles = makeStyles({
   loginBox: {
@@ -32,7 +31,8 @@ export const LoginPrompt: React.FC = () => {
   let [account, setAccount]: [any, any] = useState("");
 
   const { data: userAccountsData } = useQuery(GET_USER_ACCOUNTS);
-  const userAccounts = userAccountsData?.userAccounts ?? [];
+  let userAccounts = userAccountsData?.userAccounts ?? [];
+  userAccounts = Array.from(userAccounts).sort().reverse();
 
   const setAndStoreAccount = (account: any) => {
     setAccount(account);
@@ -40,7 +40,7 @@ export const LoginPrompt: React.FC = () => {
   };
 
   if (account === "" && userAccounts.length > 0) {
-    account = Array.from(userAccounts).sort()[0];
+    account = userAccounts[0];
     setAndStoreAccount(account);
   }
 
