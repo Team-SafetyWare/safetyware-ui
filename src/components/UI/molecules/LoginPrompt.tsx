@@ -33,15 +33,20 @@ export const LoginPrompt: React.FC = () => {
   const { data: userAccountsData } = useQuery(GET_USER_ACCOUNTS);
   const userAccounts = userAccountsData?.userAccounts ?? [];
 
+  const setAndStoreAccount = (account: any) => {
+    setAccount(account);
+    localStorage.setItem("user_account_id", account.id);
+  };
+
   if (account === "" && userAccounts.length > 0) {
     account = Array.from(userAccounts).sort()[0];
-    setAccount(account);
+    setAndStoreAccount(account);
   }
 
   const selectLabel = "Account";
 
   const handleChange = (event: SelectChangeEvent<any>) => {
-    setAccount(event.target.value);
+    setAndStoreAccount(event.target.value);
   };
 
   return (
