@@ -1,5 +1,5 @@
 import { GoogleMap, Polyline } from "@react-google-maps/api";
-import React from "react";
+import React, { useState } from "react";
 import ControlPosition = google.maps.ControlPosition;
 
 interface TravelHistoryTrailProps {
@@ -28,9 +28,15 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
     width: "100%",
   };
 
+  const [showLegend, setShowLegend] = useState(false);
+
   return (
     <>
-      <div id={"travel-legend"} style={{ backgroundColor: "red" }}>
+      <div
+        id={"travel-legend"}
+        style={{ backgroundColor: "red" }}
+        hidden={!showLegend}
+      >
         <h3>Hello. I am the legend.</h3>
       </div>
       <GoogleMap
@@ -42,6 +48,9 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
           const controls = map.controls[ControlPosition.RIGHT_TOP];
           const legend = document.getElementById("travel-legend");
           controls.push(legend);
+        }}
+        onTilesLoaded={() => {
+          setShowLegend(true);
         }}
       >
         {segments.map((segment: any) => (
