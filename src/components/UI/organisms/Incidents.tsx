@@ -5,7 +5,7 @@ import {StyledEngineProvider} from "@mui/material/styles";
 import {makeStyles} from "@mui/styles";
 import React, {useEffect, useState} from "react";
 import {
-    selectIncidentPageEndDate, selectIncidentPageName, selectIncidentPagePersonId,
+    selectIncidentPageEndDate, selectIncidentPagePersonId,
     selectIncidentPageStartDate,
 } from "../../../store/slices/incidentPageSlice";
 import {useAppSelector} from "../../../store/store";
@@ -91,12 +91,10 @@ export const Incidents: React.FC = () => {
 
     const startDate = useAppSelector(selectIncidentPageStartDate);
     const endDate = useAppSelector(selectIncidentPageEndDate);
-    const name = useAppSelector(selectIncidentPageName);
     const filterId = useAppSelector(selectIncidentPagePersonId);
 
-    const {loading, data: personIncidentData} = useQuery(GET_INCIDENTS_FOR_PERSON, {
+    const {data: personIncidentData} = useQuery(GET_INCIDENTS_FOR_PERSON, {
         variables: {
-            // personId: "cqrtqanwf3p1qy97mefxvcjw",
             personId: filterId,
             filter: {
                 minTimestamp: startDate !== "" ? new Date(startDate) : null,
