@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client";
+import { gql } from "@apollo/client";
 
 export const GET_USERS = gql`
   {
@@ -59,17 +59,17 @@ export const GET_INCIDENTS_FOR_COMPANY = gql`
 `;
 
 export const GET_INCIDENTS_FOR_PERSON = gql`
-    query ($personId: ID!, $filter: IncidentFilter) {
-      person (id: $personId) {
-        id
-        name
-        incidents (filter: $filter) {
-          coordinates
-          timestamp
-          type
-        }
+  query ($personId: ID!, $filter: IncidentFilter) {
+    person(id: $personId) {
+      id
+      name
+      incidents(filter: $filter) {
+        coordinates
+        timestamp
+        type
       }
     }
+  }
 `;
 
 export const GET_INCIDENT_STATS = gql`
