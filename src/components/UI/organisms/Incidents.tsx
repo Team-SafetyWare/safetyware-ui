@@ -3,9 +3,9 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {IconButton, Modal, useMediaQuery} from "@mui/material";
 import {StyledEngineProvider} from "@mui/material/styles";
 import {makeStyles} from "@mui/styles";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
-    selectIncidentPageEndDate,
+    selectIncidentPageEndDate, selectIncidentPagePersonId,
     selectIncidentPageStartDate,
 } from "../../../store/slices/incidentPageSlice";
 import {useAppSelector} from "../../../store/store";
@@ -91,10 +91,11 @@ export const Incidents: React.FC = () => {
 
     const startDate = useAppSelector(selectIncidentPageStartDate);
     const endDate = useAppSelector(selectIncidentPageEndDate);
+    const personId = useAppSelector(selectIncidentPagePersonId);
 
     const {data: personIncidentData} = useQuery(GET_INCIDENTS_FOR_PERSON, {
         variables: {
-            personId: "cqrtqanwf3p1qy97mefxvcjw",
+            personId: personId,
             filter: {
                 minTimestamp: startDate !== "" ? new Date(startDate) : null,
                 maxTimestamp: endDate !== "" ? new Date(endDate) : null,
@@ -102,7 +103,6 @@ export const Incidents: React.FC = () => {
         },
     });
 
-    console.log(personIncidentData)
 
     const {data: companyIncidentsData} = useQuery(GET_INCIDENTS_FOR_COMPANY, {
         variables: {
@@ -114,23 +114,48 @@ export const Incidents: React.FC = () => {
         },
     });
 
-    const incidents: any[] =
-        companyIncidentsData?.company.people
-            .map((person: any) =>
-                person.incidents.map((incident: any) => {
-                    return {
-                        coordinates: {
-                            lng: incident.coordinates[0],
-                            lat: incident.coordinates[1],
-                        },
-                        personName: person.name,
-                        timestamp: new Date(incident.timestamp),
-                        type: incident.type,
-                        companyName: companyIncidentsData.company.name,
-                    };
-                })
-            )
-            .flat() ?? [];
+    const [incidents, setIncidents] = React.useState<any>([]);
+
+    useEffect(() => {
+        if (personId !== "") {
+            const incidents: any[] =
+                personIncidentData?.person.incidents
+                    .map((incident: any) => {
+                        console.log(incident)
+                            return {
+                                coordinates: {
+                                    lng: incident.coordinates[0],
+                                    lat: incident.coordinates[1],
+                                },
+                                personName: personIncidentData.name,
+                                timestamp: new Date(incident.timestamp),
+                                type: incident.type,
+                            };
+                        }
+                    ).flat() ?? [];
+            setIncidents(incidents)
+        } else {
+            const incidents: any[] =
+                companyIncidentsData?.company.people
+                    .map((person: any) =>
+                        person.incidents.map((incident: any) => {
+                            return {
+                                coordinates: {
+                                    lng: incident.coordinates[0],
+                                    lat: incident.coordinates[1],
+                                },
+                                personName: person.name,
+                                timestamp: new Date(incident.timestamp),
+                                type: incident.type,
+                                companyName: companyIncidentsData.company.name,
+                            };
+                        })
+                    )
+                    .flat() ?? [];
+            setIncidents(incidents)
+        }
+    }, [personIncidentData, personId])
+
 
     const {data: incidentStatsData} = useQuery(GET_INCIDENT_STATS, {
         variables: {

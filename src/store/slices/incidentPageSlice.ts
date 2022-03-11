@@ -5,12 +5,14 @@ type IncidentPageState = {
   startDate: string;
   endDate: string;
   name: string;
+  personId: string;
 };
 
 export const incidentPageDefaultState: IncidentPageState = {
   startDate: "",
   endDate: "",
-  name: "All",
+  name: "",
+  personId: "",
 };
 
 export const incidentPageSlice = createSlice({
@@ -26,10 +28,13 @@ export const incidentPageSlice = createSlice({
     setIncidentName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
     },
+    setIncidentPersonId: (state, action: PayloadAction<string>) => {
+      state.personId = action.payload;
+    },
   },
 });
 
-export const { setIncidentStartDate, setIncidentEndDate, setIncidentName } =
+export const { setIncidentStartDate, setIncidentEndDate, setIncidentName, setIncidentPersonId } =
   incidentPageSlice.actions;
 
 export const selectIncidentPageStartDate = (state: RootState): any =>
@@ -38,3 +43,5 @@ export const selectIncidentPageEndDate = (state: RootState): any =>
   state.incidentPage.endDate;
 export const selectIncidentPageName = (state: RootState): any =>
   state.incidentPage.name;
+export const selectIncidentPagePersonId = (state: RootState): any =>
+    state.incidentPage.personId;
