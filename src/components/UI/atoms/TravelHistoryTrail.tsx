@@ -28,7 +28,12 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   };
 
   return (
-    <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
+    <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      zoom={12}
+      center={center}
+      options={{ gestureHandling: "greedy" }}
+    >
       {segments.map((segment: any) => (
         // eslint-disable-next-line react/jsx-key
         <Polyline
