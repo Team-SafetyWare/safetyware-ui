@@ -10,7 +10,7 @@ import {
 } from "../../../store/slices/incidentPageSlice";
 import {useAppSelector} from "../../../store/store";
 import theme from "../../../Theme";
-import {GET_INCIDENTS_FOR_COMPANY, GET_INCIDENT_STATS} from "../../../util/queryService";
+import {GET_INCIDENTS_FOR_COMPANY, GET_INCIDENT_STATS, GET_INCIDENTS_FOR_PERSON} from "../../../util/queryService";
 import {BarGraph} from "../atoms/BarGraph";
 import {CustomAccordion} from "../atoms/CustomAccordion";
 import IncidentDotMap from "../atoms/IncidentDotMap";
@@ -92,7 +92,19 @@ export const Incidents: React.FC = () => {
     const startDate = useAppSelector(selectIncidentPageStartDate);
     const endDate = useAppSelector(selectIncidentPageEndDate);
 
-    const {data: incidentsData} = useQuery(GET_INCIDENTS_FOR_COMPANY, {
+    const {data: personIncidentData} = useQuery(GET_INCIDENTS_FOR_PERSON, {
+        variables: {
+            personId: "cqrtqanwf3p1qy97mefxvcjw",
+            filter: {
+                minTimestamp: startDate !== "" ? new Date(startDate) : null,
+                maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+            },
+        },
+    });
+
+    console.log(personIncidentData)
+
+    const {data: companyIncidentsData} = useQuery(GET_INCIDENTS_FOR_COMPANY, {
         variables: {
             companyId: user?.company.id,
             filter: {
@@ -103,7 +115,7 @@ export const Incidents: React.FC = () => {
     });
 
     const incidents: any[] =
-        incidentsData?.company.people
+        companyIncidentsData?.company.people
             .map((person: any) =>
                 person.incidents.map((incident: any) => {
                     return {
@@ -114,7 +126,7 @@ export const Incidents: React.FC = () => {
                         personName: person.name,
                         timestamp: new Date(incident.timestamp),
                         type: incident.type,
-                        companyName: incidentsData.company.name,
+                        companyName: companyIncidentsData.company.name,
                     };
                 })
             )
