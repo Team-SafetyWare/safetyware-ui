@@ -12,9 +12,11 @@ import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-import { getCurrentUser } from "../../../index";
+import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import theme from "../../../Theme";
+
+const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
 const center = {
   lat: 51.049999,
@@ -69,33 +71,56 @@ export const Locations: React.FC = () => {
     variables: { companyId: user?.company.id },
   });
 
-  const locations: any[] =
-    locationsData?.company.people
-      .map((person: any) =>
-        person.locationReadings.map((location: any) => {
-          return {
-            coordinates: {
-              lng: location.coordinates[0],
-              lat: location.coordinates[1],
-            },
-            timestamp: location.timestamp,
-          };
-        })
-      )
-      .flat() ?? [];
+  const people =
+    (locationsData &&
+      Array.from(locationsData.company.people).sort((p1: any, p2: any) =>
+        p1.name > p2.name ? 1 : -1
+      )) ??
+    [];
 
-  const travelTrail: any[] =
-    locationsData?.company.people
-      .map((person: any) =>
-        person.locationReadings.map((location: any) => {
-          return {
+  const locations: any[] = people
+    .map((person: any) =>
+      person.locationReadings.map((location: any) => {
+        return {
+          coordinates: {
             lng: location.coordinates[0],
             lat: location.coordinates[1],
-            timestamp: location.timestamp,
-          };
-        })
-      )
-      .flat() ?? [];
+          },
+          timestamp: location.timestamp,
+        };
+      })
+    )
+    .flat();
+
+  const travelData: any[] = people.map((person: any, personIndex: number) => {
+    const segments = [];
+    for (const location of person.locationReadings) {
+      const segment = segments[segments.length - 1];
+      const prevTime = new Date(
+        segment?.[segment.length - 1]?.timestamp
+      )?.getTime();
+      const nextTime = new Date(location.timestamp)?.getTime();
+      if (prevTime + TRAIL_SPLIT_MS > nextTime) {
+        segment.push(location);
+      } else {
+        segments.push([location]);
+      }
+    }
+    const mapped_segments = segments.map((segment: any) => {
+      return segment.map((location: any) => {
+        return {
+          lng: location.coordinates[0],
+          lat: location.coordinates[1],
+          timestamp: location.timestamp,
+        };
+      });
+    });
+    return {
+      name: person.name,
+      color: PEOPLE_COLORS[personIndex % PEOPLE_COLORS.length],
+      segments: mapped_segments,
+    };
+  });
 
   const visualizations = [
     "Raw Locations Data Table",
@@ -143,7 +168,7 @@ export const Locations: React.FC = () => {
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
-                <TravelHistoryTrail center={center} path={travelTrail} />
+                <TravelHistoryTrail center={center} data={travelData} />
               }
             />
             <CustomAccordion
@@ -195,7 +220,7 @@ export const Locations: React.FC = () => {
             )}
             {visualization == visualizations[1] && (
               <div className={styles.visualization}>
-                <TravelHistoryTrail center={center} path={travelTrail} />
+                <TravelHistoryTrail center={center} data={travelData} />
               </div>
             )}
             {visualization == visualizations[2] && (
