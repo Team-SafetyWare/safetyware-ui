@@ -12,7 +12,7 @@ import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-import { getCurrentUser } from "../../../index";
+import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import theme from "../../../Theme";
 
@@ -90,9 +90,10 @@ export const Locations: React.FC = () => {
     )
     .flat();
 
-  const travelData: any[] = people.map((person: any) => {
+  const travelData: any[] = people.map((person: any, personIndex: number) => {
     return {
       name: person.name,
+      color: PEOPLE_COLORS[personIndex % PEOPLE_COLORS.length],
       segments: [
         person.locationReadings.map((location: any) => {
           return {
