@@ -46,7 +46,6 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
           userSelect: "none",
           direction: "ltr",
           overflow: "hidden",
-          textAlign: "center",
           verticalAlign: "middle",
           color: "rgb(86, 86, 86)",
           fontFamily: "Roboto, Arial, sans-serif",
@@ -56,7 +55,22 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
           boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px",
         }}
       >
-        <h3>Hello. I am the legend.</h3>
+        <p>Legend</p>
+        {props.data.map((person: any) => (
+          // eslint-disable-next-line react/jsx-key
+          <div>
+            <span
+              style={{
+                height: "16px",
+                width: "16px",
+                backgroundColor: person.color,
+                borderRadius: "50%",
+                display: "inline-block",
+              }}
+            />
+            <p>{person.name}</p>
+          </div>
+        ))}
       </div>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
