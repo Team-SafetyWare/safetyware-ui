@@ -10,10 +10,8 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { GET_PERSONS } from "../../../util/queryService";
-import {useAppDispatch, useAppSelector} from "../../../store/store";
+import {useAppDispatch} from "../../../store/store";
 import {
-  selectIncidentPageName,
-  selectIncidentPagePersonId,
   setIncidentName,
   setIncidentPersonId
 } from "../../../store/slices/incidentPageSlice";
