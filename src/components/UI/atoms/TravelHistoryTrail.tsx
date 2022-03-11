@@ -20,7 +20,7 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   const options: PolylineOptions = {
     strokeColor: "#FF0000",
     strokeOpacity: 0.8,
-    strokeWeight: 2,
+    strokeWeight: 3,
     clickable: false,
     draggable: false,
     editable: false,
