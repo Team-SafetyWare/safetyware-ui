@@ -59,16 +59,19 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
         {props.data.map((person: any) => (
           // eslint-disable-next-line react/jsx-key
           <div>
-            <span
-              style={{
-                height: "16px",
-                width: "16px",
-                backgroundColor: person.color,
-                borderRadius: "50%",
-                display: "inline-block",
-              }}
-            />
-            <p>{person.name}</p>
+            <p>
+              <span
+                style={{
+                  height: "16px",
+                  width: "16px",
+                  backgroundColor: person.color,
+                  borderRadius: "50%",
+                  display: "inline-block",
+                  marginRight: "8px",
+                }}
+              />
+              {person.name}
+            </p>
           </div>
         ))}
       </div>
