@@ -153,7 +153,7 @@ export const Locations: React.FC = () => {
             />
             <CustomAccordion
               defaultExpanded={true}
-              accordionHeight={"400px"}
+              accordionHeight={"600px"}
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
@@ -161,7 +161,7 @@ export const Locations: React.FC = () => {
               }
             />
             <CustomAccordion
-              accordionHeight={"400px"}
+              accordionHeight={"600px"}
               accordionWidth={""}
               accordionTitle={visualizations[2]}
               component={
