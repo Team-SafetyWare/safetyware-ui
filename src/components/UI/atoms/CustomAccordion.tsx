@@ -11,6 +11,7 @@ interface CustomAccordionProps {
   accordionWidth?: string;
   accordionTitle?: string;
   component?: any;
+  defaultExpanded?: boolean;
 }
 
 const useStyles = makeStyles({
