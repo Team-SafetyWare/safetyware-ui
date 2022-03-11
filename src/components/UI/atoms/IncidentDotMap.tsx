@@ -45,7 +45,7 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
 
   function createMarker(incident: IncidentReadings) {
     const type = incident.type;
-    let markerIcon = GenericIcon;
+    let markerIcon: any;
     switch (type) {
       case "Low battery": {
         markerIcon = BatteryIcon;
@@ -138,7 +138,12 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
 
   return (
     <>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={zoom}
+        options={{ gestureHandling: "greedy" }}
+      >
         {filteredIncidents.map((incident: IncidentReadings) =>
           createMarker(incident)
         )}
