@@ -45,7 +45,7 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
         center={center}
         options={{ gestureHandling: "greedy" }}
         onLoad={(map) => {
-          const controls = map.controls[ControlPosition.RIGHT_TOP];
+          const controls = map.controls[ControlPosition.LEFT_TOP];
           const legend = document.getElementById("travel-legend");
           controls.push(legend);
         }}
