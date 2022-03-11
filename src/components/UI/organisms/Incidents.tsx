@@ -5,7 +5,7 @@ import {StyledEngineProvider} from "@mui/material/styles";
 import {makeStyles} from "@mui/styles";
 import React, {useEffect, useState} from "react";
 import {
-    selectIncidentPageEndDate, selectIncidentPagePersonId,
+    selectIncidentPageEndDate, selectIncidentPageName, selectIncidentPagePersonId,
     selectIncidentPageStartDate,
 } from "../../../store/slices/incidentPageSlice";
 import {useAppSelector} from "../../../store/store";
@@ -91,11 +91,13 @@ export const Incidents: React.FC = () => {
 
     const startDate = useAppSelector(selectIncidentPageStartDate);
     const endDate = useAppSelector(selectIncidentPageEndDate);
-    const personId = useAppSelector(selectIncidentPagePersonId);
+    const name = useAppSelector(selectIncidentPageName);
+    const filterId = useAppSelector(selectIncidentPagePersonId);
 
-    const {data: personIncidentData} = useQuery(GET_INCIDENTS_FOR_PERSON, {
+    const {loading, data: personIncidentData} = useQuery(GET_INCIDENTS_FOR_PERSON, {
         variables: {
-            personId: personId,
+            // personId: "cqrtqanwf3p1qy97mefxvcjw",
+            personId: filterId,
             filter: {
                 minTimestamp: startDate !== "" ? new Date(startDate) : null,
                 maxTimestamp: endDate !== "" ? new Date(endDate) : null,
@@ -117,23 +119,25 @@ export const Incidents: React.FC = () => {
     const [incidents, setIncidents] = React.useState<any>([]);
 
     useEffect(() => {
-        if (personId !== "") {
-            const incidents: any[] =
-                personIncidentData?.person.incidents
-                    .map((incident: any) => {
-                        console.log(incident)
-                            return {
-                                coordinates: {
-                                    lng: incident.coordinates[0],
-                                    lat: incident.coordinates[1],
-                                },
-                                personName: personIncidentData.name,
-                                timestamp: new Date(incident.timestamp),
-                                type: incident.type,
-                            };
-                        }
-                    ).flat() ?? [];
-            setIncidents(incidents)
+        if (filterId !== "") {
+            if (personIncidentData && personIncidentData.person !== null) {
+                const incidents: any[] =
+                    personIncidentData.person.incidents
+                        .map((incident: any) => {
+                                console.log(incident)
+                                return {
+                                    coordinates: {
+                                        lng: incident.coordinates[0],
+                                        lat: incident.coordinates[1],
+                                    },
+                                    personName: personIncidentData.person.name,
+                                    timestamp: new Date(incident.timestamp),
+                                    type: incident.type,
+                                };
+                            }
+                        ).flat() ?? [];
+                setIncidents(incidents)
+            }
         } else {
             const incidents: any[] =
                 companyIncidentsData?.company.people
@@ -154,7 +158,7 @@ export const Incidents: React.FC = () => {
                     .flat() ?? [];
             setIncidents(incidents)
         }
-    }, [personIncidentData, personId])
+    }, [companyIncidentsData, personIncidentData, startDate, endDate, filterId])
 
 
     const {data: incidentStatsData} = useQuery(GET_INCIDENT_STATS, {

@@ -38,9 +38,6 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   useStyles();
   const dispatch = useAppDispatch();
   const label = props.label;
-  const personId = useAppSelector(selectIncidentPagePersonId);
-  const personName = useAppSelector(selectIncidentPageName);
-
   const user = getCurrentUser();
 
   const { data: personData } = useQuery(GET_PERSONS, {
