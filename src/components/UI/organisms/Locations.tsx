@@ -146,24 +146,13 @@ export const Locations: React.FC = () => {
               }
             />
             <PageSectionHeader
-              sectionTitle={"Raw Locations Data"}
-              sectionDescription={
-                "Explore raw locations data through a date-filtered data table."
-              }
-            />
-            <CustomAccordion
-              accordionHeight={"auto"}
-              accordionWidth={""}
-              accordionTitle={visualizations[0]}
-              component={<CustomCollapsibleTable />}
-            />
-            <PageSectionHeader
               sectionTitle={"Locations Visualizations"}
               sectionDescription={
                 "Visualize locations data through a travel trail and a heat map indicating incident frequency based on location."
               }
             />
             <CustomAccordion
+              defaultExpanded={true}
               accordionHeight={"400px"}
               accordionWidth={""}
               accordionTitle={visualizations[1]}
@@ -182,6 +171,18 @@ export const Locations: React.FC = () => {
                   zoom={10}
                 />
               }
+            />
+            <PageSectionHeader
+              sectionTitle={"Raw Locations Data"}
+              sectionDescription={
+                "Explore raw locations data through a date-filtered data table."
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"auto"}
+              accordionWidth={""}
+              accordionTitle={visualizations[0]}
+              component={<CustomCollapsibleTable />}
             />
             <IconButton
               className={styles.filterButton}
