@@ -35,7 +35,7 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
           path={segment.path}
           options={{
             strokeColor: segment.color,
-            strokeOpacity: 0.75,
+            strokeOpacity: 1,
             strokeWeight: 3,
             clickable: false,
             draggable: false,
