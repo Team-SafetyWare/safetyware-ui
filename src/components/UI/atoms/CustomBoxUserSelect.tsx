@@ -11,7 +11,10 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import { GET_PERSONS } from "../../../util/queryService";
 import { useAppDispatch } from "../../../store/store";
-import { setIncidentName } from "../../../store/slices/incidentPageSlice";
+import {
+  setIncidentName,
+  setIncidentPersonId,
+} from "../../../store/slices/incidentPageSlice";
 import { incidentPageLabel } from "../organisms/Incidents";
 import { getCurrentUser } from "../../../index";
 
@@ -33,7 +36,6 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   useStyles();
   const dispatch = useAppDispatch();
   const label = props.label;
-
   const user = getCurrentUser();
 
   const { data: personData } = useQuery(GET_PERSONS, {
@@ -44,16 +46,20 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
 
   function getMenuItemPerson(person: any) {
     return (
-      <MenuItem value={person} onClick={() => updateNameFilter(person.name)}>
+      <MenuItem
+        value={person}
+        onClick={() => updateNameAndIdFilter(person.name, person.id)}
+      >
         {person.name}
       </MenuItem>
     );
   }
 
-  function updateNameFilter(name: string) {
+  function updateNameAndIdFilter(name: string, id: string) {
     switch (label) {
       case incidentPageLabel:
         dispatch(setIncidentName(name));
+        dispatch(setIncidentPersonId(id));
         break;
     }
   }
