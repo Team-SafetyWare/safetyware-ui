@@ -8,13 +8,18 @@ interface TravelHistoryTrailProps {
 export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   props
 ) => {
-  // const paths = props.data.map((person: any) => person.segments).flat();
-  const segments = props.data.map((person: any) => {
-    return {
-      path: person.segments.flat(),
-      color: person.color,
-    };
-  });
+  const segments = props.data
+    .map((person: any) => {
+      return person.segments
+        .map((segment: any) => {
+          return {
+            path: segment,
+            color: person.color,
+          };
+        })
+        .flat();
+    })
+    .flat();
   const center = props.center;
 
   const mapContainerStyle = {

@@ -16,6 +16,8 @@ import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import theme from "../../../Theme";
 
+const TRAIL_SPLIT_MS = 10 * 60 * 1000;
+
 const center = {
   lat: 51.049999,
   lng: -114.1283,
@@ -91,18 +93,32 @@ export const Locations: React.FC = () => {
     .flat();
 
   const travelData: any[] = people.map((person: any, personIndex: number) => {
+    const segments = [];
+    for (const location of person.locationReadings) {
+      const segment = segments[segments.length - 1];
+      const prevTime = new Date(
+        segment?.[segment.length - 1]?.timestamp
+      )?.getTime();
+      const nextTime = new Date(location.timestamp)?.getTime();
+      if (prevTime + TRAIL_SPLIT_MS > nextTime) {
+        segment.push(location);
+      } else {
+        segments.push([location]);
+      }
+    }
+    const mapped_segments = segments.map((segment: any) => {
+      return segment.map((location: any) => {
+        return {
+          lng: location.coordinates[0],
+          lat: location.coordinates[1],
+          timestamp: location.timestamp,
+        };
+      });
+    });
     return {
       name: person.name,
       color: PEOPLE_COLORS[personIndex % PEOPLE_COLORS.length],
-      segments: [
-        person.locationReadings.map((location: any) => {
-          return {
-            lng: location.coordinates[0],
-            lat: location.coordinates[1],
-            timestamp: location.timestamp,
-          };
-        }),
-      ],
+      segments: mapped_segments,
     };
   });
 
