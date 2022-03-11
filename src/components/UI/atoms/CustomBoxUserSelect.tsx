@@ -10,8 +10,13 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { GET_PERSONS } from "../../../util/queryService";
-import { useAppDispatch } from "../../../store/store";
-import { setIncidentName } from "../../../store/slices/incidentPageSlice";
+import {useAppDispatch, useAppSelector} from "../../../store/store";
+import {
+  selectIncidentPageName,
+  selectIncidentPagePersonId,
+  setIncidentName,
+  setIncidentPersonId
+} from "../../../store/slices/incidentPageSlice";
 import { incidentPageLabel } from "../organisms/Incidents";
 import { getCurrentUser } from "../../../index";
 
@@ -33,6 +38,8 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   useStyles();
   const dispatch = useAppDispatch();
   const label = props.label;
+  const personId = useAppSelector(selectIncidentPagePersonId);
+  const personName = useAppSelector(selectIncidentPageName);
 
   const user = getCurrentUser();
 
@@ -44,16 +51,17 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
 
   function getMenuItemPerson(person: any) {
     return (
-      <MenuItem value={person} onClick={() => updateNameFilter(person.name)}>
+      <MenuItem value={person} onClick={() => updateNameAndIdFilter(person.name, person.id)}>
         {person.name}
       </MenuItem>
     );
   }
 
-  function updateNameFilter(name: string) {
+  function updateNameAndIdFilter(name: string, id: string) {
     switch (label) {
       case incidentPageLabel:
         dispatch(setIncidentName(name));
+        dispatch(setIncidentPersonId(id));
         break;
     }
   }
