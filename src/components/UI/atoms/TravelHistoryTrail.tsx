@@ -34,8 +34,27 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
     <>
       <div
         id={"travel-legend"}
-        style={{ backgroundColor: "red" }}
         hidden={!showLegend}
+        style={{
+          background: "rgb(255, 255, 255) none repeat scroll 0% 0% padding-box",
+          border: "0px none",
+          marginLeft: "10px",
+          padding: "0px 17px",
+          textTransform: "none",
+          appearance: "none",
+          cursor: "pointer",
+          userSelect: "none",
+          direction: "ltr",
+          overflow: "hidden",
+          textAlign: "center",
+          verticalAlign: "middle",
+          color: "rgb(86, 86, 86)",
+          fontFamily: "Roboto, Arial, sans-serif",
+          fontSize: "18px",
+          borderBottomRightRadius: "2px",
+          borderTopRightRadius: "2px",
+          boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px",
+        }}
       >
         <h3>Hello. I am the legend.</h3>
       </div>
