@@ -3,14 +3,19 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   selectIncidentPageEndDate,
+  selectIncidentPagePersonId,
   selectIncidentPageStartDate,
 } from "../../../store/slices/incidentPageSlice";
 import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
-import { GET_INCIDENTS, GET_INCIDENT_STATS } from "../../../util/queryService";
+import {
+  GET_INCIDENTS_FOR_COMPANY,
+  GET_INCIDENT_STATS,
+  GET_INCIDENTS_FOR_PERSON,
+} from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import IncidentDotMap from "../atoms/IncidentDotMap";
@@ -89,30 +94,73 @@ export const Incidents: React.FC = () => {
 
   const user = getCurrentUser();
 
-  const { data: incidentsData } = useQuery(GET_INCIDENTS, {
-    variables: { companyId: user?.company.id },
-  });
-
-  const incidents: any[] =
-    incidentsData?.company.people
-      .map((person: any) =>
-        person.incidents.map((incident: any) => {
-          return {
-            coordinates: {
-              lng: incident.coordinates[0],
-              lat: incident.coordinates[1],
-            },
-            personName: person.name,
-            timestamp: new Date(incident.timestamp),
-            type: incident.type,
-            companyName: incidentsData.company.name,
-          };
-        })
-      )
-      .flat() ?? [];
-
   const startDate = useAppSelector(selectIncidentPageStartDate);
   const endDate = useAppSelector(selectIncidentPageEndDate);
+  const filterId = useAppSelector(selectIncidentPagePersonId);
+
+  const { data: personIncidentData } = useQuery(GET_INCIDENTS_FOR_PERSON, {
+    variables: {
+      personId: filterId,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
+    },
+  });
+
+  const { data: companyIncidentsData } = useQuery(GET_INCIDENTS_FOR_COMPANY, {
+    variables: {
+      companyId: user?.company.id,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
+    },
+  });
+
+  const [incidents, setIncidents] = React.useState<any>([]);
+
+  useEffect(() => {
+    if (filterId !== "") {
+      if (personIncidentData && personIncidentData.person !== null) {
+        const incidents: any[] =
+          personIncidentData.person.incidents
+            .map((incident: any) => {
+              console.log(incident);
+              return {
+                coordinates: {
+                  lng: incident.coordinates[0],
+                  lat: incident.coordinates[1],
+                },
+                personName: personIncidentData.person.name,
+                timestamp: new Date(incident.timestamp),
+                type: incident.type,
+              };
+            })
+            .flat() ?? [];
+        setIncidents(incidents);
+      }
+    } else {
+      const incidents: any[] =
+        companyIncidentsData?.company.people
+          .map((person: any) =>
+            person.incidents.map((incident: any) => {
+              return {
+                coordinates: {
+                  lng: incident.coordinates[0],
+                  lat: incident.coordinates[1],
+                },
+                personName: person.name,
+                timestamp: new Date(incident.timestamp),
+                type: incident.type,
+                companyName: companyIncidentsData.company.name,
+              };
+            })
+          )
+          .flat() ?? [];
+      setIncidents(incidents);
+    }
+  }, [companyIncidentsData, personIncidentData, startDate, endDate, filterId]);
 
   const { data: incidentStatsData } = useQuery(GET_INCIDENT_STATS, {
     variables: {
