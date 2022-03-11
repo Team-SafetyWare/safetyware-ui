@@ -67,7 +67,12 @@ export const HazardousAreaHeatMap: React.FC<HazardousAreaHeatMapProps> = (
   }, [accidents, startDate, endDate]);
 
   return (
-    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={zoom}
+      options={{ gestureHandling: "greedy" }}
+    >
       <HeatmapLayer data={filteredAccidents} />
     </GoogleMap>
   );

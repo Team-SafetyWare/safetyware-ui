@@ -146,6 +146,33 @@ export const Locations: React.FC = () => {
               }
             />
             <PageSectionHeader
+              sectionTitle={"Locations Visualizations"}
+              sectionDescription={
+                "Visualize locations data through a travel trail and a heat map indicating incident frequency based on location."
+              }
+            />
+            <CustomAccordion
+              defaultExpanded={true}
+              accordionHeight={"600px"}
+              accordionWidth={""}
+              accordionTitle={visualizations[1]}
+              component={
+                <TravelHistoryTrail center={center} data={travelData} />
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"600px"}
+              accordionWidth={""}
+              accordionTitle={visualizations[2]}
+              component={
+                <HazardousAreaHeatMap
+                  accidents={locations}
+                  center={center}
+                  zoom={10}
+                />
+              }
+            />
+            <PageSectionHeader
               sectionTitle={"Raw Locations Data"}
               sectionDescription={
                 "Explore raw locations data through a date-filtered data table."
@@ -156,32 +183,6 @@ export const Locations: React.FC = () => {
               accordionWidth={""}
               accordionTitle={visualizations[0]}
               component={<CustomCollapsibleTable />}
-            />
-            <PageSectionHeader
-              sectionTitle={"Locations Visualizations"}
-              sectionDescription={
-                "Visualize locations data through a travel trail and a heat map indicating incident frequency based on location."
-              }
-            />
-            <CustomAccordion
-              accordionHeight={"400px"}
-              accordionWidth={""}
-              accordionTitle={visualizations[1]}
-              component={
-                <TravelHistoryTrail center={center} data={travelData} />
-              }
-            />
-            <CustomAccordion
-              accordionHeight={"400px"}
-              accordionWidth={""}
-              accordionTitle={visualizations[2]}
-              component={
-                <HazardousAreaHeatMap
-                  accidents={locations}
-                  center={center}
-                  zoom={10}
-                />
-              }
             />
             <IconButton
               className={styles.filterButton}
