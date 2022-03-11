@@ -107,16 +107,6 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     );
   }
 
-  function matchesPerson(name: string): boolean {
-    return name === filterName || filterName === "All";
-  }
-
-  function inDateRange(date: Date, start: Date, end: Date): boolean {
-    return !(
-      date.getTime() < start.getTime() || date.getTime() > end.getTime()
-    );
-  }
-
   useEffect(() => {
     updateIncidents(() => props.incidents);
   }, [props]);
@@ -139,18 +129,6 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     updateMarkerWindows([]);
     updateHoverMarker(undefined);
     incidents.map((incident: any) => {
-      if (
-        !inDateRange(
-          new Date(incident.timestamp),
-          new Date(startDate),
-          new Date(endDate)
-        )
-      ) {
-        return;
-      }
-      if (!matchesPerson(incident.personName)) {
-        return;
-      }
       updateFilteredIncidents((filteredIncidents) => [
         ...filteredIncidents,
         createIncident(incident),

@@ -42,13 +42,13 @@ export const GET_LOCATIONS = gql`
   }
 `;
 
-export const GET_INCIDENTS = gql`
-  query ($companyId: ID!) {
+export const GET_INCIDENTS_FOR_COMPANY = gql`
+  query ($companyId: ID!, $filter: IncidentFilter) {
     company(id: $companyId) {
       name
       people {
         name
-        incidents {
+        incidents(filter: $filter) {
           coordinates
           timestamp
           type
