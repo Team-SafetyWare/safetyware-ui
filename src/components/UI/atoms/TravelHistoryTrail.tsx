@@ -1,6 +1,5 @@
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import React from "react";
-import PolylineOptions = google.maps.PolylineOptions;
 
 interface TravelHistoryTrailProps {
   center?: any;
@@ -9,7 +8,13 @@ interface TravelHistoryTrailProps {
 export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   props
 ) => {
-  const paths = props.data.map((person: any) => person.segments).flat();
+  // const paths = props.data.map((person: any) => person.segments).flat();
+  const segments = props.data.map((person: any) => {
+    return {
+      path: person.segments.flat(),
+      color: person.color,
+    };
+  });
   const center = props.center;
 
   const mapContainerStyle = {
@@ -17,22 +22,23 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
     width: "100%",
   };
 
-  const options: PolylineOptions = {
-    strokeColor: "#FF0000",
-    strokeOpacity: 0.8,
-    strokeWeight: 3,
-    clickable: false,
-    draggable: false,
-    editable: false,
-    visible: true,
-    zIndex: 1,
-  };
-
   return (
     <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
-      {paths.map((path: any) => (
+      {segments.map((segment: any) => (
         // eslint-disable-next-line react/jsx-key
-        <Polyline path={path} options={options} />
+        <Polyline
+          path={segment.path}
+          options={{
+            strokeColor: segment.color,
+            strokeOpacity: 0.75,
+            strokeWeight: 3,
+            clickable: false,
+            draggable: false,
+            editable: false,
+            visible: true,
+            zIndex: 1,
+          }}
+        />
       ))}
     </GoogleMap>
   );
