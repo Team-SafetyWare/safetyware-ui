@@ -4,18 +4,12 @@ import PolylineOptions = google.maps.PolylineOptions;
 
 interface TravelHistoryTrailProps {
   center?: any;
-  path: TravelHistoryPoint[];
+  data: any;
 }
-
-export interface TravelHistoryPoint {
-  lat: number;
-  lng: number;
-  timestamp: string;
-}
-
 export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   props
 ) => {
+  const paths = props.data.map((person: any) => person.segments).flat();
   const center = props.center;
 
   const mapContainerStyle = {
@@ -36,7 +30,10 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
 
   return (
     <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
-      <Polyline path={props.path} options={options} />
+      {paths.map((path: any) => (
+        // eslint-disable-next-line react/jsx-key
+        <Polyline path={path} options={options} />
+      ))}
     </GoogleMap>
   );
 };

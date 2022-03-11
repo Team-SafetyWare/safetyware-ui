@@ -69,33 +69,41 @@ export const Locations: React.FC = () => {
     variables: { companyId: user?.company.id },
   });
 
-  const locations: any[] =
-    locationsData?.company.people
-      .map((person: any) =>
-        person.locationReadings.map((location: any) => {
-          return {
-            coordinates: {
-              lng: location.coordinates[0],
-              lat: location.coordinates[1],
-            },
-            timestamp: location.timestamp,
-          };
-        })
-      )
-      .flat() ?? [];
+  const people =
+    (locationsData &&
+      Array.from(locationsData.company.people).sort((p1: any, p2: any) =>
+        p1.name > p2.name ? 1 : -1
+      )) ??
+    [];
 
-  const travelTrail: any[] =
-    locationsData?.company.people
-      .map((person: any) =>
+  const locations: any[] = people
+    .map((person: any) =>
+      person.locationReadings.map((location: any) => {
+        return {
+          coordinates: {
+            lng: location.coordinates[0],
+            lat: location.coordinates[1],
+          },
+          timestamp: location.timestamp,
+        };
+      })
+    )
+    .flat();
+
+  const travelData: any[] = people.map((person: any) => {
+    return {
+      name: person.name,
+      segments: [
         person.locationReadings.map((location: any) => {
           return {
             lng: location.coordinates[0],
             lat: location.coordinates[1],
             timestamp: location.timestamp,
           };
-        })
-      )
-      .flat() ?? [];
+        }),
+      ],
+    };
+  });
 
   const visualizations = [
     "Raw Locations Data Table",
@@ -143,7 +151,7 @@ export const Locations: React.FC = () => {
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
-                <TravelHistoryTrail center={center} path={travelTrail} />
+                <TravelHistoryTrail center={center} data={travelData} />
               }
             />
             <CustomAccordion
@@ -195,7 +203,7 @@ export const Locations: React.FC = () => {
             )}
             {visualization == visualizations[1] && (
               <div className={styles.visualization}>
-                <TravelHistoryTrail center={center} path={travelTrail} />
+                <TravelHistoryTrail center={center} data={travelData} />
               </div>
             )}
             {visualization == visualizations[2] && (
