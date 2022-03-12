@@ -13,7 +13,7 @@ import { getCurrentUser } from "../../../index";
 import { setGasName, setGasPersonId } from "../../../store/slices/gasPageSlice";
 import {
   setIncidentName,
-  setIncidentPersonId
+  setIncidentPersonId,
 } from "../../../store/slices/incidentPageSlice";
 import { useAppDispatch } from "../../../store/store";
 import { GET_PERSONS } from "../../../util/queryService";
