@@ -3,15 +3,19 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getCurrentUser } from "../../..";
 import {
   selectGasPageEndDate,
+  selectGasPagePersonId,
   selectGasPageStartDate,
 } from "../../../store/slices/gasPageSlice";
 import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
-import { GET_GAS_READINGS } from "../../../util/queryService";
+import {
+  GET_GAS_READINGS_FOR_COMPANY,
+  GET_GAS_READINGS_FOR_PERSON,
+} from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { GasesDotMap } from "../atoms/GasesDotMap";
 import GasesTable from "../atoms/GasesTable";
@@ -73,6 +77,7 @@ export interface GasReading {
     lng: number;
   };
   density: number;
+  densityUnits: string;
   gas: string;
   personName: string;
   timestamp: Date;
@@ -88,34 +93,85 @@ export const Gases: React.FC = () => {
 
   const startDate = useAppSelector(selectGasPageStartDate);
   const endDate = useAppSelector(selectGasPageEndDate);
+  const filterId = useAppSelector(selectGasPagePersonId);
 
-  const { data: gasReadingsData } = useQuery(GET_GAS_READINGS, {
-    variables: {
-      companyId: user?.company.id,
-      filter: {
-        minTimestamp: startDate !== "" ? new Date(startDate) : null,
-        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+  const { data: companyGasReadingsData } = useQuery(
+    GET_GAS_READINGS_FOR_COMPANY,
+    {
+      variables: {
+        companyId: user?.company.id,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
       },
-    },
-  });
+    }
+  );
 
-  const gasReadings: any[] =
-    gasReadingsData?.company.people
-      .map((person: any) =>
-        person.gasReadings.map((gasReading: any) => {
-          return {
-            coordinates: {
-              lat: gasReading.coordinates[1],
-              lng: gasReading.coordinates[0],
-            },
-            density: gasReading.density,
-            gas: gasReading.gas,
-            personName: person.name,
-            timestamp: new Date(gasReading.timestamp),
-          };
-        })
-      )
-      .flat() ?? [];
+  const { data: personGasReadingsData } = useQuery(
+    GET_GAS_READINGS_FOR_PERSON,
+    {
+      variables: {
+        personId: filterId,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
+      },
+    }
+  );
+
+  const [gasReadings, setGasReadings] = React.useState<any>([]);
+
+  useEffect(() => {
+    if (filterId !== "") {
+      if (personGasReadingsData && personGasReadingsData.person !== null) {
+        const gasReadings: any[] =
+          personGasReadingsData.person.gasReadings
+            .map((gasReading: any) => {
+              return {
+                coordinates: {
+                  lat: gasReading.coordinates[1],
+                  lng: gasReading.coordinates[0],
+                },
+                density: gasReading.density,
+                densityUnits: gasReading.densityUnits,
+                gas: gasReading.gas,
+                personName: personGasReadingsData.person.name,
+                timestamp: new Date(gasReading.timestamp),
+              };
+            })
+            .flat() ?? [];
+        setGasReadings(gasReadings);
+      }
+    } else {
+      const gasReadings: any[] =
+        companyGasReadingsData?.company.people
+          .map((person: any) =>
+            person.gasReadings.map((gasReading: any) => {
+              return {
+                coordinates: {
+                  lat: gasReading.coordinates[1],
+                  lng: gasReading.coordinates[0],
+                },
+                density: gasReading.density,
+                densityUnits: gasReading.densityUnits,
+                gas: gasReading.gas,
+                personName: person.name,
+                timestamp: new Date(gasReading.timestamp),
+              };
+            })
+          )
+          .flat() ?? [];
+      setGasReadings(gasReadings);
+    }
+  }, [
+    companyGasReadingsData,
+    personGasReadingsData,
+    startDate,
+    endDate,
+    filterId,
+  ]);
 
   const visualizations = ["Raw Gases Data Table", "Gases Dot Map"];
 

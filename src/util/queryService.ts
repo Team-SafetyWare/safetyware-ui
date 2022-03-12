@@ -83,7 +83,7 @@ export const GET_INCIDENT_STATS = gql`
   }
 `;
 
-export const GET_GAS_READINGS = gql`
+export const GET_GAS_READINGS_FOR_COMPANY = gql`
   query ($companyId: ID!, $filter: GasReadingFilter) {
     company(id: $companyId) {
       people {
@@ -91,9 +91,25 @@ export const GET_GAS_READINGS = gql`
         gasReadings(filter: $filter) {
           coordinates
           density
+          densityUnits
           gas
           timestamp
         }
+      }
+    }
+  }
+`;
+
+export const GET_GAS_READINGS_FOR_PERSON = gql`
+  query ($personId: ID!, $filter: GasReadingFilter) {
+    person(id: $personId) {
+      name
+      gasReadings(filter: $filter) {
+        coordinates
+        density
+        densityUnits
+        gas
+        timestamp
       }
     }
   }
