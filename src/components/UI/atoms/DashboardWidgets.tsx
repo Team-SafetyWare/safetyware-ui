@@ -1,10 +1,13 @@
 import { makeStyles } from "@mui/styles";
-import React, { useState } from "react";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
-// import { HazardousAreaHeatMapWidget } from "./HazardousAreaHeatMapWidget";
-import { BarGraphWidget } from "./BarGraphWidget";
-import IncidentDotMapWidget from "./IncidentDotMapWidget";
+import React from "react";
+import { DragDropContext } from "react-beautiful-dnd";
 import { WidgetColumn } from "./WidgetColumn";
+
+interface DashboardWidgetProps {
+  widgetWrapperState: any;
+  onDragEndFunction: any;
+  reorderFunction: any;
+}
 
 interface DashboardWidgetTileData {
   widgetName: string;
@@ -42,71 +45,14 @@ const useStyles = makeStyles({
   },
 });
 
-const reorder = (
-  list: DashboardWidgetTileData[],
-  startIndex: number,
-  endIndex: number
-): DashboardWidgetTileData[] => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-export const DashboardWidgets = (): JSX.Element => {
+export const DashboardWidgets: React.FC<DashboardWidgetProps> = (props) => {
   const styles = useStyles();
 
-  const [state, setState] = useState([
-    {
-      widgetName: "Incident Dot Map",
-      widget: (
-        <IncidentDotMapWidget incidents={incidents} center={center} zoom={10} />
-      ),
-    },
-    // {
-    //   widgetName: "Travel History Trail",
-    //   widget: (
-    //     <TravelHistoryTrailWidget path={incidents} center={center} zoom={10} />
-    //   ),
-    // },
-    // {
-    //   widgetName: "Hazardous Area Heat Map",
-    //   widget: (
-    //     <HazardousAreaHeatMapWidget
-    //       accidents={incidents}
-    //       center={center}
-    //       zoom={10}
-    //     />
-    //   ),
-    // },
-    {
-      widgetName: "Bar Graph",
-      widget: (
-        <BarGraphWidget data={barGraphData} />
-      )
-    }
-  ]);
-
-  const onDragEnd = (result: DropResult): void => {
-    // dropped outside the list
-    if (!result.destination) {
-      return;
-    }
-
-    const items: DashboardWidgetTileData[] = reorder(
-      state,
-      result.source.index,
-      result.destination.index
-    );
-
-    setState(items);
-  };
-
+  // if first
   return (
     <div className={styles.test}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <WidgetColumn state={state} />
+      <DragDropContext onDragEnd={props.onDragEndFunction}>
+        <WidgetColumn state={props.widgetWrapperState} />
       </DragDropContext>
     </div>
   );

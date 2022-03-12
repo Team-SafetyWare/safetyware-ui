@@ -137,7 +137,12 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
   );
 };
 
-const emails = ["Travel History Trail Map", "Hazardous Area Heat Map"];
+const emails = [
+  "Incident Dot Map",
+  "Bar Graph",
+  "Travel History Trail Map",
+  "Hazardous Area Heat Map",
+];
 
 export interface SimpleDialogProps {
   open: boolean;
