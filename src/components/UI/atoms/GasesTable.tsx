@@ -20,7 +20,9 @@ function Row(props: { row: GasReading; matches: boolean }) {
     <Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>{row.gas}</TableCell>
-        <TableCell>{row.density}</TableCell>
+        <TableCell>
+          {row.density} {row.densityUnits}
+        </TableCell>
         <TableCell>{row.personName}</TableCell>
         <TableCell>
           {row.timestamp?.toLocaleString([], {

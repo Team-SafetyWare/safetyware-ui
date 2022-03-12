@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
@@ -8,15 +9,16 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import { useQuery } from "@apollo/client";
-import { GET_PERSONS } from "../../../util/queryService";
-import { useAppDispatch } from "../../../store/store";
+import { getCurrentUser } from "../../../index";
+import { setGasName, setGasPersonId } from "../../../store/slices/gasPageSlice";
 import {
   setIncidentName,
-  setIncidentPersonId,
+  setIncidentPersonId
 } from "../../../store/slices/incidentPageSlice";
+import { useAppDispatch } from "../../../store/store";
+import { GET_PERSONS } from "../../../util/queryService";
+import { gasesPageLabel } from "../organisms/Gases";
 import { incidentPageLabel } from "../organisms/Incidents";
-import { getCurrentUser } from "../../../index";
 
 interface CustomBoxUserSelectProps {
   view?: string;
@@ -60,6 +62,10 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
       case incidentPageLabel:
         dispatch(setIncidentName(name));
         dispatch(setIncidentPersonId(id));
+        break;
+      case gasesPageLabel:
+        dispatch(setGasName(name));
+        dispatch(setGasPersonId(id));
         break;
     }
   }
