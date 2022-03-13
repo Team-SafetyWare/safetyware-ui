@@ -23,7 +23,7 @@ import IncidentTable from "../atoms/IncidentTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
-import { CustomBox } from "../molecules/CustomBox";
+import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
 import { getCurrentUser } from "../../../index";
 
 const view = "User";
@@ -285,10 +285,9 @@ export const Incidents: React.FC = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <CustomBox
+          <CustomBoxReduced
             user={user}
             view={view}
-            incidentType={incidentType}
             startDate={tempStartDate}
             endDate={tempEndDate}
             pageLabel={incidentPageLabel}
