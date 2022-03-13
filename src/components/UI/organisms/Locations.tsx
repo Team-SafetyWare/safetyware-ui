@@ -31,7 +31,6 @@ const center = {
   lat: 51.049999,
   lng: -114.1283,
 };
-const view = "User";
 
 const useStyles = makeStyles({
   locationsDropdown: {
@@ -288,7 +287,6 @@ export const Locations: React.FC = () => {
             >
               <CustomBoxReduced
                 user={user}
-                view={view}
                 startDate={startDate}
                 endDate={endDate}
                 pageLabel={locationPageLabel}

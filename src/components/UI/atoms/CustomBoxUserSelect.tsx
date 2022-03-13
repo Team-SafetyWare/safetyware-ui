@@ -22,7 +22,6 @@ import { incidentPageLabel } from "../organisms/Incidents";
 import { locationPageLabel } from "../organisms/Locations";
 
 interface CustomBoxUserSelectProps {
-  view?: string;
   user?: string;
   label?: string;
 }

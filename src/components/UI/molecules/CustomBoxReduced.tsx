@@ -5,7 +5,6 @@ import { CustomBoxDates } from "../atoms/CustomBoxDates";
 import { CustomBoxUserSelect } from "../atoms/CustomBoxUserSelect";
 
 interface CustomBoxReducedProps {
-  view?: any;
   user?: any;
   startDate?: any;
   endDate?: any;
@@ -41,11 +40,7 @@ export const CustomBoxReduced: React.FC<CustomBoxReducedProps> = (props) => {
           startDate={props.startDate}
           endDate={props.endDate}
         />
-        <CustomBoxUserSelect
-          label={props.pageLabel}
-          user={props.user}
-          view={props.view}
-        />
+        <CustomBoxUserSelect label={props.pageLabel} user={props.user} />
       </div>
     </Draggable>
   );

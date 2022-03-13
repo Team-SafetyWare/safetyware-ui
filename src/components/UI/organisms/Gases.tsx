@@ -34,10 +34,6 @@ const center = {
   lng: -114.1283,
 };
 
-const view = "User";
-const tempStartDate = new Date("01/01/2022");
-const tempEndDate = new Date("01/08/2022");
-
 const useStyles = makeStyles({
   gasesDropdown: {
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
@@ -256,9 +252,8 @@ export const Gases: React.FC = () => {
         >
           <CustomBoxReduced
             user={user}
-            view={view}
-            startDate={tempStartDate}
-            endDate={tempEndDate}
+            startDate={startDate}
+            endDate={endDate}
             pageLabel={gasesPageLabel}
           />
         </Modal>
