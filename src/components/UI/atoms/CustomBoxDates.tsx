@@ -1,4 +1,3 @@
-import { makeStyles } from "@mui/styles";
 import React from "react";
 import BasicDatePicker from "../atoms/BasicDatePicker";
 import { gasesPageLabel } from "../organisms/Gases";
@@ -10,9 +9,7 @@ interface CustomBoxDatesProps {
   startDate?: any;
   endDate?: any;
 }
-makeStyles({
-  text: { fontSize: "10px" },
-});
+
 export const incidentPageStartDate = "incidentPageStartDate";
 export const incidentPageEndDate = "incidentPageEndDate";
 export const locationPageStartDate = "locationPageStartDate";
@@ -47,9 +44,9 @@ export const CustomBoxDates: React.FC<CustomBoxDatesProps> = (props) => {
 
   return (
     <>
-      <p> Start Date </p>
+      <p>Start Date</p>
       <BasicDatePicker label={getStartDateLabel()} />
-      <p> End Date </p>
+      <p>End Date</p>
       <BasicDatePicker label={getEndDateLabel()} />
     </>
   );
