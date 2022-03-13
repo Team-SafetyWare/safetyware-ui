@@ -81,23 +81,6 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
 
   return (
     <>
-      <FormControl>
-        <FormLabel id="radio-group">View</FormLabel>
-        <RadioGroup
-          row
-          aria-labelledby="radio-group"
-          defaultValue={props.view}
-          name="radio-buttons-group"
-        >
-          <FormControlLabel value="User" control={<Radio />} label="User" />
-          <FormControlLabel value="Team" control={<Radio />} label="Team" />
-          <FormControlLabel
-            value="Organization"
-            control={<Radio />}
-            label="Organization"
-          />
-        </RadioGroup>
-      </FormControl>
       <FormControl fullWidth>
         <InputLabel id="simple-select-label">Select</InputLabel>
         <Select
