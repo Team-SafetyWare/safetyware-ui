@@ -1,20 +1,29 @@
 import { useQuery } from "@apollo/client";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useState } from "react";
-import { GET_LOCATIONS } from "../../../util/queryService";
+import React, { useEffect, useState } from "react";
+import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
+import {
+  selectLocationPageEndDate,
+  selectLocationPagePersonId,
+  selectLocationPageStartDate,
+} from "../../../store/slices/locationPageSlice";
+import { useAppSelector } from "../../../store/store";
+import theme from "../../../Theme";
+import {
+  GET_LOCATIONS_FOR_COMPANY,
+  GET_LOCATIONS_FOR_PERSON,
+} from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
-import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
+import LocationsTable from "../atoms/LocationsTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import theme from "../../../Theme";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -23,8 +32,6 @@ const center = {
   lng: -114.1283,
 };
 const view = "User";
-const startDate = new Date("01/01/2022");
-const endDate = new Date("01/08/2022");
 
 const useStyles = makeStyles({
   locationsDropdown: {
@@ -60,6 +67,15 @@ const useStyles = makeStyles({
   },
 });
 
+export interface LocationReading {
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  personName: string;
+  timestamp: Date;
+}
+
 export const locationPageLabel = "locationPage";
 
 export const Locations: React.FC = () => {
@@ -67,30 +83,101 @@ export const Locations: React.FC = () => {
   const styles = useStyles();
 
   const user = getCurrentUser();
-  const { data: locationsData } = useQuery(GET_LOCATIONS, {
-    variables: { companyId: user?.company.id },
-  });
 
-  const people =
-    (locationsData &&
-      Array.from(locationsData.company.people).sort((p1: any, p2: any) =>
-        p1.name > p2.name ? 1 : -1
-      )) ??
-    [];
+  const startDate = useAppSelector(selectLocationPageStartDate);
+  const endDate = useAppSelector(selectLocationPageEndDate);
+  const filterId = useAppSelector(selectLocationPagePersonId);
 
-  const locations: any[] = people
-    .map((person: any) =>
-      person.locationReadings.map((location: any) => {
-        return {
-          coordinates: {
-            lng: location.coordinates[0],
-            lat: location.coordinates[1],
-          },
-          timestamp: location.timestamp,
-        };
-      })
-    )
-    .flat();
+  const { data: companyLocationReadingsData } = useQuery(
+    GET_LOCATIONS_FOR_COMPANY,
+    {
+      variables: {
+        companyId: user?.company.id,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
+      },
+    }
+  );
+
+  const { data: personLocationReadingsData } = useQuery(
+    GET_LOCATIONS_FOR_PERSON,
+    {
+      variables: {
+        personId: filterId,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
+      },
+    }
+  );
+
+  const [locationReadings, setLocationReadings] = useState<any>([]);
+  const [people, setPeople] = useState<any>([]);
+
+  useEffect(() => {
+    if (filterId !== "") {
+      if (
+        personLocationReadingsData &&
+        personLocationReadingsData.person !== null
+      ) {
+        const locationReadings: any[] =
+          personLocationReadingsData.person.locationReadings
+            .map((locationReading: any) => {
+              return {
+                coordinates: {
+                  lat: locationReading.coordinates[1],
+                  lng: locationReading.coordinates[0],
+                },
+                personName: personLocationReadingsData.person.name,
+                timestamp: new Date(locationReading.timestamp),
+              };
+            })
+            .flat() ?? [];
+
+        const people =
+          (personLocationReadingsData && [personLocationReadingsData.person]) ??
+          [];
+
+        setLocationReadings(locationReadings);
+        setPeople(people);
+      }
+    } else {
+      const locationReadings: any[] =
+        companyLocationReadingsData?.company.people
+          .map((person: any) =>
+            person.locationReadings.map((locationReading: any) => {
+              return {
+                coordinates: {
+                  lat: locationReading.coordinates[1],
+                  lng: locationReading.coordinates[0],
+                },
+                personName: person.name,
+                timestamp: new Date(locationReading.timestamp),
+              };
+            })
+          )
+          .flat() ?? [];
+
+      const people =
+        (companyLocationReadingsData &&
+          Array.from(companyLocationReadingsData.company.people).sort(
+            (p1: any, p2: any) => (p1.personName > p2.personName ? 1 : -1)
+          )) ??
+        [];
+
+      setLocationReadings(locationReadings);
+      setPeople(people);
+    }
+  }, [
+    companyLocationReadingsData,
+    personLocationReadingsData,
+    startDate,
+    endDate,
+    filterId,
+  ]);
 
   const travelData: any[] = people.map((person: any, personIndex: number) => {
     const segments = [];
@@ -166,7 +253,7 @@ export const Locations: React.FC = () => {
               accordionTitle={visualizations[2]}
               component={
                 <HazardousAreaHeatMap
-                  accidents={locations}
+                  accidents={locationReadings}
                   center={center}
                   zoom={10}
                 />
@@ -182,7 +269,7 @@ export const Locations: React.FC = () => {
               accordionHeight={"auto"}
               accordionWidth={""}
               accordionTitle={visualizations[0]}
-              component={<CustomCollapsibleTable />}
+              component={<LocationsTable locationReadings={locationReadings} />}
             />
             <IconButton
               className={styles.filterButton}
@@ -216,7 +303,7 @@ export const Locations: React.FC = () => {
             </div>
             {visualization == visualizations[0] && (
               <div className={styles.visualization}>
-                <CustomCollapsibleTable />
+                <LocationsTable locationReadings={locationReadings} />
               </div>
             )}
             {visualization == visualizations[1] && (
@@ -227,7 +314,7 @@ export const Locations: React.FC = () => {
             {visualization == visualizations[2] && (
               <div className={styles.visualization}>
                 <HazardousAreaHeatMap
-                  accidents={locations}
+                  accidents={locationReadings}
                   center={center}
                   zoom={10}
                 />

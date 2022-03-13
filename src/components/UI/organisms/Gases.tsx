@@ -121,7 +121,7 @@ export const Gases: React.FC = () => {
     }
   );
 
-  const [gasReadings, setGasReadings] = React.useState<any>([]);
+  const [gasReadings, setGasReadings] = useState<any>([]);
 
   useEffect(() => {
     if (filterId !== "") {
