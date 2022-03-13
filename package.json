@@ -37,6 +37,8 @@
     "react-collapsible": "^2.8.4",
     "react-dom": "^17.0.2",
     "react-draggable": "^4.4.4",
+    "react-gesture-responder": "^2.1.0",
+    "react-grid-dnd": "^2.1.2",
     "react-leaflet": "^3.2.2",
     "react-leaflet-google-layer": "^2.0.4",
     "react-leaflet-heatmap-layer": "^2.0.0",
