@@ -15,10 +15,15 @@ import {
   setIncidentName,
   setIncidentPersonId,
 } from "../../../store/slices/incidentPageSlice";
+import {
+  setLocationName,
+  setLocationPersonId,
+} from "../../../store/slices/locationPageSlice";
 import { useAppDispatch } from "../../../store/store";
 import { GET_PERSONS } from "../../../util/queryService";
 import { gasesPageLabel } from "../organisms/Gases";
 import { incidentPageLabel } from "../organisms/Incidents";
+import { locationPageLabel } from "../organisms/Locations";
 
 interface CustomBoxUserSelectProps {
   view?: string;
@@ -49,7 +54,7 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   function getMenuItemPerson(person: any) {
     return (
       <MenuItem
-        value={person}
+        value={person.name}
         onClick={() => updateNameAndIdFilter(person.name, person.id)}
       >
         {person.name}
@@ -59,6 +64,10 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
 
   function updateNameAndIdFilter(name: string, id: string) {
     switch (label) {
+      case locationPageLabel:
+        dispatch(setLocationName(name));
+        dispatch(setLocationPersonId(id));
+        break;
       case incidentPageLabel:
         dispatch(setIncidentName(name));
         dispatch(setIncidentPersonId(id));
@@ -95,9 +104,9 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
           labelId="simple-select-label"
           id="simple-select"
           label="Select"
-          defaultValue={["All"]}
+          defaultValue={"All"}
         >
-          {getMenuItemPerson("All")}
+          {getMenuItemPerson({ name: "All", id: "" })}
           {people.map((person: string) => getMenuItemPerson(person))}
         </Select>
       </FormControl>
