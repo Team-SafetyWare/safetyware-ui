@@ -62,12 +62,15 @@ const useStyles = makeStyles({
         width: "100vw",
       },
   },
+
   filterButton: {
     backgroundColor: theme.palette.primary.main,
     bottom: 16,
     color: "white",
-    position: "absolute",
+    position: "fixed",
     right: 16,
+
+    "&:hover": { backgroundColor: theme.palette.primary.light },
   },
 });
 
