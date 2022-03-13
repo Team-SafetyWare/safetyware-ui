@@ -5,8 +5,13 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
+import {
+  selectLocationPageEndDate,
+  selectLocationPageStartDate,
+} from "../../../store/slices/locationPageSlice";
+import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
-import { GET_LOCATIONS } from "../../../util/queryService";
+import { GET_LOCATIONS_FOR_COMPANY } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
 import LocationsTable from "../atoms/LocationsTable";
@@ -23,8 +28,6 @@ const center = {
   lng: -114.1283,
 };
 const view = "User";
-const startDate = new Date("01/01/2022");
-const endDate = new Date("01/08/2022");
 
 const useStyles = makeStyles({
   locationsDropdown: {
@@ -76,8 +79,18 @@ export const Locations: React.FC = () => {
   const styles = useStyles();
 
   const user = getCurrentUser();
-  const { data: locationsData } = useQuery(GET_LOCATIONS, {
-    variables: { companyId: user?.company.id },
+
+  const startDate = useAppSelector(selectLocationPageStartDate);
+  const endDate = useAppSelector(selectLocationPageEndDate);
+
+  const { data: locationsData } = useQuery(GET_LOCATIONS_FOR_COMPANY, {
+    variables: {
+      companyId: user?.company.id,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
+    },
   });
 
   const people =

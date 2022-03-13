@@ -27,13 +27,12 @@ export const GET_PERSONS = gql`
   }
 `;
 
-export const GET_LOCATIONS = gql`
-  query ($companyId: ID!) {
+export const GET_LOCATIONS_FOR_COMPANY = gql`
+  query ($companyId: ID!, $filter: LocationReadingFilter) {
     company(id: $companyId) {
       people {
-        id
         name
-        locationReadings {
+        locationReadings(filter: $filter) {
           coordinates
           timestamp
         }
