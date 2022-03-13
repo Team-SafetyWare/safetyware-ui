@@ -4,7 +4,6 @@ import {
   GridContextProvider,
   GridDropZone,
   GridItem,
-  move,
   swap,
 } from "react-grid-dnd";
 
@@ -84,42 +83,16 @@ const useStyles = makeStyles({
   },
 });
 
-const reorder = (
-  list: DashboardWidgetTileData[],
-  startIndex: number,
-  endIndex: number
-): DashboardWidgetTileData[] => {
-  console.log(startIndex);
-  console.log(endIndex);
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  console.log([removed]);
-  result.splice(endIndex, 0, removed);
-  console.log(result);
-
-  return result;
-};
-
 export const DashboardWidgetWrapper = (): JSX.Element => {
   const styles = useStyles();
 
-  const [items, setItems] = useState({
-    left: [
-      { id: 1, name: "ben" },
-      { id: 2, name: "joe" },
-      { id: 3, name: "jason" },
-      { id: 4, name: "chris" },
-      { id: 5, name: "heather" },
-    ],
-    right: [
-      { id: 7, name: "george" },
-      { id: 8, name: "rupert" },
-      { id: 9, name: "alice" },
-      { id: 10, name: "katherine" },
-      { id: 11, name: "pam" },
-      { id: 12, name: "katie" },
-    ],
-  });
+  const [items, setItems] = useState([
+    { id: 1, name: "ben" },
+    { id: 2, name: "joe" },
+    { id: 3, name: "jason" },
+    { id: 4, name: "chris" },
+    { id: 5, name: "heather" },
+  ]);
 
   const onChange = (
     sourceId: any,
@@ -127,29 +100,8 @@ export const DashboardWidgetWrapper = (): JSX.Element => {
     targetIndex: any,
     targetId: any
   ) => {
-    if (targetId) {
-      const result = move(
-        items[sourceId as keyof Item],
-        items[targetId as keyof Item],
-        sourceIndex,
-        targetIndex
-      );
-      return setItems({
-        ...items,
-        [sourceId]: result[0],
-        [targetId]: result[1],
-      });
-    }
-
-    const result = swap(
-      items[sourceId as keyof Item],
-      sourceIndex,
-      targetIndex
-    );
-    return setItems({
-      ...items,
-      [sourceId]: result,
-    });
+    const nextState = swap(items, sourceIndex, targetIndex);
+    setItems(nextState);
   };
 
   // const [state, setState] = useState([
@@ -222,10 +174,10 @@ export const DashboardWidgetWrapper = (): JSX.Element => {
           <GridDropZone
             className={styles.dropzone}
             id="left"
-            boxesPerRow={2}
+            boxesPerRow={3}
             rowHeight={150}
           >
-            {items.left.map((item) => (
+            {items.map((item) => (
               <GridItem key={item.name}>
                 <div className={styles.gridItem}>
                   <div className={styles.gridItemContent}>
