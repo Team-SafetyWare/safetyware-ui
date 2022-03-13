@@ -1,20 +1,20 @@
 import { useQuery } from "@apollo/client";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
+import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
+import theme from "../../../Theme";
 import { GET_LOCATIONS } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
-import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
+import LocationsTable from "../atoms/LocationsTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import theme from "../../../Theme";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -60,6 +60,15 @@ const useStyles = makeStyles({
   },
 });
 
+export interface LocationReading {
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  personName: string;
+  timestamp: Date;
+}
+
 export const locationPageLabel = "locationPage";
 
 export const Locations: React.FC = () => {
@@ -86,7 +95,8 @@ export const Locations: React.FC = () => {
             lng: location.coordinates[0],
             lat: location.coordinates[1],
           },
-          timestamp: location.timestamp,
+          personName: person.name,
+          timestamp: new Date(location.timestamp),
         };
       })
     )
@@ -182,7 +192,7 @@ export const Locations: React.FC = () => {
               accordionHeight={"auto"}
               accordionWidth={""}
               accordionTitle={visualizations[0]}
-              component={<CustomCollapsibleTable />}
+              component={<LocationsTable locationReadings={locations} />}
             />
             <IconButton
               className={styles.filterButton}
@@ -216,7 +226,7 @@ export const Locations: React.FC = () => {
             </div>
             {visualization == visualizations[0] && (
               <div className={styles.visualization}>
-                <CustomCollapsibleTable />
+                <LocationsTable locationReadings={locations} />
               </div>
             )}
             {visualization == visualizations[1] && (
