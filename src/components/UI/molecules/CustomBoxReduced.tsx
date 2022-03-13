@@ -13,18 +13,33 @@ interface CustomBoxReducedProps {
 
 const useStyles = makeStyles({
   box: {
-    textAlign: "center",
-    height: "400px",
-    width: "370px",
-    backgroundColor: "#ffffff",
-    borderRadius: "30px",
-    border: "1px solid rgba(0, 0, 0, 0.05)",
-    position: "absolute",
-    fontSize: "14px",
-    paddingRight: "1.5%",
-    paddingLeft: "1.5%",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: "20px",
+    display: "flex",
+    flexDirection: "column",
     left: "50%",
+    padding: "20px",
+    position: "absolute",
     top: "50%",
+    transform: "translate(-50%, -50%)",
+
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        width: "calc(100vw - 60px)",
+      },
+
+    "@media only screen and (max-height: 599px)": {
+      flexDirection: "row",
+
+      "& > *": {
+        marginLeft: "24px",
+      },
+    },
+  },
+
+  boxTitle: {
+    fontWeight: "bold",
   },
 });
 
@@ -34,7 +49,7 @@ export const CustomBoxReduced: React.FC<CustomBoxReducedProps> = (props) => {
   return (
     <Draggable positionOffset={{ x: "-50%", y: "-50%" }}>
       <div className={styles.box}>
-        <h3>Filters</h3>
+        <p className={styles.boxTitle}>Filters</p>
         <CustomBoxDates
           pageLabel={label}
           startDate={props.startDate}

@@ -3,6 +3,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { getCurrentUser } from "../../../index";
@@ -27,15 +28,24 @@ interface CustomBoxUserSelectProps {
 }
 
 const useStyles = makeStyles({
-  label: {
-    fontSize: "11px",
+  content: {
+    display: "flex",
+    flexDirection: "column",
+    marginTop: "24px",
+    textAlign: "center",
+    width: "100%",
+
+    "& > *": {
+      marginBottom: "24px",
+    },
   },
 });
 
 export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   props
 ) => {
-  useStyles();
+  const styles = useStyles();
+
   const dispatch = useAppDispatch();
   const label = props.label;
   const user = getCurrentUser();
@@ -75,19 +85,21 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   }
 
   return (
-    <>
-      <FormControl fullWidth>
-        <InputLabel id="simple-select-label">Select</InputLabel>
-        <Select
-          labelId="simple-select-label"
-          id="simple-select"
-          label="Select"
-          defaultValue={"All"}
-        >
-          {getMenuItemPerson({ name: "All", id: "" })}
-          {people.map((person: string) => getMenuItemPerson(person))}
-        </Select>
-      </FormControl>
-    </>
+    <StyledEngineProvider injectFirst>
+      <div className={styles.content}>
+        <FormControl>
+          <InputLabel id="simple-select-label">User</InputLabel>
+          <Select
+            defaultValue={"All"}
+            id="simple-select"
+            label="User"
+            labelId="simple-select-label"
+          >
+            {getMenuItemPerson({ name: "All", id: "" })}
+            {people.map((person: string) => getMenuItemPerson(person))}
+          </Select>
+        </FormControl>
+      </div>
+    </StyledEngineProvider>
   );
 };
