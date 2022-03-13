@@ -26,11 +26,6 @@ import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
 
-const view = "User";
-const incidentType = "All";
-const tempStartDate = new Date("01/01/2022");
-const tempEndDate = new Date("01/08/2022");
-
 const center = {
   lat: 51.049999,
   lng: -114.1283,
@@ -287,9 +282,8 @@ export const Incidents: React.FC = () => {
         >
           <CustomBoxReduced
             user={user}
-            view={view}
-            startDate={tempStartDate}
-            endDate={tempEndDate}
+            startDate={startDate}
+            endDate={endDate}
             pageLabel={incidentPageLabel}
           />
         </Modal>
