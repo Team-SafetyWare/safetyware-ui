@@ -3,15 +3,19 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
 import {
   selectLocationPageEndDate,
+  selectLocationPagePersonId,
   selectLocationPageStartDate,
 } from "../../../store/slices/locationPageSlice";
 import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
-import { GET_LOCATIONS_FOR_COMPANY } from "../../../util/queryService";
+import {
+  GET_LOCATIONS_FOR_COMPANY,
+  GET_LOCATIONS_FOR_PERSON,
+} from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
 import LocationsTable from "../atoms/LocationsTable";
@@ -82,38 +86,98 @@ export const Locations: React.FC = () => {
 
   const startDate = useAppSelector(selectLocationPageStartDate);
   const endDate = useAppSelector(selectLocationPageEndDate);
+  const filterId = useAppSelector(selectLocationPagePersonId);
 
-  const { data: locationsData } = useQuery(GET_LOCATIONS_FOR_COMPANY, {
-    variables: {
-      companyId: user?.company.id,
-      filter: {
-        minTimestamp: startDate !== "" ? new Date(startDate) : null,
-        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+  const { data: companyLocationReadingsData } = useQuery(
+    GET_LOCATIONS_FOR_COMPANY,
+    {
+      variables: {
+        companyId: user?.company.id,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
       },
-    },
-  });
+    }
+  );
 
-  const people =
-    (locationsData &&
-      Array.from(locationsData.company.people).sort((p1: any, p2: any) =>
-        p1.name > p2.name ? 1 : -1
-      )) ??
-    [];
+  const { data: personLocationReadingsData } = useQuery(
+    GET_LOCATIONS_FOR_PERSON,
+    {
+      variables: {
+        personId: filterId,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
+      },
+    }
+  );
 
-  const locations: any[] = people
-    .map((person: any) =>
-      person.locationReadings.map((location: any) => {
-        return {
-          coordinates: {
-            lng: location.coordinates[0],
-            lat: location.coordinates[1],
-          },
-          personName: person.name,
-          timestamp: new Date(location.timestamp),
-        };
-      })
-    )
-    .flat();
+  const [locationReadings, setLocationReadings] = useState<any>([]);
+  const [people, setPeople] = useState<any>([]);
+
+  useEffect(() => {
+    if (filterId !== "") {
+      if (
+        personLocationReadingsData &&
+        personLocationReadingsData.person !== null
+      ) {
+        const locationReadings: any[] =
+          personLocationReadingsData.person.locationReadings
+            .map((locationReading: any) => {
+              return {
+                coordinates: {
+                  lat: locationReading.coordinates[1],
+                  lng: locationReading.coordinates[0],
+                },
+                personName: personLocationReadingsData.person.name,
+                timestamp: new Date(locationReading.timestamp),
+              };
+            })
+            .flat() ?? [];
+
+        const people =
+          (personLocationReadingsData && [personLocationReadingsData.person]) ??
+          [];
+
+        setLocationReadings(locationReadings);
+        setPeople(people);
+      }
+    } else {
+      const locationReadings: any[] =
+        companyLocationReadingsData?.company.people
+          .map((person: any) =>
+            person.locationReadings.map((locationReading: any) => {
+              return {
+                coordinates: {
+                  lat: locationReading.coordinates[1],
+                  lng: locationReading.coordinates[0],
+                },
+                personName: person.name,
+                timestamp: new Date(locationReading.timestamp),
+              };
+            })
+          )
+          .flat() ?? [];
+
+      const people =
+        (companyLocationReadingsData &&
+          Array.from(companyLocationReadingsData.company.people).sort(
+            (p1: any, p2: any) => (p1.personName > p2.personName ? 1 : -1)
+          )) ??
+        [];
+
+      setLocationReadings(locationReadings);
+      setPeople(people);
+    }
+  }, [
+    companyLocationReadingsData,
+    personLocationReadingsData,
+    startDate,
+    endDate,
+    filterId,
+  ]);
 
   const travelData: any[] = people.map((person: any, personIndex: number) => {
     const segments = [];
@@ -189,7 +253,7 @@ export const Locations: React.FC = () => {
               accordionTitle={visualizations[2]}
               component={
                 <HazardousAreaHeatMap
-                  accidents={locations}
+                  accidents={locationReadings}
                   center={center}
                   zoom={10}
                 />
@@ -205,7 +269,7 @@ export const Locations: React.FC = () => {
               accordionHeight={"auto"}
               accordionWidth={""}
               accordionTitle={visualizations[0]}
-              component={<LocationsTable locationReadings={locations} />}
+              component={<LocationsTable locationReadings={locationReadings} />}
             />
             <IconButton
               className={styles.filterButton}
@@ -239,7 +303,7 @@ export const Locations: React.FC = () => {
             </div>
             {visualization == visualizations[0] && (
               <div className={styles.visualization}>
-                <LocationsTable locationReadings={locations} />
+                <LocationsTable locationReadings={locationReadings} />
               </div>
             )}
             {visualization == visualizations[1] && (
@@ -250,7 +314,7 @@ export const Locations: React.FC = () => {
             {visualization == visualizations[2] && (
               <div className={styles.visualization}>
                 <HazardousAreaHeatMap
-                  accidents={locations}
+                  accidents={locationReadings}
                   center={center}
                   zoom={10}
                 />
