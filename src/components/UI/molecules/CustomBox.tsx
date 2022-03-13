@@ -36,7 +36,7 @@ export const CustomBox: React.FC<CustomBoxProps> = (props) => {
   return (
     <Draggable positionOffset={{ x: "-50%", y: "-50%" }}>
       <div className={styles.box}>
-        <h3>Customize</h3>
+        <h3>Filters</h3>
         <CustomBoxDates
           startDate={props.startDate}
           endDate={props.endDate}

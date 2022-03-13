@@ -35,7 +35,7 @@ export const CustomBoxReduced: React.FC<CustomBoxReducedProps> = (props) => {
   return (
     <Draggable positionOffset={{ x: "-50%", y: "-50%" }}>
       <div className={styles.box}>
-        <h3>Customize</h3>
+        <h3>Filters</h3>
         <CustomBoxDates
           pageLabel={label}
           startDate={props.startDate}
