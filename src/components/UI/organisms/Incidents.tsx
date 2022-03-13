@@ -126,7 +126,6 @@ export const Incidents: React.FC = () => {
         const incidents: any[] =
           personIncidentData.person.incidents
             .map((incident: any) => {
-              console.log(incident);
               return {
                 coordinates: {
                   lng: incident.coordinates[0],
