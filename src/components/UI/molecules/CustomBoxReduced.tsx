@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import Draggable from "react-draggable";
@@ -44,19 +45,32 @@ const useStyles = makeStyles({
 });
 
 export const CustomBoxReduced: React.FC<CustomBoxReducedProps> = (props) => {
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
+
   const label = props.pageLabel;
+
+  const component = (
+    <div className={styles.box}>
+      <p className={styles.boxTitle}>Filters</p>
+      <CustomBoxDates
+        pageLabel={label}
+        startDate={props.startDate}
+        endDate={props.endDate}
+      />
+      <CustomBoxUserSelect label={props.pageLabel} user={props.user} />
+    </div>
+  );
+
   return (
-    <Draggable positionOffset={{ x: "-50%", y: "-50%" }}>
-      <div className={styles.box}>
-        <p className={styles.boxTitle}>Filters</p>
-        <CustomBoxDates
-          pageLabel={label}
-          startDate={props.startDate}
-          endDate={props.endDate}
-        />
-        <CustomBoxUserSelect label={props.pageLabel} user={props.user} />
-      </div>
-    </Draggable>
+    <>
+      {matches ? (
+        <Draggable positionOffset={{ x: "-50%", y: "-50%" }}>
+          {component}
+        </Draggable>
+      ) : (
+        <>{component}</>
+      )}
+    </>
   );
 };
