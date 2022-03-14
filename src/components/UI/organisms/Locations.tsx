@@ -31,7 +31,6 @@ const center = {
   lat: 51.049999,
   lng: -114.1283,
 };
-const view = "User";
 
 const useStyles = makeStyles({
   locationsDropdown: {
@@ -62,8 +61,10 @@ const useStyles = makeStyles({
     backgroundColor: theme.palette.primary.main,
     bottom: 16,
     color: "white",
-    position: "absolute",
+    position: "fixed",
     right: 16,
+
+    "&:hover": { backgroundColor: theme.palette.primary.light },
   },
 });
 
@@ -286,7 +287,6 @@ export const Locations: React.FC = () => {
             >
               <CustomBoxReduced
                 user={user}
-                view={view}
                 startDate={startDate}
                 endDate={endDate}
                 pageLabel={locationPageLabel}
@@ -322,6 +322,26 @@ export const Locations: React.FC = () => {
             )}
           </>
         )}
+        <IconButton
+          className={styles.filterButton}
+          onClick={handleOpenFilterBox}
+          size="large"
+        >
+          <FilterAltIcon fontSize="inherit" />
+        </IconButton>
+        <Modal
+          open={openFilterbox}
+          onClose={handleCloseFilterBox}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <CustomBoxReduced
+            user={user}
+            startDate={startDate}
+            endDate={endDate}
+            pageLabel={locationPageLabel}
+          />
+        </Modal>
       </>
     </StyledEngineProvider>
   );

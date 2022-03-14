@@ -13,7 +13,10 @@ import { DashboardSummary } from "../molecules/DashboardSummary";
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
   dashboardContent: {
-    margin: "20px",
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        margin: "20px",
+      },
   },
   placeholderDiv: {
     textAlign: "center",
