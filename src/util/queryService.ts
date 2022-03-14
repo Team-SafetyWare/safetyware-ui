@@ -83,9 +83,21 @@ export const GET_INCIDENTS_FOR_PERSON = gql`
   }
 `;
 
-export const GET_INCIDENT_STATS = gql`
+export const GET_INCIDENT_STATS_FOR_COMPANY = gql`
   query ($companyId: ID!, $filter: IncidentStatsFilter) {
     company(id: $companyId) {
+      incidentStats(filter: $filter) {
+        type
+        count
+      }
+    }
+  }
+`;
+
+export const GET_INCIDENT_STATS_FOR_PERSON = gql`
+  query ($personId: ID!, $filter: IncidentStatsFilter) {
+    person(id: $personId) {
+      name
       incidentStats(filter: $filter) {
         type
         count
