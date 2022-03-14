@@ -322,6 +322,26 @@ export const Locations: React.FC = () => {
             )}
           </>
         )}
+        <IconButton
+          className={styles.filterButton}
+          onClick={handleOpenFilterBox}
+          size="large"
+        >
+          <FilterAltIcon fontSize="inherit" />
+        </IconButton>
+        <Modal
+          open={openFilterbox}
+          onClose={handleCloseFilterBox}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <CustomBoxReduced
+            user={user}
+            startDate={startDate}
+            endDate={endDate}
+            pageLabel={locationPageLabel}
+          />
+        </Modal>
       </>
     </StyledEngineProvider>
   );
