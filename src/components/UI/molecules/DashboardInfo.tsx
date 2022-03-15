@@ -29,6 +29,7 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
       <HomeGreeting
         activeWidgetState={props.activeWidgetState}
         inactiveWidgetState={props.inactiveWidgetState}
+        updateWidgetStates={props.updateWidgetStates}
         userName={"Jane"}
         time={"Afternoon"}
         date={"January 27th, 2022"}
