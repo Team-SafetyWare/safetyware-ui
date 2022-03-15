@@ -17,7 +17,7 @@ import React from "react";
 interface HomeGreetingProps {
   activeWidgetState?: any;
   inactiveWidgetState?: any;
-  updateWidgetStates?: any;
+  addWidget?: any;
   userName?: string;
   time?: string;
   date?: string;
@@ -92,7 +92,6 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
   const styles = useStyles();
 
   const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -100,7 +99,7 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
 
   const handleCloseSelected = (value: any) => {
     setOpen(false);
-    props.updateWidgetStates(value);
+    props.addWidget(value);
   };
 
   const handleCloseNoneSelected = () => {
@@ -126,17 +125,12 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
           >
             Add Widget
           </BootstrapButton>
-          <BootstrapButton
-            variant="outlined"
-            endIcon={<SaveOutlinedIcon />}
-            onClick={handleClickOpen}
-          >
+          <BootstrapButton variant="outlined" endIcon={<SaveOutlinedIcon />}>
             Save Dashboard
           </BootstrapButton>
           <SimpleDialog
             activeWidgetState={props.activeWidgetState}
             inactiveWidgetState={props.inactiveWidgetState}
-            selectedValue={selectedValue}
             open={open}
             onCloseSelected={handleCloseSelected}
             onCloseNoneSelected={handleCloseNoneSelected}
@@ -147,18 +141,10 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
   );
 };
 
-const emails = [
-  "Incident Dot Map",
-  "Bar Graph",
-  "Travel History Trail Map",
-  "Hazardous Area Heat Map",
-];
-
 export interface SimpleDialogProps {
   activeWidgetState?: any;
   inactiveWidgetState?: any;
   open: boolean;
-  selectedValue: string;
   onCloseSelected: (value: any) => void;
   onCloseNoneSelected: () => void;
 }
@@ -167,7 +153,6 @@ function SimpleDialog(props: SimpleDialogProps) {
   const {
     onCloseSelected,
     onCloseNoneSelected,
-    selectedValue,
     open,
     inactiveWidgetState,
     activeWidgetState,
@@ -185,7 +170,7 @@ function SimpleDialog(props: SimpleDialogProps) {
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>Select a Widget to Add to the Dashboard</DialogTitle>
       <List sx={{ pt: 0 }}>
-        {props.inactiveWidgetState.map((widget: any) => (
+        {inactiveWidgetState.map((widget: any) => (
           <ListItem
             button
             onClick={() => handleListItemClick(widget)}
@@ -199,7 +184,7 @@ function SimpleDialog(props: SimpleDialogProps) {
             <ListItemText primary={widget.widgetName} />
           </ListItem>
         ))}
-        {props.activeWidgetState.map((widget: any) => (
+        {activeWidgetState.map((widget: any) => (
           <ListItem disabled={true} key={widget.widgetName}>
             <ListItemAvatar>
               <Avatar sx={{ bgcolor: "white", color: "black" }}>

@@ -81,17 +81,27 @@ export const Home: React.FC = () => {
     setInactiveWidgets(array);
   };
 
+  const removeWidget = (selectedWidget: any) => {
+    console.log(selectedWidget);
+    setInactiveWidgets([...inactiveWidgets, selectedWidget]);
+
+    let array = [...activeWidgets];
+    array.splice(activeWidgets.indexOf(selectedWidget), 1);
+    setActiveWidgets(array);
+  };
+
   return (
     <div className={styles.dashboardContent}>
       <DashboardInfo
         activeWidgetState={activeWidgets}
         inactiveWidgetState={inactiveWidgets}
-        updateWidgetStates={addWidget}
+        addWidget={addWidget}
       />
       {matches && <DashboardSummary />}
       <DashboardWidgetWrapper
         widgetState={activeWidgets}
         setWidgetState={setActiveWidgets}
+        removeWidget={removeWidget}
       />
     </div>
   );
