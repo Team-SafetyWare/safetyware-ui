@@ -1,4 +1,3 @@
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
@@ -7,10 +6,8 @@ import React from "react";
 interface PageSectionHeaderProps {
   sectionTitle?: string;
   sectionDescription?: string;
-  download?: boolean;
 }
-
-const BootstrapButton = styled(Button)({
+styled(Button)({
   boxShadow: "none",
   textTransform: "none",
   padding: "6px 12px",
@@ -30,7 +27,6 @@ const BootstrapButton = styled(Button)({
     '"Segoe UI Symbol"',
   ].join(","),
 });
-
 const useStyles = makeStyles({
   pageGreeting: {
     width: "100%",
@@ -53,15 +49,6 @@ const useStyles = makeStyles({
 
 export const PageSectionHeader: React.FC<PageSectionHeaderProps> = (props) => {
   const styles = useStyles();
-  let downloadButton;
-
-  if (props.download) {
-    downloadButton = (
-      <BootstrapButton variant="outlined" endIcon={<AddOutlinedIcon />}>
-        Download Raw Data
-      </BootstrapButton>
-    );
-  }
 
   return (
     <div className={styles.pageGreeting}>
@@ -69,7 +56,6 @@ export const PageSectionHeader: React.FC<PageSectionHeaderProps> = (props) => {
         <p className={styles.greeting}>{props.sectionTitle}</p>
         <p className={styles.date}>{props.sectionDescription}</p>
       </div>
-      <div className={styles.buttons}>{downloadButton}</div>
     </div>
   );
 };

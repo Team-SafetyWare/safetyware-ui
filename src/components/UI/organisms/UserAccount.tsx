@@ -1,10 +1,8 @@
-import { useQuery } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import ProfilePicture from "../../../assets/profilePicture.png";
-import { GET_PERSONS } from "../../../util/queryService";
+import React from "react";
 import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
 import { PageHeader } from "../atoms/PageHeader";
+import { API_URL, getCurrentUser } from "../../../index";
 
 export const UserAccount: React.FC = () => {
   // TO-DO: create proper data with ALL data from backend
@@ -22,27 +20,9 @@ export const UserAccount: React.FC = () => {
     ],
   ];
 
-  // Set up interface to hold the data we will be gathering from backend
-  interface Person {
-    name: string;
-    id: string;
-  }
-
-  // https://www.apollographql.com/docs/react/data/queries/
-  // TO-DO: handle loading and error
-  let personList: Array<Person> = [];
-  const { loading, error, data } = useQuery(GET_PERSONS);
-
-  // Sample feed into UI components
-  const [name, setName] = useState("Jane Doe");
-  useEffect(() => {
-    if (!loading && data) {
-      data.people.map((person: Person) => {
-        personList.push(person);
-      });
-      setName(personList[0].name);
-    }
-  }, [loading, data]);
+  const user = getCurrentUser();
+  const profileImageUrl =
+    user && `${API_URL}/v1/userAccount/${user.id}/profile.png`;
 
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
 
@@ -57,11 +37,11 @@ export const UserAccount: React.FC = () => {
         />
       )}
       <UserAccountTemplate
-        userPhoto={ProfilePicture}
-        userName={name}
-        userTitle={"Senior Manager at Blackline Safety"}
-        userPhone={"123-456-7890"}
-        userEmail={"jane.doe@blackline.ca"}
+        userPhoto={profileImageUrl}
+        userName={user?.name}
+        userTitle={`${user?.title} at ${user?.company?.name}`}
+        userPhone={user?.phone}
+        userEmail={user?.email}
         userTeam={"Team 123-ABC-456"}
         teamData={mockData}
       />

@@ -1,39 +1,31 @@
 import { useQuery } from "@apollo/client";
-import { useMediaQuery } from "@mui/material";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { IconButton, Modal, useMediaQuery } from "@mui/material";
+import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import { GET_INCIDENTS } from "../../../util/queryService";
+import { getCurrentUser } from "../../../index";
+import {
+  selectIncidentPageEndDate,
+  selectIncidentPagePersonId,
+  selectIncidentPageStartDate,
+} from "../../../store/slices/incidentPageSlice";
+import { useAppSelector } from "../../../store/store";
+import theme from "../../../Theme";
+import {
+  GET_INCIDENTS_FOR_COMPANY,
+  GET_INCIDENTS_FOR_PERSON,
+  GET_INCIDENT_STATS_FOR_COMPANY,
+  GET_INCIDENT_STATS_FOR_PERSON,
+} from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
-import CustomCollapsibleTable from "../atoms/CustomCollapsibleTable";
 import IncidentDotMap from "../atoms/IncidentDotMap";
+import IncidentTable from "../atoms/IncidentTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
-import { CustomBox } from "../molecules/CustomBox";
-
-const barGraphData = [
-  { x: 0, y: 8 },
-  { x: 1, y: 5 },
-  { x: 2, y: 4 },
-  { x: 3, y: 9 },
-  { x: 4, y: 1 },
-  { x: 5, y: 7 },
-  { x: 6, y: 6 },
-  { x: 7, y: 3 },
-  { x: 8, y: 2 },
-  { x: 9, y: 0 },
-];
-
-const user = "PersonA";
-const view = "User";
-const incidentType = "All";
-const tempStartDate = new Date("01/01/2022");
-const tempEndDate = new Date("01/08/2022");
-const incidents = [
-  { lat: 51.077763, lng: -114.140657 },
-  { lat: 51.046048773481786, lng: -114.02334120770176 },
-];
+import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
 
 const center = {
   lat: 51.049999,
@@ -64,6 +56,16 @@ const useStyles = makeStyles({
         width: "100vw",
       },
   },
+
+  filterButton: {
+    backgroundColor: theme.palette.primary.main,
+    bottom: 16,
+    color: "white",
+    position: "fixed",
+    right: 16,
+
+    "&:hover": { backgroundColor: theme.palette.primary.light },
+  },
 });
 
 export interface IncidentReadings {
@@ -77,35 +79,149 @@ export interface IncidentReadings {
   companyName?: string;
 }
 
+export interface IncidentStat {
+  x: string;
+  y: number;
+}
+
 export const incidentPageLabel = "incidentPage";
+export const incidentBarGraphXAxisTitle = "Type of Incident";
+export const incidentBarGraphYAxisTitle = "Number of Incidents";
 
 export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
-  const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
-  const { loading, error, data } = useQuery(GET_INCIDENTS);
+  const user = getCurrentUser();
+
+  const startDate = useAppSelector(selectIncidentPageStartDate);
+  const endDate = useAppSelector(selectIncidentPageEndDate);
+  const filterId = useAppSelector(selectIncidentPagePersonId);
+
+  const { data: personIncidentData } = useQuery(GET_INCIDENTS_FOR_PERSON, {
+    variables: {
+      personId: filterId,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
+    },
+  });
+
+  const { data: companyIncidentsData } = useQuery(GET_INCIDENTS_FOR_COMPANY, {
+    variables: {
+      companyId: user?.company.id,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
+    },
+  });
+
+  const [incidents, setIncidents] = React.useState<any>([]);
 
   useEffect(() => {
-    updateIncidents([]);
-    if (!loading && data) {
-      data.incidents.map((incident: any) => {
-        updateIncidents((incidents) => [
-          ...incidents,
-          {
-            coordinates: {
-              lng: incident.coordinates[0],
-              lat: incident.coordinates[1],
-            },
-            personName: incident.person.name,
-            timestamp: incident.timestamp,
-            type: incident.type,
-            companyName: incident.person.company.name,
-          },
-        ]);
-      });
+    if (filterId !== "") {
+      if (personIncidentData && personIncidentData.person !== null) {
+        const incidents: any[] =
+          personIncidentData.person.incidents
+            .map((incident: any) => {
+              return {
+                coordinates: {
+                  lng: incident.coordinates[0],
+                  lat: incident.coordinates[1],
+                },
+                personName: personIncidentData.person.name,
+                timestamp: new Date(incident.timestamp),
+                type: incident.type,
+              };
+            })
+            .flat() ?? [];
+        setIncidents(incidents);
+      }
+    } else {
+      const incidents: any[] =
+        companyIncidentsData?.company.people
+          .map((person: any) =>
+            person.incidents.map((incident: any) => {
+              return {
+                coordinates: {
+                  lng: incident.coordinates[0],
+                  lat: incident.coordinates[1],
+                },
+                personName: person.name,
+                timestamp: new Date(incident.timestamp),
+                type: incident.type,
+                companyName: companyIncidentsData.company.name,
+              };
+            })
+          )
+          .flat() ?? [];
+      setIncidents(incidents);
     }
-  }, [loading, data]);
+  }, [companyIncidentsData, personIncidentData, startDate, endDate, filterId]);
+
+  const { data: companyIncidentStatsData } = useQuery(
+    GET_INCIDENT_STATS_FOR_COMPANY,
+    {
+      variables: {
+        companyId: user?.company.id,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
+      },
+    }
+  );
+
+  const { data: personIncidentStatsData } = useQuery(
+    GET_INCIDENT_STATS_FOR_PERSON,
+    {
+      variables: {
+        personId: filterId,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
+      },
+    }
+  );
+
+  const [incidentStats, setIncidentStats] = React.useState<any>([]);
+
+  useEffect(() => {
+    if (filterId !== "") {
+      if (personIncidentStatsData && personIncidentStatsData.person !== null) {
+        const incidentStats: any[] =
+          personIncidentStatsData.person.incidentStats
+            .map((incidentStat: any) => {
+              return {
+                x: incidentStat.type,
+                y: incidentStat.count,
+              };
+            })
+            .sort((a: any, b: any) => (a.x > b.x ? 1 : -1)) ?? [];
+        setIncidentStats(incidentStats);
+      }
+    } else {
+      const incidentStats: any[] =
+        companyIncidentStatsData?.company.incidentStats
+          .map((incidentStat: any) => {
+            return {
+              x: incidentStat.type,
+              y: incidentStat.count,
+            };
+          })
+          .sort((a: any, b: any) => (a.x > b.x ? 1 : -1)) ?? [];
+      setIncidentStats(incidentStats);
+    }
+  }, [
+    companyIncidentStatsData,
+    personIncidentStatsData,
+    startDate,
+    endDate,
+    filterId,
+  ]);
 
   const visualizations = [
     "Raw Incidents Data Table",
@@ -115,80 +231,118 @@ export const Incidents: React.FC = () => {
 
   const [visualization, setVisualization] = useState(visualizations[0]);
 
+  const [openFilterbox, setOpenFilterbox] = useState(false);
+  const handleOpenFilterBox = () => setOpenFilterbox(true);
+  const handleCloseFilterBox = () => setOpenFilterbox(false);
+
   return (
-    <>
-      {matches ? (
-        <>
-          <PageHeader
-            pageTitle={"Incidents"}
-            pageDescription={
-              "Description of the Incidents Page and What it Does"
-            }
-          />
-          <PageSectionHeader
-            sectionTitle={"Raw Incidents Data"}
-            sectionDescription={"Explore and Download Raw Incidents Data"}
-            download={true}
-          />
-          <CustomAccordion
-            accordionHeight={"auto"}
-            accordionWidth={""}
-            accordionTitle={visualizations[0]}
-            component={<CustomCollapsibleTable />}
-          />
-          <PageSectionHeader
-            sectionTitle={"Incidents Visualizations"}
-            sectionDescription={"Visualize Incidents Data"}
-            download={false}
-          />
-          <CustomAccordion
-            accordionHeight={"400px"}
-            accordionWidth={""}
-            accordionTitle={visualizations[1]}
-            component={
-              <IncidentDotMap incidents={incidents} center={center} zoom={10} />
-            }
-          />
-          <CustomAccordion
-            accordionHeight={"400px"}
-            accordionWidth={""}
-            accordionTitle={visualizations[2]}
-            component={<BarGraph data={barGraphData} />}
-          />
-          <CustomBox
+    <StyledEngineProvider injectFirst>
+      <>
+        {matches ? (
+          <>
+            <PageHeader
+              pageTitle={"Incidents"}
+              pageDescription={
+                "Analyze data based on incidents including a dot map and a bar graph showing incident frequencies."
+              }
+            />
+            <PageSectionHeader
+              sectionTitle={"Raw Incidents Data"}
+              sectionDescription={
+                "Explore raw incidents data through a date-filtered data table."
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"auto"}
+              accordionWidth={""}
+              accordionTitle={visualizations[0]}
+              component={<IncidentTable incidents={incidents} />}
+            />
+            <PageSectionHeader
+              sectionTitle={"Incidents Visualizations"}
+              sectionDescription={
+                "Visualize incidents data through a dot map showing incident type and location, and a bar graph indicating incident frequencies."
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"400px"}
+              accordionWidth={""}
+              accordionTitle={visualizations[1]}
+              component={
+                <IncidentDotMap
+                  incidents={incidents}
+                  center={center}
+                  zoom={10}
+                />
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"400px"}
+              accordionWidth={""}
+              accordionTitle={visualizations[2]}
+              component={
+                <BarGraph
+                  data={incidentStats}
+                  xAxisTitle={incidentBarGraphXAxisTitle}
+                  yAxisTitle={incidentBarGraphYAxisTitle}
+                />
+              }
+            />
+          </>
+        ) : (
+          <>
+            <div className={styles.incidentsDropdown}>
+              <VisualizationSelect
+                visualizations={visualizations}
+                setVisualization={setVisualization}
+              />
+            </div>
+            {visualization == visualizations[0] && (
+              <div className={styles.visualization}>
+                <IncidentTable incidents={incidents} />
+              </div>
+            )}
+            {visualization == visualizations[1] && (
+              <div className={styles.visualization}>
+                <IncidentDotMap
+                  incidents={incidents}
+                  center={center}
+                  zoom={10}
+                />
+              </div>
+            )}
+            {visualization == visualizations[2] && (
+              <div className={styles.visualization}>
+                <BarGraph
+                  data={incidentStats}
+                  xAxisTitle={incidentBarGraphXAxisTitle}
+                  yAxisTitle={incidentBarGraphYAxisTitle}
+                />
+              </div>
+            )}
+          </>
+        )}
+        <IconButton
+          className={styles.filterButton}
+          onClick={handleOpenFilterBox}
+          size="large"
+        >
+          <FilterAltIcon fontSize="inherit" />
+        </IconButton>
+        <Modal
+          open={openFilterbox}
+          onClose={handleCloseFilterBox}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <CustomBoxReduced
             user={user}
-            view={view}
-            incidentType={incidentType}
-            startDate={tempStartDate}
-            endDate={tempEndDate}
+            startDate={startDate}
+            endDate={endDate}
             pageLabel={incidentPageLabel}
           />
-        </>
-      ) : (
-        <>
-          <div className={styles.incidentsDropdown}>
-            <VisualizationSelect
-              visualizations={visualizations}
-              setVisualization={setVisualization}
-            />
-          </div>
-          {visualization === visualizations[0] && (
-            <div className={styles.visualization}>
-              <CustomCollapsibleTable />
-            </div>
-          )}
-          {visualization === visualizations[1] && (
-            <div className={styles.visualization}>
-              <IncidentDotMap incidents={incidents} center={center} zoom={10} />
-            </div>
-          )}
-          {visualization === visualizations[2] && (
-            <div className={styles.visualization}>
-              <BarGraph data={barGraphData} />
-            </div>
-          )}
-        </>
-      )}
-    </>
+        </Modal>
+      </>
+    </StyledEngineProvider>
   );
 };

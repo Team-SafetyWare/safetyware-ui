@@ -9,6 +9,7 @@ interface UserPictureProps {
 const useStyles = makeStyles({
   userImage: {
     width: "270px",
+    "border-radius": "50%;",
 
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
