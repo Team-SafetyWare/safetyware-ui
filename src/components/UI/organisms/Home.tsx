@@ -41,19 +41,7 @@ export const Home: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
-  const [items, setItems] = useState([
-    {
-      widgetName: "Incident Dot Map",
-      widget: (
-        <IncidentDotMapWidget incidents={incidents} center={center} zoom={10} />
-      ),
-    },
-    {
-      widgetName: "Travel History Trail",
-      widget: (
-        <TravelHistoryTrailWidget path={incidents} center={center} zoom={10} />
-      ),
-    },
+  const [inactiveWidgets, setInactiveWidgets] = useState([
     {
       widgetName: "Hazardous Area Heat Map",
       widget: (
@@ -70,11 +58,32 @@ export const Home: React.FC = () => {
     },
   ]);
 
+  const [activeWidgets, setActiveWidgets] = useState([
+    {
+      widgetName: "Incident Dot Map",
+      widget: (
+        <IncidentDotMapWidget incidents={incidents} center={center} zoom={10} />
+      ),
+    },
+    {
+      widgetName: "Travel History Trail",
+      widget: (
+        <TravelHistoryTrailWidget path={incidents} center={center} zoom={10} />
+      ),
+    },
+  ]);
+
   return (
     <div className={styles.dashboardContent}>
-      <DashboardInfo />
+      <DashboardInfo
+        activeWidgetState={activeWidgets}
+        inactiveWidgetState={inactiveWidgets}
+      />
       {matches && <DashboardSummary />}
-      <DashboardWidgetWrapper widgetState={items} setWidgetState={setItems} />
+      <DashboardWidgetWrapper
+        widgetState={activeWidgets}
+        setWidgetState={setActiveWidgets}
+      />
     </div>
   );
 };
