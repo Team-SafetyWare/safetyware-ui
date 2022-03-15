@@ -1,69 +1,80 @@
-import AddIcon from "@mui/icons-material/Add";
-import SaveIcon from "@mui/icons-material/Save";
-import UndoIcon from "@mui/icons-material/Undo";
 import { useMediaQuery } from "@mui/material";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, { useState } from "react";
+import { BarGraphWidget } from "../atoms/BarGraphWidget";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
+import HazardousAreaHeatMapWidget from "../atoms/HazardousAreaHeatMapWidget";
+import IncidentDotMapWidget from "../atoms/IncidentDotMapWidget";
+import { TravelHistoryTrailWidget } from "../atoms/TravelHistoryTrailWidget";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
   dashboardContent: {},
-  placeholderDiv: {
-    textAlign: "center",
-  },
-  fab: {
-    backgroundColor: "#ad172b",
-  },
-  greeting: {
-    margin: 0,
-  },
-  date: {
-    margin: 0,
-  },
-  pageLabel: {
-    margin: 0,
-  },
-  pageDescription: {
-    margin: 0,
-  },
 });
 
-// still needs the actual action functions
-const actions = [
-  { icon: <UndoIcon />, name: "Undo" },
-  { icon: <SaveIcon />, name: "Save" },
-  { icon: <AddIcon />, name: "Add" },
+const barGraphData = [
+  { x: 0, y: 8 },
+  { x: 1, y: 5 },
+  { x: 2, y: 4 },
+  { x: 3, y: 9 },
+  { x: 4, y: 1 },
+  { x: 5, y: 7 },
+  { x: 6, y: 6 },
+  { x: 7, y: 3 },
+  { x: 8, y: 2 },
+  { x: 9, y: 0 },
 ];
+
+const incidents = [
+  { lat: 51.077763, lng: -114.140657 },
+  { lat: 51.046048773481786, lng: -114.02334120770176 },
+];
+
+const center = {
+  lat: 51.049999,
+  lng: -114.1283,
+};
 
 export const Home: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
+  const [items, setItems] = useState([
+    {
+      widgetName: "Incident Dot Map",
+      widget: (
+        <IncidentDotMapWidget incidents={incidents} center={center} zoom={10} />
+      ),
+    },
+    {
+      widgetName: "Travel History Trail",
+      widget: (
+        <TravelHistoryTrailWidget path={incidents} center={center} zoom={10} />
+      ),
+    },
+    {
+      widgetName: "Hazardous Area Heat Map",
+      widget: (
+        <HazardousAreaHeatMapWidget
+          accidents={incidents}
+          center={center}
+          zoom={10}
+        />
+      ),
+    },
+    {
+      widgetName: "Bar Graph",
+      widget: <BarGraphWidget data={barGraphData} />,
+    },
+  ]);
+
   return (
     <div className={styles.dashboardContent}>
-      <SpeedDial
-        ariaLabel="SpeedDial"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}
-        FabProps={{ style: { backgroundColor: "#ad172b" } }}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-          />
-        ))}
-      </SpeedDial>
       <DashboardInfo />
       {matches && <DashboardSummary />}
-      <DashboardWidgetWrapper />
+      <DashboardWidgetWrapper widgetState={items} setWidgetState={setItems} />
     </div>
   );
 };
