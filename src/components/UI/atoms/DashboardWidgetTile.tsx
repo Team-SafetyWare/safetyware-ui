@@ -4,7 +4,6 @@ import React from "react";
 interface DashboardSummaryTileProps {
   widgetName?: string;
   widget?: any;
-  innerRef?: any;
 }
 
 const useStyles = makeStyles({
