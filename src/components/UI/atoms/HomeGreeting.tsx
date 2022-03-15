@@ -90,7 +90,6 @@ const useStyles = makeStyles({
 
 export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
   const styles = useStyles();
-
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

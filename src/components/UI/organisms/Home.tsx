@@ -82,7 +82,6 @@ export const Home: React.FC = () => {
   };
 
   const removeWidget = (selectedWidget: any) => {
-    console.log(selectedWidget);
     setInactiveWidgets([...inactiveWidgets, selectedWidget]);
 
     let array = [...activeWidgets];
