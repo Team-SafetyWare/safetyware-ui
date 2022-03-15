@@ -88,6 +88,8 @@ export const incidentPageLabel = "incidentPage";
 export const incidentBarGraphXAxisTitle = "Type of Incident";
 export const incidentBarGraphYAxisTitle = "Number of Incidents";
 
+const accordionHeightInPixels = "600px";
+
 export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
@@ -247,25 +249,14 @@ export const Incidents: React.FC = () => {
               }
             />
             <PageSectionHeader
-              sectionTitle={"Raw Incidents Data"}
-              sectionDescription={
-                "Explore raw incidents data through a date-filtered data table."
-              }
-            />
-            <CustomAccordion
-              accordionHeight={"auto"}
-              accordionWidth={""}
-              accordionTitle={visualizations[0]}
-              component={<IncidentTable incidents={incidents} />}
-            />
-            <PageSectionHeader
               sectionTitle={"Incidents Visualizations"}
               sectionDescription={
                 "Visualize incidents data through a dot map showing incident type and location, and a bar graph indicating incident frequencies."
               }
             />
             <CustomAccordion
-              accordionHeight={"400px"}
+              defaultExpanded={true}
+              accordionHeight={accordionHeightInPixels}
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
@@ -277,7 +268,7 @@ export const Incidents: React.FC = () => {
               }
             />
             <CustomAccordion
-              accordionHeight={"400px"}
+              accordionHeight={accordionHeightInPixels}
               accordionWidth={""}
               accordionTitle={visualizations[2]}
               component={
@@ -287,6 +278,18 @@ export const Incidents: React.FC = () => {
                   yAxisTitle={incidentBarGraphYAxisTitle}
                 />
               }
+            />
+            <PageSectionHeader
+              sectionTitle={"Raw Incidents Data"}
+              sectionDescription={
+                "Explore raw incidents data through a date-filtered data table."
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"auto"}
+              accordionWidth={""}
+              accordionTitle={visualizations[0]}
+              component={<IncidentTable incidents={incidents} />}
             />
           </>
         ) : (
