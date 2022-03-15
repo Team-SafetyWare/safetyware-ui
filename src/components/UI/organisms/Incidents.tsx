@@ -277,16 +277,16 @@ export const Incidents: React.FC = () => {
               }
             />
             <PageSectionHeader
-                sectionTitle={"Raw Incidents Data"}
-                sectionDescription={
-                  "Explore raw incidents data through a date-filtered data table."
-                }
+              sectionTitle={"Raw Incidents Data"}
+              sectionDescription={
+                "Explore raw incidents data through a date-filtered data table."
+              }
             />
             <CustomAccordion
-                accordionHeight={"auto"}
-                accordionWidth={""}
-                accordionTitle={visualizations[0]}
-                component={<IncidentTable incidents={incidents} />}
+              accordionHeight={"auto"}
+              accordionWidth={""}
+              accordionTitle={visualizations[0]}
+              component={<IncidentTable incidents={incidents} />}
             />
           </>
         ) : (
