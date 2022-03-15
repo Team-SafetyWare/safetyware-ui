@@ -15,12 +15,21 @@ interface DashboardWidgetWrapperProps {
 }
 
 const useStyles = makeStyles({
-  container: {
+  largeContainer: {
     display: "flex",
     touchAction: "none",
     paddingTop: "5px",
     width: "100%",
     height: "850px",
+    overflow: "hidden",
+  },
+  smallContainer: {
+    display: "flex",
+    touchAction: "none",
+    paddingTop: "5px",
+    width: "100%",
+    height: "400px",
+    overflow: "hidden",
   },
   dropzone: {
     flex: 1,
@@ -45,26 +54,49 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
 
   return (
     <GridContextProvider onChange={onChange}>
-      <div className={styles.container}>
-        <GridDropZone
-          className={styles.dropzone}
-          id="drop-zone"
-          boxesPerRow={2}
-          rowHeight={410}
-        >
-          {props.widgetState.map((widget: any) => (
-            <GridItem
-              key={widget.widgetName}
-              className={styles.widgetTileContainer}
-            >
-              <DashboardWidgetTile
-                widget={widget}
-                removeWidget={props.removeWidget}
-              />
-            </GridItem>
-          ))}
-        </GridDropZone>
-      </div>
+      {props.widgetState.length > 2 ? (
+        <div className={styles.largeContainer}>
+          <GridDropZone
+            className={styles.dropzone}
+            id="drop-zone"
+            boxesPerRow={2}
+            rowHeight={410}
+          >
+            {props.widgetState.map((widget: any) => (
+              <GridItem
+                key={widget.widgetName}
+                className={styles.widgetTileContainer}
+              >
+                <DashboardWidgetTile
+                  widget={widget}
+                  removeWidget={props.removeWidget}
+                />
+              </GridItem>
+            ))}
+          </GridDropZone>
+        </div>
+      ) : (
+        <div className={styles.smallContainer}>
+          <GridDropZone
+            className={styles.dropzone}
+            id="drop-zone"
+            boxesPerRow={2}
+            rowHeight={410}
+          >
+            {props.widgetState.map((widget: any) => (
+              <GridItem
+                key={widget.widgetName}
+                className={styles.widgetTileContainer}
+              >
+                <DashboardWidgetTile
+                  widget={widget}
+                  removeWidget={props.removeWidget}
+                />
+              </GridItem>
+            ))}
+          </GridDropZone>
+        </div>
+      )}
     </GridContextProvider>
   );
 };

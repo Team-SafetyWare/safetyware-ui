@@ -8,9 +8,6 @@ interface DashboardInfoProps {
   inactiveWidgetState?: any;
   addWidget?: any;
   userName?: string;
-  time?: string;
-  date?: string;
-  day?: string;
 }
 
 export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
@@ -31,9 +28,6 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
         inactiveWidgetState={props.inactiveWidgetState}
         addWidget={props.addWidget}
         userName={"Jane"}
-        time={"Afternoon"}
-        date={"January 27th, 2022"}
-        day={"Thursday"}
       />
     </>
   );
