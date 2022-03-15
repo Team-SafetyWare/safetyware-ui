@@ -19,9 +19,6 @@ interface HomeGreetingProps {
   inactiveWidgetState?: any;
   addWidget?: any;
   userName?: string;
-  time?: string;
-  date?: string;
-  day?: string;
 }
 
 const BootstrapButton = styled(Button)({
@@ -92,6 +89,9 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
   const styles = useStyles();
   const [open, setOpen] = React.useState(false);
 
+  const date = new Date();
+  const hours = date.getHours();
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -108,11 +108,22 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
   return (
     <div className={styles.pageGreeting}>
       <div className={styles.greetingDetails}>
-        <p className={styles.greeting}>
-          Good {props.time}, {props.userName}
-        </p>
+        {hours >= 17 ? (
+          <p className={styles.greeting}>Good Evening, {props.userName}</p>
+        ) : hours >= 12 ? (
+          <p className={styles.greeting}>Good Afternoon, {props.userName}</p>
+        ) : (
+          <p className={styles.greeting}>Good Morning, {props.userName}</p>
+        )}
         <p className={styles.date}>
-          Here is your update for {props.day}, {props.date}:
+          Here is your update for{" "}
+          {date.toLocaleDateString(undefined, {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+          :
         </p>
       </div>
       <div className={styles.buttons}>
