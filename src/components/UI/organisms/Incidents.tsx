@@ -88,6 +88,8 @@ export const incidentPageLabel = "incidentPage";
 export const incidentBarGraphXAxisTitle = "Type of Incident";
 export const incidentBarGraphYAxisTitle = "Number of Incidents";
 
+const accordionHeightInPixels = "600px";
+
 export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
@@ -254,7 +256,7 @@ export const Incidents: React.FC = () => {
             />
             <CustomAccordion
               defaultExpanded={true}
-              accordionHeight={"400px"}
+              accordionHeight={accordionHeightInPixels}
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
@@ -266,7 +268,7 @@ export const Incidents: React.FC = () => {
               }
             />
             <CustomAccordion
-              accordionHeight={"400px"}
+              accordionHeight={accordionHeightInPixels}
               accordionWidth={""}
               accordionTitle={visualizations[2]}
               component={
