@@ -11,6 +11,7 @@ interface CustomAccordionProps {
   accordionWidth?: string;
   accordionTitle?: string;
   component?: any;
+  defaultExpanded?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -30,7 +31,7 @@ export const CustomAccordion: React.FC<CustomAccordionProps> = (props) => {
   const styles = useStyles(props);
 
   return (
-    <Accordion>
+    <Accordion defaultExpanded={props.defaultExpanded}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"

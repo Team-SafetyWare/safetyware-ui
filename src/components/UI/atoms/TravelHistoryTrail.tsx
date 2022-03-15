@@ -1,95 +1,111 @@
-import {GoogleMap, InfoWindow, Polyline} from "@react-google-maps/api";
-import React, {useEffect} from "react";
-import {useAppSelector} from "../../../store/store";
-import {selectLocationPageEndDate, selectLocationPageStartDate} from "../../../store/slices/locationPageSlice";
+import { GoogleMap, Polyline } from "@react-google-maps/api";
+import React, { useState } from "react";
+import ControlPosition = google.maps.ControlPosition;
 
 interface TravelHistoryTrailProps {
-    center?: any;
-    path: TravelHistoryPoint[];
+  center?: any;
+  data: any;
 }
-
-export interface TravelHistoryPoint {
-    lat: number,
-    lng: number,
-    timestamp: string,
-}
-
 export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
-    props
+  props
 ) => {
-    const [path, updatePath] = React.useState<TravelHistoryPoint[]>(props.path);
-    const [filteredPath, updateFilteredPath] = React.useState<TravelHistoryPoint[]>([])
-    const center = props.center;
-    const [polyLineWindows, updateWindows] = React.useState<TravelHistoryPoint[]>([]);
-    const startDate = useAppSelector(selectLocationPageStartDate);
-    const endDate = useAppSelector(selectLocationPageEndDate);
+  const segments = props.data
+    .map((person: any) => {
+      return person.segments
+        .map((segment: any) => {
+          return {
+            path: segment,
+            color: person.color,
+          };
+        })
+        .flat();
+    })
+    .flat();
+  const center = props.center;
 
-    const mapContainerStyle = {
-        height: "100%",
-        width: "100%",
-    };
+  const mapContainerStyle = {
+    height: "100%",
+    width: "100%",
+  };
 
-    const options = {
-        strokeColor: "#FF0000",
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: "#FF0000",
-        fillOpacity: 0.35,
-        clickable: true,
-        draggable: false,
-        editable: false,
-        visible: true,
-        radius: 30000,
-        paths: {paths: path},
-        zIndex: 1,
-    };
+  const [showLegend, setShowLegend] = useState(false);
 
-    function inDateRange(date: Date, start: Date, end: Date): boolean {
-        return !(date.getTime() < start.getTime() || date.getTime() > end.getTime());
-    }
-
-    useEffect(() => {
-        updatePath(() => props.path)
-    }, [props])
-
-    useEffect(() => {
-        updateFilteredPath([])
-        updateWindows([])
-        path.map((history: any) => {
-                if (!inDateRange(new Date(history.timestamp), new Date(startDate), new Date(endDate))) {
-                    return;
-                }
-                updateFilteredPath(filteredPath =>
-                    [
-                        ...filteredPath,
-                        history,
-                    ])
-            }
-        )
-    }, [path, startDate, endDate])
-
-    function createTravelTrailWindows(point: TravelHistoryPoint) {
-        return <InfoWindow position={{lat: point.lat, lng: point.lng}}>
-            <div>{point.timestamp}</div>
-        </InfoWindow>
-    }
-
-    function showStartEndTimesForTravelTrail() {
-        if (filteredPath) {
-            updateWindows(polyLineWindows => [...polyLineWindows, filteredPath[0]])
-            updateWindows(polyLineWindows => [...polyLineWindows, filteredPath[filteredPath.length - 1]])
-        }
-    }
-
-    return (
-        <GoogleMap
-            id="marker-example"
-            mapContainerStyle={mapContainerStyle}
-            zoom={12}
-            center={center}
-        >
-            {polyLineWindows.map((point) => createTravelTrailWindows(point))}
-            <Polyline path={filteredPath} options={options} onClick={() => showStartEndTimesForTravelTrail()}/>
-        </GoogleMap>
-    );
+  return (
+    <>
+      <div
+        id={"travel-legend"}
+        hidden={!showLegend}
+        style={{
+          background: "rgb(255, 255, 255) none repeat scroll 0% 0% padding-box",
+          border: "0px none",
+          marginLeft: "10px",
+          padding: "0px 17px",
+          textTransform: "none",
+          appearance: "none",
+          cursor: "pointer",
+          userSelect: "none",
+          direction: "ltr",
+          overflow: "hidden",
+          verticalAlign: "middle",
+          color: "rgb(86, 86, 86)",
+          fontFamily: "Roboto, Arial, sans-serif",
+          fontSize: "18px",
+          borderBottomRightRadius: "2px",
+          borderTopRightRadius: "2px",
+          boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px",
+        }}
+      >
+        <p>Legend</p>
+        {props.data.map((person: any) => (
+          // eslint-disable-next-line react/jsx-key
+          <div>
+            <p>
+              <span
+                style={{
+                  height: "16px",
+                  width: "16px",
+                  backgroundColor: person.color,
+                  borderRadius: "50%",
+                  display: "inline-block",
+                  marginRight: "8px",
+                }}
+              />
+              {person.name}
+            </p>
+          </div>
+        ))}
+      </div>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={12}
+        center={center}
+        options={{ gestureHandling: "greedy" }}
+        onLoad={(map) => {
+          const controls = map.controls[ControlPosition.LEFT_TOP];
+          const legend = document.getElementById("travel-legend");
+          controls.push(legend);
+        }}
+        onTilesLoaded={() => {
+          setShowLegend(true);
+        }}
+      >
+        {segments.map((segment: any) => (
+          // eslint-disable-next-line react/jsx-key
+          <Polyline
+            path={segment.path}
+            options={{
+              strokeColor: segment.color,
+              strokeOpacity: 1,
+              strokeWeight: 3,
+              clickable: false,
+              draggable: false,
+              editable: false,
+              visible: true,
+              zIndex: 1,
+            }}
+          />
+        ))}
+      </GoogleMap>
+    </>
+  );
 };

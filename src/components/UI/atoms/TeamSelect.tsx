@@ -5,15 +5,16 @@ import Select from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import React from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TeamSelectProps {}
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
+const BootstrapInput = styled(InputBase)(() => ({
   "& .MuiSelect-select": {
     fontWeight: "bold",
   },
 }));
 
-export const TeamSelect: React.FC<TeamSelectProps> = (props) => {
+export const TeamSelect: React.FC<TeamSelectProps> = () => {
   return (
     <FormControl variant="standard" sx={{ minWidth: 120 }}>
       <Select

@@ -76,7 +76,7 @@ export const Home: React.FC = () => {
   const addWidget = (selectedWidget: any) => {
     setActiveWidgets([...activeWidgets, selectedWidget]);
 
-    let array = [...inactiveWidgets];
+    const array = [...inactiveWidgets];
     array.splice(inactiveWidgets.indexOf(selectedWidget), 1);
     setInactiveWidgets(array);
   };
@@ -84,7 +84,7 @@ export const Home: React.FC = () => {
   const removeWidget = (selectedWidget: any) => {
     setInactiveWidgets([...inactiveWidgets, selectedWidget]);
 
-    let array = [...activeWidgets];
+    const array = [...activeWidgets];
     array.splice(activeWidgets.indexOf(selectedWidget), 1);
     setActiveWidgets(array);
   };

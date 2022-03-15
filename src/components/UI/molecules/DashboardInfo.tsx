@@ -22,7 +22,7 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
         <PageHeader
           pageTitle={"Home"}
           pageDescription={
-            "Description of the Home Page (Dashboard) and What it Does"
+            "Welcome to Blackline Safety's safety visualization web application. Add widgets to your dashboard, or explore each visualization type individually."
           }
         />
       )}

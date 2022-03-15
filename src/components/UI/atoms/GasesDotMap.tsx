@@ -26,7 +26,12 @@ export const GasesDotMap: React.FC<GasesDotMapProps> = (props) => {
   }
 
   return (
-    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={zoom}
+      options={{ gestureHandling: "greedy" }}
+    >
       {gases.map((accident: google.maps.LatLng | google.maps.LatLngLiteral) =>
         createMarker(accident)
       )}

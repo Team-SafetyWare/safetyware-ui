@@ -9,6 +9,7 @@ import LatchIcon from "../../../assets/latch.png";
 import SignalIcon from "../../../assets/signal.png";
 import {
   selectIncidentPageEndDate,
+  selectIncidentPageName,
   selectIncidentPageStartDate,
 } from "../../../store/slices/incidentPageSlice";
 import { useAppSelector } from "../../../store/store";
@@ -31,21 +32,20 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
   const [incidents, updateIncidents] = React.useState<IncidentReadings[]>([]);
   const zoom = props.zoom;
   const center = props.center;
-  const [markerWindows, updateMarkerWindows] = React.useState<
-    IncidentReadings[]
-  >([]);
+  const [, updateMarkerWindows] = React.useState<IncidentReadings[]>([]);
   const [filteredIncidents, updateFilteredIncidents] = React.useState<
     IncidentReadings[]
   >([]);
   const startDate = useAppSelector(selectIncidentPageStartDate);
   const endDate = useAppSelector(selectIncidentPageEndDate);
+  const filterName = useAppSelector(selectIncidentPageName);
   const [hoverMarker, updateHoverMarker] = React.useState<
     IncidentReadings | undefined
   >(undefined);
 
   function createMarker(incident: IncidentReadings) {
-    let type = incident.type;
-    let markerIcon = GenericIcon;
+    const type = incident.type;
+    let markerIcon: any;
     switch (type) {
       case "Low battery": {
         markerIcon = BatteryIcon;
@@ -101,15 +101,9 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
             <b>Incident: {incident.type}</b>
           </p>
           <div>Name: {incident.personName}</div>
-          <div>Time: {incident.timestamp}</div>
+          <div>Time: {incident.timestamp?.toLocaleString()}</div>
         </div>
       </InfoWindow>
-    );
-  }
-
-  function inDateRange(date: Date, start: Date, end: Date): boolean {
-    return !(
-      date.getTime() < start.getTime() || date.getTime() > end.getTime()
     );
   }
 
@@ -133,27 +127,23 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
   useEffect(() => {
     updateFilteredIncidents([]);
     updateMarkerWindows([]);
+    updateHoverMarker(undefined);
     incidents.map((incident: any) => {
-      if (
-        !inDateRange(
-          new Date(incident.date),
-          new Date(startDate),
-          new Date(endDate)
-        )
-      ) {
-        return;
-      }
       updateFilteredIncidents((filteredIncidents) => [
         ...filteredIncidents,
         createIncident(incident),
       ]);
     });
-  }, [incidents, startDate, endDate]);
+  }, [incidents, startDate, endDate, filterName]);
 
   return (
     <>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
-        {/*{markerWindows.map((markerWindow: IncidentReadings) => createMarkerWindow(markerWindow))}*/}
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={zoom}
+        options={{ gestureHandling: "greedy" }}
+      >
         {filteredIncidents.map((incident: IncidentReadings) =>
           createMarker(incident)
         )}
