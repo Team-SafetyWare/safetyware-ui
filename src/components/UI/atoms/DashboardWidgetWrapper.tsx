@@ -38,12 +38,7 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
 ) => {
   const styles = useStyles();
 
-  const onChange = (
-    sourceId: any,
-    sourceIndex: any,
-    targetIndex: any,
-    targetId: any
-  ) => {
+  const onChange = (sourceId: any, sourceIndex: any, targetIndex: any) => {
     const nextState = swap(props.widgetState, sourceIndex, targetIndex);
     props.setWidgetState(nextState);
   };
