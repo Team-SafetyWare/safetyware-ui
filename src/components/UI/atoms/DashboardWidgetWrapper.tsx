@@ -11,11 +11,6 @@ import { DashboardWidgetTile } from "./DashboardWidgetTile";
 interface DashboardWidgetWrapperProps {
   widgetState?: any;
   setWidgetState: any;
-  incidentData?: any;
-  travelHistoryData?: any;
-  heatMapData?: any;
-  barGraphData?: any;
-  centerData?: any;
   removeWidget?: any;
 }
 
