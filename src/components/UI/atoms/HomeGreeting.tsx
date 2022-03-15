@@ -1,9 +1,8 @@
+import AddIcon from "@mui/icons-material/Add";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import PersonIcon from "@mui/icons-material/Person";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import { blue } from "@mui/material/colors";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import List from "@mui/material/List";
@@ -16,6 +15,9 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 
 interface HomeGreetingProps {
+  activeWidgetState?: any;
+  inactiveWidgetState?: any;
+  updateWidgetStates?: any;
   userName?: string;
   time?: string;
   date?: string;
@@ -127,6 +129,8 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
             Filter
           </BootstrapButton>
           <SimpleDialog
+            activeWidgetState={props.activeWidgetState}
+            inactiveWidgetState={props.inactiveWidgetState}
             selectedValue={selectedValue}
             open={open}
             onClose={handleClose}
@@ -145,13 +149,21 @@ const emails = [
 ];
 
 export interface SimpleDialogProps {
+  activeWidgetState?: any;
+  inactiveWidgetState?: any;
   open: boolean;
   selectedValue: string;
   onClose: (value: string) => void;
 }
 
 function SimpleDialog(props: SimpleDialogProps) {
-  const { onClose, selectedValue, open } = props;
+  const {
+    onClose,
+    selectedValue,
+    open,
+    inactiveWidgetState,
+    activeWidgetState,
+  } = props;
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -163,20 +175,35 @@ function SimpleDialog(props: SimpleDialogProps) {
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Select a new Widget</DialogTitle>
+      <DialogTitle>Select a new Widget to Add to the Dashboard</DialogTitle>
       <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
+        {props.inactiveWidgetState.map((widget: any) => (
           <ListItem
             button
-            onClick={() => handleListItemClick(email)}
-            key={email}
+            onClick={() => handleListItemClick(widget)}
+            key={widget.widgetName}
           >
             <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                <PersonIcon />
+              <Avatar sx={{ bgcolor: "white", color: "black" }}>
+                <AddIcon />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={email} />
+            <ListItemText primary={widget.widgetName} />
+          </ListItem>
+        ))}
+        {props.activeWidgetState.map((widget: any) => (
+          <ListItem
+            disabled={true}
+            button
+            onClick={() => handleListItemClick(widget)}
+            key={widget.widgetName}
+          >
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: "white", color: "black" }}>
+                <AddIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={widget.widgetName} />
           </ListItem>
         ))}
       </List>
