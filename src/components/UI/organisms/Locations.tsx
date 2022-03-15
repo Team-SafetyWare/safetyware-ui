@@ -79,6 +79,8 @@ export interface LocationReading {
 
 export const locationPageLabel = "locationPage";
 
+const accordionHeightInPixels = "600px";
+
 export const Locations: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
@@ -241,7 +243,7 @@ export const Locations: React.FC = () => {
             />
             <CustomAccordion
               defaultExpanded={true}
-              accordionHeight={"600px"}
+              accordionHeight={accordionHeightInPixels}
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
@@ -249,7 +251,7 @@ export const Locations: React.FC = () => {
               }
             />
             <CustomAccordion
-              accordionHeight={"600px"}
+              accordionHeight={accordionHeightInPixels}
               accordionWidth={""}
               accordionTitle={visualizations[2]}
               component={
