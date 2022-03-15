@@ -253,6 +253,7 @@ export const Incidents: React.FC = () => {
               }
             />
             <CustomAccordion
+              defaultExpanded={true}
               accordionHeight={"400px"}
               accordionWidth={""}
               accordionTitle={visualizations[1]}
