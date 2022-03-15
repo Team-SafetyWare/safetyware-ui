@@ -6,13 +6,11 @@ interface BarGraphWidgetProps {
 }
 
 export const BarGraphWidget: React.FC<BarGraphWidgetProps> = (props) => {
-  const data = props.data;
-
   return (
     <FlexibleXYPlot color="#ad172b">
       <XAxis />
       <YAxis />
-      <VerticalBarSeries data={data} barWidth={1} />
+      <VerticalBarSeries data={props.data} barWidth={1} />
     </FlexibleXYPlot>
   );
 };
