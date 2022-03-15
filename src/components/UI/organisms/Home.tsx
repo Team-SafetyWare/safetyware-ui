@@ -11,7 +11,34 @@ import { DashboardSummary } from "../molecules/DashboardSummary";
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
+<<<<<<< HEAD
   dashboardContent: {},
+=======
+  dashboardContent: {
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        margin: "20px",
+      },
+  },
+  placeholderDiv: {
+    textAlign: "center",
+  },
+  fab: {
+    backgroundColor: "#ad172b",
+  },
+  greeting: {
+    margin: 0,
+  },
+  date: {
+    margin: 0,
+  },
+  pageLabel: {
+    margin: 0,
+  },
+  pageDescription: {
+    margin: 0,
+  },
+>>>>>>> origin/master
 });
 
 const barGraphData = [
@@ -76,7 +103,7 @@ export const Home: React.FC = () => {
   const addWidget = (selectedWidget: any) => {
     setActiveWidgets([...activeWidgets, selectedWidget]);
 
-    const array = [...inactiveWidgets];
+    let array = [...inactiveWidgets];
     array.splice(inactiveWidgets.indexOf(selectedWidget), 1);
     setInactiveWidgets(array);
   };
@@ -84,7 +111,7 @@ export const Home: React.FC = () => {
   const removeWidget = (selectedWidget: any) => {
     setInactiveWidgets([...inactiveWidgets, selectedWidget]);
 
-    const array = [...activeWidgets];
+    let array = [...activeWidgets];
     array.splice(activeWidgets.indexOf(selectedWidget), 1);
     setActiveWidgets(array);
   };
