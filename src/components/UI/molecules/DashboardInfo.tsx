@@ -6,7 +6,7 @@ import { PageHeader } from "../atoms/PageHeader";
 interface DashboardInfoProps {
   activeWidgetState?: any;
   inactiveWidgetState?: any;
-  updateWidgetStates?: any;
+  addWidget?: any;
   userName?: string;
   time?: string;
   date?: string;
@@ -29,7 +29,7 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
       <HomeGreeting
         activeWidgetState={props.activeWidgetState}
         inactiveWidgetState={props.inactiveWidgetState}
-        updateWidgetStates={props.updateWidgetStates}
+        addWidget={props.addWidget}
         userName={"Jane"}
         time={"Afternoon"}
         date={"January 27th, 2022"}

@@ -16,6 +16,7 @@ interface DashboardWidgetWrapperProps {
   heatMapData?: any;
   barGraphData?: any;
   centerData?: any;
+  removeWidget?: any;
 }
 
 const useStyles = makeStyles({
@@ -67,8 +68,8 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
               className={styles.widgetTileContainer}
             >
               <DashboardWidgetTile
-                widgetName={widget.widgetName}
-                widget={widget.widget}
+                widget={widget}
+                removeWidget={props.removeWidget}
               />
             </GridItem>
           ))}

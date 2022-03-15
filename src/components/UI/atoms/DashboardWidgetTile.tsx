@@ -6,8 +6,8 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 
 interface DashboardSummaryTileProps {
-  widgetName?: string;
   widget?: any;
+  removeWidget?: any;
 }
 
 const BootstrapButton = styled(Button)({
@@ -77,10 +77,14 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
     <>
       <div className={styles.widgetTile}>
         <div className={styles.widgetInfo}>
-          <p className={styles.widgetName}>{props.widgetName}</p>
+          <p className={styles.widgetName}>{props.widget.widgetName}</p>
           <div className={styles.widgetButtons}>
             <div className={styles.removeButton}>
-              <BootstrapButton variant="outlined" endIcon={<RemoveIcon />}>
+              <BootstrapButton
+                variant="outlined"
+                endIcon={<RemoveIcon />}
+                onClick={() => props.removeWidget(props.widget)}
+              >
                 Remove Widget
               </BootstrapButton>
             </div>
@@ -94,7 +98,7 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
             </div>
           </div>
         </div>
-        <div className={styles.widget}>{props.widget}</div>
+        <div className={styles.widget}>{props.widget.widget}</div>
       </div>
     </>
   );
