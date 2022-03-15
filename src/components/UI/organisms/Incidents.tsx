@@ -85,6 +85,8 @@ export interface IncidentStat {
 }
 
 export const incidentPageLabel = "incidentPage";
+export const incidentBarGraphXAxisTitle = "Type of Incident";
+export const incidentBarGraphYAxisTitle = "Number of Incidents";
 
 export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
@@ -278,7 +280,13 @@ export const Incidents: React.FC = () => {
               accordionHeight={"400px"}
               accordionWidth={""}
               accordionTitle={visualizations[2]}
-              component={<BarGraph data={incidentStats} />}
+              component={
+                <BarGraph
+                  data={incidentStats}
+                  xAxisTitle={incidentBarGraphXAxisTitle}
+                  yAxisTitle={incidentBarGraphYAxisTitle}
+                />
+              }
             />
           </>
         ) : (
@@ -305,7 +313,11 @@ export const Incidents: React.FC = () => {
             )}
             {visualization == visualizations[2] && (
               <div className={styles.visualization}>
-                <BarGraph data={incidentStats} />
+                <BarGraph
+                  data={incidentStats}
+                  xAxisTitle={incidentBarGraphXAxisTitle}
+                  yAxisTitle={incidentBarGraphYAxisTitle}
+                />
               </div>
             )}
           </>
