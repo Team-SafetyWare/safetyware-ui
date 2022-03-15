@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -98,9 +98,13 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
     setOpen(true);
   };
 
-  const handleClose = (value: string) => {
+  const handleCloseSelected = (value: any) => {
     setOpen(false);
-    setSelectedValue(value);
+    props.updateWidgetStates(value);
+  };
+
+  const handleCloseNoneSelected = () => {
+    setOpen(false);
   };
 
   return (
@@ -124,16 +128,18 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
           </BootstrapButton>
           <BootstrapButton
             variant="outlined"
-            endIcon={<FilterAltOutlinedIcon />}
+            endIcon={<SaveOutlinedIcon />}
+            onClick={handleClickOpen}
           >
-            Filter
+            Save Dashboard
           </BootstrapButton>
           <SimpleDialog
             activeWidgetState={props.activeWidgetState}
             inactiveWidgetState={props.inactiveWidgetState}
             selectedValue={selectedValue}
             open={open}
-            onClose={handleClose}
+            onCloseSelected={handleCloseSelected}
+            onCloseNoneSelected={handleCloseNoneSelected}
           />
         </Stack>
       </div>
@@ -153,12 +159,14 @@ export interface SimpleDialogProps {
   inactiveWidgetState?: any;
   open: boolean;
   selectedValue: string;
-  onClose: (value: string) => void;
+  onCloseSelected: (value: any) => void;
+  onCloseNoneSelected: () => void;
 }
 
 function SimpleDialog(props: SimpleDialogProps) {
   const {
-    onClose,
+    onCloseSelected,
+    onCloseNoneSelected,
     selectedValue,
     open,
     inactiveWidgetState,
@@ -166,16 +174,16 @@ function SimpleDialog(props: SimpleDialogProps) {
   } = props;
 
   const handleClose = () => {
-    onClose(selectedValue);
+    onCloseNoneSelected();
   };
 
-  const handleListItemClick = (value: string) => {
-    onClose(value);
+  const handleListItemClick = (value: any) => {
+    onCloseSelected(value);
   };
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Select a new Widget to Add to the Dashboard</DialogTitle>
+      <DialogTitle>Select a Widget to Add to the Dashboard</DialogTitle>
       <List sx={{ pt: 0 }}>
         {props.inactiveWidgetState.map((widget: any) => (
           <ListItem
@@ -192,12 +200,7 @@ function SimpleDialog(props: SimpleDialogProps) {
           </ListItem>
         ))}
         {props.activeWidgetState.map((widget: any) => (
-          <ListItem
-            disabled={true}
-            button
-            onClick={() => handleListItemClick(widget)}
-            key={widget.widgetName}
-          >
+          <ListItem disabled={true} key={widget.widgetName}>
             <ListItemAvatar>
               <Avatar sx={{ bgcolor: "white", color: "black" }}>
                 <AddIcon />

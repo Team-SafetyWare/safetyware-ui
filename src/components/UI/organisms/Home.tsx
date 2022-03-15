@@ -73,11 +73,20 @@ export const Home: React.FC = () => {
     },
   ]);
 
+  const addWidget = (selectedWidget: any) => {
+    setActiveWidgets([...activeWidgets, selectedWidget]);
+
+    let array = [...inactiveWidgets];
+    array.splice(inactiveWidgets.indexOf(selectedWidget), 1);
+    setInactiveWidgets(array);
+  };
+
   return (
     <div className={styles.dashboardContent}>
       <DashboardInfo
         activeWidgetState={activeWidgets}
         inactiveWidgetState={inactiveWidgets}
+        updateWidgetStates={addWidget}
       />
       {matches && <DashboardSummary />}
       <DashboardWidgetWrapper
