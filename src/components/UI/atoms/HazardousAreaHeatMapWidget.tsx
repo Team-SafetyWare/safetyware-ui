@@ -22,7 +22,7 @@ export const HazardousAreaHeatMapWidget: React.FC<
   const zoom = props.zoom;
 
   function createHeatMapData() {
-    let data = [];
+    const data = [];
     for (const accident of accidents) {
       data.push(new google.maps.LatLng(accident.lat, accident.lng));
     }
