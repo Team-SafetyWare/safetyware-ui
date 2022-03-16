@@ -1,8 +1,22 @@
 import React from "react";
-import { useCompanyLocations } from "../../../util/queryService";
+import {
+  CompanyLocationData,
+  useCompanyLocations,
+} from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
+
+const TRAIL_SPLIT_MS = 10 * 60 * 1000;
+
+interface TrailPoint extends LatLngLiteral {
+  time: Date;
+}
+
+interface Trail {
+  path: TrailPoint[];
+  color: string;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TravelMapProps {}
@@ -17,14 +31,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     },
   });
 
-  const points: LatLngLiteral[] =
-    data?.company.people
-      .map((person) => person.locationReadings)
-      .flat()
-      .map((locationReading) => ({
-        lat: Number(locationReading.coordinates[1]),
-        lng: Number(locationReading.coordinates[0]),
-      })) ?? [];
+  const trails: Trail[] = (data && intoTrails(data)) ?? [];
 
   return (
     <GoogleMap
@@ -39,15 +46,18 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
       }}
       options={{ gestureHandling: "greedy" }}
     >
-      <Polyline
-        path={points}
-        options={{
-          strokeColor: "#ff0000",
-          strokeOpacity: 1,
-          strokeWeight: 3,
-          clickable: false,
-        }}
-      />
+      {trails.map((trail: any) => (
+        // eslint-disable-next-line react/jsx-key
+        <Polyline
+          path={trail.path}
+          options={{
+            strokeColor: trail.color,
+            strokeOpacity: 1,
+            strokeWeight: 3,
+            clickable: false,
+          }}
+        />
+      ))}
     </GoogleMap>
   );
 };
@@ -65,3 +75,24 @@ const splitWhen = <T,>(arr: T[], split: (a: T, b: T) => boolean): T[][] => {
   }
   return segments;
 };
+
+const intoTrails = (data: CompanyLocationData): Trail[] =>
+  data?.company.people
+    .map((person) => {
+      const locations: TrailPoint[] = person.locationReadings.map(
+        (location) => ({
+          lat: Number(location.coordinates[1]),
+          lng: Number(location.coordinates[0]),
+          time: new Date(location.timestamp),
+        })
+      );
+      const segments = splitWhen(
+        locations,
+        (a, b) => b.time.getTime() - a.time.getTime() >= TRAIL_SPLIT_MS
+      );
+      return segments.map((path) => ({
+        path: path,
+        color: "#ff0000",
+      }));
+    })
+    .flat();
