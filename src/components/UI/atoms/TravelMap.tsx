@@ -1,6 +1,9 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { GET_LOCATIONS_FOR_COMPANY } from "../../../util/queryService";
+import {
+  GET_COMPANY_LOCATIONS,
+  useCompanyLocations,
+} from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 
@@ -8,13 +11,12 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 interface TravelMapProps {}
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const user = getCurrentUser();
-  const { data, loading } = useQuery(GET_LOCATIONS_FOR_COMPANY, {
-    variables: {
-      companyId: user?.company.id,
-      filter: {
-        minTimestamp: null,
-        maxTimestamp: null,
-      },
+
+  const { data, loading } = useCompanyLocations({
+    companyId: user?.company.id,
+    filter: {
+      minTimestamp: null,
+      maxTimestamp: null,
     },
   });
 

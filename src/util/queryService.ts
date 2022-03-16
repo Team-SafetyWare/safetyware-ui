@@ -1,4 +1,5 @@
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
+import { QueryResult } from "@apollo/client/react/types/types";
 
 export const GET_USERS = gql`
   {
@@ -27,7 +28,29 @@ export const GET_PERSONS = gql`
   }
 `;
 
-export const GET_LOCATIONS_FOR_COMPANY = gql`
+export interface CompanyLocationData {
+  company: {
+    people: {
+      name: string;
+      locationReadings: [LocationReading];
+    };
+  };
+}
+
+export interface LocationReading {
+  coordinates: [string];
+  timestamp: string;
+}
+
+export interface GetCompanyLocationsVars {
+  companyId: string;
+  filter: {
+    minTimestamp: Date | null;
+    maxTimestamp: Date | null;
+  };
+}
+
+export const GET_COMPANY_LOCATIONS = gql`
   query ($companyId: ID!, $filter: LocationReadingFilter) {
     company(id: $companyId) {
       people {
@@ -41,7 +64,18 @@ export const GET_LOCATIONS_FOR_COMPANY = gql`
   }
 `;
 
-export const GET_LOCATIONS_FOR_PERSON = gql`
+export const useCompanyLocations = (
+  variables: GetCompanyLocationsVars
+): QueryResult<CompanyLocationData, GetCompanyLocationsVars> => {
+  return useQuery<CompanyLocationData, GetCompanyLocationsVars>(
+    GET_COMPANY_LOCATIONS,
+    {
+      variables: variables,
+    }
+  );
+};
+
+export const GET_PERSON_LOCATIONS = gql`
   query ($personId: ID!, $filter: LocationReadingFilter) {
     person(id: $personId) {
       name
