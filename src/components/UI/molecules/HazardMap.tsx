@@ -49,7 +49,7 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
   );
 };
 
-export const useIncidentsInCompany = (
+const useIncidentsInCompany = (
   companyId: string,
   filter: Filter,
   skip = false
@@ -67,7 +67,7 @@ export const useIncidentsInCompany = (
   return data?.company.people.map((person) => person.incidents).flat() || [];
 };
 
-export const useIncidentsInPerson = (
+const useIncidentsInPerson = (
   personId: string,
   filter: Filter,
   skip = false

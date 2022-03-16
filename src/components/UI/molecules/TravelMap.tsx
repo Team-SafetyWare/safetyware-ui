@@ -9,6 +9,7 @@ import {
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
+  sortPeople,
 } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
@@ -142,7 +143,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   );
 };
 
-export const usePeopleInCompany = (
+const usePeopleInCompany = (
   companyId: string,
   filter: Filter,
   skip = false
@@ -160,7 +161,7 @@ export const usePeopleInCompany = (
   return data?.company.people || [];
 };
 
-export const usePersonAsPeople = (
+const usePersonAsPeople = (
   personId: string,
   filter: Filter,
   skip = false
@@ -177,11 +178,6 @@ export const usePersonAsPeople = (
   );
   return (data && [data.person]) || [];
 };
-
-export const sortPeople = (
-  people: PersonWithLocationReadings[]
-): PersonWithLocationReadings[] =>
-  people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
 const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
   people
