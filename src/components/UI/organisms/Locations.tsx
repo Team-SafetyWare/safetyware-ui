@@ -91,8 +91,9 @@ export const Locations: React.FC = () => {
   const endDate = useAppSelector(selectLocationPageEndDate);
   const filterId = useAppSelector(selectLocationPagePersonId);
 
-  const { data: companyLocationReadingsData } =
-    useQuery(GET_LOCATIONS_FOR_COMPANY, {
+  const { data: companyLocationReadingsData } = useQuery(
+    GET_LOCATIONS_FOR_COMPANY,
+    {
       variables: {
         companyId: user?.company.id,
         filter: {
@@ -100,10 +101,12 @@ export const Locations: React.FC = () => {
           maxTimestamp: endDate !== "" ? new Date(endDate) : null,
         },
       },
-    });
+    }
+  );
 
-  const { data: personLocationReadingsData } =
-    useQuery(GET_LOCATIONS_FOR_PERSON, {
+  const { data: personLocationReadingsData } = useQuery(
+    GET_LOCATIONS_FOR_PERSON,
+    {
       variables: {
         personId: filterId,
         filter: {
@@ -111,7 +114,8 @@ export const Locations: React.FC = () => {
           maxTimestamp: endDate !== "" ? new Date(endDate) : null,
         },
       },
-    });
+    }
+  );
 
   const [locationReadings, setLocationReadings] = useState<any>([]);
   // const [people, setPeople] = useState<any>([]);
@@ -277,10 +281,7 @@ export const Locations: React.FC = () => {
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
-                <TravelHistoryTrail
-                  center={center}
-                  data={travelData}
-                />
+                <TravelHistoryTrail center={center} data={travelData} />
               }
             />
             <CustomAccordion
@@ -343,10 +344,7 @@ export const Locations: React.FC = () => {
             )}
             {visualization == visualizations[1] && (
               <div className={styles.visualization}>
-                <TravelHistoryTrail
-                  center={center}
-                  data={travelData}
-                />
+                <TravelHistoryTrail center={center} data={travelData} />
               </div>
             )}
             {visualization == visualizations[2] && (

@@ -2,7 +2,7 @@ import { GoogleMap, Polyline } from "@react-google-maps/api";
 import React, { useState } from "react";
 import ControlPosition = google.maps.ControlPosition;
 import CircularProgress from "@mui/material/CircularProgress";
-import Backdrop from '@mui/material/Backdrop';
+import Backdrop from "@mui/material/Backdrop";
 import { makeStyles } from "@mui/styles";
 
 interface TravelHistoryTrailProps {
