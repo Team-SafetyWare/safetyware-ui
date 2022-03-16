@@ -22,7 +22,7 @@ export const UserAccount: React.FC = () => {
 
   const user = getCurrentUser();
   const profileImageUrl =
-    user && `${API_URL}/v1/userAccount/${user.id}/profile.png`;
+    (user && `${API_URL}/v1/userAccount/${user.id}/profile.png`) || undefined;
 
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
 

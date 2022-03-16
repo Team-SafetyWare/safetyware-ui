@@ -17,7 +17,22 @@ export const GET_USERS = gql`
   }
 `;
 
-export const GET_PERSONS = gql`
+export interface Person {
+  id: string;
+  name: string;
+}
+
+export interface CompanyPeopleData {
+  company: {
+    people: Person[];
+  };
+}
+
+export interface GetCompanyPeopleVars {
+  companyId: string;
+}
+
+export const GET_COMPANY_PEOPLE = gql`
   query ($companyId: ID!) {
     company(id: $companyId) {
       people {
@@ -28,10 +43,13 @@ export const GET_PERSONS = gql`
   }
 `;
 
-export interface Person {
-  id: string;
-  name: string;
-}
+export const useCompanyPeople = (
+  variables: GetCompanyPeopleVars
+): QueryResult<CompanyPeopleData, GetCompanyPeopleVars> => {
+  return useQuery<CompanyPeopleData, GetCompanyPeopleVars>(GET_COMPANY_PEOPLE, {
+    variables: variables,
+  });
+};
 
 export interface CompanyLocationData {
   company: {

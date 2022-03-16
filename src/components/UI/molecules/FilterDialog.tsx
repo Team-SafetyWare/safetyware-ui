@@ -1,6 +1,11 @@
 import React, { useCallback } from "react";
 import { DateTimePicker } from "@mui/lab";
-import { TextField } from "@mui/material";
+import { InputLabel, Select, TextField } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { useCompanyPeople } from "../../../util/queryService";
+import { getCurrentUser } from "../../../index";
 
 export interface Filter {
   minTimestamp?: Date;
@@ -14,7 +19,13 @@ interface FilterDialogProps {
 }
 
 export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
-  const setMinTimestamp = useCallback(
+  const user = getCurrentUser();
+
+  const { data: peopleData } = useCompanyPeople({
+    companyId: user?.company.id || "",
+  });
+
+  const minTimestampChanged = useCallback(
     (value: Date | null | undefined) => {
       props.onChange((prevFilter) => ({
         ...prevFilter,
@@ -24,7 +35,7 @@ export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
     [props.onChange]
   );
 
-  const setMaxTimestamp = useCallback(
+  const maxTimestampChanged = useCallback(
     (value: Date | null | undefined) => {
       props.onChange((prevFilter) => ({
         ...prevFilter,
@@ -34,24 +45,37 @@ export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
     [props.onChange]
   );
 
+  const personChanged = useCallback(
+    (event: SelectChangeEvent) => {
+      console.log(event);
+    },
+    [props.onChange]
+  );
+
+  const selectPersonLabel = "Person";
+
   return (
     <div>
       <DateTimePicker
         renderInput={(props) => <TextField {...props} />}
         label="From"
         value={props.filter.minTimestamp || null}
-        onChange={(newValue) => {
-          setMinTimestamp(newValue);
-        }}
+        onChange={minTimestampChanged}
       />
       <DateTimePicker
         renderInput={(props) => <TextField {...props} />}
         label="To"
         value={props.filter.maxTimestamp || null}
-        onChange={(newValue) => {
-          setMaxTimestamp(newValue);
-        }}
+        onChange={maxTimestampChanged}
       />
+      <FormControl fullWidth>
+        <InputLabel>{selectPersonLabel}</InputLabel>
+        <Select label={selectPersonLabel} onChange={personChanged}>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
     </div>
   );
 };

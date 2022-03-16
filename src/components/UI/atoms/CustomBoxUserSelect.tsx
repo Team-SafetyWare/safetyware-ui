@@ -17,7 +17,7 @@ import {
   setLocationPersonId,
 } from "../../../store/slices/locationPageSlice";
 import { useAppDispatch } from "../../../store/store";
-import { GET_PERSONS } from "../../../util/queryService";
+import { GET_COMPANY_PEOPLE } from "../../../util/queryService";
 import { gasesPageLabel } from "../organisms/Gases";
 import { incidentPageLabel } from "../organisms/Incidents";
 import { locationPageLabel } from "../organisms/Locations";
@@ -50,7 +50,7 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
   const label = props.label;
   const user = getCurrentUser();
 
-  const { data: personData } = useQuery(GET_PERSONS, {
+  const { data: personData } = useQuery(GET_COMPANY_PEOPLE, {
     variables: { companyId: user?.company.id },
   });
 

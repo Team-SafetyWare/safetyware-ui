@@ -11,12 +11,24 @@ export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
 
 const CURRENT_USER_KEY = "current_user";
 
-export const getCurrentUser = (): any | null => {
+export interface User {
+  id: string;
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+  company: {
+    id: string;
+    name: string;
+  };
+}
+
+export const getCurrentUser = (): User | null => {
   const json = localStorage.getItem(CURRENT_USER_KEY);
   return json && JSON.parse(json);
 };
 
-export const setCurrentUser = (user: any): void => {
+export const setCurrentUser = (user: User): void => {
   localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
 };
 
