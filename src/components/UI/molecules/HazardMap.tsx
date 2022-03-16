@@ -7,7 +7,6 @@ import {
 import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
 import { Filter } from "./FilterBar";
 import { Incident, useCompanyIncidents } from "../../../util/queryService";
-import LatLngLiteral = google.maps.LatLngLiteral;
 import WeightedLocation = google.maps.visualization.WeightedLocation;
 import LatLng = google.maps.LatLng;
 
