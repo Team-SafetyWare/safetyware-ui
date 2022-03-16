@@ -53,8 +53,8 @@ export interface LocationReading {
 export interface GetCompanyLocationsVars {
   companyId: string;
   filter: {
-    minTimestamp: Date | null;
-    maxTimestamp: Date | null;
+    minTimestamp?: Date;
+    maxTimestamp?: Date;
   };
 }
 

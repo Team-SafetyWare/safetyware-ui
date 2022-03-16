@@ -9,7 +9,8 @@ import { getCurrentUser } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import ControlPosition = google.maps.ControlPosition;
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidV4 } from "uuid";
+import { Filter } from "./CustomBoxUserSelect";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -38,23 +39,26 @@ interface Trail {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TravelMapProps {}
+interface TravelMapProps {
+  filter?: Filter;
+}
 
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const user = getCurrentUser();
+  const filter: Filter = props.filter ?? {};
 
   const { data, loading } = useCompanyLocations({
     companyId: user?.company.id,
     filter: {
-      minTimestamp: null,
-      maxTimestamp: null,
+      minTimestamp: filter.minTimestamp,
+      maxTimestamp: filter.maxTimestamp,
     },
   });
 
   const people: PersonWithLocationReadings[] = (data && intoPeople(data)) ?? [];
   const trails: Trail[] = intoTrails(people);
 
-  const [legendElementId] = useState(uuidv4().toString());
+  const [legendElementId] = useState(uuidV4().toString());
   const [showLegend, setShowLegend] = useState(false);
 
   return (
