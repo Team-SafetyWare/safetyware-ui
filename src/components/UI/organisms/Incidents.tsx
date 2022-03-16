@@ -13,8 +13,8 @@ import {
 import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
 import {
-  GET_INCIDENTS_FOR_COMPANY,
-  GET_INCIDENTS_FOR_PERSON,
+  GET_COMPANY_INCIDENTS,
+  GET_PERSON_INCIDENTS,
   GET_INCIDENT_STATS_FOR_COMPANY,
   GET_INCIDENT_STATS_FOR_PERSON,
 } from "../../../util/queryService";
@@ -84,9 +84,9 @@ export interface IncidentStat {
   y: number;
 }
 
-export const incidentPageLabel = "incidentPage";
-export const incidentBarGraphXAxisTitle = "Type of Incident";
-export const incidentBarGraphYAxisTitle = "Number of Incidents";
+export const INCIDENT_PAGE_LABEL = "incidentPage";
+export const INCIDENT_BAR_GRAPH_X_AXIS_TITLE = "Type of Incident";
+export const INCIDENT_BAR_GRAPH_Y_AXIS_TITLE = "Number of Incidents";
 
 const accordionHeightInPixels = "600px";
 
@@ -100,7 +100,7 @@ export const Incidents: React.FC = () => {
   const endDate = useAppSelector(selectIncidentPageEndDate);
   const filterId = useAppSelector(selectIncidentPagePersonId);
 
-  const { data: personIncidentData } = useQuery(GET_INCIDENTS_FOR_PERSON, {
+  const { data: personIncidentData } = useQuery(GET_PERSON_INCIDENTS, {
     variables: {
       personId: filterId,
       filter: {
@@ -110,7 +110,7 @@ export const Incidents: React.FC = () => {
     },
   });
 
-  const { data: companyIncidentsData } = useQuery(GET_INCIDENTS_FOR_COMPANY, {
+  const { data: companyIncidentsData } = useQuery(GET_COMPANY_INCIDENTS, {
     variables: {
       companyId: user?.company.id,
       filter: {
@@ -274,8 +274,8 @@ export const Incidents: React.FC = () => {
               component={
                 <BarGraph
                   data={incidentStats}
-                  xAxisTitle={incidentBarGraphXAxisTitle}
-                  yAxisTitle={incidentBarGraphYAxisTitle}
+                  xAxisTitle={INCIDENT_BAR_GRAPH_X_AXIS_TITLE}
+                  yAxisTitle={INCIDENT_BAR_GRAPH_Y_AXIS_TITLE}
                 />
               }
             />
@@ -318,8 +318,8 @@ export const Incidents: React.FC = () => {
               <div className={styles.visualization}>
                 <BarGraph
                   data={incidentStats}
-                  xAxisTitle={incidentBarGraphXAxisTitle}
-                  yAxisTitle={incidentBarGraphYAxisTitle}
+                  xAxisTitle={INCIDENT_BAR_GRAPH_X_AXIS_TITLE}
+                  yAxisTitle={INCIDENT_BAR_GRAPH_Y_AXIS_TITLE}
                 />
               </div>
             )}
@@ -342,7 +342,7 @@ export const Incidents: React.FC = () => {
             user={user}
             startDate={startDate}
             endDate={endDate}
-            pageLabel={incidentPageLabel}
+            pageLabel={INCIDENT_PAGE_LABEL}
           />
         </Modal>
       </>

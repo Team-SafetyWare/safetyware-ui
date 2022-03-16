@@ -6,42 +6,41 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
+import LatLngLiteral = google.maps.LatLngLiteral;
+import { Person } from "./util/queryService";
 
 export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
+export const DEFAULT_MAP_CENTER: LatLngLiteral = {
+  lat: 51.045,
+  lng: -114.072,
+};
+export const DEFAULT_MAP_ZOOM = 11;
 
 const CURRENT_USER_KEY = "current_user";
 
-export const PEOPLE_COLORS = [
-  "#e6194b",
-  "#3cb44b",
-  "#ffe119",
-  "#4363d8",
-  "#f58231",
-  "#911eb4",
-  "#46f0f0",
-  "#f032e6",
-  "#bcf60c",
-  "#fabebe",
-  "#008080",
-  "#e6beff",
-  "#9a6324",
-  "#fffac8",
-  "#800000",
-  "#aaffc3",
-  "#808000",
-  "#ffd8b1",
-  "#000075",
-  "#808080",
-];
+export interface User {
+  id: string;
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+  company: {
+    id: string;
+    name: string;
+  };
+}
 
-export const getCurrentUser = (): any | null => {
+export const getCurrentUser = (): User | null => {
   const json = localStorage.getItem(CURRENT_USER_KEY);
   return json && JSON.parse(json);
 };
 
-export const setCurrentUser = (user: any): void => {
+export const setCurrentUser = (user: User): void => {
   localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
 };
+
+export const sortPeople = <T extends Person>(people: T[]): T[] =>
+  people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
 const client = new ApolloClient({
   uri: `${API_URL}/graphql`,
