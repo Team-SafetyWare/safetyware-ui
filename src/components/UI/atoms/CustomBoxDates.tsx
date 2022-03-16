@@ -1,8 +1,8 @@
 import React from "react";
 import BasicDatePicker from "../atoms/BasicDatePicker";
-import { gasesPageLabel } from "../organisms/Gases";
-import { incidentPageLabel } from "../organisms/Incidents";
-import { locationPageLabel } from "../organisms/Locations";
+import { GASES_PAGE_LABEL } from "../organisms/Gases";
+import { INCIDENT_PAGE_LABEL } from "../organisms/Incidents";
+import { LOCATION_PAGE_LABEL } from "../organisms/Locations";
 
 interface CustomBoxDatesProps {
   pageLabel?: string;
@@ -22,22 +22,22 @@ export const CustomBoxDates: React.FC<CustomBoxDatesProps> = (props) => {
 
   function getStartDateLabel() {
     switch (label) {
-      case incidentPageLabel:
+      case INCIDENT_PAGE_LABEL:
         return incidentPageStartDate;
-      case locationPageLabel:
+      case LOCATION_PAGE_LABEL:
         return locationPageStartDate;
-      case gasesPageLabel:
+      case GASES_PAGE_LABEL:
         return gasPageStartDate;
     }
   }
 
   function getEndDateLabel() {
     switch (label) {
-      case incidentPageLabel:
+      case INCIDENT_PAGE_LABEL:
         return incidentPageEndDate;
-      case locationPageLabel:
+      case LOCATION_PAGE_LABEL:
         return locationPageEndDate;
-      case gasesPageLabel:
+      case GASES_PAGE_LABEL:
         return gasPageEndDate;
     }
   }
