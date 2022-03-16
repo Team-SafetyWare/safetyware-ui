@@ -4,7 +4,7 @@ import { IconButton, Modal, useMediaQuery } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
-import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
+import { getCurrentUser } from "../../../index";
 import {
   selectLocationPageEndDate,
   selectLocationPagePersonId,
@@ -21,12 +21,10 @@ import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
 import LocationsTable from "../atoms/LocationsTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
-import { TravelHistoryTrail } from "../atoms/TravelHistoryTrail";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-
-const TRAIL_SPLIT_MS = 10 * 60 * 1000;
-
+import { TravelMap } from "../atoms/TravelMap";
+import { Filter } from "../atoms/CustomBoxUserSelect";
 const center = {
   lat: 51.049999,
   lng: -114.1283,
@@ -91,6 +89,11 @@ export const Locations: React.FC = () => {
   const endDate = useAppSelector(selectLocationPageEndDate);
   const filterId = useAppSelector(selectLocationPagePersonId);
 
+  const filter: Filter = {
+    minTimestamp: startDate.empty ? undefined : new Date(startDate),
+    maxTimestamp: startDate.empty ? undefined : new Date(startDate),
+  };
+
   const { data: companyLocationReadingsData } = useQuery(
     GET_COMPANY_LOCATIONS,
     {
@@ -115,8 +118,6 @@ export const Locations: React.FC = () => {
   });
 
   const [locationReadings, setLocationReadings] = useState<any>([]);
-  // const [people, setPeople] = useState<any>([]);
-  const [travelData, setTravelData] = useState<any>([]);
 
   useEffect(() => {
     if (filterId !== "") {
@@ -138,44 +139,7 @@ export const Locations: React.FC = () => {
             })
             .flat() ?? [];
 
-        const people =
-          (personLocationReadingsData && [personLocationReadingsData.person]) ??
-          [];
-
-        const legend: any[] = people.map((person: any, personIndex: number) => {
-          const segments = [];
-          for (const location of person.locationReadings) {
-            const segment = segments[segments.length - 1];
-            const prevTime = new Date(
-              segment?.[segment.length - 1]?.timestamp
-            )?.getTime();
-            const nextTime = new Date(location.timestamp)?.getTime();
-            if (prevTime + TRAIL_SPLIT_MS > nextTime) {
-              segment.push(location);
-            } else {
-              segments.push([location]);
-            }
-          }
-
-          const mapped_segments = segments.map((segment: any) => {
-            return segment.map((location: any) => {
-              return {
-                lng: location.coordinates[0],
-                lat: location.coordinates[1],
-                timestamp: location.timestamp,
-              };
-            });
-          });
-          return {
-            name: person.name,
-            color: PEOPLE_COLORS[personIndex % PEOPLE_COLORS.length],
-            segments: mapped_segments,
-          };
-        });
-
-        setTravelData(legend);
         setLocationReadings(locationReadings);
-        // setPeople(people);
       }
     } else {
       const locationReadings: any[] =
@@ -194,46 +158,7 @@ export const Locations: React.FC = () => {
           )
           .flat() ?? [];
 
-      const people =
-        (companyLocationReadingsData &&
-          Array.from(companyLocationReadingsData.company.people).sort(
-            (p1: any, p2: any) => (p1.personName > p2.personName ? 1 : -1)
-          )) ??
-        [];
-
-      const legend: any[] = people.map((person: any, personIndex: number) => {
-        const segments = [];
-        for (const location of person.locationReadings) {
-          const segment = segments[segments.length - 1];
-          const prevTime = new Date(
-            segment?.[segment.length - 1]?.timestamp
-          )?.getTime();
-          const nextTime = new Date(location.timestamp)?.getTime();
-          if (prevTime + TRAIL_SPLIT_MS > nextTime) {
-            segment.push(location);
-          } else {
-            segments.push([location]);
-          }
-        }
-
-        const mapped_segments = segments.map((segment: any) => {
-          return segment.map((location: any) => {
-            return {
-              lng: location.coordinates[0],
-              lat: location.coordinates[1],
-              timestamp: location.timestamp,
-            };
-          });
-        });
-        return {
-          name: person.name,
-          color: PEOPLE_COLORS[personIndex % PEOPLE_COLORS.length],
-          segments: mapped_segments,
-        };
-      });
-      setTravelData(legend);
       setLocationReadings(locationReadings);
-      // setPeople(people);
     }
   }, [
     companyLocationReadingsData,
@@ -277,9 +202,7 @@ export const Locations: React.FC = () => {
               accordionHeight={accordionHeightInPixels}
               accordionWidth={""}
               accordionTitle={visualizations[1]}
-              component={
-                <TravelHistoryTrail center={center} data={travelData} />
-              }
+              component={<TravelMap filter={filter} />}
             />
             <CustomAccordion
               accordionHeight={accordionHeightInPixels}
@@ -341,7 +264,7 @@ export const Locations: React.FC = () => {
             )}
             {visualization == visualizations[1] && (
               <div className={styles.visualization}>
-                <TravelHistoryTrail center={center} data={travelData} />
+                <TravelMap filter={filter} />
               </div>
             )}
             {visualization == visualizations[2] && (
