@@ -142,10 +142,9 @@ export const usePersonLocations = (
   );
 };
 
-export const GET_INCIDENTS_FOR_COMPANY = gql`
+export const GET_COMPANY_INCIDENTS = gql`
   query ($companyId: ID!, $filter: IncidentFilter) {
     company(id: $companyId) {
-      name
       people {
         name
         incidents(filter: $filter) {
@@ -158,7 +157,48 @@ export const GET_INCIDENTS_FOR_COMPANY = gql`
   }
 `;
 
-export const GET_INCIDENTS_FOR_PERSON = gql`
+export interface Incident {
+  coordinates: string[];
+  timestamp: string;
+  type: string;
+}
+
+export interface PersonWithIncidents {
+  id: string;
+  name: string;
+  incidents: Incident[];
+}
+
+export interface IncidentFilter {
+  minTimestamp?: Date;
+  maxTimestamp?: Date;
+}
+
+export interface CompanyIncidentsData {
+  company: {
+    people: PersonWithIncidents[];
+  };
+}
+
+export interface GetCompanyIncidentsVars {
+  companyId: string;
+  filter: IncidentFilter;
+}
+
+export const useCompanyIncidents = (
+  variables: GetCompanyIncidentsVars,
+  skip = false
+): QueryResult<CompanyIncidentsData, GetCompanyIncidentsVars> => {
+  return useQuery<CompanyIncidentsData, GetCompanyIncidentsVars>(
+    GET_COMPANY_INCIDENTS,
+    {
+      variables: variables,
+      skip: skip,
+    }
+  );
+};
+
+export const GET_PERSON_INCIDENTS = gql`
   query ($personId: ID!, $filter: IncidentFilter) {
     person(id: $personId) {
       id

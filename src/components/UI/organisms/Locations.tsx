@@ -13,8 +13,8 @@ import {
 import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
 import {
-  GET_INCIDENTS_FOR_COMPANY,
-  GET_INCIDENTS_FOR_PERSON,
+  GET_COMPANY_INCIDENTS,
+  GET_PERSON_INCIDENTS,
   GET_COMPANY_LOCATIONS,
   GET_PERSON_LOCATIONS,
 } from "../../../util/queryService";
@@ -107,7 +107,7 @@ export const Locations: React.FC = () => {
     maxTimestamp: startDate.empty ? undefined : new Date(startDate),
   };
 
-  const { data: personIncidentData } = useQuery(GET_INCIDENTS_FOR_PERSON, {
+  const { data: personIncidentData } = useQuery(GET_PERSON_INCIDENTS, {
     variables: {
       personId: filterId,
       filter: {
@@ -117,7 +117,7 @@ export const Locations: React.FC = () => {
     },
   });
 
-  const { data: companyIncidentsData } = useQuery(GET_INCIDENTS_FOR_COMPANY, {
+  const { data: companyIncidentsData } = useQuery(GET_COMPANY_INCIDENTS, {
     variables: {
       companyId: user?.company.id,
       filter: {
