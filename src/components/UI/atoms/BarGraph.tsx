@@ -42,12 +42,8 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
     data.push(datum.y);
   });
 
-  console.log(labels);
-  console.log(data);
-
   useEffect(() => {
     if (data.length === 0) {
-      console.log("data is empty", data);
       setIsEmpty(true);
     } else {
       setIsEmpty(false);
