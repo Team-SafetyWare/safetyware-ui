@@ -77,7 +77,7 @@ export interface GasReading {
   timestamp: Date;
 }
 
-export const gasesPageLabel = "gasesPage";
+export const GASES_PAGE_LABEL = "gasesPage";
 
 export const Gases: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
@@ -249,7 +249,7 @@ export const Gases: React.FC = () => {
             user={user}
             startDate={startDate}
             endDate={endDate}
-            pageLabel={gasesPageLabel}
+            pageLabel={GASES_PAGE_LABEL}
           />
         </Modal>
       </>

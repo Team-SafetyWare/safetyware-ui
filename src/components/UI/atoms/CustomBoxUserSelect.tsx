@@ -18,9 +18,9 @@ import {
 } from "../../../store/slices/locationPageSlice";
 import { useAppDispatch } from "../../../store/store";
 import { GET_COMPANY_PEOPLE } from "../../../util/queryService";
-import { gasesPageLabel } from "../organisms/Gases";
-import { incidentPageLabel } from "../organisms/Incidents";
-import { locationPageLabel } from "../organisms/Locations";
+import { GASES_PAGE_LABEL } from "../organisms/Gases";
+import { INCIDENT_PAGE_LABEL } from "../organisms/Incidents";
+import { LOCATION_PAGE_LABEL } from "../organisms/Locations";
 
 interface CustomBoxUserSelectProps {
   user?: string;
@@ -69,15 +69,15 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
 
   function updateNameAndIdFilter(name: string, id: string) {
     switch (label) {
-      case locationPageLabel:
+      case LOCATION_PAGE_LABEL:
         dispatch(setLocationName(name));
         dispatch(setLocationPersonId(id));
         break;
-      case incidentPageLabel:
+      case INCIDENT_PAGE_LABEL:
         dispatch(setIncidentName(name));
         dispatch(setIncidentPersonId(id));
         break;
-      case gasesPageLabel:
+      case GASES_PAGE_LABEL:
         dispatch(setGasName(name));
         dispatch(setGasPersonId(id));
         break;
