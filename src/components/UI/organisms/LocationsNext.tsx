@@ -4,6 +4,7 @@ import React from "react";
 import theme from "../../../Theme";
 import { TravelMap } from "../atoms/TravelMap";
 import { Filter } from "../atoms/CustomBoxUserSelect";
+import { FilterDialog } from "../molecules/FilterDialog";
 
 makeStyles({
   locationsDropdown: {
@@ -49,6 +50,7 @@ export const LocationsNext: React.FC = () => {
       <div style={{ height: "600px" }}>
         <TravelMap filter={filter} />
       </div>
+      <FilterDialog />
     </StyledEngineProvider>
   );
 };
