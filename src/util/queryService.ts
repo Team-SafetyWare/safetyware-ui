@@ -212,6 +212,28 @@ export const GET_PERSON_INCIDENTS = gql`
   }
 `;
 
+export interface PersonIncidentsData {
+  person: PersonWithIncidents;
+}
+
+export interface GetPersonIncidentsVars {
+  personId: string;
+  filter: IncidentFilter;
+}
+
+export const usePersonIncidents = (
+  variables: GetPersonIncidentsVars,
+  skip = false
+): QueryResult<PersonIncidentsData, GetPersonIncidentsVars> => {
+  return useQuery<PersonIncidentsData, GetPersonIncidentsVars>(
+    GET_PERSON_INCIDENTS,
+    {
+      variables: variables,
+      skip: skip,
+    }
+  );
+};
+
 export const GET_INCIDENT_STATS_FOR_COMPANY = gql`
   query ($companyId: ID!, $filter: IncidentStatsFilter) {
     company(id: $companyId) {
