@@ -112,11 +112,6 @@ export const Locations: React.FC = () => {
       },
     });
 
-  useEffect(() => {
-    console.log("this is loading", loadingPersonData);
-    console.log("this is loading", loadingCompanyData);
-  }, [loadingPersonData, loadingCompanyData]);
-
   const [locationReadings, setLocationReadings] = useState<any>([]);
   const [people, setPeople] = useState<any>([]);
   const [travelData, setTravelData] = useState<any>([]);
@@ -141,7 +136,9 @@ export const Locations: React.FC = () => {
             })
             .flat() ?? [];
 
-        const people = (personLocationReadingsData && [personLocationReadingsData.person]) ?? [];
+        const people =
+          (personLocationReadingsData && [personLocationReadingsData.person]) ??
+          [];
 
         const legend: any[] = people.map((person: any, personIndex: number) => {
           const segments = [];
@@ -157,6 +154,7 @@ export const Locations: React.FC = () => {
               segments.push([location]);
             }
           }
+
           const mapped_segments = segments.map((segment: any) => {
             return segment.map((location: any) => {
               return {
@@ -172,7 +170,7 @@ export const Locations: React.FC = () => {
             segments: mapped_segments,
           };
         });
-        
+
         setTravelData(legend);
         setLocationReadings(locationReadings);
         setPeople(people);
@@ -201,11 +199,11 @@ export const Locations: React.FC = () => {
           )) ??
         [];
 
-        const legend: any[] = people.map((person: any, personIndex: number) => {
-          const segments = [];
-          for (const location of person.locationReadings) {
-            const segment = segments[segments.length - 1];
-            const prevTime = new Date(
+      const legend: any[] = people.map((person: any, personIndex: number) => {
+        const segments = [];
+        for (const location of person.locationReadings) {
+          const segment = segments[segments.length - 1];
+          const prevTime = new Date(
             segment?.[segment.length - 1]?.timestamp
           )?.getTime();
           const nextTime = new Date(location.timestamp)?.getTime();
@@ -215,6 +213,7 @@ export const Locations: React.FC = () => {
             segments.push([location]);
           }
         }
+
         const mapped_segments = segments.map((segment: any) => {
           return segment.map((location: any) => {
             return {
@@ -230,7 +229,6 @@ export const Locations: React.FC = () => {
           segments: mapped_segments,
         };
       });
-        
       setTravelData(legend);
       setLocationReadings(locationReadings);
       setPeople(people);
@@ -242,8 +240,6 @@ export const Locations: React.FC = () => {
     endDate,
     filterId,
   ]);
-
-  
 
   const visualizations = [
     "Raw Locations Data Table",
@@ -285,7 +281,12 @@ export const Locations: React.FC = () => {
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
-                <TravelHistoryTrail center={center} data={travelData} />
+                <TravelHistoryTrail
+                  center={center}
+                  data={travelData}
+                  loadingCompanyData={loadingCompanyData}
+                  loadingPersonData={loadingPersonData}
+                />
               }
             />
             <CustomAccordion
@@ -348,7 +349,12 @@ export const Locations: React.FC = () => {
             )}
             {visualization == visualizations[1] && (
               <div className={styles.visualization}>
-                <TravelHistoryTrail center={center} data={travelData} />
+                <TravelHistoryTrail
+                  center={center}
+                  data={travelData}
+                  loadingCompanyData={loadingCompanyData}
+                  loadingPersonData={loadingPersonData}
+                />
               </div>
             )}
             {visualization == visualizations[2] && (
