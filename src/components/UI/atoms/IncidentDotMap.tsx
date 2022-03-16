@@ -14,6 +14,20 @@ import {
 } from "../../../store/slices/incidentPageSlice";
 import { useAppSelector } from "../../../store/store";
 import { IncidentReadings } from "../organisms/Incidents";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  parent: {
+    position: "relative",
+    height: "575px",
+    zIndex: 0,
+  },
+  backdrop: {
+    position: "absolute",
+  },
+});
 
 const containerStyle = {
   width: "100%",
@@ -29,6 +43,8 @@ interface IncidentDotMapProps {
 }
 
 export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
+  const styles = useStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
   const [incidents, updateIncidents] = React.useState<IncidentReadings[]>([]);
   const zoom = props.zoom;
   const center = props.center;
@@ -136,19 +152,38 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     });
   }, [incidents, startDate, endDate, filterName]);
 
+  useEffect(() => {
+    if (incidents.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+    console.log("this is isEmpty", isEmpty);
+    console.log("this is incidents", incidents);
+  }, [incidents]);
+
   return (
     <>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={zoom}
-        options={{ gestureHandling: "greedy" }}
-      >
-        {filteredIncidents.map((incident: IncidentReadings) =>
-          createMarker(incident)
-        )}
-        {createHoverWindow(hoverMarker)}
-      </GoogleMap>
+      <div className={styles.parent}>
+        <Backdrop
+          className={styles.backdrop}
+          open={isEmpty}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <EmptyDataMessage />
+        </Backdrop>
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={zoom}
+          options={{ gestureHandling: "greedy" }}
+        >
+          {filteredIncidents.map((incident: IncidentReadings) =>
+            createMarker(incident)
+          )}
+          {createHoverWindow(hoverMarker)}
+        </GoogleMap>
+      </div>
     </>
   );
 };
