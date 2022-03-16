@@ -1,10 +1,13 @@
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import React, { useState } from "react";
 import ControlPosition = google.maps.ControlPosition;
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface TravelHistoryTrailProps {
   center?: any;
   data: any;
+  loadingCompanyData: any;
+  loadingPersonData: any;
 }
 export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   props
@@ -29,9 +32,16 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   };
 
   const [showLegend, setShowLegend] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   return (
     <>
+      {loading && (
+        <>
+          <CircularProgress size={200} />
+        </>
+      )}
+      
       <div
         id={"travel-legend"}
         hidden={!showLegend}
@@ -81,12 +91,14 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
         center={center}
         options={{ gestureHandling: "greedy" }}
         onLoad={(map) => {
+          setLoading(true);
           const controls = map.controls[ControlPosition.LEFT_TOP];
           const legend = document.getElementById("travel-legend");
           controls.push(legend);
         }}
         onTilesLoaded={() => {
           setShowLegend(true);
+          setLoading(false);
         }}
       >
         {segments.map((segment: any) => (
