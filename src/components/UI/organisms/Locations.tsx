@@ -15,6 +15,8 @@ import theme from "../../../Theme";
 import {
   GET_LOCATIONS_FOR_COMPANY,
   GET_LOCATIONS_FOR_PERSON,
+  GET_INCIDENTS_FOR_COMPANY,
+  GET_INCIDENTS_FOR_PERSON,
 } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
@@ -77,6 +79,17 @@ export interface LocationReading {
   timestamp: Date;
 }
 
+export interface IncidentReadings {
+  coordinates: {
+    lng: number;
+    lat: number;
+  };
+  personName?: string;
+  timestamp?: Date;
+  type?: string;
+  companyName?: string;
+}
+
 export const locationPageLabel = "locationPage";
 
 const accordionHeightInPixels = "600px";
@@ -90,6 +103,28 @@ export const Locations: React.FC = () => {
   const startDate = useAppSelector(selectLocationPageStartDate);
   const endDate = useAppSelector(selectLocationPageEndDate);
   const filterId = useAppSelector(selectLocationPagePersonId);
+
+  const { data: personIncidentData } = useQuery(GET_INCIDENTS_FOR_PERSON, {
+    variables: {
+      personId: filterId,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
+    },
+  });
+
+  const { data: companyIncidentsData } = useQuery(GET_INCIDENTS_FOR_COMPANY, {
+    variables: {
+      companyId: user?.company.id,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+      },
+    },
+  });
+
+  const [incidents, setIncidents] = React.useState<any>([]);
 
   const { data: companyLocationReadingsData } = useQuery(
     GET_LOCATIONS_FOR_COMPANY,
@@ -120,6 +155,47 @@ export const Locations: React.FC = () => {
   const [locationReadings, setLocationReadings] = useState<any>([]);
   // const [people, setPeople] = useState<any>([]);
   const [travelData, setTravelData] = useState<any>([]);
+
+  useEffect(() => {
+    if (filterId !== "") {
+      if (personIncidentData && personIncidentData.person !== null) {
+        const incidents: any[] =
+          personIncidentData.person.incidents
+            .map((incident: any) => {
+              return {
+                coordinates: {
+                  lng: incident.coordinates[0],
+                  lat: incident.coordinates[1],
+                },
+                personName: personIncidentData.person.name,
+                timestamp: new Date(incident.timestamp),
+                type: incident.type,
+              };
+            })
+            .flat() ?? [];
+        setIncidents(incidents);
+      }
+    } else {
+      const incidents: any[] =
+        companyIncidentsData?.company.people
+          .map((person: any) =>
+            person.incidents.map((incident: any) => {
+              return {
+                coordinates: {
+                  lng: incident.coordinates[0],
+                  lat: incident.coordinates[1],
+                },
+                personName: person.name,
+                timestamp: new Date(incident.timestamp),
+                type: incident.type,
+                companyName: companyIncidentsData.company.name,
+              };
+            })
+          )
+          .flat() ?? [];
+      setIncidents(incidents);
+    }
+  }, [companyIncidentsData, personIncidentData, startDate, endDate, filterId]);
 
   useEffect(() => {
     if (filterId !== "") {
@@ -290,7 +366,7 @@ export const Locations: React.FC = () => {
               accordionTitle={visualizations[2]}
               component={
                 <HazardousAreaHeatMap
-                  accidents={locationReadings}
+                  accidents={incidents}
                   center={center}
                   zoom={10}
                 />
@@ -350,7 +426,7 @@ export const Locations: React.FC = () => {
             {visualization == visualizations[2] && (
               <div className={styles.visualization}>
                 <HazardousAreaHeatMap
-                  accidents={locationReadings}
+                  accidents={incidents}
                   center={center}
                   zoom={10}
                 />
