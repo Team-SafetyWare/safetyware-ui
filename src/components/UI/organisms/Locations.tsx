@@ -17,8 +17,6 @@ import {
   GET_LOCATIONS_FOR_PERSON,
   GET_INCIDENTS_FOR_COMPANY,
   GET_INCIDENTS_FOR_PERSON,
-  GET_INCIDENT_STATS_FOR_COMPANY,
-  GET_INCIDENT_STATS_FOR_PERSON,
 } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
@@ -198,68 +196,6 @@ export const Locations: React.FC = () => {
       setIncidents(incidents);
     }
   }, [companyIncidentsData, personIncidentData, startDate, endDate, filterId]);
-
-  const { data: companyIncidentStatsData } = useQuery(
-    GET_INCIDENT_STATS_FOR_COMPANY,
-    {
-      variables: {
-        companyId: user?.company.id,
-        filter: {
-          minTimestamp: startDate !== "" ? new Date(startDate) : null,
-          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
-        },
-      },
-    }
-  );
-
-  const { data: personIncidentStatsData } = useQuery(
-    GET_INCIDENT_STATS_FOR_PERSON,
-    {
-      variables: {
-        personId: filterId,
-        filter: {
-          minTimestamp: startDate !== "" ? new Date(startDate) : null,
-          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
-        },
-      },
-    }
-  );
-
-  const [incidentStats, setIncidentStats] = React.useState<any>([]);
-
-  useEffect(() => {
-    if (filterId !== "") {
-      if (personIncidentStatsData && personIncidentStatsData.person !== null) {
-        const incidentStats: any[] =
-          personIncidentStatsData.person.incidentStats
-            .map((incidentStat: any) => {
-              return {
-                x: incidentStat.type,
-                y: incidentStat.count,
-              };
-            })
-            .sort((a: any, b: any) => (a.x > b.x ? 1 : -1)) ?? [];
-        setIncidentStats(incidentStats);
-      }
-    } else {
-      const incidentStats: any[] =
-        companyIncidentStatsData?.company.incidentStats
-          .map((incidentStat: any) => {
-            return {
-              x: incidentStat.type,
-              y: incidentStat.count,
-            };
-          })
-          .sort((a: any, b: any) => (a.x > b.x ? 1 : -1)) ?? [];
-      setIncidentStats(incidentStats);
-    }
-  }, [
-    companyIncidentStatsData,
-    personIncidentStatsData,
-    startDate,
-    endDate,
-    filterId,
-  ]);
 
   useEffect(() => {
     if (filterId !== "") {
