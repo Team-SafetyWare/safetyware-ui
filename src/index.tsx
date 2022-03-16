@@ -6,8 +6,14 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
+import LatLngLiteral = google.maps.LatLngLiteral;
 
 export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
+export const DEFAULT_MAP_CENTER: LatLngLiteral = {
+  lat: 51.045,
+  lng: -114.072,
+};
+export const DEFAULT_MAP_ZOOM = 11;
 
 const CURRENT_USER_KEY = "current_user";
 
