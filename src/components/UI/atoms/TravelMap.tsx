@@ -131,7 +131,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
             options={{
               strokeColor: trail.color,
               strokeOpacity: 1,
-              strokeWeight: 3,
+              strokeWeight: 4,
               clickable: false,
             }}
           />
