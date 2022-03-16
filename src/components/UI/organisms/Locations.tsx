@@ -13,8 +13,8 @@ import {
 import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
 import {
-  GET_LOCATIONS_FOR_COMPANY,
-  GET_LOCATIONS_FOR_PERSON,
+  GET_COMPANY_LOCATIONS,
+  GET_PERSON_LOCATIONS,
 } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { HazardousAreaHeatMap } from "../atoms/HazardousAreaHeatMap";
@@ -92,7 +92,7 @@ export const Locations: React.FC = () => {
   const filterId = useAppSelector(selectLocationPagePersonId);
 
   const { data: companyLocationReadingsData } = useQuery(
-    GET_LOCATIONS_FOR_COMPANY,
+    GET_COMPANY_LOCATIONS,
     {
       variables: {
         companyId: user?.company.id,
@@ -104,18 +104,15 @@ export const Locations: React.FC = () => {
     }
   );
 
-  const { data: personLocationReadingsData } = useQuery(
-    GET_LOCATIONS_FOR_PERSON,
-    {
-      variables: {
-        personId: filterId,
-        filter: {
-          minTimestamp: startDate !== "" ? new Date(startDate) : null,
-          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
-        },
+  const { data: personLocationReadingsData } = useQuery(GET_PERSON_LOCATIONS, {
+    variables: {
+      personId: filterId,
+      filter: {
+        minTimestamp: startDate !== "" ? new Date(startDate) : null,
+        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
       },
-    }
-  );
+    },
+  });
 
   const [locationReadings, setLocationReadings] = useState<any>([]);
   const [people, setPeople] = useState<any>([]);
