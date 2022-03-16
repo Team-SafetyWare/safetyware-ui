@@ -39,6 +39,7 @@ const useStyles = makeStyles({
   resetButton: {
     height: "56px",
     width: "192px",
+    textTransform: "none",
   },
 });
 
