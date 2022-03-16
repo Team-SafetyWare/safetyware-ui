@@ -17,7 +17,7 @@ interface CustomAccordionProps {
 const useStyles = makeStyles({
   accordionDetailsRoot: {
     height: (props: CustomAccordionProps) =>
-      props.accordionHeight ? props.accordionHeight : "400px",
+      props.accordionHeight ? props.accordionHeight : "600px",
     width: (props: CustomAccordionProps) =>
       props.accordionWidth ? props.accordionWidth : "100%",
   },
