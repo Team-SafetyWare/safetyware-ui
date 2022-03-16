@@ -81,7 +81,11 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
   return (
     <>
       <div className={overlayStyles.parent}>
-        <Backdrop className={overlayStyles.backdrop} open={isEmpty}>
+        <Backdrop
+          className={overlayStyles.backdrop}
+          open={isEmpty}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
           <EmptyDataMessage />
         </Backdrop>
         <Bar data={barData} options={options} />
