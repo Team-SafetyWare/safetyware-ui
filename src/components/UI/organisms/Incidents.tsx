@@ -15,7 +15,8 @@ import theme from "../../../Theme";
 import {
   GET_INCIDENTS_FOR_COMPANY,
   GET_INCIDENTS_FOR_PERSON,
-  GET_INCIDENT_STATS,
+  GET_INCIDENT_STATS_FOR_COMPANY,
+  GET_INCIDENT_STATS_FOR_PERSON,
 } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
@@ -84,6 +85,10 @@ export interface IncidentStat {
 }
 
 export const incidentPageLabel = "incidentPage";
+export const incidentBarGraphXAxisTitle = "Type of Incident";
+export const incidentBarGraphYAxisTitle = "Number of Incidents";
+
+const accordionHeightInPixels = "600px";
 
 export const Incidents: React.FC = () => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
@@ -158,25 +163,67 @@ export const Incidents: React.FC = () => {
     }
   }, [companyIncidentsData, personIncidentData, startDate, endDate, filterId]);
 
-  const { data: incidentStatsData } = useQuery(GET_INCIDENT_STATS, {
-    variables: {
-      companyId: user?.company.id,
-      filter: {
-        minTimestamp: startDate !== "" ? new Date(startDate) : null,
-        maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+  const { data: companyIncidentStatsData } = useQuery(
+    GET_INCIDENT_STATS_FOR_COMPANY,
+    {
+      variables: {
+        companyId: user?.company.id,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
       },
-    },
-  });
+    }
+  );
 
-  const incidentStats: any[] =
-    incidentStatsData?.company.incidentStats
-      .map((stat: any) => {
-        return {
-          x: stat.type,
-          y: stat.count,
-        };
-      })
-      .sort((s1: any, s2: any) => (s1.x > s2.x ? 1 : -1)) ?? [];
+  const { data: personIncidentStatsData } = useQuery(
+    GET_INCIDENT_STATS_FOR_PERSON,
+    {
+      variables: {
+        personId: filterId,
+        filter: {
+          minTimestamp: startDate !== "" ? new Date(startDate) : null,
+          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
+        },
+      },
+    }
+  );
+
+  const [incidentStats, setIncidentStats] = React.useState<any>([]);
+
+  useEffect(() => {
+    if (filterId !== "") {
+      if (personIncidentStatsData && personIncidentStatsData.person !== null) {
+        const incidentStats: any[] =
+          personIncidentStatsData.person.incidentStats
+            .map((incidentStat: any) => {
+              return {
+                x: incidentStat.type,
+                y: incidentStat.count,
+              };
+            })
+            .sort((a: any, b: any) => (a.x > b.x ? 1 : -1)) ?? [];
+        setIncidentStats(incidentStats);
+      }
+    } else {
+      const incidentStats: any[] =
+        companyIncidentStatsData?.company.incidentStats
+          .map((incidentStat: any) => {
+            return {
+              x: incidentStat.type,
+              y: incidentStat.count,
+            };
+          })
+          .sort((a: any, b: any) => (a.x > b.x ? 1 : -1)) ?? [];
+      setIncidentStats(incidentStats);
+    }
+  }, [
+    companyIncidentStatsData,
+    personIncidentStatsData,
+    startDate,
+    endDate,
+    filterId,
+  ]);
 
   const visualizations = [
     "Raw Incidents Data Table",
@@ -202,25 +249,14 @@ export const Incidents: React.FC = () => {
               }
             />
             <PageSectionHeader
-              sectionTitle={"Raw Incidents Data"}
-              sectionDescription={
-                "Explore raw incidents data through a date-filtered data table."
-              }
-            />
-            <CustomAccordion
-              accordionHeight={"auto"}
-              accordionWidth={""}
-              accordionTitle={visualizations[0]}
-              component={<IncidentTable incidents={incidents} />}
-            />
-            <PageSectionHeader
               sectionTitle={"Incidents Visualizations"}
               sectionDescription={
                 "Visualize incidents data through a dot map showing incident type and location, and a bar graph indicating incident frequencies."
               }
             />
             <CustomAccordion
-              accordionHeight={"400px"}
+              defaultExpanded={true}
+              accordionHeight={accordionHeightInPixels}
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
@@ -232,10 +268,28 @@ export const Incidents: React.FC = () => {
               }
             />
             <CustomAccordion
-              accordionHeight={"400px"}
+              accordionHeight={accordionHeightInPixels}
               accordionWidth={""}
               accordionTitle={visualizations[2]}
-              component={<BarGraph data={incidentStats} />}
+              component={
+                <BarGraph
+                  data={incidentStats}
+                  xAxisTitle={incidentBarGraphXAxisTitle}
+                  yAxisTitle={incidentBarGraphYAxisTitle}
+                />
+              }
+            />
+            <PageSectionHeader
+              sectionTitle={"Raw Incidents Data"}
+              sectionDescription={
+                "Explore raw incidents data through a date-filtered data table."
+              }
+            />
+            <CustomAccordion
+              accordionHeight={"auto"}
+              accordionWidth={""}
+              accordionTitle={visualizations[0]}
+              component={<IncidentTable incidents={incidents} />}
             />
           </>
         ) : (
@@ -262,7 +316,11 @@ export const Incidents: React.FC = () => {
             )}
             {visualization == visualizations[2] && (
               <div className={styles.visualization}>
-                <BarGraph data={incidentStats} />
+                <BarGraph
+                  data={incidentStats}
+                  xAxisTitle={incidentBarGraphXAxisTitle}
+                  yAxisTitle={incidentBarGraphYAxisTitle}
+                />
               </div>
             )}
           </>
