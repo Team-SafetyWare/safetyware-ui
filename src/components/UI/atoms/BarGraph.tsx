@@ -9,7 +9,7 @@ import { Bar } from "react-chartjs-2";
 import theme from "../../../Theme";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
-import { makeStyles } from "@mui/styles";
+import OverlayStyles from "../../styling/OverlayStyles";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
@@ -19,19 +19,8 @@ interface BarGraphProps {
   yAxisTitle: string;
 }
 
-const useStyles = makeStyles({
-  parent: {
-    position: "relative",
-    height: "575px",
-    zIndex: 0,
-  },
-  backdrop: {
-    position: "absolute",
-  },
-});
-
 export const BarGraph: React.FC<BarGraphProps> = (props) => {
-  const styles = useStyles();
+  const overlayStyles = OverlayStyles();
 
   const labels: any[] = [];
   const data: any[] = [];
@@ -42,12 +31,8 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
     data.push(datum.y);
   });
 
-  console.log(labels);
-  console.log(data);
-
   useEffect(() => {
     if (data.length === 0) {
-      console.log("data is empty", data);
       setIsEmpty(true);
     } else {
       setIsEmpty(false);
@@ -95,8 +80,12 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
 
   return (
     <>
-      <div className={styles.parent}>
-        <Backdrop className={styles.backdrop} open={isEmpty}>
+      <div className={overlayStyles.parent}>
+        <Backdrop
+          className={overlayStyles.backdrop}
+          open={isEmpty}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
           <EmptyDataMessage />
         </Backdrop>
         <Bar data={barData} options={options} />

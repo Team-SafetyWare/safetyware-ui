@@ -3,28 +3,17 @@ import React, { useState } from "react";
 import ControlPosition = google.maps.ControlPosition;
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
-import { makeStyles } from "@mui/styles";
+import OverlayStyles from "../../styling/OverlayStyles";
 
 interface TravelHistoryTrailProps {
   center?: any;
   data: any;
 }
 
-const useStyles = makeStyles({
-  parent: {
-    position: "relative",
-    height: "575px",
-    zIndex: 0,
-  },
-  backdrop: {
-    position: "absolute",
-  },
-});
-
 export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   props
 ) => {
-  const styles = useStyles();
+  const overlayStyles = OverlayStyles();
 
   const segments = props.data
     .map((person: any) => {
@@ -50,9 +39,9 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
 
   return (
     <>
-      <div className={styles.parent}>
+      <div className={overlayStyles.parent}>
         <Backdrop
-          className={styles.backdrop}
+          className={overlayStyles.backdrop}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={loading}
         >
