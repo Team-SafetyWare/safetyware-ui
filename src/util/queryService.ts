@@ -51,12 +51,6 @@ export const useCompanyPeople = (
   });
 };
 
-export interface CompanyLocationData {
-  company: {
-    people: PersonWithLocationReadings[];
-  };
-}
-
 export interface PersonWithLocationReadings {
   id: string;
   name: string;
@@ -68,12 +62,20 @@ export interface LocationReading {
   timestamp: string;
 }
 
+export interface LocationReadingFilter {
+  minTimestamp?: Date;
+  maxTimestamp?: Date;
+}
+
+export interface CompanyLocationsData {
+  company: {
+    people: PersonWithLocationReadings[];
+  };
+}
+
 export interface GetCompanyLocationsVars {
   companyId: string;
-  filter: {
-    minTimestamp?: Date;
-    maxTimestamp?: Date;
-  };
+  filter: LocationReadingFilter;
 }
 
 export const GET_COMPANY_LOCATIONS = gql`
@@ -92,12 +94,14 @@ export const GET_COMPANY_LOCATIONS = gql`
 `;
 
 export const useCompanyLocations = (
-  variables: GetCompanyLocationsVars
-): QueryResult<CompanyLocationData, GetCompanyLocationsVars> => {
-  return useQuery<CompanyLocationData, GetCompanyLocationsVars>(
+  variables: GetCompanyLocationsVars,
+  skip = false
+): QueryResult<CompanyLocationsData, GetCompanyLocationsVars> => {
+  return useQuery<CompanyLocationsData, GetCompanyLocationsVars>(
     GET_COMPANY_LOCATIONS,
     {
       variables: variables,
+      skip: skip,
     }
   );
 };
@@ -105,6 +109,7 @@ export const useCompanyLocations = (
 export const GET_PERSON_LOCATIONS = gql`
   query ($personId: ID!, $filter: LocationReadingFilter) {
     person(id: $personId) {
+      id
       name
       locationReadings(filter: $filter) {
         coordinates
@@ -113,6 +118,28 @@ export const GET_PERSON_LOCATIONS = gql`
     }
   }
 `;
+
+export interface PersonLocationsData {
+  person: PersonWithLocationReadings;
+}
+
+export interface GetPersonLocationsVars {
+  personId: string;
+  filter: LocationReadingFilter;
+}
+
+export const usePersonLocations = (
+  variables: GetPersonLocationsVars,
+  skip = false
+): QueryResult<PersonLocationsData, GetPersonLocationsVars> => {
+  return useQuery<PersonLocationsData, GetPersonLocationsVars>(
+    GET_PERSON_LOCATIONS,
+    {
+      variables: variables,
+      skip: skip,
+    }
+  );
+};
 
 export const GET_INCIDENTS_FOR_COMPANY = gql`
   query ($companyId: ID!, $filter: IncidentFilter) {

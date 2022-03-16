@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import {
-  CompanyLocationData,
   Person,
   PersonWithLocationReadings,
   useCompanyLocations,
+  usePersonLocations,
 } from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
@@ -46,15 +46,12 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const { data } = useCompanyLocations({
-    companyId: user?.company.id || "",
-    filter: {
-      minTimestamp: filter.minTimestamp,
-      maxTimestamp: filter.maxTimestamp,
-    },
-  });
+  let people: PersonWithLocationReadings[] = [
+    usePersonAsPeople(filter.person?.id || "", filter, !filter.person),
+    usePeopleInCompany(user?.company.id || "", filter, !!filter.person),
+  ].flat();
+  people = sortPeople(people);
 
-  const people: PersonWithLocationReadings[] = (data && intoPeople(data)) ?? [];
   const trails: Trail[] = intoTrails(people);
 
   const [legendElementId] = useState(uuidV4().toString());
@@ -144,8 +141,46 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   );
 };
 
-const intoPeople = (data: CompanyLocationData): PersonWithLocationReadings[] =>
-  data.company.people.slice().sort((a, b) => a.name.localeCompare(b.name));
+const usePeopleInCompany = (
+  companyId: string,
+  filter: Filter,
+  skip = false
+): PersonWithLocationReadings[] => {
+  const { data } = useCompanyLocations(
+    {
+      companyId: companyId,
+      filter: {
+        minTimestamp: filter.minTimestamp,
+        maxTimestamp: filter.maxTimestamp,
+      },
+    },
+    skip
+  );
+  return data?.company.people || [];
+};
+
+const usePersonAsPeople = (
+  personId: string,
+  filter: Filter,
+  skip = false
+): PersonWithLocationReadings[] => {
+  const { data } = usePersonLocations(
+    {
+      personId: personId,
+      filter: {
+        minTimestamp: filter.minTimestamp,
+        maxTimestamp: filter.maxTimestamp,
+      },
+    },
+    skip
+  );
+  return (data && [data.person]) || [];
+};
+
+const sortPeople = (
+  people: PersonWithLocationReadings[]
+): PersonWithLocationReadings[] =>
+  people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
 const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
   people
