@@ -9,6 +9,7 @@ import { makeStyles } from "@mui/styles";
 import React from "react";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
+import { TravelMap } from "../atoms/TravelMap";
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
@@ -51,6 +52,7 @@ export const Home: React.FC = () => {
 
   return (
     <div className={styles.dashboardContent}>
+      <TravelMap />
       <SpeedDial
         ariaLabel="SpeedDial"
         sx={{ position: "absolute", bottom: 16, right: 16 }}
