@@ -116,7 +116,11 @@ export default function IncidentTable(props: IncidentTableProps): any {
 
   return (
     <div className={overlayStyles.parent}>
-      <Backdrop className={overlayStyles.backdrop} open={isEmpty}>
+      <Backdrop
+        className={overlayStyles.backdrop}
+        open={isEmpty}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <EmptyDataMessage />
       </Backdrop>
       <TableContainer component={Paper}>
