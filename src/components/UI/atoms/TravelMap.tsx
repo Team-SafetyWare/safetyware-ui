@@ -1,7 +1,7 @@
 import React from "react";
 import { useCompanyLocations } from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
-import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
+import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -50,4 +50,18 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
       />
     </GoogleMap>
   );
+};
+
+const splitWhen = <T,>(arr: T[], split: (a: T, b: T) => boolean): T[][] => {
+  const segments: T[][] = [];
+  let sliceStart = 0;
+  let sliceEnd = 0;
+  while (sliceEnd < arr.length) {
+    sliceEnd += 1;
+    if (sliceEnd == arr.length || split(arr[sliceEnd - 1], arr[sliceEnd])) {
+      segments.push(arr.slice(sliceStart, sliceEnd));
+      sliceStart = sliceEnd;
+    }
+  }
+  return segments;
 };
