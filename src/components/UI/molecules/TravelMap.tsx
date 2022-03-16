@@ -15,7 +15,7 @@ import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import ControlPosition = google.maps.ControlPosition;
 import { v4 as uuidV4 } from "uuid";
-import { Filter } from "./FilterDialog";
+import { Filter } from "./FilterBar";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
