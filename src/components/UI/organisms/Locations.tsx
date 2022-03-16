@@ -13,8 +13,6 @@ import {
 import { useAppSelector } from "../../../store/store";
 import theme from "../../../Theme";
 import {
-  GET_LOCATIONS_FOR_COMPANY,
-  GET_LOCATIONS_FOR_PERSON,
   GET_INCIDENTS_FOR_COMPANY,
   GET_INCIDENTS_FOR_PERSON,
   GET_COMPANY_LOCATIONS,
