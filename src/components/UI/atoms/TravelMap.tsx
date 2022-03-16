@@ -4,11 +4,34 @@ import {
   Person,
   useCompanyLocations,
 } from "../../../util/queryService";
-import { getCurrentUser } from "../../../index";
+import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
+
+export const TRAIL_COLORS = [
+  "#e6194b",
+  "#3cb44b",
+  "#ffe119",
+  "#4363d8",
+  "#f58231",
+  "#911eb4",
+  "#46f0f0",
+  "#f032e6",
+  "#bcf60c",
+  "#fabebe",
+  "#008080",
+  "#e6beff",
+  "#9a6324",
+  "#fffac8",
+  "#800000",
+  "#aaffc3",
+  "#808000",
+  "#ffd8b1",
+  "#000075",
+  "#808080",
+];
 
 interface TrailPoint extends LatLngLiteral {
   time: Date;
@@ -80,7 +103,7 @@ const splitWhen = <T,>(arr: T[], split: (a: T, b: T) => boolean): T[][] => {
 
 const intoTrails = (data: CompanyLocationData): Trail[] =>
   data?.company.people
-    .map((person) => {
+    .map((person, person_index) => {
       const locations: TrailPoint[] = person.locationReadings.map(
         (location) => ({
           lat: Number(location.coordinates[1]),
@@ -98,10 +121,13 @@ const intoTrails = (data: CompanyLocationData): Trail[] =>
           id: person.id,
           name: person.name,
         },
-        color: "#ff0000",
+        color: indexToColor(person_index),
       }));
     })
     .flat();
+
+const indexToColor = (index: number): string =>
+  TRAIL_COLORS[index % TRAIL_COLORS.length];
 
 const trailKey = (trail: Trail): string => {
   const personId = trail.person.id;
