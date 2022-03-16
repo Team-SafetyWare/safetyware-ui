@@ -155,6 +155,7 @@ export const FilterBar: React.FC<FilterDialogProps> = (props) => {
               <Button
                 className={styles.resetButton}
                 variant="contained"
+                disableElevation={true}
                 onClick={resetPressed}
               >
                 Reset
