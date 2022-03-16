@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import Paper from "@mui/material/Paper";
 
 interface PageHeaderProps {
   pageTitle?: string;
@@ -7,10 +8,11 @@ interface PageHeaderProps {
 }
 
 const useStyles = makeStyles({
-  pageHeader: {
-    backgroundColor: "white",
-    padding: "24px 25px",
-    margin: "-10px -25px 15px",
+  container: {
+    margin: "-16px -24px 16px",
+  },
+  content: {
+    padding: "24px",
   },
   pageTitle: {
     fontSize: "32px",
@@ -27,9 +29,13 @@ export const PageHeader: React.FC<PageHeaderProps> = (props) => {
   const styles = useStyles();
 
   return (
-    <div className={styles.pageHeader}>
-      <h1 className={styles.pageTitle}>{props.pageTitle}</h1>
-      <h2 className={styles.pageDescription}>{props.pageDescription}</h2>
+    <div className={styles.container}>
+      <Paper elevation={2} style={{ borderRadius: "0" }}>
+        <div className={styles.content}>
+          <h1 className={styles.pageTitle}>{props.pageTitle}</h1>
+          <h2 className={styles.pageDescription}>{props.pageDescription}</h2>
+        </div>
+      </Paper>
     </div>
   );
 };
