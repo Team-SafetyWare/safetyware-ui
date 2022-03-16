@@ -35,12 +35,14 @@ export interface Person {
 
 export interface CompanyLocationData {
   company: {
-    people: {
-      id: string;
-      name: string;
-      locationReadings: LocationReading[];
-    }[];
+    people: PersonWithLocationReadings[];
   };
+}
+
+export interface PersonWithLocationReadings {
+  id: string;
+  name: string;
+  locationReadings: LocationReading[];
 }
 
 export interface LocationReading {
