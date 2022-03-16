@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { DateTimePicker } from "@mui/lab";
-import { Card, CardContent, Grid, Select, TextField } from "@mui/material";
+import { Grid, Select, TextField } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import { SelectChangeEvent } from "@mui/material/Select";
@@ -25,9 +25,6 @@ interface FilterDialogProps {
 }
 
 const useStyles = makeStyles({
-  content: {
-    marginBottom: "-8px",
-  },
   horizontalLayout: {
     display: "flex",
     flexDirection: "row",
@@ -100,71 +97,65 @@ export const FilterBar: React.FC<FilterDialogProps> = (props) => {
   const styles = useStyles();
 
   return (
-    <Card>
-      <CardContent>
-        <div className={styles.content}>
-          <Grid container spacing={2}>
-            <Grid item>
-              <div className={styles.horizontalLayout}>
-                <p className={styles.label}>Start Date</p>
-                <div className={styles.formControl}>
-                  <FormControl fullWidth>
-                    <DateTimePicker
-                      renderInput={(props) => <TextField {...props} />}
-                      value={props.filter.minTimestamp || null}
-                      onChange={minTimestampChanged}
-                    />
-                  </FormControl>
-                </div>
-              </div>
-            </Grid>
-            <Grid item>
-              <div className={styles.horizontalLayout}>
-                <p className={styles.label}>End Date</p>
-                <div className={styles.formControl}>
-                  <FormControl fullWidth>
-                    <DateTimePicker
-                      renderInput={(props) => <TextField {...props} />}
-                      value={props.filter.maxTimestamp || null}
-                      onChange={maxTimestampChanged}
-                    />
-                  </FormControl>
-                </div>
-              </div>
-            </Grid>
-            <Grid item>
-              <div className={styles.horizontalLayout}>
-                <p className={styles.label}>Person</p>
-                <div className={styles.formControl}>
-                  <FormControl fullWidth>
-                    <Select
-                      onChange={personChanged}
-                      value={(props.filter.person as any) || allPerson}
-                    >
-                      {[allPerson].concat(people).map((person) => (
-                        <MenuItem key={person.id} value={person as any}>
-                          {person.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </div>
-              </div>
-            </Grid>
-            <Grid item xs={true} container justifyContent="flex-end">
-              <Button
-                className={styles.resetButton}
-                variant="contained"
-                disableElevation={true}
-                onClick={resetPressed}
-              >
-                Reset
-              </Button>
-            </Grid>
-          </Grid>
+    <Grid container spacing={2}>
+      <Grid item>
+        <div className={styles.horizontalLayout}>
+          <p className={styles.label}>Start Date</p>
+          <div className={styles.formControl}>
+            <FormControl fullWidth>
+              <DateTimePicker
+                renderInput={(props) => <TextField {...props} />}
+                value={props.filter.minTimestamp || null}
+                onChange={minTimestampChanged}
+              />
+            </FormControl>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      </Grid>
+      <Grid item>
+        <div className={styles.horizontalLayout}>
+          <p className={styles.label}>End Date</p>
+          <div className={styles.formControl}>
+            <FormControl fullWidth>
+              <DateTimePicker
+                renderInput={(props) => <TextField {...props} />}
+                value={props.filter.maxTimestamp || null}
+                onChange={maxTimestampChanged}
+              />
+            </FormControl>
+          </div>
+        </div>
+      </Grid>
+      <Grid item>
+        <div className={styles.horizontalLayout}>
+          <p className={styles.label}>Person</p>
+          <div className={styles.formControl}>
+            <FormControl fullWidth>
+              <Select
+                onChange={personChanged}
+                value={(props.filter.person as any) || allPerson}
+              >
+                {[allPerson].concat(people).map((person) => (
+                  <MenuItem key={person.id} value={person as any}>
+                    {person.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+        </div>
+      </Grid>
+      <Grid item xs={true} container justifyContent="flex-end">
+        <Button
+          className={styles.resetButton}
+          variant="contained"
+          disableElevation={true}
+          onClick={resetPressed}
+        >
+          Reset
+        </Button>
+      </Grid>
+    </Grid>
   );
 };
 
