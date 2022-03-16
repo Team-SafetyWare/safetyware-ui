@@ -10,6 +10,7 @@ import {
   useCompanyPeople,
 } from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
+import { makeStyles } from "@mui/styles";
 
 export interface Filter {
   minTimestamp?: Date;
