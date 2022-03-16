@@ -4,9 +4,12 @@ import {
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
 } from "../../../index";
-import { GoogleMap } from "@react-google-maps/api";
+import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
 import { Filter } from "./FilterBar";
 import { Incident, useCompanyIncidents } from "../../../util/queryService";
+import LatLngLiteral = google.maps.LatLngLiteral;
+import WeightedLocation = google.maps.visualization.WeightedLocation;
+import LatLng = google.maps.LatLng;
 
 interface HazardMapProps {
   filter?: Filter;
@@ -22,6 +25,8 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
     !!filter.person
   );
 
+  const points: WeightedLocation[] = intoPoints(incidents);
+
   return (
     <GoogleMap
       mapContainerStyle={{
@@ -31,7 +36,14 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
       options={{ gestureHandling: "greedy" }}
       zoom={DEFAULT_MAP_ZOOM}
       center={DEFAULT_MAP_CENTER}
-    />
+    >
+      <HeatmapLayer
+        data={points}
+        options={{
+          radius: 40,
+        }}
+      />
+    </GoogleMap>
   );
 };
 
@@ -51,4 +63,14 @@ export const useIncidentsInCompany = (
     skip
   );
   return data?.company.people.map((person) => person.incidents).flat() || [];
+};
+
+const intoPoints = (incidents: Incident[]): WeightedLocation[] => {
+  return incidents.map((incident) => ({
+    location: new LatLng(
+      Number(incident.coordinates[1]),
+      Number(incident.coordinates[0])
+    ),
+    weight: 1,
+  }));
 };
