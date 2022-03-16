@@ -68,6 +68,8 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
     adjustedPage * ROWS_PER_PAGE + ROWS_PER_PAGE
   );
 
+  const colWidth = `${100 / 3}%`;
+
   const styles = useStyles();
 
   return (
@@ -76,9 +78,15 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
         <Table stickyHeader>
           <TableHead>
             <TableRow style={{ fontWeight: "bold" }}>
-              <TableCell className={styles.header}>Name</TableCell>
-              <TableCell className={styles.header}>Time</TableCell>
-              <TableCell className={styles.header}>Coordinates</TableCell>
+              <TableCell className={styles.header} width={colWidth}>
+                Name
+              </TableCell>
+              <TableCell className={styles.header} width={colWidth}>
+                Time
+              </TableCell>
+              <TableCell className={styles.header} width={colWidth}>
+                Coordinates
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
