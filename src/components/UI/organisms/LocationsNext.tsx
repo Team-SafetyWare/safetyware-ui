@@ -39,7 +39,7 @@ export const LocationsNext: React.FC = () => {
       <PageHeader
         pageTitle={"Locations"}
         pageDescription={
-          "Analyze data based on locations including a travel history trail and a heat map of common incident locations."
+          "Analyze locations data including travel history and hazardous areas."
         }
       />
 
