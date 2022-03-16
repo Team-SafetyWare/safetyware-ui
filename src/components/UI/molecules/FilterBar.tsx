@@ -93,6 +93,10 @@ export const FilterBar: React.FC<FilterDialogProps> = (props) => {
     [props.onChange]
   );
 
+  const resetPressed = useCallback(() => {
+    props.onChange(() => ({}));
+  }, [props.onChange]);
+
   const styles = useStyles();
 
   return (
@@ -148,7 +152,11 @@ export const FilterBar: React.FC<FilterDialogProps> = (props) => {
               </div>
             </Grid>
             <Grid item xs={true} container justifyContent="flex-end">
-              <Button className={styles.resetButton} variant="contained">
+              <Button
+                className={styles.resetButton}
+                variant="contained"
+                onClick={resetPressed}
+              >
                 Reset
               </Button>
             </Grid>
