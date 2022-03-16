@@ -11,6 +11,7 @@ import {
 } from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
 import { makeStyles } from "@mui/styles";
+import Button from "@mui/material/Button";
 
 export interface Filter {
   minTimestamp?: Date;
@@ -32,11 +33,15 @@ const useStyles = makeStyles({
     flexDirection: "row",
   },
   formControl: {
-    width: "265px",
+    width: "288px",
   },
   label: {
     fontWeight: "bold",
     marginRight: "8px",
+  },
+  resetButton: {
+    height: "56px",
+    width: "192px",
   },
 });
 
@@ -141,6 +146,11 @@ export const FilterBar: React.FC<FilterDialogProps> = (props) => {
                   </FormControl>
                 </div>
               </div>
+            </Grid>
+            <Grid item xs={true} container justifyContent="flex-end">
+              <Button className={styles.resetButton} variant="contained">
+                Reset
+              </Button>
             </Grid>
           </Grid>
         </div>
