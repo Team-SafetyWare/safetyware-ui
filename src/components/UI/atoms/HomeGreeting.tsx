@@ -1,16 +1,24 @@
+import AddIcon from "@mui/icons-material/Add";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
 interface HomeGreetingProps {
+  activeWidgetState?: any;
+  inactiveWidgetState?: any;
+  addWidget?: any;
   userName?: string;
-  time?: string;
-  date?: string;
-  day?: string;
 }
 
 const BootstrapButton = styled(Button)({
@@ -79,30 +87,124 @@ const useStyles = makeStyles({
 
 export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
   const styles = useStyles();
+  const [open, setOpen] = React.useState(false);
+
+  const date = new Date();
+  const hours = date.getHours();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleCloseSelected = (value: any) => {
+    setOpen(false);
+    props.addWidget(value);
+  };
+
+  const handleCloseNoneSelected = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={styles.pageGreeting}>
       <div className={styles.greetingDetails}>
-        <p className={styles.greeting}>
-          Good {props.time}, {props.userName}
-        </p>
+        {hours >= 17 ? (
+          <p className={styles.greeting}>Good Evening, {props.userName}</p>
+        ) : hours >= 12 ? (
+          <p className={styles.greeting}>Good Afternoon, {props.userName}</p>
+        ) : (
+          <p className={styles.greeting}>Good Morning, {props.userName}</p>
+        )}
         <p className={styles.date}>
-          Here is your update for {props.day}, {props.date}:
+          Here is your update for{" "}
+          {date.toLocaleDateString(undefined, {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+          :
         </p>
       </div>
       <div className={styles.buttons}>
         <Stack spacing={2} direction="row">
-          <BootstrapButton variant="outlined" endIcon={<AddOutlinedIcon />}>
-            Add Widget
-          </BootstrapButton>
           <BootstrapButton
             variant="outlined"
-            endIcon={<FilterAltOutlinedIcon />}
+            endIcon={<AddOutlinedIcon />}
+            onClick={handleClickOpen}
           >
-            Filter
+            Add Widget
           </BootstrapButton>
+          <BootstrapButton variant="outlined" endIcon={<SaveOutlinedIcon />}>
+            Save Dashboard
+          </BootstrapButton>
+          <SimpleDialog
+            activeWidgetState={props.activeWidgetState}
+            inactiveWidgetState={props.inactiveWidgetState}
+            open={open}
+            onCloseSelected={handleCloseSelected}
+            onCloseNoneSelected={handleCloseNoneSelected}
+          />
         </Stack>
       </div>
     </div>
   );
 };
+
+export interface SimpleDialogProps {
+  activeWidgetState?: any;
+  inactiveWidgetState?: any;
+  open: boolean;
+  onCloseSelected: (value: any) => void;
+  onCloseNoneSelected: () => void;
+}
+
+function SimpleDialog(props: SimpleDialogProps) {
+  const {
+    onCloseSelected,
+    onCloseNoneSelected,
+    open,
+    inactiveWidgetState,
+    activeWidgetState,
+  } = props;
+
+  const handleClose = () => {
+    onCloseNoneSelected();
+  };
+
+  const handleListItemClick = (value: any) => {
+    onCloseSelected(value);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>Select a Widget to Add to the Dashboard</DialogTitle>
+      <List sx={{ pt: 0 }}>
+        {inactiveWidgetState.map((widget: any) => (
+          <ListItem
+            button
+            onClick={() => handleListItemClick(widget)}
+            key={widget.widgetName}
+          >
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: "white", color: "black" }}>
+                <AddIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={widget.widgetName} />
+          </ListItem>
+        ))}
+        {activeWidgetState.map((widget: any) => (
+          <ListItem disabled={true} key={widget.widgetName}>
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: "white", color: "black" }}>
+                <AddIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={widget.widgetName} />
+          </ListItem>
+        ))}
+      </List>
+    </Dialog>
+  );
+}

@@ -115,7 +115,8 @@ export const Locations: React.FC = () => {
   });
 
   const [locationReadings, setLocationReadings] = useState<any>([]);
-  const [people, setPeople] = useState<any>([]);
+  // const [people, setPeople] = useState<any>([]);
+  const [travelData, setTravelData] = useState<any>([]);
 
   useEffect(() => {
     if (filterId !== "") {
@@ -141,8 +142,40 @@ export const Locations: React.FC = () => {
           (personLocationReadingsData && [personLocationReadingsData.person]) ??
           [];
 
+        const legend: any[] = people.map((person: any, personIndex: number) => {
+          const segments = [];
+          for (const location of person.locationReadings) {
+            const segment = segments[segments.length - 1];
+            const prevTime = new Date(
+              segment?.[segment.length - 1]?.timestamp
+            )?.getTime();
+            const nextTime = new Date(location.timestamp)?.getTime();
+            if (prevTime + TRAIL_SPLIT_MS > nextTime) {
+              segment.push(location);
+            } else {
+              segments.push([location]);
+            }
+          }
+
+          const mapped_segments = segments.map((segment: any) => {
+            return segment.map((location: any) => {
+              return {
+                lng: location.coordinates[0],
+                lat: location.coordinates[1],
+                timestamp: location.timestamp,
+              };
+            });
+          });
+          return {
+            name: person.name,
+            color: PEOPLE_COLORS[personIndex % PEOPLE_COLORS.length],
+            segments: mapped_segments,
+          };
+        });
+
+        setTravelData(legend);
         setLocationReadings(locationReadings);
-        setPeople(people);
+        // setPeople(people);
       }
     } else {
       const locationReadings: any[] =
@@ -168,8 +201,39 @@ export const Locations: React.FC = () => {
           )) ??
         [];
 
+      const legend: any[] = people.map((person: any, personIndex: number) => {
+        const segments = [];
+        for (const location of person.locationReadings) {
+          const segment = segments[segments.length - 1];
+          const prevTime = new Date(
+            segment?.[segment.length - 1]?.timestamp
+          )?.getTime();
+          const nextTime = new Date(location.timestamp)?.getTime();
+          if (prevTime + TRAIL_SPLIT_MS > nextTime) {
+            segment.push(location);
+          } else {
+            segments.push([location]);
+          }
+        }
+
+        const mapped_segments = segments.map((segment: any) => {
+          return segment.map((location: any) => {
+            return {
+              lng: location.coordinates[0],
+              lat: location.coordinates[1],
+              timestamp: location.timestamp,
+            };
+          });
+        });
+        return {
+          name: person.name,
+          color: PEOPLE_COLORS[personIndex % PEOPLE_COLORS.length],
+          segments: mapped_segments,
+        };
+      });
+      setTravelData(legend);
       setLocationReadings(locationReadings);
-      setPeople(people);
+      // setPeople(people);
     }
   }, [
     companyLocationReadingsData,
@@ -178,36 +242,6 @@ export const Locations: React.FC = () => {
     endDate,
     filterId,
   ]);
-
-  const travelData: any[] = people.map((person: any, personIndex: number) => {
-    const segments = [];
-    for (const location of person.locationReadings) {
-      const segment = segments[segments.length - 1];
-      const prevTime = new Date(
-        segment?.[segment.length - 1]?.timestamp
-      )?.getTime();
-      const nextTime = new Date(location.timestamp)?.getTime();
-      if (prevTime + TRAIL_SPLIT_MS > nextTime) {
-        segment.push(location);
-      } else {
-        segments.push([location]);
-      }
-    }
-    const mapped_segments = segments.map((segment: any) => {
-      return segment.map((location: any) => {
-        return {
-          lng: location.coordinates[0],
-          lat: location.coordinates[1],
-          timestamp: location.timestamp,
-        };
-      });
-    });
-    return {
-      name: person.name,
-      color: PEOPLE_COLORS[personIndex % PEOPLE_COLORS.length],
-      segments: mapped_segments,
-    };
-  });
 
   const visualizations = [
     "Raw Locations Data Table",
