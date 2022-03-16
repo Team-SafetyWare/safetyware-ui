@@ -73,7 +73,12 @@ export const HazardousAreaHeatMap: React.FC<HazardousAreaHeatMapProps> = (
       zoom={zoom}
       options={{ gestureHandling: "greedy" }}
     >
-      <HeatmapLayer data={filteredAccidents} />
+      <HeatmapLayer
+        data={filteredAccidents}
+        options={{
+          radius: 40,
+        }}
+      />
     </GoogleMap>
   );
 };
