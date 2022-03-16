@@ -22,6 +22,21 @@ interface FilterDialogProps {
   onChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
 }
 
+const useStyles = makeStyles({
+  box: {
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: "20px",
+    textAlign: "center",
+    width: "fit-content",
+    padding: "20px",
+  },
+  boxTitle: {
+    fontWeight: "bold",
+  },
+  text: { fontSize: "10px" },
+});
+
 export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
   const user = getCurrentUser();
 
@@ -70,22 +85,29 @@ export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
     [props.onChange]
   );
 
+  const styles = useStyles();
   const selectPersonLabel = "Person";
 
   return (
-    <div>
+    <div className={styles.box}>
+      <p className={styles.boxTitle}>Filters</p>
+      <p>Start Date</p>
       <DateTimePicker
+        className={styles.text}
         renderInput={(props) => <TextField {...props} />}
-        label="From"
+        label="Date"
         value={props.filter.minTimestamp || null}
         onChange={minTimestampChanged}
       />
+      <p>End Date</p>
       <DateTimePicker
+        className={styles.text}
         renderInput={(props) => <TextField {...props} />}
-        label="To"
+        label="Date"
         value={props.filter.maxTimestamp || null}
         onChange={maxTimestampChanged}
       />
+      <p>Person</p>
       <FormControl fullWidth>
         <InputLabel>{selectPersonLabel}</InputLabel>
         <Select

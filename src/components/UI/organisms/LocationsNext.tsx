@@ -1,9 +1,9 @@
-import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useCallback, useState } from "react";
 import theme from "../../../Theme";
 import { TravelMap } from "../molecules/TravelMap";
 import { Filter, FilterDialog } from "../molecules/FilterDialog";
+import Draggable from "react-draggable";
 
 makeStyles({
   locationsDropdown: {
@@ -52,11 +52,15 @@ export const LocationsNext: React.FC = () => {
   );
 
   return (
-    <StyledEngineProvider injectFirst>
+    <>
       <div style={{ height: "600px" }}>
         <TravelMap filter={filter} />
       </div>
-      <FilterDialog filter={filter} onChange={filterChange} />
-    </StyledEngineProvider>
+      <Draggable>
+        <div>
+          <FilterDialog filter={filter} onChange={filterChange} />
+        </div>
+      </Draggable>
+    </>
   );
 };
