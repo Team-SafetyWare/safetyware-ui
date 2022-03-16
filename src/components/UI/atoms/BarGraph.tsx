@@ -8,6 +8,8 @@ import React, { useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import theme from "../../../Theme";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import { makeStyles } from "@mui/styles";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
@@ -17,7 +19,20 @@ interface BarGraphProps {
   yAxisTitle: string;
 }
 
+const useStyles = makeStyles({
+  parent: {
+    position: "relative",
+    height: "575px",
+    zIndex: 0,
+  },
+  backdrop: {
+    position: "absolute",
+  },
+});
+
 export const BarGraph: React.FC<BarGraphProps> = (props) => {
+  const styles = useStyles();
+
   const labels: any[] = [];
   const data: any[] = [];
   const [isEmpty, setIsEmpty] = React.useState(false);
@@ -80,11 +95,12 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
 
   return (
     <>
-      {isEmpty ? (
-        <EmptyDataMessage />
-      ) : (
+      <div className={styles.parent}>
+        <Backdrop className={styles.backdrop} open={isEmpty}>
+          <EmptyDataMessage />
+        </Backdrop>
         <Bar data={barData} options={options} />
-      )}
+      </div>
     </>
   );
 };
