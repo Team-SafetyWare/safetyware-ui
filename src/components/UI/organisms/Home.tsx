@@ -52,7 +52,9 @@ export const Home: React.FC = () => {
 
   return (
     <div className={styles.dashboardContent}>
-      <TravelMap />
+      <div style={{ height: "600px" }}>
+        <TravelMap />
+      </div>
       <SpeedDial
         ariaLabel="SpeedDial"
         sx={{ position: "absolute", bottom: 16, right: 16 }}
