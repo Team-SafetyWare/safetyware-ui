@@ -8,6 +8,9 @@ import {
 } from "../../../store/slices/gasPageSlice";
 import { useAppSelector } from "../../../store/store";
 import { GasReading } from "../organisms/Gases";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import OverlayStyles from "../../styling/OverlayStyles";
 
 const containerStyle = {
   width: "100%",
@@ -23,6 +26,8 @@ interface GasDotMapProps {
 }
 
 export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
+  const overlayStyles = OverlayStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
   const [gases, updateGases] = React.useState<GasReading[]>([]);
   const zoom = props.zoom;
   const center = props.center;
@@ -34,6 +39,14 @@ export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
   const [hoverMarker, updateHoverMarker] = React.useState<
     GasReading | undefined
   >(undefined);
+
+  useEffect(() => {
+    if (props.gases.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [props.gases]);
 
   function createMarker(gas: GasReading) {
     const markerIcon = GenericIcon;
@@ -103,15 +116,24 @@ export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
 
   return (
     <>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={zoom}
-        options={{ gestureHandling: "greedy" }}
-      >
-        {filteredGases.map((gas: GasReading) => createMarker(gas))}
-        {createHoverWindow(hoverMarker)}
-      </GoogleMap>
+      <div className={overlayStyles.parent}>
+        <Backdrop
+          className={overlayStyles.backdrop}
+          open={isEmpty}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <EmptyDataMessage />
+        </Backdrop>
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={zoom}
+          options={{ gestureHandling: "greedy" }}
+        >
+          {filteredGases.map((gas: GasReading) => createMarker(gas))}
+          {createHoverWindow(hoverMarker)}
+        </GoogleMap>
+      </div>
     </>
   );
 };
