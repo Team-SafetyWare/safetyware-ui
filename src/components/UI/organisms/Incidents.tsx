@@ -268,7 +268,8 @@ export const Incidents: React.FC = () => {
               }
             />
             <CustomAccordion
-              accordionHeight={accordionHeightInPixels}
+              // accordionHeight={accordionHeightInPixels}
+              accordionHeight={"auto"}
               accordionWidth={""}
               accordionTitle={visualizations[2]}
               component={
