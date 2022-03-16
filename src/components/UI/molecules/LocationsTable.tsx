@@ -77,7 +77,7 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
       <TableContainer>
         <Table stickyHeader>
           <TableHead>
-            <TableRow style={{ fontWeight: "bold" }}>
+            <TableRow>
               <TableCell className={styles.header} width={colWidth}>
                 Name
               </TableCell>
