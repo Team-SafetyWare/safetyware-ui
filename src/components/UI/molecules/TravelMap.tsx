@@ -16,6 +16,7 @@ import LatLngLiteral = google.maps.LatLngLiteral;
 import ControlPosition = google.maps.ControlPosition;
 import { v4 as uuidV4 } from "uuid";
 import { Filter } from "./FilterBar";
+import { makeStyles } from "@mui/styles";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -47,6 +48,35 @@ interface TravelMapProps {
   filter?: Filter;
 }
 
+const useStyles = makeStyles({
+  legend: {
+    background: "rgb(255, 255, 255) none repeat scroll 0% 0% padding-box",
+    border: "0px none",
+    marginLeft: "10px",
+    padding: "0px 17px",
+    textTransform: "none",
+    appearance: "none",
+    cursor: "pointer",
+    userSelect: "none",
+    direction: "ltr",
+    overflow: "hidden",
+    verticalAlign: "middle",
+    color: "rgb(86, 86, 86)",
+    fontFamily: "Roboto, Arial, sans-serif",
+    fontSize: "18px",
+    borderBottomRightRadius: "2px",
+    borderTopRightRadius: "2px",
+    boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px",
+  },
+  legendColor: {
+    height: "16px",
+    width: "16px",
+    borderRadius: "50%",
+    display: "inline-block",
+    marginRight: "8px",
+  },
+});
+
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
@@ -62,30 +92,14 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const [legendElementId] = useState(uuidV4().toString());
   const [showLegend, setShowLegend] = useState(false);
 
+  const styles = useStyles();
+
   return (
     <>
       <div
         id={legendElementId}
-        hidden={!showLegend}
-        style={{
-          background: "rgb(255, 255, 255) none repeat scroll 0% 0% padding-box",
-          border: "0px none",
-          marginLeft: "10px",
-          padding: "0px 17px",
-          textTransform: "none",
-          appearance: "none",
-          cursor: "pointer",
-          userSelect: "none",
-          direction: "ltr",
-          overflow: "hidden",
-          verticalAlign: "middle",
-          color: "rgb(86, 86, 86)",
-          fontFamily: "Roboto, Arial, sans-serif",
-          fontSize: "18px",
-          borderBottomRightRadius: "2px",
-          borderTopRightRadius: "2px",
-          boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px",
-        }}
+        className={styles.legend}
+        hidden={!showLegend && people.length > 0}
       >
         <p>Legend</p>
         {people.map((person, personIndex) => {
@@ -94,14 +108,8 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
             <div key={`${person.id}-${color}`}>
               <p>
                 <span
-                  style={{
-                    height: "16px",
-                    width: "16px",
-                    backgroundColor: color,
-                    borderRadius: "50%",
-                    display: "inline-block",
-                    marginRight: "8px",
-                  }}
+                  className={styles.legendColor}
+                  style={{ backgroundColor: color }}
                 />
                 {person.name}
               </p>
