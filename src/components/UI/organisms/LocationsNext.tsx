@@ -1,10 +1,9 @@
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import theme from "../../../Theme";
-import { TravelMap } from "../atoms/TravelMap";
-import { Filter } from "../atoms/CustomBoxUserSelect";
-import { FilterDialog } from "../molecules/FilterDialog";
+import { TravelMap } from "../molecules/TravelMap";
+import { Filter, FilterDialog } from "../molecules/FilterDialog";
 
 makeStyles({
   locationsDropdown: {
@@ -43,14 +42,21 @@ makeStyles({
 });
 
 export const LocationsNext: React.FC = () => {
-  const filter: Filter = {};
+  const [filter, setFilter] = useState<Filter>({});
+
+  const filterChange = useCallback(
+    (updateFilter: (prevFilter: Filter) => Filter) => {
+      setFilter((filter) => updateFilter(filter));
+    },
+    []
+  );
 
   return (
     <StyledEngineProvider injectFirst>
       <div style={{ height: "600px" }}>
         <TravelMap filter={filter} />
       </div>
-      <FilterDialog />
+      <FilterDialog filter={filter} onChange={filterChange} />
     </StyledEngineProvider>
   );
 };

@@ -22,12 +22,6 @@ import { gasesPageLabel } from "../organisms/Gases";
 import { incidentPageLabel } from "../organisms/Incidents";
 import { locationPageLabel } from "../organisms/Locations";
 
-export interface Filter {
-  minTimestamp?: Date;
-  maxTimestamp?: Date;
-  personId?: string;
-}
-
 interface CustomBoxUserSelectProps {
   user?: string;
   label?: string;
