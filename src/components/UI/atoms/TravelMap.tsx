@@ -14,17 +14,17 @@ import { v4 as uuidv4 } from "uuid";
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
 const TRAIL_COLORS = [
-  "#e6194b",
-  "#3cb44b",
-  "#4363d8",
-  "#f58231",
-  "#911eb4",
-  "#f032e6",
-  "#008080",
-  "#9a6324",
-  "#800000",
-  "#808000",
-  "#000075",
+  "#e6194b", // Red
+  "#3cb44b", // Green
+  "#4363d8", // Blue
+  "#008080", // Cyan
+  "#911eb4", // Purple
+  "#f58231", // Orange
+  "#800000", // Brown red
+  "#f032e6", // Pink
+  "#9a6324", // Brown
+  "#808000", // Olive
+  "#000075", // Dark blue
 ];
 
 interface TrailPoint extends LatLngLiteral {
