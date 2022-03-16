@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Filter } from "./FilterBar";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -12,9 +12,10 @@ import {
   usePersonLocations,
 } from "../../../util/queryService";
 import { getCurrentUser, sortPeople } from "../../../index";
+import { TablePagination } from "@mui/material";
 
 const NUM_COORD_DIGITS = 5;
-const MAX_ROWS = 10;
+const ROWS_PER_PAGE = 10;
 
 interface PersonLocation {
   name: string;
@@ -36,38 +37,56 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
+  const [page, setPage] = useState(0);
+
   const locations: PersonLocation[] = [
     useLocationsInPerson(filter.person?.id || "", filter, !filter.person),
     useLocationsInCompany(user?.company.id || "", filter, !!filter.person),
-  ]
-    .flat()
-    .slice(0, MAX_ROWS);
+  ].flat();
 
-  console.log(locations);
+  const pageLocations = locations.slice(
+    page * ROWS_PER_PAGE,
+    page * ROWS_PER_PAGE + ROWS_PER_PAGE
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const pageChanged = useCallback((_: any, page: number) => {
+    setPage(page);
+  }, []);
 
   const styles = useStyles();
 
   return (
-    <TableContainer>
-      <Table stickyHeader>
-        <TableHead>
-          <TableRow style={{ fontWeight: "bold" }}>
-            <TableCell className={styles.header}>Name</TableCell>
-            <TableCell className={styles.header}>Time</TableCell>
-            <TableCell className={styles.header}>Coordinates</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {locations.map((location, index) => (
-            <TableRow key={index}>
-              <TableCell>{location.name}</TableCell>
-              <TableCell>{location.time}</TableCell>
-              <TableCell>{location.coordinates}</TableCell>
+    <>
+      <TableContainer>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow style={{ fontWeight: "bold" }}>
+              <TableCell className={styles.header}>Name</TableCell>
+              <TableCell className={styles.header}>Time</TableCell>
+              <TableCell className={styles.header}>Coordinates</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {pageLocations.map((location, index) => (
+              <TableRow key={index}>
+                <TableCell>{location.name}</TableCell>
+                <TableCell>{location.time}</TableCell>
+                <TableCell>{location.coordinates}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component="div"
+        rowsPerPageOptions={[ROWS_PER_PAGE]}
+        rowsPerPage={ROWS_PER_PAGE}
+        count={locations.length}
+        onPageChange={pageChanged}
+        page={page}
+      />
+    </>
   );
 };
 
