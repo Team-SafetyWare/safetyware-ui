@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import {
   Person,
   PersonWithLocationReadings,
-  sortPeople,
-  usePeopleInCompany,
-  usePersonAsPeople,
+  useCompanyLocations,
+  usePersonLocations,
 } from "../../../util/queryService";
 import {
   DEFAULT_MAP_CENTER,
@@ -142,6 +141,47 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     </>
   );
 };
+
+export const usePeopleInCompany = (
+  companyId: string,
+  filter: Filter,
+  skip = false
+): PersonWithLocationReadings[] => {
+  const { data } = useCompanyLocations(
+    {
+      companyId: companyId,
+      filter: {
+        minTimestamp: filter.minTimestamp,
+        maxTimestamp: filter.maxTimestamp,
+      },
+    },
+    skip
+  );
+  return data?.company.people || [];
+};
+
+export const usePersonAsPeople = (
+  personId: string,
+  filter: Filter,
+  skip = false
+): PersonWithLocationReadings[] => {
+  const { data } = usePersonLocations(
+    {
+      personId: personId,
+      filter: {
+        minTimestamp: filter.minTimestamp,
+        maxTimestamp: filter.maxTimestamp,
+      },
+    },
+    skip
+  );
+  return (data && [data.person]) || [];
+};
+
+export const sortPeople = (
+  people: PersonWithLocationReadings[]
+): PersonWithLocationReadings[] =>
+  people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
 const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
   people
