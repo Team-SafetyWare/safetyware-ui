@@ -37,22 +37,36 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const [page, setPage] = useState(0);
-
   const locations: PersonLocation[] = [
     useLocationsInPerson(filter.person?.id || "", filter, !filter.person),
     useLocationsInCompany(user?.company.id || "", filter, !!filter.person),
   ].flat();
 
-  const pageLocations = locations.slice(
-    page * ROWS_PER_PAGE,
-    page * ROWS_PER_PAGE + ROWS_PER_PAGE
-  );
+  // eslint-disable-next-line prefer-const
+  let [page, setPage] = useState(0);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const pageChanged = useCallback((_: any, page: number) => {
     setPage(page);
   }, []);
+
+  const rowCount = locations.length;
+  const maxPage = Math.floor(rowCount / ROWS_PER_PAGE);
+  const adjustedPage = Math.min(page, maxPage);
+
+  if (adjustedPage < page) {
+    setPage(adjustedPage);
+  }
+
+  const emptyRowCount = Math.max(
+    0,
+    (1 + adjustedPage) * ROWS_PER_PAGE - rowCount
+  );
+
+  const pageLocations = locations.slice(
+    adjustedPage * ROWS_PER_PAGE,
+    adjustedPage * ROWS_PER_PAGE + ROWS_PER_PAGE
+  );
 
   const styles = useStyles();
 
@@ -75,6 +89,11 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
                 <TableCell>{location.coordinates}</TableCell>
               </TableRow>
             ))}
+            {emptyRowCount > 0 && (
+              <TableRow style={{ height: 53 * emptyRowCount }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -82,9 +101,9 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
         component="div"
         rowsPerPageOptions={[ROWS_PER_PAGE]}
         rowsPerPage={ROWS_PER_PAGE}
-        count={locations.length}
+        count={rowCount}
         onPageChange={pageChanged}
-        page={page}
+        page={adjustedPage}
       />
     </>
   );
