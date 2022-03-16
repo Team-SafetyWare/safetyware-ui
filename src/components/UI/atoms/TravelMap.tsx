@@ -1,11 +1,8 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
-import {
-  GET_COMPANY_LOCATIONS,
-  useCompanyLocations,
-} from "../../../util/queryService";
+import { useCompanyLocations } from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
+import LatLngLiteral = google.maps.LatLngLiteral;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TravelMapProps {}
@@ -20,6 +17,15 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     },
   });
 
+  const points: LatLngLiteral[] =
+    data?.company.people
+      .map((person) => person.locationReadings)
+      .flat()
+      .map((locationReading) => ({
+        lat: Number(locationReading.coordinates[1]),
+        lng: Number(locationReading.coordinates[0]),
+      })) ?? [];
+
   return (
     <GoogleMap
       mapContainerStyle={{
@@ -33,7 +39,15 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
       }}
       options={{ gestureHandling: "greedy" }}
     >
-      <Marker position={{ lat: -34.397, lng: 150.644 }} />
+      <Polyline
+        path={points}
+        options={{
+          strokeColor: "#ff0000",
+          strokeOpacity: 1,
+          strokeWeight: 3,
+          clickable: false,
+        }}
+      />
     </GoogleMap>
   );
 };
