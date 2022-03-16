@@ -6,12 +6,16 @@ import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 
 const useStyles = makeStyles({
   filterBar: {
-    position: "fixed",
+    position: "sticky",
+    top: "16px",
     zIndex: "1",
-    width: "calc(100% - 48px - 240px)",
+    width: "100%",
   },
   topMargin: {
     height: "104px",
+  },
+  pageCard: {
+    marginBottom: "16px",
   },
 });
 
@@ -29,7 +33,7 @@ export const LocationsNext: React.FC = () => {
 
   return (
     <>
-      <div className={styles.filterBar}>
+      <div className={[styles.pageCard, styles.filterBar].join(" ")}>
         <Card elevation={2}>
           <CardContent>
             <div style={{ marginBottom: "-8px" }}>
@@ -38,8 +42,8 @@ export const LocationsNext: React.FC = () => {
           </CardContent>
         </Card>
       </div>
-      <div className={styles.topMargin} />
-      <Card>
+
+      <Card className={styles.pageCard}>
         <CardHeader
           title="Travel history"
           subheader="Understand how people move through your facility."
@@ -51,9 +55,7 @@ export const LocationsNext: React.FC = () => {
         </CardMedia>
       </Card>
 
-      <div style={{ height: "16px" }} />
-
-      <Card>
+      <Card className={styles.pageCard}>
         <CardHeader
           title="Hazardous areas"
           subheader="See where incidents occur most frequently."
