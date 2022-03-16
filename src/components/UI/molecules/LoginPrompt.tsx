@@ -98,8 +98,8 @@ export const LoginPrompt: React.FC = () => {
               {selectLabel}
             </InputLabel>
             <Select className={styles.loginEmailSelect} onChange={handleChange}>
-              {users.map((user: any) => (
-                <MenuItem key={user.id} value={user}>
+              {users.map((user) => (
+                <MenuItem key={user.id} value={user as any}>
                   {user.email}
                 </MenuItem>
               ))}

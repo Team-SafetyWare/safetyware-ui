@@ -4,13 +4,17 @@ import { InputLabel, Select, TextField } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { useCompanyPeople } from "../../../util/queryService";
+import {
+  CompanyPeopleData,
+  Person,
+  useCompanyPeople,
+} from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
 
 export interface Filter {
   minTimestamp?: Date;
   maxTimestamp?: Date;
-  personId?: string;
+  person?: Person;
 }
 
 interface FilterDialogProps {
@@ -24,6 +28,8 @@ export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
   const { data: peopleData } = useCompanyPeople({
     companyId: user?.company.id || "",
   });
+
+  const people: Person[] = (peopleData && intoPeople(peopleData)) || [];
 
   const minTimestampChanged = useCallback(
     (value: Date | null | undefined) => {
@@ -47,7 +53,11 @@ export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
 
   const personChanged = useCallback(
     (event: SelectChangeEvent) => {
-      console.log(event);
+      event.preventDefault();
+      props.onChange((prevFilter) => ({
+        ...prevFilter,
+        person: (event.target.value as unknown as Person) || undefined,
+      }));
     },
     [props.onChange]
   );
@@ -70,12 +80,23 @@ export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
       />
       <FormControl fullWidth>
         <InputLabel>{selectPersonLabel}</InputLabel>
-        <Select label={selectPersonLabel} onChange={personChanged}>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+        <Select
+          label={selectPersonLabel}
+          onChange={personChanged}
+          value={(props.filter.person as any) || ""}
+        >
+          {people.map((person) => (
+            <MenuItem key={person.id} value={person as any}>
+              {person.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </div>
   );
 };
+
+const intoPeople = (peopleData: CompanyPeopleData): Person[] =>
+  peopleData.company.people
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name));
