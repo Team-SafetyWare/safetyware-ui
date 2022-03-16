@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { DateTimePicker } from "@mui/lab";
 import { InputLabel, Select, TextField } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
@@ -29,8 +29,6 @@ export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
     companyId: user?.company.id || "",
   });
 
-  const people: Person[] = (peopleData && intoPeople(peopleData)) || [];
-
   const minTimestampChanged = useCallback(
     (value: Date | null | undefined) => {
       props.onChange((prevFilter) => ({
@@ -51,12 +49,22 @@ export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
     [props.onChange]
   );
 
+  const people: Person[] = (peopleData && intoPeople(peopleData)) || [];
+  const [allPerson] = useState<Person>({
+    id: "All",
+    name: "All",
+  });
+
   const personChanged = useCallback(
     (event: SelectChangeEvent) => {
       event.preventDefault();
+      let person: Person | undefined = event.target.value as unknown as Person;
+      if (person === allPerson) {
+        person = undefined;
+      }
       props.onChange((prevFilter) => ({
         ...prevFilter,
-        person: (event.target.value as unknown as Person) || undefined,
+        person: person,
       }));
     },
     [props.onChange]
@@ -83,9 +91,9 @@ export const FilterDialog: React.FC<FilterDialogProps> = (props) => {
         <Select
           label={selectPersonLabel}
           onChange={personChanged}
-          value={(props.filter.person as any) || ""}
+          value={(props.filter.person as any) || allPerson}
         >
-          {people.map((person) => (
+          {[allPerson].concat(people).map((person) => (
             <MenuItem key={person.id} value={person as any}>
               {person.name}
             </MenuItem>
