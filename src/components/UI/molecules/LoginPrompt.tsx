@@ -9,7 +9,7 @@ import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
 import { default as React, useState } from "react";
 import Logo from "../../../assets/logo.png";
-import { setCurrentUser } from "../../../index";
+import { setCurrentUser, User } from "../../../index";
 import { GET_USERS } from "../../../util/queryService";
 import { LoginEmailButton } from "../atoms/LoginEmailButton";
 import { LoginMicrosoftButton } from "../atoms/LoginMicrosoftButton";
@@ -64,28 +64,26 @@ export const LoginPrompt: React.FC = () => {
   const styles = useStyles();
 
   // eslint-disable-next-line prefer-const
-  let [user, setUser]: [any, any] = useState("");
+  let [user, setUser] = useState<User>({} as User);
 
   const { data: usersData } = useQuery(GET_USERS);
-  let users = usersData?.userAccounts ?? [];
-  users = Array.from(users).sort((a: any, b: any) =>
-    a.name > b.name ? 1 : -1
-  );
+  let users: User[] = usersData?.userAccounts ?? [];
+  users = Array.from(users).sort((a, b) => (a.name > b.name ? 1 : -1));
 
-  const setAndStoreUser = (user: any) => {
+  const setAndStoreUser = (user: User) => {
     setUser(user);
     setCurrentUser(user);
   };
 
-  if (user === "" && users.length > 0) {
+  if (Object.keys(user).length === 0 && users.length > 0) {
     user = users[0];
     setAndStoreUser(user);
   }
 
   const selectLabel = "Email";
 
-  const handleChange = (event: SelectChangeEvent<any>) => {
-    setAndStoreUser(event.target.value);
+  const handleChange = (event: SelectChangeEvent<User>) => {
+    setAndStoreUser(event.target.value as User);
   };
 
   return (

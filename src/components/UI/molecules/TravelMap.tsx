@@ -47,7 +47,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const filter: Filter = props.filter ?? {};
 
   const { data } = useCompanyLocations({
-    companyId: user?.company.id,
+    companyId: user?.company.id || "",
     filter: {
       minTimestamp: filter.minTimestamp,
       maxTimestamp: filter.maxTimestamp,
