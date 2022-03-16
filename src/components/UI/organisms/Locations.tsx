@@ -91,7 +91,7 @@ export const Locations: React.FC = () => {
   const endDate = useAppSelector(selectLocationPageEndDate);
   const filterId = useAppSelector(selectLocationPagePersonId);
 
-  const { data: companyLocationReadingsData, loading: loadingCompanyData } =
+  const { data: companyLocationReadingsData } =
     useQuery(GET_LOCATIONS_FOR_COMPANY, {
       variables: {
         companyId: user?.company.id,
@@ -102,7 +102,7 @@ export const Locations: React.FC = () => {
       },
     });
 
-  const { data: personLocationReadingsData, loading: loadingPersonData } =
+  const { data: personLocationReadingsData } =
     useQuery(GET_LOCATIONS_FOR_PERSON, {
       variables: {
         personId: filterId,
@@ -114,7 +114,7 @@ export const Locations: React.FC = () => {
     });
 
   const [locationReadings, setLocationReadings] = useState<any>([]);
-  const [people, setPeople] = useState<any>([]);
+  // const [people, setPeople] = useState<any>([]);
   const [travelData, setTravelData] = useState<any>([]);
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export const Locations: React.FC = () => {
 
         setTravelData(legend);
         setLocationReadings(locationReadings);
-        setPeople(people);
+        // setPeople(people);
       }
     } else {
       const locationReadings: any[] =
@@ -232,7 +232,7 @@ export const Locations: React.FC = () => {
       });
       setTravelData(legend);
       setLocationReadings(locationReadings);
-      setPeople(people);
+      // setPeople(people);
     }
   }, [
     companyLocationReadingsData,
