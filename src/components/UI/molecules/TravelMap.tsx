@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import {
   Person,
   PersonWithLocationReadings,
-  useCompanyLocations,
-  usePersonLocations,
+  sortPeople,
+  usePeopleInCompany,
+  usePersonAsPeople,
 } from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
@@ -140,47 +141,6 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     </>
   );
 };
-
-const usePeopleInCompany = (
-  companyId: string,
-  filter: Filter,
-  skip = false
-): PersonWithLocationReadings[] => {
-  const { data } = useCompanyLocations(
-    {
-      companyId: companyId,
-      filter: {
-        minTimestamp: filter.minTimestamp,
-        maxTimestamp: filter.maxTimestamp,
-      },
-    },
-    skip
-  );
-  return data?.company.people || [];
-};
-
-const usePersonAsPeople = (
-  personId: string,
-  filter: Filter,
-  skip = false
-): PersonWithLocationReadings[] => {
-  const { data } = usePersonLocations(
-    {
-      personId: personId,
-      filter: {
-        minTimestamp: filter.minTimestamp,
-        maxTimestamp: filter.maxTimestamp,
-      },
-    },
-    skip
-  );
-  return (data && [data.person]) || [];
-};
-
-const sortPeople = (
-  people: PersonWithLocationReadings[]
-): PersonWithLocationReadings[] =>
-  people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
 const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
   people
