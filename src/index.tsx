@@ -7,6 +7,7 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 import LatLngLiteral = google.maps.LatLngLiteral;
+import { Person } from "./util/queryService";
 
 export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
 export const DEFAULT_MAP_CENTER: LatLngLiteral = {
@@ -37,6 +38,9 @@ export const getCurrentUser = (): User | null => {
 export const setCurrentUser = (user: User): void => {
   localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
 };
+
+export const sortPeople = <T extends Person>(people: T[]): T[] =>
+  people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
 const client = new ApolloClient({
   uri: `${API_URL}/graphql`,

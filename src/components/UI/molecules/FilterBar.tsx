@@ -9,7 +9,7 @@ import {
   Person,
   useCompanyPeople,
 } from "../../../util/queryService";
-import { getCurrentUser } from "../../../index";
+import { getCurrentUser, sortPeople } from "../../../index";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 
@@ -160,6 +160,4 @@ export const FilterBar: React.FC<FilterDialogProps> = (props) => {
 };
 
 const intoPeople = (peopleData: CompanyPeopleData): Person[] =>
-  peopleData.company.people
-    .slice()
-    .sort((a, b) => a.name.localeCompare(b.name));
+  sortPeople(peopleData.company.people);
