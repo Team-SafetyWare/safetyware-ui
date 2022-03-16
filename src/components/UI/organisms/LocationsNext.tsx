@@ -52,19 +52,18 @@ export const LocationsNext: React.FC = () => {
       </Card>
 
       <div style={{ height: "16px" }} />
-      <div style={{ height: "600px" }}>
-        <TravelMap filter={filter} />
-      </div>
-      <div style={{ height: "16px" }} />
 
-      <div style={{ height: "600px" }}>
-        <TravelMap filter={filter} />
-      </div>
-      <div style={{ height: "16px" }} />
-
-      <div style={{ height: "600px" }}>
-        <TravelMap filter={filter} />
-      </div>
+      <Card>
+        <CardHeader
+          title="Hazardous areas"
+          subheader="See where incidents occur most frequently."
+        />
+        <CardMedia>
+          <div style={{ height: "600px" }}>
+            <TravelMap filter={filter} />
+          </div>
+        </CardMedia>
+      </Card>
     </>
   );
 };
