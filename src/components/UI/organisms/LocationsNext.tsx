@@ -5,6 +5,7 @@ import { makeStyles } from "@mui/styles";
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
 import { HazardMap } from "../molecules/HazardMap";
+import { LocationsTable } from "../molecules/LocationsTable";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -73,6 +74,16 @@ export const LocationsNext: React.FC = () => {
           <div style={{ height: "600px" }}>
             <HazardMap filter={filter} />
           </div>
+        </CardMedia>
+      </Card>
+
+      <Card className={styles.pageCard}>
+        <CardHeader
+          title="Locations table"
+          subheader="View individual location readings."
+        />
+        <CardMedia>
+          <LocationsTable filter={filter} />
         </CardMedia>
       </Card>
     </>
