@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   innerContent: {
     height: "100%",
     width: "100%",
-    padding: "10px 25px",
+    padding: "16px 24px",
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
         padding: "0",
