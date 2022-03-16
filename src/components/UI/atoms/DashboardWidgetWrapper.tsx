@@ -28,7 +28,7 @@ const useStyles = makeStyles({
     touchAction: "none",
     paddingTop: "5px",
     width: "100%",
-    height: "600px",
+    height: "400px",
     overflow: "hidden",
   },
   dropzone: {
