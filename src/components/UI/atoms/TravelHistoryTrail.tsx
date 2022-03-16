@@ -1,13 +1,12 @@
 import { GoogleMap, Polyline } from "@react-google-maps/api";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ControlPosition = google.maps.ControlPosition;
 import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from '@mui/material/Backdrop';
 
 interface TravelHistoryTrailProps {
   center?: any;
   data: any;
-  loadingCompanyData: any;
-  loadingPersonData: any;
 }
 export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
   props
@@ -36,12 +35,12 @@ export const TravelHistoryTrail: React.FC<TravelHistoryTrailProps> = (
 
   return (
     <>
-      {loading && (
-        <>
-          <CircularProgress size={200} />
-        </>
-      )}
-      
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress size={200} />
+      </Backdrop>
       <div
         id={"travel-legend"}
         hidden={!showLegend}

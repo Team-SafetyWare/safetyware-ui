@@ -1,7 +1,6 @@
 import { useQuery } from "@apollo/client";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { IconButton, Modal, useMediaQuery } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
@@ -256,11 +255,6 @@ export const Locations: React.FC = () => {
   return (
     <StyledEngineProvider injectFirst>
       <>
-        {(loadingCompanyData || loadingPersonData) && (
-          <>
-            <CircularProgress size={200} />
-          </>
-        )}
         {matches ? (
           <>
             <PageHeader
@@ -284,8 +278,6 @@ export const Locations: React.FC = () => {
                 <TravelHistoryTrail
                   center={center}
                   data={travelData}
-                  loadingCompanyData={loadingCompanyData}
-                  loadingPersonData={loadingPersonData}
                 />
               }
             />
@@ -352,8 +344,6 @@ export const Locations: React.FC = () => {
                 <TravelHistoryTrail
                   center={center}
                   data={travelData}
-                  loadingCompanyData={loadingCompanyData}
-                  loadingPersonData={loadingPersonData}
                 />
               </div>
             )}
