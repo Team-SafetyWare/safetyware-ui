@@ -28,9 +28,15 @@ export const GET_PERSONS = gql`
   }
 `;
 
+export interface Person {
+  id: string;
+  name: string;
+}
+
 export interface CompanyLocationData {
   company: {
     people: {
+      id: string;
       name: string;
       locationReadings: LocationReading[];
     }[];
@@ -54,6 +60,7 @@ export const GET_COMPANY_LOCATIONS = gql`
   query ($companyId: ID!, $filter: LocationReadingFilter) {
     company(id: $companyId) {
       people {
+        id
         name
         locationReadings(filter: $filter) {
           coordinates

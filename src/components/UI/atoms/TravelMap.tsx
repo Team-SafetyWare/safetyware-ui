@@ -1,6 +1,7 @@
 import React from "react";
 import {
   CompanyLocationData,
+  Person,
   useCompanyLocations,
 } from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
@@ -15,6 +16,7 @@ interface TrailPoint extends LatLngLiteral {
 
 interface Trail {
   path: TrailPoint[];
+  person: Person;
   color: string;
 }
 
@@ -47,8 +49,8 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
       options={{ gestureHandling: "greedy" }}
     >
       {trails.map((trail: any) => (
-        // eslint-disable-next-line react/jsx-key
         <Polyline
+          key={trailKey(trail)}
           path={trail.path}
           options={{
             strokeColor: trail.color,
@@ -92,7 +94,18 @@ const intoTrails = (data: CompanyLocationData): Trail[] =>
       );
       return segments.map((path) => ({
         path: path,
+        person: {
+          id: person.id,
+          name: person.name,
+        },
         color: "#ff0000",
       }));
     })
     .flat();
+
+const trailKey = (trail: Trail): string => {
+  const personId = trail.person.id;
+  const start = trail.path[0].time.toISOString();
+  const end = trail.path[trail.path.length - 1].time.toISOString();
+  return `${personId}-${start}-${end}`;
+};
