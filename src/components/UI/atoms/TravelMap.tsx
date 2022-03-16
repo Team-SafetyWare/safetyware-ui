@@ -2,6 +2,7 @@ import React from "react";
 import {
   CompanyLocationData,
   Person,
+  PersonWithLocationReadings,
   useCompanyLocations,
 } from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
@@ -47,7 +48,8 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     },
   });
 
-  const trails: Trail[] = (data && intoTrails(data)) ?? [];
+  const people: PersonWithLocationReadings[] = (data && intoPeople(data)) ?? [];
+  const trails: Trail[] = intoTrails(people);
 
   return (
     <GoogleMap
@@ -78,22 +80,11 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   );
 };
 
-const splitWhen = <T,>(arr: T[], split: (a: T, b: T) => boolean): T[][] => {
-  const segments: T[][] = [];
-  let sliceStart = 0;
-  let sliceEnd = 0;
-  while (sliceEnd < arr.length) {
-    sliceEnd += 1;
-    if (sliceEnd == arr.length || split(arr[sliceEnd - 1], arr[sliceEnd])) {
-      segments.push(arr.slice(sliceStart, sliceEnd));
-      sliceStart = sliceEnd;
-    }
-  }
-  return segments;
-};
+const intoPeople = (data: CompanyLocationData): PersonWithLocationReadings[] =>
+  data.company.people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
-const intoTrails = (data: CompanyLocationData): Trail[] =>
-  data?.company.people
+const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
+  people
     .map((person, person_index) => {
       const locations: TrailPoint[] = person.locationReadings.map(
         (location) => ({
@@ -116,6 +107,20 @@ const intoTrails = (data: CompanyLocationData): Trail[] =>
       }));
     })
     .flat();
+
+const splitWhen = <T,>(arr: T[], split: (a: T, b: T) => boolean): T[][] => {
+  const segments: T[][] = [];
+  let sliceStart = 0;
+  let sliceEnd = 0;
+  while (sliceEnd < arr.length) {
+    sliceEnd += 1;
+    if (sliceEnd == arr.length || split(arr[sliceEnd - 1], arr[sliceEnd])) {
+      segments.push(arr.slice(sliceStart, sliceEnd));
+      sliceStart = sliceEnd;
+    }
+  }
+  return segments;
+};
 
 const indexToColor = (index: number): string =>
   TRAIL_COLORS[index % TRAIL_COLORS.length];
