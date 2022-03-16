@@ -16,18 +16,7 @@ import { useAppSelector } from "../../../store/store";
 import { IncidentReadings } from "../organisms/Incidents";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles({
-  parent: {
-    position: "relative",
-    height: "575px",
-    zIndex: 0,
-  },
-  backdrop: {
-    position: "absolute",
-  },
-});
+import OverlayStyles from "../../styling/OverlayStyles";
 
 const containerStyle = {
   width: "100%",
@@ -43,7 +32,7 @@ interface IncidentDotMapProps {
 }
 
 export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
-  const styles = useStyles();
+  const overlayStyles = OverlayStyles();
   const [isEmpty, setIsEmpty] = React.useState(false);
   const [incidents, updateIncidents] = React.useState<IncidentReadings[]>([]);
   const zoom = props.zoom;
@@ -158,15 +147,13 @@ export const IncidentDotMap: React.FC<IncidentDotMapProps> = (props) => {
     } else {
       setIsEmpty(false);
     }
-    console.log("this is isEmpty", isEmpty);
-    console.log("this is incidents", incidents);
   }, [incidents]);
 
   return (
     <>
-      <div className={styles.parent}>
+      <div className={overlayStyles.parent}>
         <Backdrop
-          className={styles.backdrop}
+          className={overlayStyles.backdrop}
           open={isEmpty}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
