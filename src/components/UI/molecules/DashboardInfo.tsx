@@ -3,7 +3,14 @@ import React from "react";
 import { HomeGreeting } from "../atoms/HomeGreeting";
 import { PageHeader } from "../atoms/PageHeader";
 
-export const DashboardInfo: React.FC = () => {
+interface DashboardInfoProps {
+  activeWidgetState?: any;
+  inactiveWidgetState?: any;
+  addWidget?: any;
+  userName?: string;
+}
+
+export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
 
   return (
@@ -17,10 +24,10 @@ export const DashboardInfo: React.FC = () => {
         />
       )}
       <HomeGreeting
+        activeWidgetState={props.activeWidgetState}
+        inactiveWidgetState={props.inactiveWidgetState}
+        addWidget={props.addWidget}
         userName={"Jane"}
-        time={"Afternoon"}
-        date={"January 27th, 2022"}
-        day={"Thursday"}
       />
     </>
   );
