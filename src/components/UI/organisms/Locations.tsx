@@ -23,8 +23,8 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-import { TravelMap } from "../atoms/TravelMap";
-import { Filter } from "../atoms/CustomBoxUserSelect";
+import { TravelMap } from "../molecules/TravelMap";
+import { Filter } from "../molecules/FilterDialog";
 const center = {
   lat: 51.049999,
   lng: -114.1283,

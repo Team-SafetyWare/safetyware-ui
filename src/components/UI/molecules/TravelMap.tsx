@@ -10,7 +10,7 @@ import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import ControlPosition = google.maps.ControlPosition;
 import { v4 as uuidV4 } from "uuid";
-import { Filter } from "./CustomBoxUserSelect";
+import { Filter } from "./FilterDialog";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -38,7 +38,6 @@ interface Trail {
   color: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TravelMapProps {
   filter?: Filter;
 }
