@@ -4,13 +4,13 @@ import {
   Person,
   useCompanyLocations,
 } from "../../../util/queryService";
-import { getCurrentUser, PEOPLE_COLORS } from "../../../index";
+import { getCurrentUser } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
-export const TRAIL_COLORS = [
+const TRAIL_COLORS = [
   "#e6194b",
   "#3cb44b",
   "#ffe119",
