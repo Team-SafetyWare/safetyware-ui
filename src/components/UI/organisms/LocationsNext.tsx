@@ -3,6 +3,7 @@ import { TravelMap } from "../molecules/TravelMap";
 import { Filter, FilterBar } from "../molecules/FilterBar";
 import { makeStyles } from "@mui/styles";
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
+import { PageHeader } from "../atoms/PageHeader";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -33,6 +34,13 @@ export const LocationsNext: React.FC = () => {
 
   return (
     <>
+      <PageHeader
+        pageTitle={"Locations"}
+        pageDescription={
+          "Analyze data based on locations including a travel history trail and a heat map of common incident locations."
+        }
+      />
+
       <div className={[styles.pageCard, styles.filterBar].join(" ")}>
         <Card elevation={2}>
           <CardContent>
