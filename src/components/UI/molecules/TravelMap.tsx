@@ -6,7 +6,11 @@ import {
   usePeopleInCompany,
   usePersonAsPeople,
 } from "../../../util/queryService";
-import { getCurrentUser } from "../../../index";
+import {
+  DEFAULT_MAP_CENTER,
+  DEFAULT_MAP_ZOOM,
+  getCurrentUser,
+} from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import ControlPosition = google.maps.ControlPosition;
@@ -110,12 +114,9 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
           height: "100%",
           width: "100%",
         }}
-        zoom={12}
-        center={{
-          lat: 51.049999,
-          lng: -114.1283,
-        }}
         options={{ gestureHandling: "greedy" }}
+        zoom={DEFAULT_MAP_ZOOM}
+        center={DEFAULT_MAP_CENTER}
         onLoad={(map) => {
           const controls = map.controls[ControlPosition.LEFT_TOP];
           const legend = document.getElementById(legendElementId);
