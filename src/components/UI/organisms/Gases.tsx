@@ -17,17 +17,12 @@ import {
   GET_GAS_READINGS_FOR_PERSON,
 } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
-import { GasesDotMap } from "../atoms/GasesDotMap";
+import { GasDotMap } from "../atoms/GasesDotMap";
 import GasesTable from "../atoms/GasesTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-
-const gases = [
-  { lat: 51.077763, lng: -114.140657 },
-  { lat: 51.046048773481786, lng: -114.02334120770176 },
-];
 
 const center = {
   lat: 51.049999,
@@ -213,7 +208,7 @@ export const Gases: React.FC = () => {
               accordionWidth={""}
               accordionTitle={visualizations[1]}
               component={
-                <GasesDotMap gases={gases} center={center} zoom={10} />
+                <GasDotMap gases={gasReadings} center={center} zoom={10} />
               }
             />
           </>
@@ -232,7 +227,7 @@ export const Gases: React.FC = () => {
             )}
             {visualization == visualizations[1] && (
               <div className={styles.visualization}>
-                <GasesDotMap gases={gases} center={center} zoom={10} />
+                <GasDotMap gases={gasReadings} center={center} zoom={10} />
               </div>
             )}
           </>
