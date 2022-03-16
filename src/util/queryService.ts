@@ -32,13 +32,13 @@ export interface CompanyLocationData {
   company: {
     people: {
       name: string;
-      locationReadings: [LocationReading];
-    };
+      locationReadings: LocationReading[];
+    }[];
   };
 }
 
 export interface LocationReading {
-  coordinates: [string];
+  coordinates: string[];
   timestamp: string;
 }
 
