@@ -1,6 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
 import { QueryResult } from "@apollo/client/react/types/types";
-import { Filter } from "../components/UI/molecules/FilterBar";
 
 export const GET_USERS = gql`
   {
