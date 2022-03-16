@@ -14,6 +14,9 @@ import {
 } from "../../../store/slices/incidentPageSlice";
 import { useAppSelector } from "../../../store/store";
 import { IncidentReadings } from "../organisms/Incidents";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import OverlayStyles from "../../styling/OverlayStyles";
 
 interface IncidentTableProps {
   incidents: IncidentReadings[];
@@ -44,8 +47,18 @@ function Row(props: { row: IncidentReadings; matches: boolean }) {
 }
 
 export default function IncidentTable(props: IncidentTableProps): any {
-  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
+  const overlayStyles = OverlayStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
 
+  useEffect(() => {
+    if (props.incidents.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [props.incidents]);
+
+  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const [incidents, updateIncidents] = useState<IncidentReadings[]>([]);
   const [filteredIncidents, updateFilteredIncidents] = useState<
     IncidentReadings[]
@@ -102,23 +115,28 @@ export default function IncidentTable(props: IncidentTableProps): any {
   );
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Incident</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Time</TableCell>
-            {matches && <TableCell>Coordinates</TableCell>}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            // eslint-disable-next-line react/jsx-key
-            <Row row={row} matches={matches} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div className={overlayStyles.parent}>
+      <Backdrop className={overlayStyles.backdrop} open={isEmpty}>
+        <EmptyDataMessage />
+      </Backdrop>
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Incident</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Time</TableCell>
+              {matches && <TableCell>Coordinates</TableCell>}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              // eslint-disable-next-line react/jsx-key
+              <Row row={row} matches={matches} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 }
