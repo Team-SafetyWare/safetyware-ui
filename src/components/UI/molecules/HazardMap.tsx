@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
@@ -13,12 +13,18 @@ import {
 } from "../../../util/queryService";
 import WeightedLocation = google.maps.visualization.WeightedLocation;
 import LatLng = google.maps.LatLng;
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import OverlayStyles from "../../styling/OverlayStyles";
 
 interface HazardMapProps {
   filter?: Filter;
 }
 
 export const HazardMap: React.FC<HazardMapProps> = (props) => {
+  const overlayStyles = OverlayStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
+
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
@@ -29,23 +35,40 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
 
   const points: WeightedLocation[] = intoPoints(incidents);
 
+  useEffect(() => {
+    if (incidents.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [incidents]);
+
   return (
-    <GoogleMap
-      mapContainerStyle={{
-        height: "100%",
-        width: "100%",
-      }}
-      options={{ gestureHandling: "greedy" }}
-      zoom={DEFAULT_MAP_ZOOM}
-      center={DEFAULT_MAP_CENTER}
-    >
-      <HeatmapLayer
-        data={points}
-        options={{
-          radius: 40,
+    <div className={overlayStyles.parent}>
+      <Backdrop
+        className={overlayStyles.backdrop}
+        open={isEmpty}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <EmptyDataMessage />
+      </Backdrop>
+      <GoogleMap
+        mapContainerStyle={{
+          height: "100%",
+          width: "100%",
         }}
-      />
-    </GoogleMap>
+        options={{ gestureHandling: "greedy" }}
+        zoom={DEFAULT_MAP_ZOOM}
+        center={DEFAULT_MAP_CENTER}
+      >
+        <HeatmapLayer
+          data={points}
+          options={{
+            radius: 40,
+          }}
+        />
+      </GoogleMap>
+    </div>
   );
 };
 
