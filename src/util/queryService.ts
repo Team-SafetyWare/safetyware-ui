@@ -278,10 +278,9 @@ export const useCompanyIncidentStats = (
   );
 };
 
-export const GET_INCIDENT_STATS_FOR_PERSON = gql`
+export const GET_PERSON_INCIDENT_STATS = gql`
   query ($personId: ID!, $filter: IncidentStatsFilter) {
     person(id: $personId) {
-      name
       incidentStats(filter: $filter) {
         type
         count
@@ -289,6 +288,30 @@ export const GET_INCIDENT_STATS_FOR_PERSON = gql`
     }
   }
 `;
+
+export interface PersonIncidentStatsData {
+  person: {
+    incidentStats: IncidentStat[];
+  };
+}
+
+export interface PersonIncidentStatsVars {
+  personId: string;
+  filter: IncidentStatsFilter;
+}
+
+export const usePersonIncidentStats = (
+  variables: GetPersonIncidentsVars,
+  skip = false
+): QueryResult<PersonIncidentStatsData, PersonIncidentStatsVars> => {
+  return useQuery<PersonIncidentStatsData, PersonIncidentStatsVars>(
+    GET_PERSON_INCIDENT_STATS,
+    {
+      variables: variables,
+      skip: skip,
+    }
+  );
+};
 
 export const GET_GAS_READINGS_FOR_COMPANY = gql`
   query ($companyId: ID!, $filter: GasReadingFilter) {
