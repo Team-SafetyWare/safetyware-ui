@@ -1,6 +1,13 @@
 import { useQuery } from "@apollo/client";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import {Card, CardHeader, CardMedia, IconButton, Modal, useMediaQuery} from "@mui/material";
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  IconButton,
+  Modal,
+  useMediaQuery,
+} from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
@@ -23,7 +30,7 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-import {TravelMap} from "../molecules/TravelMap";
+import { TravelMap } from "../molecules/TravelMap";
 
 const center = {
   lat: 51.049999,
@@ -192,8 +199,8 @@ export const Gases: React.FC = () => {
             />
             <Card className={styles.pageCard}>
               <CardHeader
-                  title="Gases Dot Map"
-                  subheader="Become aware of the gas concentrations across multiple locations. "
+                title="Gases Dot Map"
+                subheader="Become aware of the gas concentrations across multiple locations. "
               />
               <CardMedia>
                 <div style={{ height: "600px" }}>
@@ -202,16 +209,16 @@ export const Gases: React.FC = () => {
               </CardMedia>
             </Card>
             <PageSectionHeader
-                sectionTitle={"Raw Gases Data"}
-                sectionDescription={
-                  "Explore raw gas readings data through a date-filtered data table."
-                }
+              sectionTitle={"Raw Gases Data"}
+              sectionDescription={
+                "Explore raw gas readings data through a date-filtered data table."
+              }
             />
             <CustomAccordion
-                accordionHeight={"auto"}
-                accordionWidth={""}
-                accordionTitle={visualizations[0]}
-                component={<GasesTable gasReadings={gasReadings} />}
+              accordionHeight={"auto"}
+              accordionWidth={""}
+              accordionTitle={visualizations[0]}
+              component={<GasesTable gasReadings={gasReadings} />}
             />
           </>
         ) : (
