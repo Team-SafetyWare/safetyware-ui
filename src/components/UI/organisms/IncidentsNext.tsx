@@ -4,6 +4,7 @@ import { Filter, FilterBar } from "../molecules/FilterBar";
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
 import { makeStyles } from "@mui/styles";
+import { IncidentsMap } from "../molecules/IncidentsMap";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -61,7 +62,7 @@ export const IncidentsNext: React.FC = () => {
         />
         <CardMedia>
           <div style={{ height: "600px" }}>
-            <TravelMap filter={filter} />
+            <IncidentsMap filter={filter} />
           </div>
         </CardMedia>
       </Card>
