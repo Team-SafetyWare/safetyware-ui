@@ -40,14 +40,17 @@ const useStyles = makeStyles({
   tooltip: {
     position: "relative",
     right: "calc(100% / 2)",
-    bottom: "152px",
+    bottom: "216px",
     filter: "drop-shadow(0 0 0.75rem crimson);",
+    // boxShadow:
+    //   "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
   },
   tooltipContent: {
     position: "relative",
     padding: "8px",
     fontSize: "1rem",
     backgroundColor: "white",
+    borderRadius: "4px",
     "& h3": {
       margin: "8px",
     },
@@ -57,14 +60,15 @@ const useStyles = makeStyles({
     zIndex: "2",
   },
   tooltipArrow: {
-    width: "32px",
-    height: "32px",
+    width: "64px",
+    height: "64px",
     position: "relative",
     backgroundColor: "white",
+    borderRadius: "4px",
     transform: "rotate(45deg)",
     translate: "-50%",
     left: "50%",
-    bottom: "16px",
+    top: "120px",
   },
 });
 
@@ -124,12 +128,12 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
             position={hoveredMarker.location}
           >
             <div className={styles.tooltip}>
+              <div className={styles.tooltipArrow} />
               <div className={styles.tooltipContent}>
                 <h3>Incident: {hoveredMarker.type}</h3>
                 <p>Name: {hoveredMarker.person.name}</p>
                 <p>Time: {hoveredMarker.time.toISOString()}</p>
               </div>
-              <div className={styles.tooltipArrow} />
             </div>
           </OverlayView>
         )}
