@@ -22,6 +22,7 @@ import SignalIcon from "../../../assets/signal.png";
 import DeathIcon from "../../../assets/death.png";
 import GenericIcon from "../../../assets/generic.png";
 import LatLngLiteral = google.maps.LatLngLiteral;
+import { makeStyles } from "@mui/styles";
 
 interface IncidentMarker {
   person: Person;
@@ -34,6 +35,12 @@ interface IncidentMarker {
 interface IncidentsMapProps {
   filter?: Filter;
 }
+
+const useStyles = makeStyles({
+  tooltip: {
+    backgroundColor: "white",
+  },
+});
 
 export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
   const user = getCurrentUser();
@@ -54,6 +61,8 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
   const onMarkerHover = useCallback((marker: IncidentMarker) => {
     setHoveredMarker(marker);
   }, []);
+
+  const styles = useStyles();
 
   return (
     <>
@@ -79,7 +88,7 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
             mapPaneName={OverlayView.OVERLAY_LAYER}
             position={hoveredMarker.location}
           >
-            <div>
+            <div className={styles.tooltip}>
               <h1>Incident: {hoveredMarker.type}</h1>
               <div>Name: {hoveredMarker.person.name}</div>
               <div>Time: {hoveredMarker.time.toLocaleString()}</div>
