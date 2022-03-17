@@ -233,7 +233,7 @@ export const usePersonIncidents = (
   );
 };
 
-export const GET_INCIDENT_STATS_FOR_COMPANY = gql`
+export const GET_COMPANY_INCIDENT_STATS = gql`
   query ($companyId: ID!, $filter: IncidentStatsFilter) {
     company(id: $companyId) {
       incidentStats(filter: $filter) {
@@ -243,6 +243,40 @@ export const GET_INCIDENT_STATS_FOR_COMPANY = gql`
     }
   }
 `;
+
+export interface IncidentStat {
+  type: string;
+  count: number;
+}
+
+export interface IncidentStatsFilter {
+  minTimestamp?: Date;
+  maxTimestamp?: Date;
+}
+
+export interface CompanyIncidentStatsData {
+  company: {
+    incidentStats: IncidentStat[];
+  };
+}
+
+export interface CompanyIncidentStatsVars {
+  companyId: string;
+  filter: IncidentStatsFilter;
+}
+
+export const useCompanyIncidentStats = (
+  variables: GetCompanyIncidentsVars,
+  skip = false
+): QueryResult<CompanyIncidentStatsData, CompanyIncidentStatsVars> => {
+  return useQuery<CompanyIncidentStatsData, CompanyIncidentStatsVars>(
+    GET_COMPANY_INCIDENT_STATS,
+    {
+      variables: variables,
+      skip: skip,
+    }
+  );
+};
 
 export const GET_INCIDENT_STATS_FOR_PERSON = gql`
   query ($personId: ID!, $filter: IncidentStatsFilter) {
