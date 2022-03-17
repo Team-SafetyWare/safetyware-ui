@@ -23,7 +23,6 @@ import DeathIcon from "../../../assets/death.png";
 import GenericIcon from "../../../assets/generic.png";
 import { makeStyles } from "@mui/styles";
 import LatLngLiteral = google.maps.LatLngLiteral;
-import Paper from "@mui/material/Paper";
 
 interface IncidentMarker {
   person: Person;
@@ -42,15 +41,20 @@ const useStyles = makeStyles({
     position: "relative",
     right: "calc(100% / 2)",
     bottom: "152px",
+    filter: "drop-shadow(0 0 0.75rem crimson);",
+  },
+  tooltipContent: {
+    position: "relative",
     padding: "8px",
     fontSize: "1rem",
+    backgroundColor: "white",
     "& h3": {
       margin: "8px",
     },
     "& p": {
       margin: "8px",
     },
-    zIndex: "1",
+    zIndex: "2",
   },
   tooltipArrow: {
     width: "32px",
@@ -59,7 +63,8 @@ const useStyles = makeStyles({
     backgroundColor: "white",
     transform: "rotate(45deg)",
     translate: "-50%",
-    bottom: "168px",
+    left: "50%",
+    bottom: "16px",
   },
 });
 
@@ -118,13 +123,13 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
             mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
             position={hoveredMarker.location}
           >
-            <div>
-              <Paper className={styles.tooltip}>
+            <div className={styles.tooltip}>
+              <div className={styles.tooltipContent}>
                 <h3>Incident: {hoveredMarker.type}</h3>
                 <p>Name: {hoveredMarker.person.name}</p>
                 <p>Time: {hoveredMarker.time.toISOString()}</p>
-              </Paper>
-              <Paper className={styles.tooltipArrow} />
+              </div>
+              <div className={styles.tooltipArrow} />
             </div>
           </OverlayView>
         )}
