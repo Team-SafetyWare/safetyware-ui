@@ -15,7 +15,7 @@ import theme from "../../../Theme";
 import {
   GET_COMPANY_INCIDENTS,
   GET_PERSON_INCIDENTS,
-  GET_INCIDENT_STATS_FOR_COMPANY,
+  GET_COMPANY_INCIDENT_STATS,
   GET_INCIDENT_STATS_FOR_PERSON,
 } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
@@ -164,7 +164,7 @@ export const Incidents: React.FC = () => {
   }, [companyIncidentsData, personIncidentData, startDate, endDate, filterId]);
 
   const { data: companyIncidentStatsData } = useQuery(
-    GET_INCIDENT_STATS_FOR_COMPANY,
+    GET_COMPANY_INCIDENT_STATS,
     {
       variables: {
         companyId: user?.company.id,
