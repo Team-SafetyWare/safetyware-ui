@@ -41,6 +41,7 @@ const useStyles = makeStyles({
   tooltip: {
     position: "relative",
     right: "calc(100% / 2)",
+    bottom: "128px",
     padding: "8px",
     fontSize: "1rem",
     "& h3": {
