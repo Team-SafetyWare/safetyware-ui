@@ -4,6 +4,7 @@ import { BarGraph, BarItem } from "../atoms/BarGraph";
 import {
   IncidentStat,
   useCompanyIncidentStats,
+  usePersonIncidentStats,
 } from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
 
@@ -18,11 +19,10 @@ export const IncidentsBarGraph: React.FC<IncidentsBarGraphProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  let stats = useStatsInCompany(
-    user?.company.id || "",
-    filter,
-    !!filter.person
-  );
+  let stats: IncidentStat[] = [
+    useStatsInPerson(filter.person?.id || "", filter, !filter.person),
+    useStatsInCompany(user?.company.id || "", filter, !!filter.person),
+  ].flat();
   stats = sortByOccurances(stats);
 
   const graphData = intoChartData(stats);
@@ -52,6 +52,24 @@ const useStatsInCompany = (
     skip
   );
   return data?.company.incidentStats || [];
+};
+
+const useStatsInPerson = (
+  personId: string,
+  filter: Filter,
+  skip = false
+): IncidentStat[] => {
+  const { data } = usePersonIncidentStats(
+    {
+      personId: personId,
+      filter: {
+        minTimestamp: filter.minTimestamp,
+        maxTimestamp: filter.maxTimestamp,
+      },
+    },
+    skip
+  );
+  return data?.person.incidentStats || [];
 };
 
 const sortByOccurances = (stats: IncidentStat[]): IncidentStat[] =>

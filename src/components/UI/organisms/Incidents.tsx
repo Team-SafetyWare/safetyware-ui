@@ -16,7 +16,7 @@ import {
   GET_COMPANY_INCIDENTS,
   GET_PERSON_INCIDENTS,
   GET_COMPANY_INCIDENT_STATS,
-  GET_INCIDENT_STATS_FOR_PERSON,
+  GET_PERSON_INCIDENT_STATS,
 } from "../../../util/queryService";
 import { BarGraph } from "../atoms/BarGraph";
 import { CustomAccordion } from "../atoms/CustomAccordion";
@@ -177,7 +177,7 @@ export const Incidents: React.FC = () => {
   );
 
   const { data: personIncidentStatsData } = useQuery(
-    GET_INCIDENT_STATS_FOR_PERSON,
+    GET_PERSON_INCIDENT_STATS,
     {
       variables: {
         personId: filterId,
