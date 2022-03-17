@@ -41,7 +41,7 @@ const useStyles = makeStyles({
   tooltip: {
     position: "relative",
     right: "calc(100% / 2)",
-    bottom: "128px",
+    bottom: "152px",
     padding: "8px",
     fontSize: "1rem",
     "& h3": {
@@ -49,6 +49,28 @@ const useStyles = makeStyles({
     },
     "& p": {
       margin: "8px",
+    },
+  },
+  tooltipArrow: {
+    width: "64px",
+    height: "64px",
+    position: "relative",
+    overflow: "hidden",
+    boxShadow: "0 16px 10px -17px rgba(0, 0, 0, 0.5)",
+    backgroundColor: "transparent",
+    transform: "rotate(180deg)",
+    translate: "-50%",
+    bottom: "152px",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      width: "32px",
+      height: "32px",
+      background: "white",
+      transform: "rotate(45deg);",
+      top: "48px",
+      left: "16px",
+      boxShadow: "-1px -1px 10px -2px rgba(0, 0, 0, 0.5)",
     },
   },
 });
@@ -108,11 +130,14 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
             mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
             position={hoveredMarker.location}
           >
-            <Paper className={styles.tooltip}>
-              <h3>Incident: {hoveredMarker.type}</h3>
-              <p>Name: {hoveredMarker.person.name}</p>
-              <p>Time: {hoveredMarker.time.toISOString()}</p>
-            </Paper>
+            <div>
+              <Paper className={styles.tooltip}>
+                <h3>Incident: {hoveredMarker.type}</h3>
+                <p>Name: {hoveredMarker.person.name}</p>
+                <p>Time: {hoveredMarker.time.toISOString()}</p>
+              </Paper>
+              <Paper className={styles.tooltipArrow} />
+            </div>
           </OverlayView>
         )}
       </GoogleMap>
