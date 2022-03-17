@@ -55,12 +55,15 @@ const useStatsInCompany = (
 };
 
 const sortByOccurances = (stats: IncidentStat[]): IncidentStat[] =>
-  stats
-    .slice()
-    .sort((a, b) =>
-      a.count > b.count || a.type.localeCompare(b.type) ? 1 : -1
-    )
-    .reverse();
+  stats.slice().sort((a, b) => {
+    if (a.count < b.count) {
+      return 1;
+    }
+    if (a.count == b.count) {
+      return a.type.localeCompare(b.type);
+    }
+    return -1;
+  });
 
 const intoChartData = (stats: IncidentStat[]): BarItem[] =>
   stats.map((stat) => ({
