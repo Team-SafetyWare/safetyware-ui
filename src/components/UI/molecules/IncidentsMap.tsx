@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
   sortPeople,
 } from "../../../index";
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, OverlayView } from "@react-google-maps/api";
 
 import { Filter } from "./FilterBar";
 import {
+  Person,
   PersonWithIncidents,
   useCompanyIncidents,
   usePersonIncidents,
@@ -23,7 +24,10 @@ import GenericIcon from "../../../assets/generic.png";
 import LatLngLiteral = google.maps.LatLngLiteral;
 
 interface IncidentMarker {
+  person: Person;
   location: LatLngLiteral;
+  type: string;
+  time: Date;
   icon: string;
 }
 
@@ -43,20 +47,47 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
 
   const markers: IncidentMarker[] = intoMarkers(people);
 
+  const [hoveredMarker, setHoveredMarker] = useState<
+    IncidentMarker | undefined
+  >();
+
+  const onMarkerHover = useCallback((marker: IncidentMarker) => {
+    setHoveredMarker(marker);
+  }, []);
+
   return (
-    <GoogleMap
-      mapContainerStyle={{
-        height: "100%",
-        width: "100%",
-      }}
-      options={{ gestureHandling: "greedy" }}
-      zoom={DEFAULT_MAP_ZOOM}
-      center={DEFAULT_MAP_CENTER}
-    >
-      {markers.map((marker, index) => (
-        <Marker key={index} position={marker.location} icon={marker.icon} />
-      ))}
-    </GoogleMap>
+    <>
+      <GoogleMap
+        mapContainerStyle={{
+          height: "100%",
+          width: "100%",
+        }}
+        options={{ gestureHandling: "greedy" }}
+        zoom={DEFAULT_MAP_ZOOM}
+        center={DEFAULT_MAP_CENTER}
+      >
+        {markers.map((marker) => (
+          <Marker
+            key={markerKey(marker)}
+            position={marker.location}
+            icon={marker.icon}
+            onMouseOver={() => onMarkerHover(marker)}
+          />
+        ))}
+        {hoveredMarker && (
+          <OverlayView
+            mapPaneName={OverlayView.OVERLAY_LAYER}
+            position={hoveredMarker.location}
+          >
+            <div>
+              <h1>Incident: {hoveredMarker.type}</h1>
+              <div>Name: {hoveredMarker.person.name}</div>
+              <div>Time: {hoveredMarker.time.toLocaleString()}</div>
+            </div>
+          </OverlayView>
+        )}
+      </GoogleMap>
+    </>
   );
 };
 
@@ -100,11 +131,14 @@ const intoMarkers = (people: PersonWithIncidents[]): IncidentMarker[] =>
   people
     .map((person) =>
       person.incidents.map((incident) => ({
+        person: person,
         location: {
           lat: Number(incident.coordinates[1]),
           lng: Number(incident.coordinates[0]),
         },
+        type: incident.type,
         icon: incidentIcon(incident.type),
+        time: new Date(incident.timestamp),
       }))
     )
     .flat();
@@ -132,4 +166,11 @@ const incidentIcon = (type: string): string => {
     default:
       return GenericIcon;
   }
+};
+
+const markerKey = (marker: IncidentMarker): string => {
+  const personId = marker.person.id;
+  const time = marker.time.toISOString();
+  const type = marker.type;
+  return `${personId}-${time}-${type}`;
 };
