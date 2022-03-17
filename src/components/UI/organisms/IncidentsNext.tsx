@@ -1,13 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { TravelMap } from "../molecules/TravelMap";
 import { Filter, FilterBar } from "../molecules/FilterBar";
-import { makeStyles } from "@mui/styles";
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
-import { HazardMap } from "../molecules/HazardMap";
-import { LocationsTable } from "../molecules/LocationsTable";
-
-export const LOCATION_PAGE_LABEL = "locationPage";
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -27,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const Locations: React.FC = () => {
+export const IncidentsNext: React.FC = () => {
   const [filter, setFilter] = useState<Filter>({});
 
   const filterChange = useCallback(
@@ -42,9 +38,9 @@ export const Locations: React.FC = () => {
   return (
     <>
       <PageHeader
-        pageTitle={"Locations"}
+        pageTitle={"Incidents"}
         pageDescription={
-          "Analyze locations data including travel history and hazardous areas."
+          "Analyze incidents data including an incident map and a graph of incident frequencies."
         }
       />
 
@@ -60,35 +56,13 @@ export const Locations: React.FC = () => {
 
       <Card className={styles.pageCard}>
         <CardHeader
-          title="Travel history"
-          subheader="Understand how people move through your facility."
+          title="Incident map"
+          subheader="Investigate field incidents that may have put your people at risk."
         />
         <CardMedia>
           <div style={{ height: "600px" }}>
             <TravelMap filter={filter} />
           </div>
-        </CardMedia>
-      </Card>
-
-      <Card className={styles.pageCard}>
-        <CardHeader
-          title="Hazardous areas"
-          subheader="See where incidents occur most frequently."
-        />
-        <CardMedia>
-          <div style={{ height: "600px" }}>
-            <HazardMap filter={filter} />
-          </div>
-        </CardMedia>
-      </Card>
-
-      <Card className={styles.pageCard}>
-        <CardHeader
-          title="Locations table"
-          subheader="View individual location readings."
-        />
-        <CardMedia>
-          <LocationsTable filter={filter} />
         </CardMedia>
       </Card>
     </>

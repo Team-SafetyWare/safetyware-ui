@@ -10,6 +10,7 @@ import { Login } from "./UI/organisms/Login";
 import { UserAccount } from "./UI/organisms/UserAccount";
 import { API_URL, getCurrentUser } from "../index";
 import { Locations } from "./UI/organisms/Locations";
+import { IncidentsNext } from "./UI/organisms/IncidentsNext";
 
 const useStyles = makeStyles({
   content: {
@@ -70,6 +71,12 @@ export const Pages: React.FC = () => {
                   path="/incidents"
                   title="Blackline Safety | Incidents"
                   component={Incidents}
+                />
+                <Page
+                  exact
+                  path="/incidentsNext"
+                  title="Blackline Safety | Incidents"
+                  component={IncidentsNext}
                 />
                 <Page
                   exact
