@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Person,
   PersonWithLocationReadings,
@@ -17,6 +17,9 @@ import ControlPosition = google.maps.ControlPosition;
 import { v4 as uuidV4 } from "uuid";
 import { Filter } from "./FilterBar";
 import { makeStyles } from "@mui/styles";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import OverlayStyles from "../../styling/OverlayStyles";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -78,6 +81,9 @@ const useStyles = makeStyles({
 });
 
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
+  const overlayStyles = OverlayStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
+
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
@@ -88,65 +94,80 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   people = sortPeople(people);
 
   const trails: Trail[] = intoTrails(people);
-
   const [legendElementId] = useState(uuidV4().toString());
   const [showLegend, setShowLegend] = useState(false);
-
   const styles = useStyles();
+
+  useEffect(() => {
+    if (trails.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [trails]);
 
   return (
     <>
-      <div
-        id={legendElementId}
-        className={styles.legend}
-        hidden={!showLegend && people.length > 0}
-      >
-        <p>Legend</p>
-        {people.map((person, personIndex) => {
-          const color = indexToColor(personIndex);
-          return (
-            <div key={`${person.id}-${color}`}>
-              <p>
-                <span
-                  className={styles.legendColor}
-                  style={{ backgroundColor: color }}
-                />
-                {person.name}
-              </p>
-            </div>
-          );
-        })}
+      <div className={overlayStyles.parent}>
+        <Backdrop
+          className={overlayStyles.backdrop}
+          open={isEmpty}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <EmptyDataMessage />
+        </Backdrop>
+        <div
+          id={legendElementId}
+          className={styles.legend}
+          hidden={!showLegend && people.length > 0}
+        >
+          <p>Legend</p>
+          {people.map((person, personIndex) => {
+            const color = indexToColor(personIndex);
+            return (
+              <div key={`${person.id}-${color}`}>
+                <p>
+                  <span
+                    className={styles.legendColor}
+                    style={{ backgroundColor: color }}
+                  />
+                  {person.name}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+        <GoogleMap
+          mapContainerStyle={{
+            height: "100%",
+            width: "100%",
+          }}
+          options={{ gestureHandling: "greedy" }}
+          zoom={DEFAULT_MAP_ZOOM}
+          center={DEFAULT_MAP_CENTER}
+          onLoad={(map) => {
+            const controls = map.controls[ControlPosition.LEFT_TOP];
+            const legend = document.getElementById(legendElementId);
+            controls.push(legend);
+          }}
+          onTilesLoaded={() => {
+            setShowLegend(true);
+          }}
+        >
+          {trails.map((trail: any) => (
+            <Polyline
+              key={trailKey(trail)}
+              path={trail.path}
+              options={{
+                strokeColor: trail.color,
+                strokeOpacity: 1,
+                strokeWeight: 4,
+                clickable: false,
+              }}
+            />
+          ))}
+        </GoogleMap>
       </div>
-      <GoogleMap
-        mapContainerStyle={{
-          height: "100%",
-          width: "100%",
-        }}
-        options={{ gestureHandling: "greedy" }}
-        zoom={DEFAULT_MAP_ZOOM}
-        center={DEFAULT_MAP_CENTER}
-        onLoad={(map) => {
-          const controls = map.controls[ControlPosition.LEFT_TOP];
-          const legend = document.getElementById(legendElementId);
-          controls.push(legend);
-        }}
-        onTilesLoaded={() => {
-          setShowLegend(true);
-        }}
-      >
-        {trails.map((trail: any) => (
-          <Polyline
-            key={trailKey(trail)}
-            path={trail.path}
-            options={{
-              strokeColor: trail.color,
-              strokeOpacity: 1,
-              strokeWeight: 4,
-              clickable: false,
-            }}
-          />
-        ))}
-      </GoogleMap>
     </>
   );
 };
