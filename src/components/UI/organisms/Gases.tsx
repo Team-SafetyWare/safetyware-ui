@@ -30,7 +30,6 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
-import { TravelMap } from "../molecules/TravelMap";
 
 const center = {
   lat: 51.049999,
