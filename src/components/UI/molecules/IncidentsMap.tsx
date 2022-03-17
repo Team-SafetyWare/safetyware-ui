@@ -94,7 +94,7 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
         ))}
         {hoveredMarker && (
           <OverlayView
-            mapPaneName={OverlayView.OVERLAY_LAYER}
+            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
             position={hoveredMarker.location}
           >
             <div className={styles.tooltip}>
