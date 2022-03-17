@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { IconButton, Modal, useMediaQuery } from "@mui/material";
+import {Card, CardHeader, CardMedia, IconButton, Modal, useMediaQuery} from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
@@ -23,6 +23,7 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
+import {TravelMap} from "../molecules/TravelMap";
 
 const center = {
   lat: 51.049999,
@@ -62,6 +63,10 @@ const useStyles = makeStyles({
     right: 16,
 
     "&:hover": { backgroundColor: theme.palette.primary.light },
+  },
+
+  pageCard: {
+    marginBottom: "16px",
   },
 });
 
@@ -185,31 +190,28 @@ export const Gases: React.FC = () => {
                 "Analyze data based on gases using a gas dot map."
               }
             />
+            <Card className={styles.pageCard}>
+              <CardHeader
+                  title="Gases Dot Map"
+                  subheader="Become aware of the gas concentrations across multiple locations. "
+              />
+              <CardMedia>
+                <div style={{ height: "600px" }}>
+                  <GasDotMap gases={gasReadings} center={center} zoom={10} />
+                </div>
+              </CardMedia>
+            </Card>
             <PageSectionHeader
-              sectionTitle={"Raw Gases Data"}
-              sectionDescription={
-                "Explore raw gas readings data through a date-filtered data table."
-              }
+                sectionTitle={"Raw Gases Data"}
+                sectionDescription={
+                  "Explore raw gas readings data through a date-filtered data table."
+                }
             />
             <CustomAccordion
-              accordionHeight={"auto"}
-              accordionWidth={""}
-              accordionTitle={visualizations[0]}
-              component={<GasesTable gasReadings={gasReadings} />}
-            />
-            <PageSectionHeader
-              sectionTitle={"Gas Visualizations"}
-              sectionDescription={
-                "Visualize gases data through a dot map showing gas type and location."
-              }
-            />
-            <CustomAccordion
-              accordionHeight={"600px"}
-              accordionWidth={""}
-              accordionTitle={visualizations[1]}
-              component={
-                <GasDotMap gases={gasReadings} center={center} zoom={10} />
-              }
+                accordionHeight={"auto"}
+                accordionWidth={""}
+                accordionTitle={visualizations[0]}
+                component={<GasesTable gasReadings={gasReadings} />}
             />
           </>
         ) : (
