@@ -21,8 +21,8 @@ import LatchIcon from "../../../assets/latch.png";
 import SignalIcon from "../../../assets/signal.png";
 import DeathIcon from "../../../assets/death.png";
 import GenericIcon from "../../../assets/generic.png";
-import LatLngLiteral = google.maps.LatLngLiteral;
 import { makeStyles } from "@mui/styles";
+import LatLngLiteral = google.maps.LatLngLiteral;
 
 interface IncidentMarker {
   person: Person;
@@ -58,8 +58,16 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
     IncidentMarker | undefined
   >();
 
-  const onMarkerHover = useCallback((marker: IncidentMarker) => {
+  const onMarkerMouseOver = useCallback((marker: IncidentMarker) => {
     setHoveredMarker(marker);
+  }, []);
+
+  const onMarkerMouseOut = useCallback((marker: IncidentMarker) => {
+    setHoveredMarker((prevMarker) =>
+      JSON.stringify(marker) === JSON.stringify(prevMarker)
+        ? undefined
+        : prevMarker
+    );
   }, []);
 
   const styles = useStyles();
@@ -80,7 +88,8 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
             key={markerKey(marker)}
             position={marker.location}
             icon={marker.icon}
-            onMouseOver={() => onMarkerHover(marker)}
+            onMouseOver={() => onMarkerMouseOver(marker)}
+            onMouseOut={() => onMarkerMouseOut(marker)}
           />
         ))}
         {hoveredMarker && (
