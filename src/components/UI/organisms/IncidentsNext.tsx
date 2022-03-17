@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { TravelMap } from "../molecules/TravelMap";
 import { Filter, FilterBar } from "../molecules/FilterBar";
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
