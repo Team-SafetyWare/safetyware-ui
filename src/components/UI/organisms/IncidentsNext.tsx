@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
 import { makeStyles } from "@mui/styles";
 import { IncidentsMap } from "../molecules/IncidentsMap";
+import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -62,6 +63,18 @@ export const IncidentsNext: React.FC = () => {
         <CardMedia>
           <div style={{ height: "600px" }}>
             <IncidentsMap filter={filter} />
+          </div>
+        </CardMedia>
+      </Card>
+
+      <Card className={styles.pageCard}>
+        <CardHeader
+          title="Incidents bar graph"
+          subheader="Understand what incidents are affecting your team most frequently."
+        />
+        <CardMedia>
+          <div style={{ height: "600px" }}>
+            <IncidentsBarGraph filter={filter} />
           </div>
         </CardMedia>
       </Card>
