@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
-  Card,
+  Card, CardContent,
   CardHeader,
   CardMedia,
   IconButton,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { getCurrentUser } from "../../..";
 import {
   selectGasPageEndDate,
@@ -30,6 +30,7 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
+import {Filter, FilterBar} from "../molecules/FilterBar";
 
 const center = {
   lat: 51.049999,
@@ -37,6 +38,13 @@ const center = {
 };
 
 const useStyles = makeStyles({
+  filterBar: {
+    position: "sticky",
+    top: "16px",
+    zIndex: "1",
+    width: "100%",
+  },
+
   gasesDropdown: {
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
@@ -99,6 +107,15 @@ export const Gases: React.FC = () => {
   const startDate = useAppSelector(selectGasPageStartDate);
   const endDate = useAppSelector(selectGasPageEndDate);
   const filterId = useAppSelector(selectGasPagePersonId);
+
+  const [filter, setFilter] = useState<Filter>({});
+
+  const filterChange = useCallback(
+      (updateFilter: (prevFilter: Filter) => Filter) => {
+        setFilter((filter) => updateFilter(filter));
+      },
+      []
+  );
 
   const { data: companyGasReadingsData } = useQuery(
     GET_GAS_READINGS_FOR_COMPANY,
@@ -196,6 +213,17 @@ export const Gases: React.FC = () => {
                 "Analyze data based on gases using a gas dot map."
               }
             />
+
+            <div className={[styles.pageCard, styles.filterBar].join(" ")}>
+              <Card elevation={2}>
+                <CardContent>
+                  <div style={{ marginBottom: "-8px" }}>
+                    <FilterBar filter={filter} onChange={filterChange} />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
             <Card className={styles.pageCard}>
               <CardHeader
                 title="Gases Dot Map"
