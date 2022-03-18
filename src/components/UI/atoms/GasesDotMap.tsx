@@ -11,6 +11,9 @@ import { GasReading } from "../organisms/Gases";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
+import {Filter} from "../molecules/FilterBar";
+import {PersonWithLocationReadings} from "../../../util/queryService";
+import {sortPeople} from "../../../index";
 
 const containerStyle = {
   width: "100%",
@@ -23,117 +26,20 @@ interface GasDotMapProps {
   endDate?: any;
   center?: any;
   zoom?: any;
+  filter?: Filter;
 }
 
 export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
-  const overlayStyles = OverlayStyles();
-  const [isEmpty, setIsEmpty] = React.useState(false);
-  const [gases, updateGases] = React.useState<GasReading[]>([]);
-  const zoom = props.zoom;
-  const center = props.center;
-  const [, updateMarkerWindows] = React.useState<GasReading[]>([]);
-  const [filteredGases, updateFilteredGases] = React.useState<GasReading[]>([]);
-  const startDate = useAppSelector(selectGasPageStartDate);
-  const endDate = useAppSelector(selectGasPageEndDate);
-  const filterName = useAppSelector(selectGasPageName);
-  const [hoverMarker, updateHoverMarker] = React.useState<
-    GasReading | undefined
-  >(undefined);
-
-  useEffect(() => {
-    if (props.gases.length === 0) {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
-    }
-  }, [props.gases]);
-
-  function createMarker(gas: GasReading) {
-    const markerIcon = GenericIcon;
-    return (
-      <Marker
-        position={gas.coordinates}
-        icon={markerIcon}
-        onClick={() => {
-          updateMarkerWindows((markerWindows) => [...markerWindows, gas]);
-        }}
-        onMouseOver={() => updateHoverMarker(gas)}
-      />
-    );
-  }
-
-  function createHoverWindow(gas?: GasReading) {
-    if (gas) return createMarkerWindow(gas);
-  }
-
-  function createMarkerWindow(gas: GasReading) {
-    return (
-      <InfoWindow
-        position={gas.coordinates}
-        onCloseClick={() => updateHoverMarker(undefined)}
-      >
-        <div>
-          <p>
-            <b>Gas: {gas.gas}</b>
-          </p>
-          <div>Name: {gas.personName}</div>
-          <div>Density: {gas.density + " " + gas.densityUnits}</div>
-          <div>Time: {gas.timestamp?.toLocaleString()}</div>
-        </div>
-      </InfoWindow>
-    );
-  }
-
-  useEffect(() => {
-    updateGases(() => props.gases);
-  }, [props]);
-
-  function createGas(gas: any) {
-    return {
-      coordinates: {
-        lat: gas.coordinates.lat,
-        lng: gas.coordinates.lng,
-      },
-      density: gas.density,
-      densityUnits: gas.densityUnits,
-      gas: gas.gas,
-      timestamp: gas.timestamp,
-      personName: gas.personName,
-    };
-  }
-
-  useEffect(() => {
-    updateFilteredGases([]);
-    updateMarkerWindows([]);
-    updateHoverMarker(undefined);
-    gases.map((gas: any) => {
-      updateFilteredGases((filteredGases) => [
-        ...filteredGases,
-        createGas(gas),
-      ]);
-    });
-  }, [gases, startDate, endDate, filterName]);
+  const filter: Filter = props.filter ?? {};
+  // let people: PersonWithLocationReadings[] = [
+  //   usePersonAsPeople(filter.person?.id || "", filter, !filter.person),
+  //   usePeopleInCompany(user?.company.id || "", filter, !!filter.person),
+  // ].flat();
+  // people = sortPeople(people);
 
   return (
     <>
-      <div className={overlayStyles.parent}>
-        <Backdrop
-          className={overlayStyles.backdrop}
-          open={isEmpty}
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        >
-          <EmptyDataMessage />
-        </Backdrop>
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={zoom}
-          options={{ gestureHandling: "greedy" }}
-        >
-          {filteredGases.map((gas: GasReading) => createMarker(gas))}
-          {createHoverWindow(hoverMarker)}
-        </GoogleMap>
-      </div>
+
     </>
   );
 };
