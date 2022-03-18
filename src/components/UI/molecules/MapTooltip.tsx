@@ -7,12 +7,13 @@ const useStyles = makeStyles({
   tooltip: {
     position: "relative",
     right: "calc(100% / 2)",
-    bottom: "216px",
     filter: "drop-shadow(0 0 5px rgba(0,0,0,0.2));",
+    bottom: "20px",
   },
   tooltipContent: {
-    position: "relative",
-    top: "calc(176px - 100%)",
+    position: "absolute",
+    bottom: "16px",
+    translate: "-50%",
     padding: "8px",
     fontSize: "1rem",
     backgroundColor: "white",
@@ -20,15 +21,15 @@ const useStyles = makeStyles({
     zIndex: "2",
   },
   tooltipArrow: {
-    width: "64px",
-    height: "64px",
-    position: "relative",
+    width: "32px",
+    height: "32px",
+    position: "absolute",
     backgroundColor: "white",
     borderRadius: "4px",
     transform: "rotate(45deg)",
     translate: "-50%",
     left: "50%",
-    top: "120px",
+    bottom: "calc(0.2071 * 32px)",
   },
 });
 
