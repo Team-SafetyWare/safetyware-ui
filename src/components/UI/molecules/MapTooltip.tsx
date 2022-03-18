@@ -8,7 +8,6 @@ const useStyles = makeStyles({
     position: "relative",
     right: "calc(100% / 2)",
     filter: "drop-shadow(0 0 5px rgba(0,0,0,0.2));",
-    bottom: "20px",
   },
   tooltipContent: {
     position: "absolute",
@@ -35,17 +34,20 @@ const useStyles = makeStyles({
 
 interface MapTooltipProps {
   location: LatLngLiteral;
+  hoverDistance?: number | string;
 }
 
 export const MapTooltip: React.FC<MapTooltipProps> = (props) => {
   const styles = useStyles();
-
   return (
     <OverlayView
       mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
       position={props.location}
     >
-      <div className={styles.tooltip}>
+      <div
+        className={styles.tooltip}
+        style={{ bottom: props.hoverDistance ?? "8px" }}
+      >
         <div className={styles.tooltipArrow} />
         <div className={styles.tooltipContent}>
           <>{props.children}</>
