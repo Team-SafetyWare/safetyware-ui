@@ -40,6 +40,7 @@ interface IncidentsMapProps {
 const useStyles = makeStyles({
   tooltipText: {
     margin: "8px",
+    whiteSpace: "nowrap",
   },
 });
 
