@@ -21,7 +21,6 @@ import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
 import MapMouseEvent = google.maps.MapMouseEvent;
-import LatLng = google.maps.LatLng;
 import { MapTooltip } from "./MapTooltip";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
@@ -105,19 +104,11 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   >();
 
   const onTrailMouseOver = useCallback((event: MapMouseEvent) => {
-    const location =
-      (event.latLng && intoLatLngLiteral(event.latLng)) ?? undefined;
-    setHoverLocation(location);
+    setHoverLocation(eventIntoLocation(event));
   }, []);
 
-  const onTrailMouseOut = useCallback((event: MapMouseEvent) => {
-    const location =
-      (event.latLng && intoLatLngLiteral(event.latLng)) ?? undefined;
-    setHoverLocation((prevLocation) =>
-      JSON.stringify(location) === JSON.stringify(prevLocation)
-        ? undefined
-        : prevLocation
-    );
+  const onTrailMouseOut = useCallback(() => {
+    setHoverLocation(undefined);
   }, []);
 
   useEffect(() => {
@@ -188,6 +179,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
                 strokeWeight: 4,
               }}
               onMouseOver={onTrailMouseOver}
+              onMouseMove={onTrailMouseOver}
               onMouseOut={onTrailMouseOut}
             />
           ))}
@@ -287,7 +279,9 @@ const trailKey = (trail: Trail): string => {
   return `${personId}-${start}-${end}`;
 };
 
-const intoLatLngLiteral = (latLng: LatLng) => ({
-  lat: latLng.lat(),
-  lng: latLng.lng(),
-});
+const eventIntoLocation = (event: MapMouseEvent): LatLngLiteral | undefined =>
+  (event.latLng && {
+    lat: event.latLng.lat(),
+    lng: event.latLng.lng(),
+  }) ||
+  undefined;
