@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
   tableColumn: {
     border: "1px solid black",
-    padding: "10px",
+    padding: "12px",
     backgroundColor: "white",
   },
   memberColumn: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     justifyContent: "center",
   },
   memberName: {
-    margin: "0 5px",
+    margin: "0 8px",
   },
   memberPicture: {
     height: "24px",

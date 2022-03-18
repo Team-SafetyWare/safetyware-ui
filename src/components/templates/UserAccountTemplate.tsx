@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
         marginLeft: "0",
-        marginBottom: "20px",
+        marginBottom: "24px",
         width: "auto",
       },
   },

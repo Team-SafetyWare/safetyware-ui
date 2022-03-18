@@ -33,7 +33,7 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    margin: "15px 0",
+    margin: "16px 0",
   },
   greetingDetails: {},
   greeting: {

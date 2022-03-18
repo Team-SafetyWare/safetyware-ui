@@ -14,13 +14,7 @@ const useStyles = makeStyles({
   content: {
     padding: "24px",
   },
-  pageTitle: {
-    fontSize: "32px",
-    margin: 0,
-  },
-  pageDescription: {
-    fontSize: "16px",
-    fontWeight: "normal",
+  text: {
     margin: 0,
   },
 });
@@ -32,8 +26,8 @@ export const PageHeader: React.FC<PageHeaderProps> = (props) => {
     <div className={styles.container}>
       <Paper elevation={2} style={{ borderRadius: "0" }}>
         <div className={styles.content}>
-          <h1 className={styles.pageTitle}>{props.pageTitle}</h1>
-          <h2 className={styles.pageDescription}>{props.pageDescription}</h2>
+          <h1 className={styles.text}>{props.pageTitle}</h1>
+          <p className={styles.text}>{props.pageDescription}</p>
         </div>
       </Paper>
     </div>
