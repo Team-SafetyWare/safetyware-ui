@@ -16,6 +16,9 @@ const useStyles = makeStyles({
     zIndex: "1",
     width: "100%",
   },
+  filterBarContainer: {
+    marginBottom: "-8px",
+  },
   topMargin: {
     height: "104px",
   },
@@ -48,7 +51,7 @@ export const Locations: React.FC = () => {
       <div className={[styles.pageCard, styles.filterBar].join(" ")}>
         <Card elevation={2}>
           <CardContent>
-            <div style={{ marginBottom: "-8px" }}>
+            <div className={styles.filterBarContainer}>
               <FilterBar filter={filter} onChange={filterChange} />
             </div>
           </CardContent>
