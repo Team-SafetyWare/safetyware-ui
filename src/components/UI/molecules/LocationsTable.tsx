@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Filter } from "./FilterBar";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -13,6 +13,9 @@ import {
 } from "../../../util/queryService";
 import { getCurrentUser, sortPeople } from "../../../index";
 import { TablePagination } from "@mui/material";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import OverlayStyles from "../../styling/OverlayStyles";
 
 const NUM_COORD_DIGITS = 5;
 const NUM_COLS = 3;
@@ -35,6 +38,9 @@ const useStyles = makeStyles({
 });
 
 export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
+  const overlayStyles = OverlayStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
+
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
@@ -73,47 +79,64 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
 
   const styles = useStyles();
 
+  useEffect(() => {
+    if (locations.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [locations]);
+
   return (
     <>
-      <TableContainer>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell className={styles.header} width={colWidth}>
-                Name
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
-                Time
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
-                Coordinates
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pageLocations.map((location, index) => (
-              <TableRow key={index}>
-                <TableCell>{location.name}</TableCell>
-                <TableCell>{location.time}</TableCell>
-                <TableCell>{location.coordinates}</TableCell>
+      <div className={overlayStyles.parent}>
+        <Backdrop
+          className={overlayStyles.backdrop}
+          open={isEmpty}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <EmptyDataMessage />
+        </Backdrop>
+        <TableContainer>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell className={styles.header} width={colWidth}>
+                  Name
+                </TableCell>
+                <TableCell className={styles.header} width={colWidth}>
+                  Time
+                </TableCell>
+                <TableCell className={styles.header} width={colWidth}>
+                  Coordinates
+                </TableCell>
               </TableRow>
-            ))}
-            {emptyRowCount > 0 && (
-              <TableRow style={{ height: 53 * emptyRowCount }}>
-                <TableCell colSpan={NUM_COLS} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        rowsPerPageOptions={[ROWS_PER_PAGE]}
-        rowsPerPage={ROWS_PER_PAGE}
-        count={rowCount}
-        onPageChange={pageChanged}
-        page={adjustedPage}
-      />
+            </TableHead>
+            <TableBody>
+              {pageLocations.map((location, index) => (
+                <TableRow key={index}>
+                  <TableCell>{location.name}</TableCell>
+                  <TableCell>{location.time}</TableCell>
+                  <TableCell>{location.coordinates}</TableCell>
+                </TableRow>
+              ))}
+              {emptyRowCount > 0 && (
+                <TableRow style={{ height: 53 * emptyRowCount }}>
+                  <TableCell colSpan={NUM_COLS} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          component="div"
+          rowsPerPageOptions={[ROWS_PER_PAGE]}
+          rowsPerPage={ROWS_PER_PAGE}
+          count={rowCount}
+          onPageChange={pageChanged}
+          page={adjustedPage}
+        />
+      </div>
     </>
   );
 };
