@@ -5,6 +5,7 @@ import { PageHeader } from "../atoms/PageHeader";
 import { makeStyles } from "@mui/styles";
 import { IncidentsMap } from "../molecules/IncidentsMap";
 import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
+import { IncidentsTable } from "../molecules/IncidentsTable";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -76,6 +77,16 @@ export const IncidentsNext: React.FC = () => {
           <div style={{ height: "600px" }}>
             <IncidentsBarGraph filter={filter} />
           </div>
+        </CardMedia>
+      </Card>
+
+      <Card className={styles.pageCard}>
+        <CardHeader
+          title="Incidents table"
+          subheader="View individual incidents."
+        />
+        <CardMedia>
+          <IncidentsTable filter={filter} />
         </CardMedia>
       </Card>
     </>
