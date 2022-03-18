@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { defaultFilter, Filter, FilterBar } from "../molecules/FilterBar";
+import React, { useCallback } from "react";
+import { Filter, FilterBar } from "../molecules/FilterBar";
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
 import { makeStyles } from "@mui/styles";
@@ -27,12 +27,15 @@ const useStyles = makeStyles({
 
 export const INCIDENTS_PAGE_LABEL = "incidentsPage";
 
-export const Incidents: React.FC = () => {
-  const [filter, setFilter] = useState<Filter>(defaultFilter());
+interface IncidentsProps {
+  filter: Filter;
+  onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
+}
 
-  const filterChange = useCallback(
+export const Incidents: React.FC<IncidentsProps> = (props) => {
+  const filterChanged = useCallback(
     (updateFilter: (prevFilter: Filter) => Filter) => {
-      setFilter((filter) => updateFilter(filter));
+      props.onFilterChange(updateFilter);
     },
     []
   );
@@ -52,7 +55,7 @@ export const Incidents: React.FC = () => {
         <Card elevation={2}>
           <CardContent>
             <div className={styles.filterBarContainer}>
-              <FilterBar filter={filter} onChange={filterChange} />
+              <FilterBar filter={props.filter} onChange={filterChanged} />
             </div>
           </CardContent>
         </Card>
@@ -65,7 +68,7 @@ export const Incidents: React.FC = () => {
         />
         <CardMedia>
           <div style={{ height: "600px" }}>
-            <IncidentsMap filter={filter} />
+            <IncidentsMap filter={props.filter} />
           </div>
         </CardMedia>
       </Card>
@@ -77,7 +80,7 @@ export const Incidents: React.FC = () => {
         />
         <CardMedia>
           <div style={{ height: "600px" }}>
-            <IncidentsBarGraph filter={filter} />
+            <IncidentsBarGraph filter={props.filter} />
           </div>
         </CardMedia>
       </Card>
@@ -88,7 +91,7 @@ export const Incidents: React.FC = () => {
           subheader="View individual incidents."
         />
         <CardMedia>
-          <IncidentsTable filter={filter} />
+          <IncidentsTable filter={props.filter} />
         </CardMedia>
       </Card>
     </>
