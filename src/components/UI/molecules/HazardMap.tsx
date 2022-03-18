@@ -3,7 +3,7 @@ import {
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
-  MIN_MAP_ZOOM,
+  MAP_RESTRICTION,
 } from "../../../index";
 import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
 import { Filter } from "./FilterBar";
@@ -60,7 +60,7 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
         }}
         options={{
           gestureHandling: "greedy",
-          minZoom: MIN_MAP_ZOOM,
+          restriction: MAP_RESTRICTION,
         }}
         zoom={DEFAULT_MAP_ZOOM}
         center={DEFAULT_MAP_CENTER}
