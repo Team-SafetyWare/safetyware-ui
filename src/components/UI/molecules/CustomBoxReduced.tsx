@@ -16,11 +16,11 @@ const useStyles = makeStyles({
   box: {
     alignItems: "center",
     backgroundColor: "white",
-    borderRadius: "20px",
+    borderRadius: "16px",
     display: "flex",
     flexDirection: "column",
     left: "50%",
-    padding: "20px",
+    padding: "24px",
     position: "absolute",
     top: "50%",
     transform: "translate(-50%, -50%)",
