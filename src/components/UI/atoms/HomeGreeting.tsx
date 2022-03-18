@@ -13,6 +13,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import { Box } from "@mui/system";
 
 interface HomeGreetingProps {
   activeWidgetState?: any;
@@ -48,21 +49,12 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    margin: "15px 0",
+    margin: "16px 0",
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
         alignItems: "normal",
         flexDirection: "column",
       },
-  },
-  greetingDetails: {},
-  greeting: {
-    fontSize: "24px",
-    margin: 0,
-  },
-  date: {
-    fontSize: "16px",
-    margin: 0,
   },
   buttons: {
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
@@ -107,15 +99,17 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
 
   return (
     <div className={styles.pageGreeting}>
-      <div className={styles.greetingDetails}>
-        {hours >= 17 ? (
-          <p className={styles.greeting}>Good Evening, {props.userName}</p>
-        ) : hours >= 12 ? (
-          <p className={styles.greeting}>Good Afternoon, {props.userName}</p>
-        ) : (
-          <p className={styles.greeting}>Good Morning, {props.userName}</p>
-        )}
-        <p className={styles.date}>
+      <div>
+        <Box sx={{ fontSize: "h5.fontSize" }}>
+          {hours >= 17 ? (
+            <>Good Evening, {props.userName}</>
+          ) : hours >= 12 ? (
+            <>Good Afternoon, {props.userName}</>
+          ) : (
+            <>Good Morning, {props.userName}</>
+          )}
+        </Box>
+        <Box>
           Here is your update for{" "}
           {date.toLocaleDateString(undefined, {
             weekday: "long",
@@ -124,7 +118,7 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
             day: "numeric",
           })}
           :
-        </p>
+        </Box>
       </div>
       <div className={styles.buttons}>
         <Stack spacing={2} direction="row">
