@@ -48,7 +48,7 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    margin: "15px 0",
+    margin: "16px 0",
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
         alignItems: "normal",
@@ -67,7 +67,7 @@ const useStyles = makeStyles({
   buttons: {
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
-        marginTop: "10px",
+        marginTop: "12px",
         width: "100%",
       },
     "& .MuiStack-root": {

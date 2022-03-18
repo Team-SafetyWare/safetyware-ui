@@ -52,13 +52,13 @@ const useStyles = makeStyles({
   widgetName: {
     fontWeight: "bold",
     fontSize: "24px",
-    margin: "12px 0px 12px 10px",
+    margin: "12px 0px 12px 8px",
   },
   widgetButtons: {
     display: "flex",
   },
   removeButton: {
-    marginRight: "10px",
+    marginRight: "16px",
   },
   filterButton: {},
   widget: {

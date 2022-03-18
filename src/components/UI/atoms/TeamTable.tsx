@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
   tableColumn: {
     border: "1px solid black",
-    padding: "10px",
+    padding: "12px",
     backgroundColor: "white",
   },
   memberColumn: {
