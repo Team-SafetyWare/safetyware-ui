@@ -233,7 +233,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
               options={{
                 strokeColor: modularIndex(trailColors, trail.personIndex),
                 strokeOpacity: 1,
-                strokeWeight: 4,
+                strokeWeight: 6,
               }}
               onMouseOver={onTrailMouseOver}
               onMouseMove={onTrailMouseOver}
