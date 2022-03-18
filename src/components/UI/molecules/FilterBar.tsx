@@ -169,9 +169,12 @@ export const defaultFilter = (): Filter => ({
   maxTimestamp: defaultMaxTimestamp(),
 });
 
-export const defaultMinTimestamp = (): Date => new Date(2022, 3, 6);
+export const defaultMinTimestamp = (): Date => new Date(2022, 2, 6);
 
 export const defaultMaxTimestamp = (): Date => {
-  // Beginning of tomorrow in local time.
-  return new Date(new Date().setDate(new Date().getDate() + 1));
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+  return tomorrow;
 };
