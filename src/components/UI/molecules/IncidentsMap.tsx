@@ -94,7 +94,7 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
           />
         ))}
         {hoveredMarker && (
-          <MapTooltip location={hoveredMarker.location}>
+          <MapTooltip location={hoveredMarker.location} hoverDistance={"20px"}>
             <h3 className={styles.tooltipText}>
               Incident: {hoveredMarker.type}
             </h3>
