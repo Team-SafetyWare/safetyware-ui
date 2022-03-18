@@ -12,7 +12,7 @@ interface VisualizationSelectProps {
 
 const BootstrapInput = styled(InputBase)(() => ({
   backgroundColor: "white",
-  borderRadius: "5px",
+  borderRadius: "8px",
   padding: "8px 12px 8px 12px",
 
   "& .MuiSelect-select": {

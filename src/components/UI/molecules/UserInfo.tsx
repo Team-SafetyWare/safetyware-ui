@@ -61,7 +61,7 @@ const useStyles = makeStyles({
   },
   editText: {
     height: "100%",
-    marginLeft: "5px",
+    marginLeft: "4px",
   },
 });
 
