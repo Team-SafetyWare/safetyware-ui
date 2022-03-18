@@ -211,7 +211,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
         >
           {drawer}
         </Drawer>
-        <Drawer variant="permanent" open>
+        <Drawer variant="permanent" PaperProps={{ elevation: 5 }} open>
           {drawer}
         </Drawer>
       </Box>
