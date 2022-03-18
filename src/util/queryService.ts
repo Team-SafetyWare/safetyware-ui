@@ -233,7 +233,7 @@ export const usePersonIncidents = (
   );
 };
 
-export const GET_INCIDENT_STATS_FOR_COMPANY = gql`
+export const GET_COMPANY_INCIDENT_STATS = gql`
   query ($companyId: ID!, $filter: IncidentStatsFilter) {
     company(id: $companyId) {
       incidentStats(filter: $filter) {
@@ -244,10 +244,43 @@ export const GET_INCIDENT_STATS_FOR_COMPANY = gql`
   }
 `;
 
-export const GET_INCIDENT_STATS_FOR_PERSON = gql`
+export interface IncidentStat {
+  type: string;
+  count: number;
+}
+
+export interface IncidentStatsFilter {
+  minTimestamp?: Date;
+  maxTimestamp?: Date;
+}
+
+export interface CompanyIncidentStatsData {
+  company: {
+    incidentStats: IncidentStat[];
+  };
+}
+
+export interface CompanyIncidentStatsVars {
+  companyId: string;
+  filter: IncidentStatsFilter;
+}
+
+export const useCompanyIncidentStats = (
+  variables: GetCompanyIncidentsVars,
+  skip = false
+): QueryResult<CompanyIncidentStatsData, CompanyIncidentStatsVars> => {
+  return useQuery<CompanyIncidentStatsData, CompanyIncidentStatsVars>(
+    GET_COMPANY_INCIDENT_STATS,
+    {
+      variables: variables,
+      skip: skip,
+    }
+  );
+};
+
+export const GET_PERSON_INCIDENT_STATS = gql`
   query ($personId: ID!, $filter: IncidentStatsFilter) {
     person(id: $personId) {
-      name
       incidentStats(filter: $filter) {
         type
         count
@@ -255,6 +288,30 @@ export const GET_INCIDENT_STATS_FOR_PERSON = gql`
     }
   }
 `;
+
+export interface PersonIncidentStatsData {
+  person: {
+    incidentStats: IncidentStat[];
+  };
+}
+
+export interface PersonIncidentStatsVars {
+  personId: string;
+  filter: IncidentStatsFilter;
+}
+
+export const usePersonIncidentStats = (
+  variables: GetPersonIncidentsVars,
+  skip = false
+): QueryResult<PersonIncidentStatsData, PersonIncidentStatsVars> => {
+  return useQuery<PersonIncidentStatsData, PersonIncidentStatsVars>(
+    GET_PERSON_INCIDENT_STATS,
+    {
+      variables: variables,
+      skip: skip,
+    }
+  );
+};
 
 export const GET_GAS_READINGS_FOR_COMPANY = gql`
   query ($companyId: ID!, $filter: GasReadingFilter) {

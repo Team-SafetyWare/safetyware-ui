@@ -18,6 +18,7 @@ import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
 
 const NUM_COORD_DIGITS = 5;
+const NUM_COLS = 3;
 const ROWS_PER_PAGE = 10;
 
 interface PersonLocation {
@@ -74,7 +75,7 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
     adjustedPage * ROWS_PER_PAGE + ROWS_PER_PAGE
   );
 
-  const colWidth = `${100 / 3}%`;
+  const colWidth = `${100 / NUM_COLS}%`;
 
   const styles = useStyles();
 
@@ -121,7 +122,7 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
               ))}
               {emptyRowCount > 0 && (
                 <TableRow style={{ height: 53 * emptyRowCount }}>
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={NUM_COLS} />
                 </TableRow>
               )}
             </TableBody>
@@ -155,13 +156,16 @@ const useLocationsInCompany = (
     },
     skip
   );
-  return sortPeople(data?.company.people ?? [])
+  return sortPeople(data?.company.people || [])
     .map((person) =>
-      person.locationReadings.map((location) => ({
-        name: person.name,
-        time: new Date(location.timestamp).toISOString(),
-        coordinates: formatCoordinates(location.coordinates),
-      }))
+      person.locationReadings
+        .slice()
+        .reverse()
+        .map((location) => ({
+          name: person.name,
+          time: new Date(location.timestamp).toISOString(),
+          coordinates: formatCoordinates(location.coordinates),
+        }))
     )
     .flat();
 };

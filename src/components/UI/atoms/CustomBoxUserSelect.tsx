@@ -19,7 +19,7 @@ import {
 import { useAppDispatch } from "../../../store/store";
 import { GET_COMPANY_PEOPLE } from "../../../util/queryService";
 import { GASES_PAGE_LABEL } from "../organisms/Gases";
-import { INCIDENT_PAGE_LABEL } from "../organisms/Incidents";
+import { INCIDENTS_PAGE_LABEL } from "../organisms/Incidents";
 import { LOCATION_PAGE_LABEL } from "../organisms/Locations";
 
 interface CustomBoxUserSelectProps {
@@ -73,7 +73,7 @@ export const CustomBoxUserSelect: React.FC<CustomBoxUserSelectProps> = (
         dispatch(setLocationName(name));
         dispatch(setLocationPersonId(id));
         break;
-      case INCIDENT_PAGE_LABEL:
+      case INCIDENTS_PAGE_LABEL:
         dispatch(setIncidentName(name));
         dispatch(setIncidentPersonId(id));
         break;

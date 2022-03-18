@@ -5,11 +5,11 @@ import { Page } from "./UI/atoms/Page";
 import { Sidebar } from "./UI/molecules/Sidebar";
 import { Gases } from "./UI/organisms/Gases";
 import { Home } from "./UI/organisms/Home";
-import { Incidents } from "./UI/organisms/Incidents";
 import { Login } from "./UI/organisms/Login";
 import { UserAccount } from "./UI/organisms/UserAccount";
 import { API_URL, getCurrentUser } from "../index";
 import { Locations } from "./UI/organisms/Locations";
+import { Incidents } from "./UI/organisms/Incidents";
 
 const useStyles = makeStyles({
   content: {
