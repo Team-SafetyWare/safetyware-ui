@@ -1,5 +1,5 @@
-import { gql, useQuery } from "@apollo/client";
-import { QueryResult } from "@apollo/client/react/types/types";
+import {gql, useQuery} from "@apollo/client";
+import {QueryResult} from "@apollo/client/react/types/types";
 
 export const GET_USERS = gql`
   {
@@ -18,18 +18,18 @@ export const GET_USERS = gql`
 `;
 
 export interface Person {
-  id: string;
-  name: string;
+    id: string;
+    name: string;
 }
 
 export interface CompanyPeopleData {
-  company: {
-    people: Person[];
-  };
+    company: {
+        people: Person[];
+    };
 }
 
 export interface GetCompanyPeopleVars {
-  companyId: string;
+    companyId: string;
 }
 
 export const GET_COMPANY_PEOPLE = gql`
@@ -44,38 +44,38 @@ export const GET_COMPANY_PEOPLE = gql`
 `;
 
 export const useCompanyPeople = (
-  variables: GetCompanyPeopleVars
+    variables: GetCompanyPeopleVars
 ): QueryResult<CompanyPeopleData, GetCompanyPeopleVars> => {
-  return useQuery<CompanyPeopleData, GetCompanyPeopleVars>(GET_COMPANY_PEOPLE, {
-    variables: variables,
-  });
+    return useQuery<CompanyPeopleData, GetCompanyPeopleVars>(GET_COMPANY_PEOPLE, {
+        variables: variables,
+    });
 };
 
 export interface PersonWithLocationReadings {
-  id: string;
-  name: string;
-  locationReadings: LocationReading[];
+    id: string;
+    name: string;
+    locationReadings: LocationReading[];
 }
 
 export interface LocationReading {
-  coordinates: string[];
-  timestamp: string;
+    coordinates: string[];
+    timestamp: string;
 }
 
 export interface LocationReadingFilter {
-  minTimestamp?: Date;
-  maxTimestamp?: Date;
+    minTimestamp?: Date;
+    maxTimestamp?: Date;
 }
 
 export interface CompanyLocationsData {
-  company: {
-    people: PersonWithLocationReadings[];
-  };
+    company: {
+        people: PersonWithLocationReadings[];
+    };
 }
 
 export interface GetCompanyLocationsVars {
-  companyId: string;
-  filter: LocationReadingFilter;
+    companyId: string;
+    filter: LocationReadingFilter;
 }
 
 export const GET_COMPANY_LOCATIONS = gql`
@@ -94,16 +94,16 @@ export const GET_COMPANY_LOCATIONS = gql`
 `;
 
 export const useCompanyLocations = (
-  variables: GetCompanyLocationsVars,
-  skip = false
+    variables: GetCompanyLocationsVars,
+    skip = false
 ): QueryResult<CompanyLocationsData, GetCompanyLocationsVars> => {
-  return useQuery<CompanyLocationsData, GetCompanyLocationsVars>(
-    GET_COMPANY_LOCATIONS,
-    {
-      variables: variables,
-      skip: skip,
-    }
-  );
+    return useQuery<CompanyLocationsData, GetCompanyLocationsVars>(
+        GET_COMPANY_LOCATIONS,
+        {
+            variables: variables,
+            skip: skip,
+        }
+    );
 };
 
 export const GET_PERSON_LOCATIONS = gql`
@@ -120,25 +120,25 @@ export const GET_PERSON_LOCATIONS = gql`
 `;
 
 export interface PersonLocationsData {
-  person: PersonWithLocationReadings;
+    person: PersonWithLocationReadings;
 }
 
 export interface GetPersonLocationsVars {
-  personId: string;
-  filter: LocationReadingFilter;
+    personId: string;
+    filter: LocationReadingFilter;
 }
 
 export const usePersonLocations = (
-  variables: GetPersonLocationsVars,
-  skip = false
+    variables: GetPersonLocationsVars,
+    skip = false
 ): QueryResult<PersonLocationsData, GetPersonLocationsVars> => {
-  return useQuery<PersonLocationsData, GetPersonLocationsVars>(
-    GET_PERSON_LOCATIONS,
-    {
-      variables: variables,
-      skip: skip,
-    }
-  );
+    return useQuery<PersonLocationsData, GetPersonLocationsVars>(
+        GET_PERSON_LOCATIONS,
+        {
+            variables: variables,
+            skip: skip,
+        }
+    );
 };
 
 export const GET_COMPANY_INCIDENTS = gql`
@@ -157,44 +157,44 @@ export const GET_COMPANY_INCIDENTS = gql`
 `;
 
 export interface Incident {
-  coordinates: string[];
-  timestamp: string;
-  type: string;
+    coordinates: string[];
+    timestamp: string;
+    type: string;
 }
 
 export interface PersonWithIncidents {
-  id: string;
-  name: string;
-  incidents: Incident[];
+    id: string;
+    name: string;
+    incidents: Incident[];
 }
 
 export interface IncidentFilter {
-  minTimestamp?: Date;
-  maxTimestamp?: Date;
+    minTimestamp?: Date;
+    maxTimestamp?: Date;
 }
 
 export interface CompanyIncidentsData {
-  company: {
-    people: PersonWithIncidents[];
-  };
+    company: {
+        people: PersonWithIncidents[];
+    };
 }
 
 export interface GetCompanyIncidentsVars {
-  companyId: string;
-  filter: IncidentFilter;
+    companyId: string;
+    filter: IncidentFilter;
 }
 
 export const useCompanyIncidents = (
-  variables: GetCompanyIncidentsVars,
-  skip = false
+    variables: GetCompanyIncidentsVars,
+    skip = false
 ): QueryResult<CompanyIncidentsData, GetCompanyIncidentsVars> => {
-  return useQuery<CompanyIncidentsData, GetCompanyIncidentsVars>(
-    GET_COMPANY_INCIDENTS,
-    {
-      variables: variables,
-      skip: skip,
-    }
-  );
+    return useQuery<CompanyIncidentsData, GetCompanyIncidentsVars>(
+        GET_COMPANY_INCIDENTS,
+        {
+            variables: variables,
+            skip: skip,
+        }
+    );
 };
 
 export const GET_PERSON_INCIDENTS = gql`
@@ -212,25 +212,25 @@ export const GET_PERSON_INCIDENTS = gql`
 `;
 
 export interface PersonIncidentsData {
-  person: PersonWithIncidents;
+    person: PersonWithIncidents;
 }
 
 export interface GetPersonIncidentsVars {
-  personId: string;
-  filter: IncidentFilter;
+    personId: string;
+    filter: IncidentFilter;
 }
 
 export const usePersonIncidents = (
-  variables: GetPersonIncidentsVars,
-  skip = false
+    variables: GetPersonIncidentsVars,
+    skip = false
 ): QueryResult<PersonIncidentsData, GetPersonIncidentsVars> => {
-  return useQuery<PersonIncidentsData, GetPersonIncidentsVars>(
-    GET_PERSON_INCIDENTS,
-    {
-      variables: variables,
-      skip: skip,
-    }
-  );
+    return useQuery<PersonIncidentsData, GetPersonIncidentsVars>(
+        GET_PERSON_INCIDENTS,
+        {
+            variables: variables,
+            skip: skip,
+        }
+    );
 };
 
 export const GET_INCIDENT_STATS_FOR_COMPANY = gql`
@@ -260,6 +260,7 @@ export const GET_GAS_READINGS_FOR_COMPANY = gql`
   query ($companyId: ID!, $filter: GasReadingFilter) {
     company(id: $companyId) {
       people {
+        id
         name
         gasReadings(filter: $filter) {
           coordinates
@@ -272,6 +273,49 @@ export const GET_GAS_READINGS_FOR_COMPANY = gql`
     }
   }
 `;
+
+export interface GasReading {
+    coordinates: string[];
+    timestamp: string;
+    density: string;
+    densityUnits: string,
+    gas: string,
+}
+
+export interface PersonWithGasReadings {
+    id: string;
+    name: string;
+    gasReadings: GasReading[]
+}
+
+export interface GasReadingFilter {
+    minTimestamp?: Date;
+    maxTimestamp?: Date;
+}
+
+export interface GetCompanyGasReadingVars {
+    companyId: string;
+    filter: GasReadingFilter;
+}
+
+export interface CompanyGasReadingsData {
+    company: {
+        people: PersonWithGasReadings[];
+    };
+}
+
+export const useCompanyGasReadings = (
+    variables: GetCompanyGasReadingVars,
+    skip = false
+): QueryResult<CompanyGasReadingsData, GetCompanyGasReadingVars> => {
+    return useQuery<CompanyGasReadingsData, GetCompanyGasReadingVars>(
+        GET_GAS_READINGS_FOR_COMPANY,
+        {
+            variables: variables,
+            skip: skip,
+        }
+    );
+};
 
 export const GET_GAS_READINGS_FOR_PERSON = gql`
   query ($personId: ID!, $filter: GasReadingFilter) {
