@@ -27,19 +27,22 @@ import { quadtree, Quadtree } from "d3-quadtree";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
-const TRAIL_COLORS = [
+const ROADMAP_TRAIL_COLORS = [
   "#e6194b", // Red
   "#3cb44b", // Green
   "#4363d8", // Blue
+];
+
+const SATELLITE_TRAIL_COLORS = [
   "#008080", // Cyan
   "#911eb4", // Purple
   "#f58231", // Orange
-  "#800000", // Brown red
-  "#f032e6", // Pink
-  "#9a6324", // Brown
-  "#808000", // Olive
-  "#000075", // Dark blue
 ];
+
+enum MapTypeId {
+  Satellite = "satellite",
+  Hybrid = "hybrid",
+}
 
 interface TrailPoint extends LatLngLiteral {
   time: Date;
@@ -160,6 +163,14 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     }
   }, [trails]);
 
+  const satelliteView = [
+    MapTypeId.Satellite.toString(),
+    MapTypeId.Hybrid.toString(),
+  ].includes(mapTypeId ?? "");
+  const trailColors = satelliteView
+    ? SATELLITE_TRAIL_COLORS
+    : ROADMAP_TRAIL_COLORS;
+
   const styles = useStyles();
 
   return (
@@ -179,7 +190,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
         >
           <p>Legend</p>
           {people.map((person, personIndex) => {
-            const color = modularIndex(TRAIL_COLORS, personIndex);
+            const color = modularIndex(trailColors, personIndex);
             return (
               <div key={`${person.id}-${color}`}>
                 <p>
@@ -210,7 +221,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
               key={trailKey(trail)}
               path={trail.path}
               options={{
-                strokeColor: modularIndex(TRAIL_COLORS, trail.personIndex),
+                strokeColor: modularIndex(trailColors, trail.personIndex),
                 strokeOpacity: 1,
                 strokeWeight: 4,
               }}
