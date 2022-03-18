@@ -12,6 +12,7 @@ const useStyles = makeStyles({
   },
   tooltipContent: {
     position: "relative",
+    top: "calc(176px - 100%)",
     padding: "8px",
     fontSize: "1rem",
     backgroundColor: "white",
