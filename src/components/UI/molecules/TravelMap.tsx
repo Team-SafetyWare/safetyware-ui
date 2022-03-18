@@ -206,7 +206,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
             <MapTooltip location={tooltipPoint.location}>
               <h3 className={styles.tooltipText}>{tooltipPoint.person.name}</h3>
               <p className={styles.tooltipText}>
-                {tooltipPoint.time.toISOString()}
+                {tooltipPoint.time.toLocaleString()}
               </p>
             </MapTooltip>
           )}
