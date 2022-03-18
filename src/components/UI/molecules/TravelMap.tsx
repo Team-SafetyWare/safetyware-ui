@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Person,
   PersonWithLocationReadings,
@@ -20,6 +20,9 @@ import { makeStyles } from "@mui/styles";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
+import MapMouseEvent = google.maps.MapMouseEvent;
+import LatLng = google.maps.LatLng;
+import { MapTooltip } from "./MapTooltip";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -96,7 +99,26 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const trails: Trail[] = intoTrails(people);
   const [legendElementId] = useState(uuidV4().toString());
   const [showLegend, setShowLegend] = useState(false);
-  const styles = useStyles();
+
+  const [hoverLocation, setHoverLocation] = useState<
+    LatLngLiteral | undefined
+  >();
+
+  const onTrailMouseOver = useCallback((event: MapMouseEvent) => {
+    const location =
+      (event.latLng && intoLatLngLiteral(event.latLng)) ?? undefined;
+    setHoverLocation(location);
+  }, []);
+
+  const onTrailMouseOut = useCallback((event: MapMouseEvent) => {
+    const location =
+      (event.latLng && intoLatLngLiteral(event.latLng)) ?? undefined;
+    setHoverLocation((prevLocation) =>
+      JSON.stringify(location) === JSON.stringify(prevLocation)
+        ? undefined
+        : prevLocation
+    );
+  }, []);
 
   useEffect(() => {
     if (trails.length === 0) {
@@ -105,6 +127,8 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
       setIsEmpty(false);
     }
   }, [trails]);
+
+  const styles = useStyles();
 
   return (
     <>
@@ -162,10 +186,16 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
                 strokeColor: trail.color,
                 strokeOpacity: 1,
                 strokeWeight: 4,
-                clickable: false,
               }}
+              onMouseOver={onTrailMouseOver}
+              onMouseOut={onTrailMouseOut}
             />
           ))}
+          {hoverLocation && (
+            <MapTooltip location={hoverLocation}>
+              <p>{JSON.stringify(hoverLocation)}</p>
+            </MapTooltip>
+          )}
         </GoogleMap>
       </div>
     </>
@@ -256,3 +286,8 @@ const trailKey = (trail: Trail): string => {
   const end = trail.path[trail.path.length - 1].time.toISOString();
   return `${personId}-${start}-${end}`;
 };
+
+const intoLatLngLiteral = (latLng: LatLng) => ({
+  lat: latLng.lat(),
+  lng: latLng.lng(),
+});
