@@ -23,7 +23,7 @@ const useStyles = makeStyles({
         backgroundColor: theme.palette.primary.main,
         color: "white",
         flexDirection: "column",
-        paddingBottom: "40px",
+        paddingBottom: "48px",
       },
   },
   userPhoto: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     alignContent: "center",
-    marginRight: "20px",
+    marginRight: "24px",
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
         marginRight: "0",
@@ -46,22 +46,22 @@ const useStyles = makeStyles({
   editBox: {
     alignItems: "center",
     display: "flex",
-    margin: "0 auto 0 calc(0.5 * 270px)",
+    margin: "0 auto 0 calc(0.5 * 256px)",
     transform: "translate(-50%)",
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
         backgroundColor: "white",
-        borderRadius: "20px",
+        borderRadius: "16px",
         boxShadow: "0px 2px 2px #aaa",
         fontWeight: "bold",
         margin: "0 auto",
-        padding: "10px 50px 10px 50px",
+        padding: "12px 48px 12px 48px",
         transform: "translate(0%, -50%)",
       },
   },
   editText: {
     height: "100%",
-    marginLeft: "5px",
+    marginLeft: "4px",
   },
 });
 

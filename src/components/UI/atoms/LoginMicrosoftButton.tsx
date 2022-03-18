@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   },
 
   loginMicrosoftButtonIcon: {
-    margin: "10px 16px 10px 0px",
+    margin: "12px 16px 12px 0px",
   },
 });
 
