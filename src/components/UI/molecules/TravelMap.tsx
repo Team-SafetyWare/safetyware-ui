@@ -27,27 +27,6 @@ import { quadtree, Quadtree } from "d3-quadtree";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
-// fffac8 // Beige
-// ffd8b1 // Apricot
-// a9a9a9 // Grey
-// fabed4 // Pink
-// aaffc3 // Mint
-// dcbeff // Lavender
-// 42d4f4 // Cyan
-// bfef45 // Lime
-// ffe119 // Yellow
-// f58231 // Orange
-// 469990 // Teal
-// 3cb44b // Green
-// f032e6 // Magenta
-// 808000 // Olive
-// 9a6324 // Brown
-// e6194b // Red
-// 4363d8 // Blue
-// 911eb4 // Purple
-// 800000 // Maroon
-// 000075 // Navy
-
 const ROADMAP_TRAIL_COLORS = [
   "#e6194b", // Red
   "#3cb44b", // Green
