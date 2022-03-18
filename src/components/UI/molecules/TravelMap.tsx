@@ -9,6 +9,7 @@ import {
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
+  modularIndex,
   sortPeople,
 } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
@@ -47,7 +48,7 @@ interface TrailPoint extends LatLngLiteral {
 interface Trail {
   path: TrailPoint[];
   person: Person;
-  color: string;
+  personIndex: number;
 }
 
 interface QuadPoint {
@@ -178,7 +179,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
         >
           <p>Legend</p>
           {people.map((person, personIndex) => {
-            const color = indexToColor(personIndex);
+            const color = modularIndex(TRAIL_COLORS, personIndex);
             return (
               <div key={`${person.id}-${color}`}>
                 <p>
@@ -204,12 +205,12 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
           onTilesLoaded={onTilesLoaded}
           onMapTypeIdChanged={onMapTypeIdChanged}
         >
-          {trails.map((trail: any) => (
+          {trails.map((trail) => (
             <Polyline
               key={trailKey(trail)}
               path={trail.path}
               options={{
-                strokeColor: trail.color,
+                strokeColor: modularIndex(TRAIL_COLORS, trail.personIndex),
                 strokeOpacity: 1,
                 strokeWeight: 4,
               }}
@@ -270,7 +271,7 @@ const usePersonAsPeople = (
 
 const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
   people
-    .map((person, person_index) => {
+    .map((person, personIndex) => {
       const locations: TrailPoint[] = person.locationReadings.map(
         (location) => ({
           lat: Number(location.coordinates[1]),
@@ -288,7 +289,7 @@ const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
           id: person.id,
           name: person.name,
         },
-        color: indexToColor(person_index),
+        personIndex: personIndex,
       }));
     })
     .flat();
@@ -306,9 +307,6 @@ const splitWhen = <T,>(arr: T[], split: (a: T, b: T) => boolean): T[][] => {
   }
   return segments;
 };
-
-const indexToColor = (index: number): string =>
-  TRAIL_COLORS[index % TRAIL_COLORS.length];
 
 const trailKey = (trail: Trail): string => {
   const personId = trail.person.id;
