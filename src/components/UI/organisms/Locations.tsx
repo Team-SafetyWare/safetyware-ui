@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { TravelMap } from "../molecules/TravelMap";
-import { Filter, FilterBar } from "../molecules/FilterBar";
+import { defaultFilter, Filter, FilterBar } from "../molecules/FilterBar";
 import { makeStyles } from "@mui/styles";
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 });
 
 export const Locations: React.FC = () => {
-  const [filter, setFilter] = useState<Filter>({});
+  const [filter, setFilter] = useState<Filter>(defaultFilter());
 
   const filterChange = useCallback(
     (updateFilter: (prevFilter: Filter) => Filter) => {

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Filter, FilterBar } from "../molecules/FilterBar";
+import { defaultFilter, Filter, FilterBar } from "../molecules/FilterBar";
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
 import { makeStyles } from "@mui/styles";
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 export const INCIDENTS_PAGE_LABEL = "incidentsPage";
 
 export const Incidents: React.FC = () => {
-  const [filter, setFilter] = useState<Filter>({});
+  const [filter, setFilter] = useState<Filter>(defaultFilter());
 
   const filterChange = useCallback(
     (updateFilter: (prevFilter: Filter) => Filter) => {
