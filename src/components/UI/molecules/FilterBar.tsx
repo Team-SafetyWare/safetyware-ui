@@ -19,7 +19,7 @@ export interface Filter {
   person?: Person;
 }
 
-interface FilterDialogProps {
+interface FilterBarProps {
   filter: Filter;
   onChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
 }
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const FilterBar: React.FC<FilterDialogProps> = (props) => {
+export const FilterBar: React.FC<FilterBarProps> = (props) => {
   const user = getCurrentUser();
 
   const { data: peopleData } = useCompanyPeople({
