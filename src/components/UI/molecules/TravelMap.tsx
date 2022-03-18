@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Person,
   PersonWithLocationReadings,
@@ -20,6 +20,9 @@ import { makeStyles } from "@mui/styles";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
+import MapMouseEvent = google.maps.MapMouseEvent;
+import { MapTooltip } from "./MapTooltip";
+import { quadtree, Quadtree } from "d3-quadtree";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -45,6 +48,12 @@ interface Trail {
   path: TrailPoint[];
   person: Person;
   color: string;
+}
+
+interface QuadPoint {
+  location: LatLngLiteral;
+  person: Person;
+  time: Date;
 }
 
 interface TravelMapProps {
@@ -78,6 +87,10 @@ const useStyles = makeStyles({
     display: "inline-block",
     marginRight: "8px",
   },
+  tooltipText: {
+    margin: "8px",
+    whiteSpace: "nowrap",
+  },
 });
 
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
@@ -94,9 +107,29 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   people = sortPeople(people);
 
   const trails: Trail[] = intoTrails(people);
+  const pointTree = intoPointTree(trails);
+
   const [legendElementId] = useState(uuidV4().toString());
   const [showLegend, setShowLegend] = useState(false);
-  const styles = useStyles();
+
+  const [tooltipPoint, setTooltipPoint] = useState<QuadPoint | undefined>();
+
+  const onTrailMouseOver = useCallback(
+    (event: MapMouseEvent) => {
+      const location = eventIntoLocation(event);
+      const nearest = location && nearestPoint(location, pointTree);
+      const tooltipPoint = nearest && {
+        ...nearest,
+        location: location,
+      };
+      setTooltipPoint(tooltipPoint);
+    },
+    [pointTree]
+  );
+
+  const onTrailMouseOut = useCallback(() => {
+    setTooltipPoint(undefined);
+  }, []);
 
   useEffect(() => {
     if (trails.length === 0) {
@@ -105,6 +138,8 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
       setIsEmpty(false);
     }
   }, [trails]);
+
+  const styles = useStyles();
 
   return (
     <>
@@ -162,10 +197,20 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
                 strokeColor: trail.color,
                 strokeOpacity: 1,
                 strokeWeight: 4,
-                clickable: false,
               }}
+              onMouseOver={onTrailMouseOver}
+              onMouseMove={onTrailMouseOver}
+              onMouseOut={onTrailMouseOut}
             />
           ))}
+          {tooltipPoint && (
+            <MapTooltip location={tooltipPoint.location}>
+              <h3 className={styles.tooltipText}>{tooltipPoint.person.name}</h3>
+              <p className={styles.tooltipText}>
+                {tooltipPoint.time.toLocaleString()}
+              </p>
+            </MapTooltip>
+          )}
         </GoogleMap>
       </div>
     </>
@@ -256,3 +301,28 @@ const trailKey = (trail: Trail): string => {
   const end = trail.path[trail.path.length - 1].time.toISOString();
   return `${personId}-${start}-${end}`;
 };
+
+const eventIntoLocation = (event: MapMouseEvent): LatLngLiteral | undefined =>
+  (event.latLng && {
+    lat: event.latLng.lat(),
+    lng: event.latLng.lng(),
+  }) ||
+  undefined;
+
+const intoPointTree = (trails: Trail[]): Quadtree<QuadPoint> =>
+  quadtree<QuadPoint>()
+    .x((d) => d.location.lat)
+    .y((d) => d.location.lng)
+    .addAll(trails.map(trailIntoQuadPoints).flat());
+
+const trailIntoQuadPoints = (trail: Trail): QuadPoint[] =>
+  trail.path.map((point) => ({
+    location: point,
+    person: trail.person,
+    time: point.time,
+  }));
+
+const nearestPoint = (
+  location: LatLngLiteral,
+  tree: Quadtree<QuadPoint>
+): QuadPoint | undefined => tree.find(location.lat, location.lng);
