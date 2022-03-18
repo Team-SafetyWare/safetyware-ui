@@ -1,11 +1,8 @@
 import { useQuery } from "@apollo/client";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
   Card, CardContent,
   CardHeader,
   CardMedia,
-  IconButton,
-  Modal,
   useMediaQuery,
 } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
@@ -29,7 +26,6 @@ import GasesTable from "../atoms/GasesTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
-import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
 import {Filter, FilterBar} from "../molecules/FilterBar";
 
 const center = {
@@ -198,9 +194,6 @@ export const Gases: React.FC = () => {
   const visualizations = ["Raw Gases Data Table", "Gases Dot Map"];
 
   const [visualization, setVisualization] = useState(visualizations[0]);
-  const [openFilterbox, setOpenFilterbox] = useState(false);
-  const handleOpenFilterBox = () => setOpenFilterbox(true);
-  const handleCloseFilterBox = () => setOpenFilterbox(false);
 
   return (
     <StyledEngineProvider injectFirst>
@@ -231,7 +224,7 @@ export const Gases: React.FC = () => {
               />
               <CardMedia>
                 <div style={{ height: "600px" }}>
-                  <GasDotMap gases={gasReadings} center={center} zoom={10} />
+                  <GasDotMap filter={filter} gases={gasReadings} center={center} zoom={10} />
                 </div>
               </CardMedia>
             </Card>
@@ -268,26 +261,6 @@ export const Gases: React.FC = () => {
             )}
           </>
         )}
-        <IconButton
-          className={styles.filterButton}
-          onClick={handleOpenFilterBox}
-          size="large"
-        >
-          <FilterAltIcon fontSize="inherit" />
-        </IconButton>
-        <Modal
-          open={openFilterbox}
-          onClose={handleCloseFilterBox}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <CustomBoxReduced
-            user={user}
-            startDate={startDate}
-            endDate={endDate}
-            pageLabel={GASES_PAGE_LABEL}
-          />
-        </Modal>
       </>
     </StyledEngineProvider>
   );
