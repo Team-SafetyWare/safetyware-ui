@@ -109,8 +109,28 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const trails: Trail[] = intoTrails(people);
   const pointTree = intoPointTree(trails);
 
+  const [map, setMap] = useState<google.maps.Map | undefined>();
+
   const [legendElementId] = useState(uuidV4().toString());
   const [showLegend, setShowLegend] = useState(false);
+
+  const onMapLoad = useCallback((map: google.maps.Map) => {
+    setMap(map);
+    const controls = map.controls[ControlPosition.LEFT_TOP];
+    const legend = document.getElementById(legendElementId);
+    controls.push(legend);
+  }, []);
+
+  const onTilesLoaded = useCallback(() => {
+    setShowLegend(true);
+  }, []);
+
+  const [mapTypeId, setMapTypeId] = useState<string>();
+
+  const onMapTypeIdChanged = useCallback(() => {
+    const mapTypeId = map?.getMapTypeId();
+    mapTypeId && setMapTypeId(mapTypeId);
+  }, [map]);
 
   const [tooltipPoint, setTooltipPoint] = useState<QuadPoint | undefined>();
 
@@ -180,14 +200,9 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
           options={{ gestureHandling: "greedy" }}
           zoom={DEFAULT_MAP_ZOOM}
           center={DEFAULT_MAP_CENTER}
-          onLoad={(map) => {
-            const controls = map.controls[ControlPosition.LEFT_TOP];
-            const legend = document.getElementById(legendElementId);
-            controls.push(legend);
-          }}
-          onTilesLoaded={() => {
-            setShowLegend(true);
-          }}
+          onLoad={onMapLoad}
+          onTilesLoaded={onTilesLoaded}
+          onMapTypeIdChanged={onMapTypeIdChanged}
         >
           {trails.map((trail: any) => (
             <Polyline
