@@ -8,23 +8,24 @@ import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import { makeStyles } from "@mui/styles";
 import {
-  useCompanyLocations,
-  usePersonLocations,
+  useCompanyIncidents,
+  usePersonIncidents,
 } from "../../../util/queryService";
-import { getCurrentUser } from "../../../index";
+import { getCurrentUser, sortPeople } from "../../../index";
 import { TablePagination } from "@mui/material";
 
 const NUM_COORD_DIGITS = 5;
-const NUM_COLS = 3;
+const NUM_COLS = 4;
 const ROWS_PER_PAGE = 10;
 
-interface PersonLocation {
+interface PersonIncident {
   name: string;
+  incident: string;
   time: string;
   coordinates: string;
 }
 
-interface LocationsTableProps {
+interface IncidentsTableProps {
   filter?: Filter;
 }
 
@@ -34,13 +35,13 @@ const useStyles = makeStyles({
   },
 });
 
-export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
+export const IncidentsTable: React.FC<IncidentsTableProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const locations: PersonLocation[] = [
-    useLocationsInPerson(filter.person?.id || "", filter, !filter.person),
-    useLocationsInCompany(user?.company.id || "", filter, !!filter.person),
+  const incidents: PersonIncident[] = [
+    useIncidentsInPerson(filter.person?.id || "", filter, !filter.person),
+    useIncidentsInCompany(user?.company.id || "", filter, !!filter.person),
   ].flat();
 
   // eslint-disable-next-line prefer-const
@@ -51,7 +52,7 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
     setPage(page);
   }, []);
 
-  const rowCount = locations.length;
+  const rowCount = incidents.length;
   const maxPage = Math.floor(rowCount / ROWS_PER_PAGE);
   const adjustedPage = Math.min(page, maxPage);
 
@@ -64,7 +65,7 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
     (1 + adjustedPage) * ROWS_PER_PAGE - rowCount
   );
 
-  const pageLocations = locations.slice(
+  const pageIncidents = incidents.slice(
     adjustedPage * ROWS_PER_PAGE,
     adjustedPage * ROWS_PER_PAGE + ROWS_PER_PAGE
   );
@@ -80,10 +81,13 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
           <TableHead>
             <TableRow>
               <TableCell className={styles.header} width={colWidth}>
-                Name
+                Time
               </TableCell>
               <TableCell className={styles.header} width={colWidth}>
-                Time
+                Incident
+              </TableCell>
+              <TableCell className={styles.header} width={colWidth}>
+                Name
               </TableCell>
               <TableCell className={styles.header} width={colWidth}>
                 Coordinates
@@ -91,11 +95,12 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pageLocations.map((location, index) => (
+            {pageIncidents.map((incident, index) => (
               <TableRow key={index}>
-                <TableCell>{location.name}</TableCell>
-                <TableCell>{location.time}</TableCell>
-                <TableCell>{location.coordinates}</TableCell>
+                <TableCell>{incident.time}</TableCell>
+                <TableCell>{incident.incident}</TableCell>
+                <TableCell>{incident.name}</TableCell>
+                <TableCell>{incident.coordinates}</TableCell>
               </TableRow>
             ))}
             {emptyRowCount > 0 && (
@@ -118,12 +123,12 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   );
 };
 
-const useLocationsInCompany = (
+const useIncidentsInCompany = (
   companyId: string,
   filter: Filter,
   skip = false
-): PersonLocation[] => {
-  const { data } = useCompanyLocations(
+): PersonIncident[] => {
+  const { data } = useCompanyIncidents(
     {
       companyId: companyId,
       filter: {
@@ -133,25 +138,24 @@ const useLocationsInCompany = (
     },
     skip
   );
-  return (
-    data?.company.people
-      .map((person) =>
-        person.locationReadings.map((location) => ({
-          name: person.name,
-          time: new Date(location.timestamp).toISOString(),
-          coordinates: formatCoordinates(location.coordinates),
-        }))
-      )
-      .flat() ?? []
-  );
+  return sortPeople(data?.company.people ?? [])
+    .map((person) =>
+      person.incidents.map((incident) => ({
+        name: person.name,
+        incident: incident.type,
+        time: new Date(incident.timestamp).toISOString(),
+        coordinates: formatCoordinates(incident.coordinates),
+      }))
+    )
+    .flat();
 };
 
-const useLocationsInPerson = (
+const useIncidentsInPerson = (
   personId: string,
   filter: Filter,
   skip = false
-): PersonLocation[] => {
-  const { data } = usePersonLocations(
+): PersonIncident[] => {
+  const { data } = usePersonIncidents(
     {
       personId: personId,
       filter: {
@@ -162,10 +166,11 @@ const useLocationsInPerson = (
     skip
   );
   return (
-    data?.person.locationReadings.map((location) => ({
+    data?.person.incidents.map((incident) => ({
       name: data.person.name,
-      time: new Date(location.timestamp).toISOString(),
-      coordinates: formatCoordinates(location.coordinates),
+      incident: incident.type,
+      time: new Date(incident.timestamp).toISOString(),
+      coordinates: formatCoordinates(incident.coordinates),
     })) ?? []
   );
 };
