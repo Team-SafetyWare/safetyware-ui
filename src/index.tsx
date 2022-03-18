@@ -42,9 +42,6 @@ export const setCurrentUser = (user: User): void => {
 export const sortPeople = <T extends Person>(people: T[]): T[] =>
   people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
-export const modularIndex = <T,>(arr: T[], index: number): T =>
-  arr[index % arr.length];
-
 const client = new ApolloClient({
   uri: `${API_URL}/graphql`,
   cache: new InMemoryCache(),
