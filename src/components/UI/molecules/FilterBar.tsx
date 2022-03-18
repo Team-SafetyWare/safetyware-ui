@@ -21,6 +21,7 @@ export interface Filter {
 
 interface FilterBarProps {
   filter: Filter;
+  resetFilter?: () => Filter;
   onChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
 }
 
@@ -92,7 +93,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
   );
 
   const resetPressed = useCallback(() => {
-    props.onChange(() => ({}));
+    props.onChange(props.resetFilter || defaultFilter);
   }, [props.onChange]);
 
   const styles = useStyles();
@@ -162,3 +163,19 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
 
 const intoPeople = (peopleData: CompanyPeopleData): Person[] =>
   sortPeople(peopleData.company.people);
+
+export const defaultFilter = (): Filter => ({
+  minTimestamp: defaultMinTimestamp(),
+  maxTimestamp: defaultMaxTimestamp(),
+});
+
+export const defaultMinTimestamp = (): Date => new Date(2022, 2, 6);
+
+export const defaultMaxTimestamp = (): Date => {
+  // Beginning of tomorrow in local time.
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+  return tomorrow;
+};
