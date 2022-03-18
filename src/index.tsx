@@ -15,6 +15,7 @@ export const DEFAULT_MAP_CENTER: LatLngLiteral = {
   lng: -114.072,
 };
 export const DEFAULT_MAP_ZOOM = 11;
+export const MIN_MAP_ZOOM = 2;
 
 const CURRENT_USER_KEY = "current_user";
 

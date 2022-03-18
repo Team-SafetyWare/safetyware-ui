@@ -9,6 +9,7 @@ import {
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
+  MIN_MAP_ZOOM,
   modularIndex,
   sortPeople,
 } from "../../../index";
@@ -215,7 +216,10 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
             height: "100%",
             width: "100%",
           }}
-          options={{ gestureHandling: "greedy" }}
+          options={{
+            gestureHandling: "greedy",
+            minZoom: MIN_MAP_ZOOM,
+          }}
           zoom={DEFAULT_MAP_ZOOM}
           center={DEFAULT_MAP_CENTER}
           onLoad={onMapLoad}
