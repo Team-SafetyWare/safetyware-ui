@@ -5,7 +5,7 @@ import {
   getCurrentUser,
   sortPeople,
 } from "../../../index";
-import { GoogleMap, Marker, OverlayView } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 
 import { Filter } from "./FilterBar";
 import {
@@ -23,6 +23,7 @@ import DeathIcon from "../../../assets/death.png";
 import GenericIcon from "../../../assets/generic.png";
 import { makeStyles } from "@mui/styles";
 import LatLngLiteral = google.maps.LatLngLiteral;
+import { MapTooltip } from "./MapTooltip";
 
 interface IncidentMarker {
   person: Person;
@@ -37,36 +38,8 @@ interface IncidentsMapProps {
 }
 
 const useStyles = makeStyles({
-  tooltip: {
-    position: "relative",
-    right: "calc(100% / 2)",
-    bottom: "216px",
-    filter: "drop-shadow(0 0 5px rgba(0,0,0,0.2));",
-  },
-  tooltipContent: {
-    position: "relative",
-    padding: "8px",
-    fontSize: "1rem",
-    backgroundColor: "white",
-    borderRadius: "4px",
-    "& h3": {
-      margin: "8px",
-    },
-    "& p": {
-      margin: "8px",
-    },
-    zIndex: "2",
-  },
-  tooltipArrow: {
-    width: "64px",
-    height: "64px",
-    position: "relative",
-    backgroundColor: "white",
-    borderRadius: "4px",
-    transform: "rotate(45deg)",
-    translate: "-50%",
-    left: "50%",
-    top: "120px",
+  tooltipText: {
+    margin: "8px",
   },
 });
 
@@ -121,19 +94,17 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
           />
         ))}
         {hoveredMarker && (
-          <OverlayView
-            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-            position={hoveredMarker.location}
-          >
-            <div className={styles.tooltip}>
-              <div className={styles.tooltipArrow} />
-              <div className={styles.tooltipContent}>
-                <h3>Incident: {hoveredMarker.type}</h3>
-                <p>Name: {hoveredMarker.person.name}</p>
-                <p>Time: {hoveredMarker.time.toISOString()}</p>
-              </div>
-            </div>
-          </OverlayView>
+          <MapTooltip location={hoveredMarker.location}>
+            <h3 className={styles.tooltipText}>
+              Incident: {hoveredMarker.type}
+            </h3>
+            <p className={styles.tooltipText}>
+              Name: {hoveredMarker.person.name}
+            </p>
+            <p className={styles.tooltipText}>
+              Time: {hoveredMarker.time.toISOString()}
+            </p>
+          </MapTooltip>
         )}
       </GoogleMap>
     </>
