@@ -11,7 +11,7 @@ import {
   useCompanyLocations,
   usePersonLocations,
 } from "../../../util/queryService";
-import { getCurrentUser } from "../../../index";
+import { getCurrentUser, sortPeople } from "../../../index";
 import { TablePagination } from "@mui/material";
 
 const NUM_COORD_DIGITS = 5;
@@ -133,17 +133,18 @@ const useLocationsInCompany = (
     },
     skip
   );
-  return (
-    data?.company.people
-      .map((person) =>
-        person.locationReadings.map((location) => ({
+  return sortPeople(data?.company.people || [])
+    .map((person) =>
+      person.locationReadings
+        .slice()
+        .reverse()
+        .map((location) => ({
           name: person.name,
           time: new Date(location.timestamp).toISOString(),
           coordinates: formatCoordinates(location.coordinates),
         }))
-      )
-      .flat() ?? []
-  );
+    )
+    .flat();
 };
 
 const useLocationsInPerson = (
