@@ -11,7 +11,7 @@ import {
   useCompanyIncidents,
   usePersonIncidents,
 } from "../../../util/queryService";
-import { getCurrentUser, sortPeople } from "../../../index";
+import { getCurrentUser } from "../../../index";
 import { TablePagination } from "@mui/material";
 
 const NUM_COORD_DIGITS = 5;
@@ -138,16 +138,19 @@ const useIncidentsInCompany = (
     },
     skip
   );
-  return sortPeople(data?.company.people ?? [])
-    .map((person) =>
-      person.incidents.map((incident) => ({
-        name: person.name,
-        incident: incident.type,
-        time: new Date(incident.timestamp).toISOString(),
-        coordinates: formatCoordinates(incident.coordinates),
-      }))
-    )
-    .flat();
+  return (
+    data?.company.people
+      .map((person) =>
+        person.incidents.map((incident) => ({
+          name: person.name,
+          incident: incident.type,
+          time: new Date(incident.timestamp).toISOString(),
+          coordinates: formatCoordinates(incident.coordinates),
+        }))
+      )
+      .flat()
+      .reverse() ?? []
+  );
 };
 
 const useIncidentsInPerson = (
