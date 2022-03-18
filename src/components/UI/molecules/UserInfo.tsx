@@ -23,7 +23,7 @@ const useStyles = makeStyles({
         backgroundColor: theme.palette.primary.main,
         color: "white",
         flexDirection: "column",
-        paddingBottom: "40px",
+        paddingBottom: "48px",
       },
   },
   userPhoto: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     alignContent: "center",
-    marginRight: "20px",
+    marginRight: "24px",
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
         marginRight: "0",
@@ -51,7 +51,7 @@ const useStyles = makeStyles({
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
         backgroundColor: "white",
-        borderRadius: "20px",
+        borderRadius: "16px",
         boxShadow: "0px 2px 2px #aaa",
         fontWeight: "bold",
         margin: "0 auto",
