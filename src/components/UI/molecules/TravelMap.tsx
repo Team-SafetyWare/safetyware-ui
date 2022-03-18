@@ -9,6 +9,7 @@ import {
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
+  modularIndex,
   sortPeople,
 } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
@@ -26,19 +27,28 @@ import { quadtree, Quadtree } from "d3-quadtree";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
-const TRAIL_COLORS = [
-  "#e6194b", // Red
+const ROADMAP_TRAIL_COLORS = [
   "#3cb44b", // Green
+  "#e6194b", // Red
+  "#808000", // Olive
   "#4363d8", // Blue
-  "#008080", // Cyan
   "#911eb4", // Purple
   "#f58231", // Orange
-  "#800000", // Brown red
-  "#f032e6", // Pink
-  "#9a6324", // Brown
-  "#808000", // Olive
-  "#000075", // Dark blue
 ];
+
+const SATELLITE_TRAIL_COLORS = [
+  "#aaffc3", // Mint
+  "#fabed4", // Pink
+  "#ffd8b1", // Apricot
+  "#42d4f4", // Cyan
+  "#bfef45", // Lime
+  "#fffac8", // Beige
+];
+
+enum MapTypeId {
+  Satellite = "satellite",
+  Hybrid = "hybrid",
+}
 
 interface TrailPoint extends LatLngLiteral {
   time: Date;
@@ -47,7 +57,7 @@ interface TrailPoint extends LatLngLiteral {
 interface Trail {
   path: TrailPoint[];
   person: Person;
-  color: string;
+  personIndex: number;
 }
 
 interface QuadPoint {
@@ -109,8 +119,28 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const trails: Trail[] = intoTrails(people);
   const pointTree = intoPointTree(trails);
 
+  const [map, setMap] = useState<google.maps.Map | undefined>();
+
   const [legendElementId] = useState(uuidV4().toString());
   const [showLegend, setShowLegend] = useState(false);
+
+  const onMapLoad = useCallback((map: google.maps.Map) => {
+    setMap(map);
+    const controls = map.controls[ControlPosition.LEFT_TOP];
+    const legend = document.getElementById(legendElementId);
+    controls.push(legend);
+  }, []);
+
+  const onTilesLoaded = useCallback(() => {
+    setShowLegend(true);
+  }, []);
+
+  const [mapTypeId, setMapTypeId] = useState<string>();
+
+  const onMapTypeIdChanged = useCallback(() => {
+    const mapTypeId = map?.getMapTypeId();
+    mapTypeId && setMapTypeId(mapTypeId);
+  }, [map]);
 
   const [tooltipPoint, setTooltipPoint] = useState<QuadPoint | undefined>();
 
@@ -139,6 +169,14 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     }
   }, [trails]);
 
+  const satelliteView = [
+    MapTypeId.Satellite.toString(),
+    MapTypeId.Hybrid.toString(),
+  ].includes(mapTypeId ?? "");
+  const trailColors = satelliteView
+    ? SATELLITE_TRAIL_COLORS
+    : ROADMAP_TRAIL_COLORS;
+
   const styles = useStyles();
 
   return (
@@ -158,7 +196,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
         >
           <p>Legend</p>
           {people.map((person, personIndex) => {
-            const color = indexToColor(personIndex);
+            const color = modularIndex(trailColors, personIndex);
             return (
               <div key={`${person.id}-${color}`}>
                 <p>
@@ -180,21 +218,16 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
           options={{ gestureHandling: "greedy" }}
           zoom={DEFAULT_MAP_ZOOM}
           center={DEFAULT_MAP_CENTER}
-          onLoad={(map) => {
-            const controls = map.controls[ControlPosition.LEFT_TOP];
-            const legend = document.getElementById(legendElementId);
-            controls.push(legend);
-          }}
-          onTilesLoaded={() => {
-            setShowLegend(true);
-          }}
+          onLoad={onMapLoad}
+          onTilesLoaded={onTilesLoaded}
+          onMapTypeIdChanged={onMapTypeIdChanged}
         >
-          {trails.map((trail: any) => (
+          {trails.map((trail) => (
             <Polyline
               key={trailKey(trail)}
               path={trail.path}
               options={{
-                strokeColor: trail.color,
+                strokeColor: modularIndex(trailColors, trail.personIndex),
                 strokeOpacity: 1,
                 strokeWeight: 4,
               }}
@@ -255,7 +288,7 @@ const usePersonAsPeople = (
 
 const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
   people
-    .map((person, person_index) => {
+    .map((person, personIndex) => {
       const locations: TrailPoint[] = person.locationReadings.map(
         (location) => ({
           lat: Number(location.coordinates[1]),
@@ -273,7 +306,7 @@ const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
           id: person.id,
           name: person.name,
         },
-        color: indexToColor(person_index),
+        personIndex: personIndex,
       }));
     })
     .flat();
@@ -291,9 +324,6 @@ const splitWhen = <T,>(arr: T[], split: (a: T, b: T) => boolean): T[][] => {
   }
   return segments;
 };
-
-const indexToColor = (index: number): string =>
-  TRAIL_COLORS[index % TRAIL_COLORS.length];
 
 const trailKey = (trail: Trail): string => {
   const personId = trail.person.id;
