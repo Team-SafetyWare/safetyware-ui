@@ -80,18 +80,6 @@ const useStyles = makeStyles({
   },
 });
 
-export interface GasReading {
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-  density: number;
-  densityUnits: string;
-  gas: string;
-  personName: string;
-  timestamp: Date;
-}
-
 export const GASES_PAGE_LABEL = "gasesPage";
 
 export const Gases: React.FC = () => {
@@ -224,7 +212,7 @@ export const Gases: React.FC = () => {
               />
               <CardMedia>
                 <div style={{ height: "600px" }}>
-                  <GasDotMap filter={filter} gases={gasReadings} center={center} zoom={10} />
+                  <GasDotMap filter={filter}/>
                 </div>
               </CardMedia>
             </Card>
@@ -252,11 +240,6 @@ export const Gases: React.FC = () => {
             {visualization == visualizations[0] && (
               <div className={styles.visualization}>
                 <GasesTable gasReadings={gasReadings} />
-              </div>
-            )}
-            {visualization == visualizations[1] && (
-              <div className={styles.visualization}>
-                <GasDotMap gases={gasReadings} center={center} zoom={10} />
               </div>
             )}
           </>
