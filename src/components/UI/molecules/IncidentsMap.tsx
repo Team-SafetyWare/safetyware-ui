@@ -3,6 +3,7 @@ import {
   DEFAULT_MAP_CENTER,
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
+  MAP_RESTRICTION,
   sortPeople,
 } from "../../../index";
 import { GoogleMap, Marker } from "@react-google-maps/api";
@@ -81,7 +82,10 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
           height: "100%",
           width: "100%",
         }}
-        options={{ gestureHandling: "greedy" }}
+        options={{
+          gestureHandling: "greedy",
+          restriction: MAP_RESTRICTION,
+        }}
         zoom={DEFAULT_MAP_ZOOM}
         center={DEFAULT_MAP_CENTER}
       >
