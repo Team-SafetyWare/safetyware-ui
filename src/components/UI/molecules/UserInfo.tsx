@@ -46,7 +46,7 @@ const useStyles = makeStyles({
   editBox: {
     alignItems: "center",
     display: "flex",
-    margin: "0 auto 0 calc(0.5 * 270px)",
+    margin: "0 auto 0 calc(0.5 * 256px)",
     transform: "translate(-50%)",
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
@@ -55,7 +55,7 @@ const useStyles = makeStyles({
         boxShadow: "0px 2px 2px #aaa",
         fontWeight: "bold",
         margin: "0 auto",
-        padding: "10px 50px 10px 50px",
+        padding: "12px 48px 12px 48px",
         transform: "translate(0%, -50%)",
       },
   },
