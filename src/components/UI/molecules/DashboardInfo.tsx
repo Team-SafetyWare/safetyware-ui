@@ -27,7 +27,7 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
         activeWidgetState={props.activeWidgetState}
         inactiveWidgetState={props.inactiveWidgetState}
         addWidget={props.addWidget}
-        userName={"Jane"}
+        userName={props.userName?.substring(0, props.userName.indexOf(" "))}
       />
     </>
   );
