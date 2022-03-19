@@ -1,6 +1,12 @@
 import React, { useCallback, useState } from "react";
 import { DateTimePicker } from "@mui/lab";
-import { Grid, Select, TextField } from "@mui/material";
+import {
+  Grid,
+  InputLabel,
+  Select,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import { SelectChangeEvent } from "@mui/material/Select";
@@ -12,6 +18,12 @@ import {
 import { getCurrentUser, sortPeople } from "../../../index";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
+import theme from "../../../Theme";
+import { Box } from "@mui/system";
+
+const START_DATE_LABEL = "Start Date";
+const END_DATE_LABEL = "End Date";
+const PERSON_LABEL = "Person";
 
 export interface Filter {
   minTimestamp?: Date;
@@ -23,23 +35,16 @@ interface FilterBarProps {
   filter: Filter;
   resetFilter?: () => Filter;
   onChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
+  closeable?: boolean;
+  onClose?: () => void;
 }
 
 const useStyles = makeStyles({
-  horizontalLayout: {
-    display: "flex",
-    flexDirection: "row",
-  },
   formControl: {
-    width: "288px",
+    width: "100%",
   },
-  label: {
-    fontWeight: "bold",
-    marginRight: "8px",
-  },
-  resetButton: {
+  button: {
     height: "56px",
-    width: "192px",
     textTransform: "none",
   },
 });
@@ -104,16 +109,32 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
     props.onChange(props.resetFilter || defaultFilter);
   }, [props.onChange]);
 
+  const showFullLabels = useMediaQuery(theme.breakpoints.not("lg"));
+
+  const layoutSx = {
+    display: "flex",
+    flexDirection: { xs: "column", lg: "row" },
+    alignItems: "center",
+  };
+
+  const labelSx = {
+    fontWeight: "bold",
+    marginRight: { xs: 0, lg: "8px" },
+    marginBottom: { xs: "8px", lg: 0 },
+    whiteSpace: "nowrap",
+  };
+
   const styles = useStyles();
 
   return (
     <Grid container spacing={2}>
-      <Grid item>
-        <div className={styles.horizontalLayout}>
-          <p className={styles.label}>Start Date</p>
+      <Grid item lg={3} xs={12}>
+        <Box sx={layoutSx}>
+          {showFullLabels && <Box sx={labelSx}>{START_DATE_LABEL}</Box>}
           <div className={styles.formControl}>
             <FormControl fullWidth>
               <DateTimePicker
+                label={(!showFullLabels && START_DATE_LABEL) || undefined}
                 renderInput={(props) => <TextField {...props} />}
                 value={props.filter.minTimestamp || null}
                 onChange={minTimestampChanged}
@@ -121,14 +142,15 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
               />
             </FormControl>
           </div>
-        </div>
+        </Box>
       </Grid>
-      <Grid item>
-        <div className={styles.horizontalLayout}>
-          <p className={styles.label}>End Date</p>
+      <Grid item lg={3} xs={12}>
+        <Box sx={layoutSx}>
+          {showFullLabels && <Box sx={labelSx}>{END_DATE_LABEL}</Box>}
           <div className={styles.formControl}>
             <FormControl fullWidth>
               <DateTimePicker
+                label={(!showFullLabels && END_DATE_LABEL) || undefined}
                 renderInput={(props) => <TextField {...props} />}
                 value={props.filter.maxTimestamp || null}
                 onChange={maxTimestampChanged}
@@ -136,14 +158,19 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
               />
             </FormControl>
           </div>
-        </div>
+        </Box>
       </Grid>
-      <Grid item>
-        <div className={styles.horizontalLayout}>
-          <p className={styles.label}>Person</p>
+      <Grid item lg={3} xs={12}>
+        <Box sx={layoutSx}>
+          {showFullLabels && <Box sx={labelSx}>{PERSON_LABEL}</Box>}
           <div className={styles.formControl}>
             <FormControl fullWidth>
-              <Select onChange={personChanged} value={selectedPerson as any}>
+              {!showFullLabels && <InputLabel>{PERSON_LABEL}</InputLabel>}
+              <Select
+                label={(!showFullLabels && PERSON_LABEL) || undefined}
+                onChange={personChanged}
+                value={selectedPerson as any}
+              >
                 {[allPerson].concat(people).map((person) => (
                   <MenuItem key={person.id} value={person as any}>
                     {person.name}
@@ -152,11 +179,12 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
               </Select>
             </FormControl>
           </div>
-        </div>
+        </Box>
       </Grid>
-      <Grid item xs={true} container justifyContent="flex-end">
+      <Grid item lg={true} xs={12} container justifyContent="flex-end">
         <Button
-          className={styles.resetButton}
+          sx={{ width: { xs: "100%", lg: "192px" } }}
+          className={styles.button}
           variant="contained"
           disableElevation={true}
           onClick={resetPressed}
@@ -164,6 +192,20 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
           Reset
         </Button>
       </Grid>
+      {props.closeable && (
+        <Grid item xs={12} container>
+          <Button
+            sx={{ width: { xs: "100%" } }}
+            className={styles.button}
+            variant="outlined"
+            color="inherit"
+            disableElevation={true}
+            onClick={props.onClose}
+          >
+            Close
+          </Button>
+        </Grid>
+      )}
     </Grid>
   );
 };
