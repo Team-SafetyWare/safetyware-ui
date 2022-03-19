@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -11,7 +11,7 @@ import {
   useCompanyLocations,
   usePersonLocations,
 } from "../../../util/queryService";
-import { getCurrentUser, sortPeople } from "../../../index";
+import { getCurrentUser, sortPeople, User } from "../../../index";
 import { TablePagination } from "@mui/material";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
@@ -44,10 +44,7 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const locations: PersonLocation[] = [
-    useLocationsInPerson(filter.person?.id || "", filter, !filter.person),
-    useLocationsInCompany(user?.company.id || "", filter, !!filter.person),
-  ].flat();
+  const locations: PersonLocation[] = useLocations(user, filter);
 
   // eslint-disable-next-line prefer-const
   let [page, setPage] = useState(0);
@@ -141,10 +138,24 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   );
 };
 
+const useLocations = (user: User | null, filter: Filter) =>
+  [
+    useLocationsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useLocationsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
+  ].flat();
+
 const useLocationsInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonLocation[] => {
   const { data } = useCompanyLocations(
     {
@@ -154,7 +165,7 @@ const useLocationsInCompany = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
   return sortPeople(data?.company.people || [])
     .map((person) =>
@@ -173,7 +184,7 @@ const useLocationsInCompany = (
 const useLocationsInPerson = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonLocation[] => {
   const { data } = usePersonLocations(
     {
@@ -183,7 +194,7 @@ const useLocationsInPerson = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
   return (
     data?.person.locationReadings.map((location) => ({

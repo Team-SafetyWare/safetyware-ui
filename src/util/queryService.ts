@@ -97,13 +97,13 @@ export const GET_COMPANY_LOCATIONS = gql`
 
 export const useCompanyLocations = (
   variables: GetCompanyLocationsVars,
-  skip = false
+  execute = true
 ): QueryResult<CompanyLocationsData, GetCompanyLocationsVars> => {
   return useQuery<CompanyLocationsData, GetCompanyLocationsVars>(
     GET_COMPANY_LOCATIONS,
     {
       variables: variables,
-      skip: skip,
+      skip: !execute,
     }
   );
 };
@@ -132,13 +132,13 @@ export interface GetPersonLocationsVars {
 
 export const usePersonLocations = (
   variables: GetPersonLocationsVars,
-  skip = false
+  execute = true
 ): QueryResult<PersonLocationsData, GetPersonLocationsVars> => {
   return useQuery<PersonLocationsData, GetPersonLocationsVars>(
     GET_PERSON_LOCATIONS,
     {
       variables: variables,
-      skip: skip,
+      skip: !execute,
     }
   );
 };
@@ -191,13 +191,13 @@ export interface GetCompanyIncidentsVars {
 
 export const useCompanyIncidents = (
   variables: GetCompanyIncidentsVars,
-  skip = false
+  execute = true
 ): QueryResult<CompanyIncidentsData, GetCompanyIncidentsVars> => {
   return useQuery<CompanyIncidentsData, GetCompanyIncidentsVars>(
     GET_COMPANY_INCIDENTS,
     {
       variables: variables,
-      skip: skip,
+      skip: !execute,
     }
   );
 };
@@ -228,13 +228,13 @@ export interface GetPersonIncidentsVars {
 
 export const usePersonIncidents = (
   variables: GetPersonIncidentsVars,
-  skip = false
+  execute = true
 ): QueryResult<PersonIncidentsData, GetPersonIncidentsVars> => {
   return useQuery<PersonIncidentsData, GetPersonIncidentsVars>(
     GET_PERSON_INCIDENTS,
     {
       variables: variables,
-      skip: skip,
+      skip: !execute,
     }
   );
 };
@@ -274,13 +274,13 @@ export interface CompanyIncidentStatsVars {
 
 export const useCompanyIncidentStats = (
   variables: GetCompanyIncidentsVars,
-  skip = false
+  execute = true
 ): QueryResult<CompanyIncidentStatsData, CompanyIncidentStatsVars> => {
   return useQuery<CompanyIncidentStatsData, CompanyIncidentStatsVars>(
     GET_COMPANY_INCIDENT_STATS,
     {
       variables: variables,
-      skip: skip,
+      skip: !execute,
     }
   );
 };
@@ -310,13 +310,13 @@ export interface PersonIncidentStatsVars {
 
 export const usePersonIncidentStats = (
   variables: GetPersonIncidentsVars,
-  skip = false
+  execute = true
 ): QueryResult<PersonIncidentStatsData, PersonIncidentStatsVars> => {
   return useQuery<PersonIncidentStatsData, PersonIncidentStatsVars>(
     GET_PERSON_INCIDENT_STATS,
     {
       variables: variables,
-      skip: skip,
+      skip: !execute,
     }
   );
 };

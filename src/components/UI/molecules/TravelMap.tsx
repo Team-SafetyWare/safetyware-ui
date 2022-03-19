@@ -12,12 +12,13 @@ import {
   MAP_RESTRICTION,
   modularIndex,
   sortPeople,
+  User,
 } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import ControlPosition = google.maps.ControlPosition;
 import { v4 as uuidV4 } from "uuid";
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import { makeStyles } from "@mui/styles";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
@@ -111,11 +112,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  let people: PersonWithLocationReadings[] = [
-    usePersonAsPeople(filter.person?.id || "", filter, !filter.person),
-    usePeopleInCompany(user?.company.id || "", filter, !!filter.person),
-  ].flat();
-  people = sortPeople(people);
+  const people: PersonWithLocationReadings[] = usePeople(user, filter);
 
   const trails: Trail[] = intoTrails(people);
   const pointTree = intoPointTree(trails);
@@ -254,10 +251,26 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   );
 };
 
+const usePeople = (user: User | null, filter: Filter) =>
+  sortPeople(
+    [
+      usePersonAsPeople(
+        filter.person?.id || "",
+        filter,
+        shouldFilterPerson(filter)
+      ),
+      usePeopleInCompany(
+        user?.company.id || "",
+        filter,
+        !shouldFilterPerson(filter)
+      ),
+    ].flat()
+  );
+
 const usePeopleInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonWithLocationReadings[] => {
   const { data } = useCompanyLocations(
     {
@@ -267,7 +280,7 @@ const usePeopleInCompany = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
   return data?.company.people || [];
 };
@@ -275,7 +288,7 @@ const usePeopleInCompany = (
 const usePersonAsPeople = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonWithLocationReadings[] => {
   const { data } = usePersonLocations(
     {
@@ -285,7 +298,7 @@ const usePersonAsPeople = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
   return (data && [data.person]) || [];
 };

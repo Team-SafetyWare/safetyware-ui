@@ -4,9 +4,10 @@ import {
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
   MAP_RESTRICTION,
+  User,
 } from "../../../index";
 import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import {
   Incident,
   useCompanyIncidents,
@@ -29,11 +30,7 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const incidents: Incident[] = [
-    useIncidentsInPerson(filter.person?.id || "", filter, !filter.person),
-    useIncidentsInCompany(user?.company.id || "", filter, !!filter.person),
-  ].flat();
-
+  const incidents: Incident[] = useIncidents(user, filter);
   const points: WeightedLocation[] = intoPoints(incidents);
 
   useEffect(() => {
@@ -76,10 +73,24 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
   );
 };
 
+const useIncidents = (user: User | null, filter: Filter) =>
+  [
+    useIncidentsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useIncidentsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
+  ].flat();
+
 const useIncidentsInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): Incident[] => {
   const { data } = useCompanyIncidents(
     {
@@ -89,7 +100,7 @@ const useIncidentsInCompany = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
   return data?.company.people.map((person) => person.incidents).flat() || [];
 };
@@ -97,7 +108,7 @@ const useIncidentsInCompany = (
 const useIncidentsInPerson = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): Incident[] => {
   const { data } = usePersonIncidents(
     {
@@ -107,7 +118,7 @@ const useIncidentsInPerson = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
   return data?.person.incidents || [];
 };
