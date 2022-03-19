@@ -12,6 +12,7 @@ import {
   MAP_RESTRICTION,
   modularIndex,
   sortPeople,
+  User,
 } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
@@ -111,19 +112,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  let people: PersonWithLocationReadings[] = [
-    usePersonAsPeople(
-      filter.person?.id || "",
-      filter,
-      shouldFilterPerson(filter)
-    ),
-    usePeopleInCompany(
-      user?.company.id || "",
-      filter,
-      !shouldFilterPerson(filter)
-    ),
-  ].flat();
-  people = sortPeople(people);
+  const people: PersonWithLocationReadings[] = usePeople(user, filter);
 
   const trails: Trail[] = intoTrails(people);
   const pointTree = intoPointTree(trails);
@@ -261,6 +250,22 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     </>
   );
 };
+
+const usePeople = (user: User | null, filter: Filter) =>
+  sortPeople(
+    [
+      usePersonAsPeople(
+        filter.person?.id || "",
+        filter,
+        shouldFilterPerson(filter)
+      ),
+      usePeopleInCompany(
+        user?.company.id || "",
+        filter,
+        !shouldFilterPerson(filter)
+      ),
+    ].flat()
+  );
 
 const usePeopleInCompany = (
   companyId: string,

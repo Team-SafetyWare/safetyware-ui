@@ -11,7 +11,7 @@ import {
   useCompanyLocations,
   usePersonLocations,
 } from "../../../util/queryService";
-import { getCurrentUser, sortPeople } from "../../../index";
+import { getCurrentUser, sortPeople, User } from "../../../index";
 import { TablePagination } from "@mui/material";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
@@ -44,18 +44,7 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const locations: PersonLocation[] = [
-    useLocationsInPerson(
-      filter.person?.id || "",
-      filter,
-      shouldFilterPerson(filter)
-    ),
-    useLocationsInCompany(
-      user?.company.id || "",
-      filter,
-      !shouldFilterPerson(filter)
-    ),
-  ].flat();
+  const locations: PersonLocation[] = useLocations(user, filter);
 
   // eslint-disable-next-line prefer-const
   let [page, setPage] = useState(0);
@@ -148,6 +137,20 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
     </>
   );
 };
+
+const useLocations = (user: User | null, filter: Filter) =>
+  [
+    useLocationsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useLocationsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
+  ].flat();
 
 const useLocationsInCompany = (
   companyId: string,
