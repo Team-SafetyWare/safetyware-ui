@@ -49,7 +49,6 @@ export const Locations: React.FC<LocationsProps> = (props) => {
   );
 
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-
   const showFilterBar = useMediaQuery(theme.breakpoints.up("lg"));
 
   const styles = useStyles();
