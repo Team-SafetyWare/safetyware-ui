@@ -1,5 +1,5 @@
 import React from "react";
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import { BarGraph, BarItem } from "../atoms/BarGraph";
 import {
   IncidentStat,
@@ -20,8 +20,16 @@ export const IncidentsBarGraph: React.FC<IncidentsBarGraphProps> = (props) => {
   const filter: Filter = props.filter ?? {};
 
   let stats: IncidentStat[] = [
-    useStatsInPerson(filter.person?.id || "", filter, !filter.person),
-    useStatsInCompany(user?.company.id || "", filter, !!filter.person),
+    useStatsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useStatsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
   ].flat();
   stats = sortByOccurances(stats);
 
@@ -39,14 +47,14 @@ export const IncidentsBarGraph: React.FC<IncidentsBarGraphProps> = (props) => {
 const useStatsInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): IncidentStat[] => {
   const { data } = useCompanyIncidentStats(
     {
       companyId: companyId,
       filter: filter,
     },
-    skip
+    execute
   );
   return data?.company.incidentStats || [];
 };
@@ -54,14 +62,14 @@ const useStatsInCompany = (
 const useStatsInPerson = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): IncidentStat[] => {
   const { data } = usePersonIncidentStats(
     {
       personId: personId,
       filter: filter,
     },
-    skip
+    execute
   );
   return data?.person.incidentStats || [];
 };

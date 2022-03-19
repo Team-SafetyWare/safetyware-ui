@@ -17,7 +17,7 @@ import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import ControlPosition = google.maps.ControlPosition;
 import { v4 as uuidV4 } from "uuid";
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import { makeStyles } from "@mui/styles";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
@@ -112,8 +112,16 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const filter: Filter = props.filter ?? {};
 
   let people: PersonWithLocationReadings[] = [
-    usePersonAsPeople(filter.person?.id || "", filter, !filter.person),
-    usePeopleInCompany(user?.company.id || "", filter, !!filter.person),
+    usePersonAsPeople(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    usePeopleInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
   ].flat();
   people = sortPeople(people);
 
@@ -257,14 +265,14 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
 const usePeopleInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonWithLocationReadings[] => {
   const { data } = useCompanyLocations(
     {
       companyId: companyId,
       filter: filter,
     },
-    skip
+    execute
   );
   return data?.company.people || [];
 };
@@ -272,14 +280,14 @@ const usePeopleInCompany = (
 const usePersonAsPeople = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonWithLocationReadings[] => {
   const { data } = usePersonLocations(
     {
       personId: personId,
       filter: filter,
     },
-    skip
+    execute
   );
   return (data && [data.person]) || [];
 };

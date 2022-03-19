@@ -8,7 +8,7 @@ import {
 } from "../../../index";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import {
   Person,
   PersonWithIncidents,
@@ -50,8 +50,16 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
   const filter: Filter = props.filter ?? {};
 
   let people: PersonWithIncidents[] = [
-    usePersonAsPeople(filter.person?.id || "", filter, !filter.person),
-    usePeopleInCompany(user?.company.id || "", filter, !!filter.person),
+    usePersonAsPeople(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    usePeopleInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
   ].flat();
   people = sortPeople(people);
 
@@ -119,14 +127,14 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
 const usePeopleInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonWithIncidents[] => {
   const { data } = useCompanyIncidents(
     {
       companyId: companyId,
       filter: filter,
     },
-    skip
+    execute
   );
   return data?.company.people || [];
 };
@@ -134,14 +142,14 @@ const usePeopleInCompany = (
 const usePersonAsPeople = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonWithIncidents[] => {
   const { data } = usePersonIncidents(
     {
       personId: personId,
       filter: filter,
     },
-    skip
+    execute
   );
   return (data && [data.person]) || [];
 };

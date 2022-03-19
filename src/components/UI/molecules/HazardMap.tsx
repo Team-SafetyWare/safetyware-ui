@@ -6,7 +6,7 @@ import {
   MAP_RESTRICTION,
 } from "../../../index";
 import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import {
   Incident,
   useCompanyIncidents,
@@ -30,8 +30,16 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
   const filter: Filter = props.filter ?? {};
 
   const incidents: Incident[] = [
-    useIncidentsInPerson(filter.person?.id || "", filter, !filter.person),
-    useIncidentsInCompany(user?.company.id || "", filter, !!filter.person),
+    useIncidentsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useIncidentsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
   ].flat();
 
   const points: WeightedLocation[] = intoPoints(incidents);
@@ -79,14 +87,14 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
 const useIncidentsInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): Incident[] => {
   const { data } = useCompanyIncidents(
     {
       companyId: companyId,
       filter: filter,
     },
-    skip
+    execute
   );
   return data?.company.people.map((person) => person.incidents).flat() || [];
 };
@@ -94,14 +102,14 @@ const useIncidentsInCompany = (
 const useIncidentsInPerson = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): Incident[] => {
   const { data } = usePersonIncidents(
     {
       personId: personId,
       filter: filter,
     },
-    skip
+    execute
   );
   return data?.person.incidents || [];
 };
