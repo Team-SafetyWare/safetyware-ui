@@ -44,10 +44,7 @@ const useStatsInCompany = (
   const { data } = useCompanyIncidentStats(
     {
       companyId: companyId,
-      filter: {
-        minTimestamp: filter.minTimestamp,
-        maxTimestamp: filter.maxTimestamp,
-      },
+      filter: filter,
     },
     skip
   );
@@ -62,10 +59,7 @@ const useStatsInPerson = (
   const { data } = usePersonIncidentStats(
     {
       personId: personId,
-      filter: {
-        minTimestamp: filter.minTimestamp,
-        maxTimestamp: filter.maxTimestamp,
-      },
+      filter: filter,
     },
     skip
   );

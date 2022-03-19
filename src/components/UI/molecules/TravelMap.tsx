@@ -262,10 +262,7 @@ const usePeopleInCompany = (
   const { data } = useCompanyLocations(
     {
       companyId: companyId,
-      filter: {
-        minTimestamp: filter.minTimestamp,
-        maxTimestamp: filter.maxTimestamp,
-      },
+      filter: filter,
     },
     skip
   );
@@ -280,10 +277,7 @@ const usePersonAsPeople = (
   const { data } = usePersonLocations(
     {
       personId: personId,
-      filter: {
-        minTimestamp: filter.minTimestamp,
-        maxTimestamp: filter.maxTimestamp,
-      },
+      filter: filter,
     },
     skip
   );
