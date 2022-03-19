@@ -35,6 +35,7 @@ export interface GetCompanyPeopleVars {
 export const GET_COMPANY_PEOPLE = gql`
   query ($companyId: ID!) {
     company(id: $companyId) {
+      id
       people {
         id
         name
@@ -81,6 +82,7 @@ export interface GetCompanyLocationsVars {
 export const GET_COMPANY_LOCATIONS = gql`
   query ($companyId: ID!, $filter: LocationReadingFilter) {
     company(id: $companyId) {
+      id
       people {
         id
         name
@@ -144,9 +146,12 @@ export const usePersonLocations = (
 export const GET_COMPANY_INCIDENTS = gql`
   query ($companyId: ID!, $filter: IncidentFilter) {
     company(id: $companyId) {
+      id
       people {
+        id
         name
         incidents(filter: $filter) {
+          id
           coordinates
           timestamp
           type
@@ -203,6 +208,7 @@ export const GET_PERSON_INCIDENTS = gql`
       id
       name
       incidents(filter: $filter) {
+        id
         coordinates
         timestamp
         type
@@ -236,6 +242,7 @@ export const usePersonIncidents = (
 export const GET_COMPANY_INCIDENT_STATS = gql`
   query ($companyId: ID!, $filter: IncidentStatsFilter) {
     company(id: $companyId) {
+      id
       incidentStats(filter: $filter) {
         type
         count
@@ -281,6 +288,7 @@ export const useCompanyIncidentStats = (
 export const GET_PERSON_INCIDENT_STATS = gql`
   query ($personId: ID!, $filter: IncidentStatsFilter) {
     person(id: $personId) {
+      id
       incidentStats(filter: $filter) {
         type
         count
@@ -316,7 +324,9 @@ export const usePersonIncidentStats = (
 export const GET_GAS_READINGS_FOR_COMPANY = gql`
   query ($companyId: ID!, $filter: GasReadingFilter) {
     company(id: $companyId) {
+      id
       people {
+        id
         name
         gasReadings(filter: $filter) {
           coordinates
@@ -333,6 +343,7 @@ export const GET_GAS_READINGS_FOR_COMPANY = gql`
 export const GET_GAS_READINGS_FOR_PERSON = gql`
   query ($personId: ID!, $filter: GasReadingFilter) {
     person(id: $personId) {
+      id
       name
       gasReadings(filter: $filter) {
         coordinates
