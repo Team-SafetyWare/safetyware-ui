@@ -48,7 +48,7 @@ export const Locations: React.FC<LocationsProps> = (props) => {
     []
   );
 
-  const [modalFilterOpen, setModalFilterOpen] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   const showFilterBar = useMediaQuery(theme.breakpoints.up("lg"));
 
@@ -77,10 +77,10 @@ export const Locations: React.FC<LocationsProps> = (props) => {
 
       {!showFilterBar && (
         <>
-          <FilterFab onClick={() => setModalFilterOpen(true)} />
+          <FilterFab onClick={() => setFilterModalOpen(true)} />
           <Modal
-            open={modalFilterOpen}
-            onClose={() => setModalFilterOpen(false)}
+            open={filterModalOpen}
+            onClose={() => setFilterModalOpen(false)}
           >
             <Card elevation={2}>
               <CardContent>
@@ -89,7 +89,7 @@ export const Locations: React.FC<LocationsProps> = (props) => {
                     filter={props.filter}
                     onChange={filterChanged}
                     closeable={true}
-                    onClose={() => setModalFilterOpen(false)}
+                    onClose={() => setFilterModalOpen(false)}
                   />
                 </div>
               </CardContent>
