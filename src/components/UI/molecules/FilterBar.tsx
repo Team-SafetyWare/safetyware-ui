@@ -184,3 +184,5 @@ export const defaultMaxTimestamp = (): Date => {
   tomorrow.setHours(0, 0, 0, 0);
   return tomorrow;
 };
+
+export const shouldFilterPerson = (filter: Filter): boolean => !!filter.person;
