@@ -114,7 +114,6 @@ export const GET_PERSON_LOCATIONS = gql`
       id
       name
       locationReadings(filter: $filter) {
-        id
         coordinates
         timestamp
       }
