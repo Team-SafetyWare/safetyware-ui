@@ -2,11 +2,18 @@ import React, { useCallback } from "react";
 import { TravelMap } from "../molecules/TravelMap";
 import { Filter, FilterBar } from "../molecules/FilterBar";
 import { makeStyles } from "@mui/styles";
-import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  useMediaQuery,
+} from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
 import { HazardMap } from "../molecules/HazardMap";
 import { LocationsTable } from "../molecules/LocationsTable";
-
+import theme from "../../../Theme";
+import { FilterFab } from "../molecules/FilterFab";
 export const LOCATION_PAGE_LABEL = "locationPage";
 
 const useStyles = makeStyles({
@@ -40,6 +47,8 @@ export const Locations: React.FC<LocationsProps> = (props) => {
     []
   );
 
+  const showFilterBar = useMediaQuery(theme.breakpoints.up("lg"));
+
   const styles = useStyles();
 
   return (
@@ -51,15 +60,19 @@ export const Locations: React.FC<LocationsProps> = (props) => {
         }
       />
 
-      <div className={[styles.pageCard, styles.filterBar].join(" ")}>
-        <Card elevation={2}>
-          <CardContent>
-            <div className={styles.filterBarContainer}>
-              <FilterBar filter={props.filter} onChange={filterChanged} />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {showFilterBar && (
+        <div className={[styles.pageCard, styles.filterBar].join(" ")}>
+          <Card elevation={2}>
+            <CardContent>
+              <div className={styles.filterBarContainer}>
+                <FilterBar filter={props.filter} onChange={filterChanged} />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {!showFilterBar && <FilterFab />}
 
       <Card className={styles.pageCard}>
         <CardHeader
