@@ -3,11 +3,11 @@ import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import { BarGraphWidget } from "../atoms/BarGraphWidget";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
-import HazardousAreaHeatMapWidget from "../atoms/HazardousAreaHeatMapWidget";
 import IncidentDotMapWidget from "../atoms/IncidentDotMapWidget";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
 import { defaultFilter } from "../molecules/FilterBar";
+import { HazardMap } from "../molecules/HazardMap";
 import { TravelMap } from "../molecules/TravelMap";
 
 interface HomeProps {
@@ -49,13 +49,7 @@ export const Home: React.FC<HomeProps> = (props) => {
   const [inactiveWidgets, setInactiveWidgets] = useState([
     {
       widgetName: "Hazardous Area Heat Map",
-      widget: (
-        <HazardousAreaHeatMapWidget
-          accidents={incidents}
-          center={center}
-          zoom={10}
-        />
-      ),
+      widget: <HazardMap filter={defaultFilter()} />,
     },
     {
       widgetName: "Incident Bar Graph",
