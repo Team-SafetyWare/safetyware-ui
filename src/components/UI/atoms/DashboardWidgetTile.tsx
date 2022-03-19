@@ -1,4 +1,3 @@
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
