@@ -3,11 +3,11 @@ import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import { BarGraphWidget } from "../atoms/BarGraphWidget";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
-import IncidentDotMapWidget from "../atoms/IncidentDotMapWidget";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
 import { defaultFilter } from "../molecules/FilterBar";
 import { HazardMap } from "../molecules/HazardMap";
+import { IncidentsMap } from "../molecules/IncidentsMap";
 import { TravelMap } from "../molecules/TravelMap";
 
 interface HomeProps {
@@ -32,16 +32,6 @@ const barGraphData = [
   { x: 9, y: 0 },
 ];
 
-const incidents = [
-  { lat: 51.077763, lng: -114.140657 },
-  { lat: 51.046048773481786, lng: -114.02334120770176 },
-];
-
-const center = {
-  lat: 51.049999,
-  lng: -114.1283,
-};
-
 export const Home: React.FC<HomeProps> = (props) => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
@@ -60,9 +50,7 @@ export const Home: React.FC<HomeProps> = (props) => {
   const [activeWidgets, setActiveWidgets] = useState([
     {
       widgetName: "Incident Dot Map",
-      widget: (
-        <IncidentDotMapWidget incidents={incidents} center={center} zoom={10} />
-      ),
+      widget: <IncidentsMap filter={defaultFilter()} />,
     },
     {
       widgetName: "Travel History Trail",
