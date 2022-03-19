@@ -32,6 +32,9 @@ const useStyles = makeStyles({
   pageCard: {
     marginBottom: "16px",
   },
+  fabPadding: {
+    height: "56px",
+  },
 });
 
 export const INCIDENTS_PAGE_LABEL = "incidentsPage";
@@ -120,6 +123,7 @@ export const Incidents: React.FC<IncidentsProps> = (props) => {
           <IncidentsTable filter={props.filter} />
         </CardMedia>
       </Card>
+      {!showFilterBar && <div className={styles.fabPadding} />}
     </>
   );
 };

@@ -33,6 +33,9 @@ const useStyles = makeStyles({
   pageCard: {
     marginBottom: "16px",
   },
+  fabPadding: {
+    height: "56px",
+  },
 });
 
 interface LocationsProps {
@@ -119,6 +122,7 @@ export const Locations: React.FC<LocationsProps> = (props) => {
           <LocationsTable filter={props.filter} />
         </CardMedia>
       </Card>
+      {!showFilterBar && <div className={styles.fabPadding} />}
     </>
   );
 };
