@@ -43,11 +43,6 @@ const useStyles = makeStyles({
   formControl: {
     width: "100%",
   },
-  label: {
-    fontWeight: "bold",
-    marginRight: "8px",
-    whiteSpace: "nowrap",
-  },
   button: {
     height: "56px",
     textTransform: "none",
@@ -122,13 +117,20 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
     alignItems: "center",
   };
 
+  const labelSx = {
+    fontWeight: "bold",
+    marginRight: { xs: 0, lg: "8px" },
+    marginBottom: { xs: "8px", lg: 0 },
+    whiteSpace: "nowrap",
+  };
+
   const styles = useStyles();
 
   return (
     <Grid container spacing={2}>
       <Grid item lg={3} xs={12}>
         <Box sx={layoutSx}>
-          {showFullLabels && <p className={styles.label}>{START_DATE_LABEL}</p>}
+          {showFullLabels && <Box sx={labelSx}>{START_DATE_LABEL}</Box>}
           <div className={styles.formControl}>
             <FormControl fullWidth>
               <DateTimePicker
@@ -144,7 +146,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
       </Grid>
       <Grid item lg={3} xs={12}>
         <Box sx={layoutSx}>
-          {showFullLabels && <p className={styles.label}>{END_DATE_LABEL}</p>}
+          {showFullLabels && <Box sx={labelSx}>{END_DATE_LABEL}</Box>}
           <div className={styles.formControl}>
             <FormControl fullWidth>
               <DateTimePicker
@@ -160,7 +162,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
       </Grid>
       <Grid item lg={3} xs={12}>
         <Box sx={layoutSx}>
-          {showFullLabels && <p className={styles.label}>{PERSON_LABEL}</p>}
+          {showFullLabels && <Box sx={labelSx}>{PERSON_LABEL}</Box>}
           <div className={styles.formControl}>
             <FormControl fullWidth>
               {!showFullLabels && <InputLabel>{PERSON_LABEL}</InputLabel>}
