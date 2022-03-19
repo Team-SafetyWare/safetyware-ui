@@ -10,6 +10,10 @@ import { DashboardSummary } from "../molecules/DashboardSummary";
 import { defaultFilter } from "../molecules/FilterBar";
 import { TravelMap } from "../molecules/TravelMap";
 
+interface HomeProps {
+  userName?: string;
+}
+
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
   dashboardContent: {},
@@ -38,7 +42,7 @@ const center = {
   lng: -114.1283,
 };
 
-export const Home: React.FC = () => {
+export const Home: React.FC<HomeProps> = (props) => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
@@ -94,6 +98,7 @@ export const Home: React.FC = () => {
         activeWidgetState={activeWidgets}
         inactiveWidgetState={inactiveWidgets}
         addWidget={addWidget}
+        userName={props.userName}
       />
       {matches && <DashboardSummary />}
       <DashboardWidgetWrapper
