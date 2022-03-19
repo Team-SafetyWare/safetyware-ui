@@ -19,6 +19,7 @@ import { getCurrentUser, sortPeople } from "../../../index";
 import { makeStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import theme from "../../../Theme";
+import { Box } from "@mui/system";
 
 const START_DATE_LABEL = "Start Date";
 const END_DATE_LABEL = "End Date";
@@ -39,10 +40,6 @@ interface FilterBarProps {
 }
 
 const useStyles = makeStyles({
-  horizontalLayout: {
-    display: "flex",
-    flexDirection: "row",
-  },
   formControl: {
     width: "100%",
   },
@@ -117,14 +114,20 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
     props.onChange(props.resetFilter || defaultFilter);
   }, [props.onChange]);
 
-  const showFullLabels = useMediaQuery(theme.breakpoints.up("xl"));
+  const showFullLabels = useMediaQuery(theme.breakpoints.not("lg"));
+
+  const layoutSx = {
+    display: "flex",
+    flexDirection: { xs: "column", lg: "row" },
+    alignItems: "center",
+  };
 
   const styles = useStyles();
 
   return (
     <Grid container spacing={2}>
       <Grid item lg={3} xs={12}>
-        <div className={styles.horizontalLayout}>
+        <Box sx={layoutSx}>
           {showFullLabels && <p className={styles.label}>{START_DATE_LABEL}</p>}
           <div className={styles.formControl}>
             <FormControl fullWidth>
@@ -137,10 +140,10 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
               />
             </FormControl>
           </div>
-        </div>
+        </Box>
       </Grid>
       <Grid item lg={3} xs={12}>
-        <div className={styles.horizontalLayout}>
+        <Box sx={layoutSx}>
           {showFullLabels && <p className={styles.label}>{END_DATE_LABEL}</p>}
           <div className={styles.formControl}>
             <FormControl fullWidth>
@@ -153,10 +156,10 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
               />
             </FormControl>
           </div>
-        </div>
+        </Box>
       </Grid>
       <Grid item lg={3} xs={12}>
-        <div className={styles.horizontalLayout}>
+        <Box sx={layoutSx}>
           {showFullLabels && <p className={styles.label}>{PERSON_LABEL}</p>}
           <div className={styles.formControl}>
             <FormControl fullWidth>
@@ -174,7 +177,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
               </Select>
             </FormControl>
           </div>
-        </div>
+        </Box>
       </Grid>
       <Grid item lg={true} xs={12} container justifyContent="flex-end">
         <Button
