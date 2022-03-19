@@ -51,7 +51,6 @@ const useStyles = makeStyles({
   },
   resetButton: {
     height: "56px",
-    width: "192px",
     textTransform: "none",
   },
 });
@@ -122,7 +121,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item lg={3}>
+      <Grid item lg={3} xs={12}>
         <div className={styles.horizontalLayout}>
           {showFullLabels && <p className={styles.label}>{START_DATE_LABEL}</p>}
           <div className={styles.formControl}>
@@ -138,7 +137,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
           </div>
         </div>
       </Grid>
-      <Grid item lg={3}>
+      <Grid item lg={3} xs={12}>
         <div className={styles.horizontalLayout}>
           {showFullLabels && <p className={styles.label}>{END_DATE_LABEL}</p>}
           <div className={styles.formControl}>
@@ -154,7 +153,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
           </div>
         </div>
       </Grid>
-      <Grid item lg={3}>
+      <Grid item lg={3} xs={12}>
         <div className={styles.horizontalLayout}>
           {showFullLabels && <p className={styles.label}>{PERSON_LABEL}</p>}
           <div className={styles.formControl}>
@@ -175,8 +174,9 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
           </div>
         </div>
       </Grid>
-      <Grid item xs={true} container justifyContent="flex-end">
+      <Grid item lg={true} xs={12} container justifyContent="flex-end">
         <Button
+          sx={{ width: { xs: "100%", lg: "192px" } }}
           className={styles.resetButton}
           variant="contained"
           disableElevation={true}
