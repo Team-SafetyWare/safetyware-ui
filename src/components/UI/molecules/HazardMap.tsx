@@ -4,6 +4,7 @@ import {
   DEFAULT_MAP_ZOOM,
   getCurrentUser,
   MAP_RESTRICTION,
+  User,
 } from "../../../index";
 import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
 import { Filter, shouldFilterPerson } from "./FilterBar";
@@ -29,19 +30,7 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const incidents: Incident[] = [
-    useIncidentsInPerson(
-      filter.person?.id || "",
-      filter,
-      shouldFilterPerson(filter)
-    ),
-    useIncidentsInCompany(
-      user?.company.id || "",
-      filter,
-      !shouldFilterPerson(filter)
-    ),
-  ].flat();
-
+  const incidents: Incident[] = useIncidents(user, filter);
   const points: WeightedLocation[] = intoPoints(incidents);
 
   useEffect(() => {
@@ -83,6 +72,20 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
     </div>
   );
 };
+
+const useIncidents = (user: User | null, filter: Filter) =>
+  [
+    useIncidentsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useIncidentsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
+  ].flat();
 
 const useIncidentsInCompany = (
   companyId: string,

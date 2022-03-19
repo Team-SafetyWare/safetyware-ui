@@ -5,6 +5,7 @@ import {
   getCurrentUser,
   MAP_RESTRICTION,
   sortPeople,
+  User,
 } from "../../../index";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 
@@ -49,20 +50,7 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  let people: PersonWithIncidents[] = [
-    usePersonAsPeople(
-      filter.person?.id || "",
-      filter,
-      shouldFilterPerson(filter)
-    ),
-    usePeopleInCompany(
-      user?.company.id || "",
-      filter,
-      !shouldFilterPerson(filter)
-    ),
-  ].flat();
-  people = sortPeople(people);
-
+  const people: PersonWithIncidents[] = usePeople(user, filter);
   const markers: IncidentMarker[] = intoMarkers(people);
 
   const [hoveredMarker, setHoveredMarker] = useState<
@@ -123,6 +111,22 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
     </>
   );
 };
+
+const usePeople = (user: User | null, filter: Filter) =>
+  sortPeople(
+    [
+      usePersonAsPeople(
+        filter.person?.id || "",
+        filter,
+        shouldFilterPerson(filter)
+      ),
+      usePeopleInCompany(
+        user?.company.id || "",
+        filter,
+        !shouldFilterPerson(filter)
+      ),
+    ].flat()
+  );
 
 const usePeopleInCompany = (
   companyId: string,

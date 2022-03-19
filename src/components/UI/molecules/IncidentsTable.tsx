@@ -11,7 +11,7 @@ import {
   useCompanyIncidents,
   usePersonIncidents,
 } from "../../../util/queryService";
-import { getCurrentUser } from "../../../index";
+import { getCurrentUser, User } from "../../../index";
 import { TablePagination } from "@mui/material";
 
 const NUM_COORD_DIGITS = 5;
@@ -39,18 +39,7 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const incidents: PersonIncident[] = [
-    useIncidentsInPerson(
-      filter.person?.id || "",
-      filter,
-      shouldFilterPerson(filter)
-    ),
-    useIncidentsInCompany(
-      user?.company.id || "",
-      filter,
-      !shouldFilterPerson(filter)
-    ),
-  ].flat();
+  const incidents: PersonIncident[] = useIncidents(user, filter);
 
   // eslint-disable-next-line prefer-const
   let [page, setPage] = useState(0);
@@ -130,6 +119,20 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = (props) => {
     </>
   );
 };
+
+const useIncidents = (user: User | null, filter: Filter) =>
+  [
+    useIncidentsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useIncidentsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
+  ].flat();
 
 const useIncidentsInCompany = (
   companyId: string,

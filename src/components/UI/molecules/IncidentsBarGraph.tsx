@@ -6,7 +6,7 @@ import {
   useCompanyIncidentStats,
   usePersonIncidentStats,
 } from "../../../util/queryService";
-import { getCurrentUser } from "../../../index";
+import { getCurrentUser, User } from "../../../index";
 
 export const X_AXIS_TITLE = "Incident Type";
 export const Y_AXIS_TITLE = "Occurrences";
@@ -19,20 +19,7 @@ export const IncidentsBarGraph: React.FC<IncidentsBarGraphProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  let stats: IncidentStat[] = [
-    useStatsInPerson(
-      filter.person?.id || "",
-      filter,
-      shouldFilterPerson(filter)
-    ),
-    useStatsInCompany(
-      user?.company.id || "",
-      filter,
-      !shouldFilterPerson(filter)
-    ),
-  ].flat();
-  stats = sortByOccurances(stats);
-
+  const stats: IncidentStat[] = useIncidentStats(user, filter);
   const graphData = intoChartData(stats);
 
   return (
@@ -43,6 +30,22 @@ export const IncidentsBarGraph: React.FC<IncidentsBarGraphProps> = (props) => {
     />
   );
 };
+
+const useIncidentStats = (user: User | null, filter: Filter) =>
+  sortByOccurances(
+    [
+      useStatsInPerson(
+        filter.person?.id || "",
+        filter,
+        shouldFilterPerson(filter)
+      ),
+      useStatsInCompany(
+        user?.company.id || "",
+        filter,
+        !shouldFilterPerson(filter)
+      ),
+    ].flat()
+  );
 
 const useStatsInCompany = (
   companyId: string,
