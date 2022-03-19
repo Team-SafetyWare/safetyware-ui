@@ -48,7 +48,6 @@ export const Pages: React.FC = () => {
     },
     []
   );
-
   return (
     <>
       <Prefetch filter={filter} />
@@ -69,7 +68,7 @@ export const Pages: React.FC = () => {
                   exact
                   path="/home"
                   title="Blackline Safety | Home"
-                  component={Home}
+                  render={() => <Home userName={user?.name} />}
                 />
                 <Page
                   exact
