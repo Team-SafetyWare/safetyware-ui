@@ -5,9 +5,10 @@ import { BarGraphWidget } from "../atoms/BarGraphWidget";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
 import HazardousAreaHeatMapWidget from "../atoms/HazardousAreaHeatMapWidget";
 import IncidentDotMapWidget from "../atoms/IncidentDotMapWidget";
-import { TravelHistoryTrailWidget } from "../atoms/TravelHistoryTrailWidget";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
+import { defaultFilter } from "../molecules/FilterBar";
+import { TravelMap } from "../molecules/TravelMap";
 
 interface HomeProps {
   userName?: string;
@@ -71,9 +72,7 @@ export const Home: React.FC<HomeProps> = (props) => {
     },
     {
       widgetName: "Travel History Trail",
-      widget: (
-        <TravelHistoryTrailWidget path={incidents} center={center} zoom={10} />
-      ),
+      widget: <TravelMap filter={defaultFilter()} />,
     },
   ]);
 
