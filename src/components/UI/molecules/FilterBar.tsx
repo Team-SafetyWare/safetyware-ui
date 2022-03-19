@@ -117,6 +117,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
                 renderInput={(props) => <TextField {...props} />}
                 value={props.filter.minTimestamp || null}
                 onChange={minTimestampChanged}
+                maxDateTime={tomorrow()}
               />
             </FormControl>
           </div>
@@ -131,6 +132,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
                 renderInput={(props) => <TextField {...props} />}
                 value={props.filter.maxTimestamp || null}
                 onChange={maxTimestampChanged}
+                maxDateTime={tomorrow()}
               />
             </FormControl>
           </div>
@@ -176,7 +178,9 @@ export const defaultFilter = (): Filter => ({
 
 export const defaultMinTimestamp = (): Date => new Date(2022, 2, 6);
 
-export const defaultMaxTimestamp = (): Date => {
+export const defaultMaxTimestamp = (): Date => tomorrow();
+
+const tomorrow = (): Date => {
   // Beginning of tomorrow in local time.
   const today = new Date();
   const tomorrow = new Date(today);
