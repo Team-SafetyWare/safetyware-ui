@@ -57,7 +57,7 @@ export const Home: React.FC<HomeProps> = (props) => {
       ),
     },
     {
-      widgetName: "Bar Graph",
+      widgetName: "Incident Bar Graph",
       widget: <BarGraphWidget data={barGraphData} />,
     },
   ]);
