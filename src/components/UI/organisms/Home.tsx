@@ -3,7 +3,6 @@ import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import { BarGraphWidget } from "../atoms/BarGraphWidget";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
-import HazardousAreaHeatMapWidget from "../atoms/HazardousAreaHeatMapWidget";
 import IncidentDotMapWidget from "../atoms/IncidentDotMapWidget";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
