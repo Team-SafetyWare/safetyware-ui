@@ -11,6 +11,7 @@ import { API_URL, getCurrentUser } from "../index";
 import { Locations } from "./UI/organisms/Locations";
 import { Incidents } from "./UI/organisms/Incidents";
 import { defaultFilter, Filter } from "./UI/molecules/FilterBar";
+import { Prefetch } from "./UI/molecules/Prefetch";
 
 const useStyles = makeStyles({
   content: {
@@ -50,6 +51,7 @@ export const Pages: React.FC = () => {
 
   return (
     <>
+      <Prefetch filter={filter} />
       {location.pathname === "/" ? (
         <Page
           exact
