@@ -72,10 +72,18 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
   );
 
   const people: Person[] = (peopleData && intoPeople(peopleData)) || [];
+
   const [allPerson] = useState<Person>({
     id: "All",
     name: "All",
   });
+
+  const selectedPerson: Person =
+    (props.filter.person &&
+      people.find(
+        (person) => props.filter.person && person.id === props.filter.person.id
+      )) ||
+    allPerson;
 
   const personChanged = useCallback(
     (event: SelectChangeEvent) => {
@@ -133,10 +141,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
           <p className={styles.label}>Person</p>
           <div className={styles.formControl}>
             <FormControl fullWidth>
-              <Select
-                onChange={personChanged}
-                value={(props.filter.person as any) || allPerson}
-              >
+              <Select onChange={personChanged} value={selectedPerson as any}>
                 {[allPerson].concat(people).map((person) => (
                   <MenuItem key={person.id} value={person as any}>
                     {person.name}
