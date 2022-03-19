@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { TravelMap } from "../molecules/TravelMap";
 import { Filter, FilterBar } from "../molecules/FilterBar";
 import { makeStyles } from "@mui/styles";
@@ -7,6 +7,7 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
+  Modal,
   useMediaQuery,
 } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
@@ -47,6 +48,8 @@ export const Locations: React.FC<LocationsProps> = (props) => {
     []
   );
 
+  const [modalFilterOpen, setModalFilterOpen] = useState(false);
+
   const showFilterBar = useMediaQuery(theme.breakpoints.up("lg"));
 
   const styles = useStyles();
@@ -72,7 +75,23 @@ export const Locations: React.FC<LocationsProps> = (props) => {
         </div>
       )}
 
-      {!showFilterBar && <FilterFab />}
+      {!showFilterBar && (
+        <>
+          <FilterFab onClick={() => setModalFilterOpen(true)} />
+          <Modal
+            open={modalFilterOpen}
+            onClose={() => setModalFilterOpen(false)}
+          >
+            <Card elevation={2}>
+              <CardContent>
+                <div className={styles.filterBarContainer}>
+                  <FilterBar filter={props.filter} onChange={filterChanged} />
+                </div>
+              </CardContent>
+            </Card>
+          </Modal>
+        </>
+      )}
 
       <Card className={styles.pageCard}>
         <CardHeader
