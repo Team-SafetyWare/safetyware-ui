@@ -81,7 +81,7 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
             </BootstrapButton>
           </div>
         </div>
-        <div className={styles.widget}>{props.widget.widget}</div>
+        {props.widget.widget}
       </div>
     </>
   );
