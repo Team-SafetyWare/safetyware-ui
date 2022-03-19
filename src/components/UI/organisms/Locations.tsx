@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { TravelMap } from "../molecules/TravelMap";
-import { defaultFilter, Filter, FilterBar } from "../molecules/FilterBar";
+import { Filter, FilterBar } from "../molecules/FilterBar";
 import { makeStyles } from "@mui/styles";
 import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
@@ -27,12 +27,15 @@ const useStyles = makeStyles({
   },
 });
 
-export const Locations: React.FC = () => {
-  const [filter, setFilter] = useState<Filter>(defaultFilter());
+interface LocationsProps {
+  filter: Filter;
+  onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
+}
 
-  const filterChange = useCallback(
+export const Locations: React.FC<LocationsProps> = (props) => {
+  const filterChanged = useCallback(
     (updateFilter: (prevFilter: Filter) => Filter) => {
-      setFilter((filter) => updateFilter(filter));
+      props.onFilterChange(updateFilter);
     },
     []
   );
@@ -52,7 +55,7 @@ export const Locations: React.FC = () => {
         <Card elevation={2}>
           <CardContent>
             <div className={styles.filterBarContainer}>
-              <FilterBar filter={filter} onChange={filterChange} />
+              <FilterBar filter={props.filter} onChange={filterChanged} />
             </div>
           </CardContent>
         </Card>
@@ -65,7 +68,7 @@ export const Locations: React.FC = () => {
         />
         <CardMedia>
           <div style={{ height: "600px" }}>
-            <TravelMap filter={filter} />
+            <TravelMap filter={props.filter} />
           </div>
         </CardMedia>
       </Card>
@@ -77,7 +80,7 @@ export const Locations: React.FC = () => {
         />
         <CardMedia>
           <div style={{ height: "600px" }}>
-            <HazardMap filter={filter} />
+            <HazardMap filter={props.filter} />
           </div>
         </CardMedia>
       </Card>
@@ -88,7 +91,7 @@ export const Locations: React.FC = () => {
           subheader="View individual location readings."
         />
         <CardMedia>
-          <LocationsTable filter={filter} />
+          <LocationsTable filter={props.filter} />
         </CardMedia>
       </Card>
     </>

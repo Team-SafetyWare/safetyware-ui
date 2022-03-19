@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { Route } from "react-router-dom";
+import { RouteComponentProps } from "react-router";
 
 interface PageProps {
   data?: any;
   title?: any;
   component?: any;
+  render?: ((props: RouteComponentProps<any>) => React.ReactNode) | undefined;
   exact?: boolean | undefined;
   path?: string | string[] | undefined;
   children?: React.ReactNode;

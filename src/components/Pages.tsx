@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Switch, useLocation } from "react-router-dom";
 import { Page } from "./UI/atoms/Page";
 import { Sidebar } from "./UI/molecules/Sidebar";
@@ -10,6 +10,7 @@ import { UserAccount } from "./UI/organisms/UserAccount";
 import { API_URL, getCurrentUser } from "../index";
 import { Locations } from "./UI/organisms/Locations";
 import { Incidents } from "./UI/organisms/Incidents";
+import { defaultFilter, Filter } from "./UI/molecules/FilterBar";
 
 const useStyles = makeStyles({
   content: {
@@ -38,6 +39,15 @@ export const Pages: React.FC = () => {
   const profileImageUrl =
     (user && `${API_URL}/v1/userAccount/${user.id}/profile.png`) || undefined;
 
+  const [filter, setFilter] = useState<Filter>(defaultFilter());
+
+  const filterChanged = useCallback(
+    (updateFilter: (prevFilter: Filter) => Filter) => {
+      setFilter((filter) => updateFilter(filter));
+    },
+    []
+  );
+
   return (
     <>
       {location.pathname === "/" ? (
@@ -63,13 +73,17 @@ export const Pages: React.FC = () => {
                   exact
                   path="/locations"
                   title="Blackline Safety | Locations"
-                  component={Locations}
+                  render={() => (
+                    <Locations filter={filter} onFilterChange={filterChanged} />
+                  )}
                 />
                 <Page
                   exact
                   path="/incidents"
                   title="Blackline Safety | Incidents"
-                  component={Incidents}
+                  render={() => (
+                    <Incidents filter={filter} onFilterChange={filterChanged} />
+                  )}
                 />
                 <Page
                   exact
