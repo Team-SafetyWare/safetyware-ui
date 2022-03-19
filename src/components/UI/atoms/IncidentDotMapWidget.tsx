@@ -24,7 +24,8 @@ export const IncidentDotMapWidget: React.FC<IncidentDotMapWidgetProps> = (
   function createMarker(
     location: google.maps.LatLng | google.maps.LatLngLiteral
   ) {
-    return <Marker position={location} />;
+    //Temporary fix (this component won't even be used soon)
+    return <Marker key={Math.random()} position={location} />;
   }
 
   return (
