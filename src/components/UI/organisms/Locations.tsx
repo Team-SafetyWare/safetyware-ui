@@ -7,7 +7,6 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  Modal,
   useMediaQuery,
 } from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
@@ -15,6 +14,7 @@ import { HazardMap } from "../molecules/HazardMap";
 import { LocationsTable } from "../molecules/LocationsTable";
 import theme from "../../../Theme";
 import { FilterFab } from "../molecules/FilterFab";
+import { FilterModal } from "../molecules/FilterModal";
 export const LOCATION_PAGE_LABEL = "locationPage";
 
 const useStyles = makeStyles({
@@ -78,23 +78,12 @@ export const Locations: React.FC<LocationsProps> = (props) => {
       {!showFilterBar && (
         <>
           <FilterFab onClick={() => setFilterModalOpen(true)} />
-          <Modal
+          <FilterModal
+            filter={props.filter}
+            onChange={props.onFilterChange}
             open={filterModalOpen}
             onClose={() => setFilterModalOpen(false)}
-          >
-            <Card elevation={2}>
-              <CardContent>
-                <div className={styles.filterBarContainer}>
-                  <FilterBar
-                    filter={props.filter}
-                    onChange={filterChanged}
-                    closeable={true}
-                    onClose={() => setFilterModalOpen(false)}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </Modal>
+          />
         </>
       )}
 
