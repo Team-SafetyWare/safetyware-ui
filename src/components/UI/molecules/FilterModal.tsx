@@ -1,19 +1,19 @@
 import React from "react";
 
-import { Card, CardContent, Grid, Modal } from "@mui/material";
+import { Card, CardContent, Modal } from "@mui/material";
 import { Filter, FilterBar } from "./FilterBar";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
-  grid: {
-    width: "100%",
-    height: "100%",
-  },
   card: {
+    position: "absolute",
     margin: "16px",
     width: "100%",
-    height: "fit-content",
     maxWidth: "320px",
+    height: "fit-content",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   },
   filterBarContainer: {
     marginBottom: "-8px",
@@ -32,28 +32,18 @@ export const FilterModal: React.FC<FilterModalProps> = (props) => {
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Grid
-        className={styles.grid}
-        container
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Grid item>
-          <Card className={styles.card} elevation={2}>
-            <CardContent>
-              <div className={styles.filterBarContainer}>
-                <FilterBar
-                  filter={props.filter}
-                  onChange={props.onChange}
-                  closeable={true}
-                  onClose={props.onClose}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      <Card className={styles.card} elevation={2}>
+        <CardContent>
+          <div className={styles.filterBarContainer}>
+            <FilterBar
+              filter={props.filter}
+              onChange={props.onChange}
+              closeable={true}
+              onClose={props.onClose}
+            />
+          </div>
+        </CardContent>
+      </Card>
     </Modal>
   );
 };
