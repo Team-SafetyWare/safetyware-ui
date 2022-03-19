@@ -9,6 +9,7 @@ const useStyles = makeStyles({
     color: "white",
     marginTop: "24px",
     textTransform: "none",
+    height: "56px",
 
     "&:hover": {
       backgroundColor: "white",

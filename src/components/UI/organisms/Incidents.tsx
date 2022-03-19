@@ -1,11 +1,20 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Filter, FilterBar } from "../molecules/FilterBar";
-import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  useMediaQuery,
+} from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
 import { makeStyles } from "@mui/styles";
 import { IncidentsMap } from "../molecules/IncidentsMap";
 import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
 import { IncidentsTable } from "../molecules/IncidentsTable";
+import theme from "../../../Theme";
+import { FilterFab } from "../molecules/FilterFab";
+import { FilterModal } from "../molecules/FilterModal";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -22,6 +31,9 @@ const useStyles = makeStyles({
   },
   pageCard: {
     marginBottom: "16px",
+  },
+  fabPadding: {
+    height: "56px",
   },
 });
 
@@ -40,6 +52,9 @@ export const Incidents: React.FC<IncidentsProps> = (props) => {
     []
   );
 
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const showFilterBar = useMediaQuery(theme.breakpoints.up("lg"));
+
   const styles = useStyles();
 
   return (
@@ -51,15 +66,29 @@ export const Incidents: React.FC<IncidentsProps> = (props) => {
         }
       />
 
-      <div className={[styles.pageCard, styles.filterBar].join(" ")}>
-        <Card elevation={2}>
-          <CardContent>
-            <div className={styles.filterBarContainer}>
-              <FilterBar filter={props.filter} onChange={filterChanged} />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {showFilterBar && (
+        <div className={[styles.pageCard, styles.filterBar].join(" ")}>
+          <Card elevation={2}>
+            <CardContent>
+              <div className={styles.filterBarContainer}>
+                <FilterBar filter={props.filter} onChange={filterChanged} />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {!showFilterBar && (
+        <>
+          <FilterFab onClick={() => setFilterModalOpen(true)} />
+          <FilterModal
+            filter={props.filter}
+            onChange={props.onFilterChange}
+            open={filterModalOpen}
+            onClose={() => setFilterModalOpen(false)}
+          />
+        </>
+      )}
 
       <Card className={styles.pageCard}>
         <CardHeader
@@ -94,6 +123,7 @@ export const Incidents: React.FC<IncidentsProps> = (props) => {
           <IncidentsTable filter={props.filter} />
         </CardMedia>
       </Card>
+      {!showFilterBar && <div className={styles.fabPadding} />}
     </>
   );
 };

@@ -7,7 +7,7 @@ const useStyles = makeStyles({
   loginEmailButton: {
     borderColor: "white",
     color: "white",
-    height: "46px",
+    height: "56px",
     marginTop: "24px",
     textTransform: "none",
 
