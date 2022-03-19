@@ -34,6 +34,8 @@ interface FilterBarProps {
   filter: Filter;
   resetFilter?: () => Filter;
   onChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
+  closeable?: boolean;
+  onClose?: () => void;
 }
 
 const useStyles = makeStyles({
@@ -49,7 +51,7 @@ const useStyles = makeStyles({
     marginRight: "8px",
     whiteSpace: "nowrap",
   },
-  resetButton: {
+  button: {
     height: "56px",
     textTransform: "none",
   },
@@ -177,7 +179,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
       <Grid item lg={true} xs={12} container justifyContent="flex-end">
         <Button
           sx={{ width: { xs: "100%", lg: "192px" } }}
-          className={styles.resetButton}
+          className={styles.button}
           variant="contained"
           disableElevation={true}
           onClick={resetPressed}
@@ -185,6 +187,20 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
           Reset
         </Button>
       </Grid>
+      {props.closeable && (
+        <Grid item xs={12} container>
+          <Button
+            sx={{ width: { xs: "100%" } }}
+            className={styles.button}
+            variant="outlined"
+            color="inherit"
+            disableElevation={true}
+            onClick={props.onClose}
+          >
+            Close
+          </Button>
+        </Grid>
+      )}
     </Grid>
   );
 };

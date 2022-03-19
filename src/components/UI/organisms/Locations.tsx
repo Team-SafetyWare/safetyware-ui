@@ -85,7 +85,12 @@ export const Locations: React.FC<LocationsProps> = (props) => {
             <Card elevation={2}>
               <CardContent>
                 <div className={styles.filterBarContainer}>
-                  <FilterBar filter={props.filter} onChange={filterChanged} />
+                  <FilterBar
+                    filter={props.filter}
+                    onChange={filterChanged}
+                    closeable={true}
+                    onClose={() => setModalFilterOpen(false)}
+                  />
                 </div>
               </CardContent>
             </Card>
