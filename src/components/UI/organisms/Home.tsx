@@ -32,16 +32,6 @@ const barGraphData = [
   { x: 9, y: 0 },
 ];
 
-const incidents = [
-  { lat: 51.077763, lng: -114.140657 },
-  { lat: 51.046048773481786, lng: -114.02334120770176 },
-];
-
-const center = {
-  lat: 51.049999,
-  lng: -114.1283,
-};
-
 export const Home: React.FC<HomeProps> = (props) => {
   const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
