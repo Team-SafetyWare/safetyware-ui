@@ -30,10 +30,10 @@ import { quadtree, Quadtree } from "d3-quadtree";
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
 const ROADMAP_TRAIL_COLORS = [
-  "#3cb44b", // Green
   "#e6194b", // Red
-  "#808000", // Olive
   "#4363d8", // Blue
+  "#808000", // Olive
+  "#3cb44b", // Green
   "#911eb4", // Purple
   "#f58231", // Orange
 ];
