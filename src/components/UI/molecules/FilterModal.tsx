@@ -31,7 +31,7 @@ export const FilterModal: React.FC<FilterModalProps> = (props) => {
   const styles = useStyles();
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={props.open} onClose={props.onClose} disableScrollLock={true}>
       <Card className={styles.card} elevation={2}>
         <CardContent>
           <div className={styles.filterBarContainer}>
