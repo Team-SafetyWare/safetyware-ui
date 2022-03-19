@@ -1,4 +1,3 @@
-import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -54,13 +53,7 @@ const useStyles = makeStyles({
     fontSize: "24px",
     margin: "12px 0px 12px 8px",
   },
-  widgetButtons: {
-    display: "flex",
-  },
-  removeButton: {
-    marginRight: "16px",
-  },
-  filterButton: {},
+  removeButton: {},
   widget: {
     height: "100%",
     width: "100%",
@@ -78,24 +71,14 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
       <div className={styles.widgetTile}>
         <div className={styles.widgetInfo}>
           <p className={styles.widgetName}>{props.widget.widgetName}</p>
-          <div className={styles.widgetButtons}>
-            <div className={styles.removeButton}>
-              <BootstrapButton
-                variant="outlined"
-                endIcon={<RemoveIcon />}
-                onClick={() => props.removeWidget(props.widget)}
-              >
-                Remove Widget
-              </BootstrapButton>
-            </div>
-            <div className={styles.filterButton}>
-              <BootstrapButton
-                variant="outlined"
-                endIcon={<FilterAltOutlinedIcon />}
-              >
-                Filter
-              </BootstrapButton>
-            </div>
+          <div className={styles.removeButton}>
+            <BootstrapButton
+              variant="outlined"
+              endIcon={<RemoveIcon />}
+              onClick={() => props.removeWidget(props.widget)}
+            >
+              Remove Widget
+            </BootstrapButton>
           </div>
         </div>
         <div className={styles.widget}>{props.widget.widget}</div>
