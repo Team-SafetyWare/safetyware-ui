@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -45,8 +45,16 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   const filter: Filter = props.filter ?? {};
 
   const locations: PersonLocation[] = [
-    useLocationsInPerson(filter.person?.id || "", filter, !filter.person),
-    useLocationsInCompany(user?.company.id || "", filter, !!filter.person),
+    useLocationsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useLocationsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
   ].flat();
 
   // eslint-disable-next-line prefer-const
@@ -144,14 +152,14 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
 const useLocationsInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonLocation[] => {
   const { data } = useCompanyLocations(
     {
       companyId: companyId,
       filter: filter,
     },
-    skip
+    execute
   );
   return sortPeople(data?.company.people || [])
     .map((person) =>
@@ -170,14 +178,14 @@ const useLocationsInCompany = (
 const useLocationsInPerson = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonLocation[] => {
   const { data } = usePersonLocations(
     {
       personId: personId,
       filter: filter,
     },
-    skip
+    execute
   );
   return (
     data?.person.locationReadings.map((location) => ({

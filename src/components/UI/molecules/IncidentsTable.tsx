@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -40,8 +40,16 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = (props) => {
   const filter: Filter = props.filter ?? {};
 
   const incidents: PersonIncident[] = [
-    useIncidentsInPerson(filter.person?.id || "", filter, !filter.person),
-    useIncidentsInCompany(user?.company.id || "", filter, !!filter.person),
+    useIncidentsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useIncidentsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
   ].flat();
 
   // eslint-disable-next-line prefer-const
@@ -126,14 +134,14 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = (props) => {
 const useIncidentsInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonIncident[] => {
   const { data } = useCompanyIncidents(
     {
       companyId: companyId,
       filter: filter,
     },
-    skip
+    execute
   );
   return (
     data?.company.people
@@ -153,14 +161,14 @@ const useIncidentsInCompany = (
 const useIncidentsInPerson = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonIncident[] => {
   const { data } = usePersonIncidents(
     {
       personId: personId,
       filter: filter,
     },
-    skip
+    execute
   );
   return (
     data?.person.incidents.map((incident) => ({
