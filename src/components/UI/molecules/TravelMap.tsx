@@ -45,10 +45,10 @@ const SATELLITE_PALETTE = [
 ];
 
 const DEFAULT_MAP_CENTER: LatLngLiteral = {
-  lat: 51.045,
-  lng: -114.072,
+  lat: 51.03,
+  lng: -114.466,
 };
-const DEFAULT_MAP_ZOOM = 11;
+const DEFAULT_MAP_ZOOM = 9;
 
 enum MapTypeId {
   Satellite = "satellite",
