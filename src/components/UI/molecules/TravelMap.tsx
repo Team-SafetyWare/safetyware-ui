@@ -76,6 +76,7 @@ interface QuadPoint {
 interface TravelMapProps {
   filter?: Filter;
   legendDefaultCollapsed?: boolean;
+  legendCompact?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -169,6 +170,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
           items={legendItems}
           hidden={!showLegend}
           defaultCollapsed={props.legendDefaultCollapsed}
+          compact={props.legendCompact}
         />
         <GoogleMap
           mapContainerStyle={{
