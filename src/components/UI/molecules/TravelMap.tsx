@@ -51,6 +51,8 @@ enum MapTypeId {
   Hybrid = "hybrid",
 }
 
+const DEFAULT_MAP_TYPE_ID = MapTypeId.Hybrid;
+
 interface TrailPoint extends LatLngLiteral {
   time: Date;
 }
@@ -95,11 +97,15 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
 
   const [tilesLoaded, setTilesLoaded] = useState(false);
 
-  const onMapLoad = useCallback((map: google.maps.Map) => {
-    setMap(map);
-  }, []);
+  const [mapTypeId, setMapTypeId] = useState<string>(DEFAULT_MAP_TYPE_ID);
 
-  const [mapTypeId, setMapTypeId] = useState<string>();
+  const onMapLoad = useCallback(
+    (map: google.maps.Map) => {
+      map.setMapTypeId(mapTypeId);
+      setMap(map);
+    },
+    [mapTypeId]
+  );
 
   const onMapTypeIdChanged = useCallback(() => {
     const mapTypeId = map?.getMapTypeId();
@@ -173,6 +179,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
           center={DEFAULT_MAP_CENTER}
           onLoad={onMapLoad}
           onTilesLoaded={() => setTilesLoaded(true)}
+          mapTypeId={mapTypeId}
           onMapTypeIdChanged={onMapTypeIdChanged}
         >
           {trails.map((trail) => (
