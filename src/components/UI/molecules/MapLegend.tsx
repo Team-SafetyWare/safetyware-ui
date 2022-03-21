@@ -54,6 +54,7 @@ interface MapLegendProps {
   items?: LegendItem[];
   map?: google.maps.Map;
   hidden?: boolean;
+  defaultCollapsed?: boolean;
 }
 
 export const MapLegend: React.FC<MapLegendProps> = (props) => {
@@ -68,8 +69,11 @@ export const MapLegend: React.FC<MapLegendProps> = (props) => {
   }
 
   const [toggle, setToggle] = useState<boolean | undefined>(undefined);
-  const defaultExpanded = useMediaQuery(theme.breakpoints.up("md"));
-  const expanded = toggle ?? defaultExpanded;
+  const largeScreen = useMediaQuery(theme.breakpoints.up("md"));
+
+  const defaultExpanded =
+    props.defaultCollapsed === undefined ? undefined : !props.defaultCollapsed;
+  const expanded = toggle ?? defaultExpanded ?? largeScreen;
 
   const styles = useStyles();
 
