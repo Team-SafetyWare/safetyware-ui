@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import ControlPosition = google.maps.ControlPosition;
 import { v4 as uuidV4 } from "uuid";
 import { makeStyles } from "@mui/styles";
+import { Checkbox } from "@mui/material";
+import { Box } from "@mui/system";
 
 export interface LegendItem {
   color: string;
@@ -10,7 +12,7 @@ export interface LegendItem {
 }
 
 const useStyles = makeStyles({
-  legend: {
+  container: {
     background: "rgb(255, 255, 255) none repeat scroll 0% 0% padding-box",
     border: "0px none",
     marginLeft: "10px",
@@ -29,7 +31,13 @@ const useStyles = makeStyles({
     borderTopRightRadius: "2px",
     boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px",
   },
-  legendColor: {
+  header: {
+    display: "flex",
+  },
+  toggle: {
+    margin: "0 0 0 auto",
+  },
+  color: {
     height: "16px",
     width: "16px",
     borderRadius: "50%",
@@ -55,25 +63,36 @@ export const MapLegend: React.FC<MapLegendProps> = (props) => {
     }
   }
 
+  const [expanded, setExpanded] = useState<boolean>(true);
+
   const styles = useStyles();
 
   return (
     <>
-      <div id={elementId} className={styles.legend} hidden={props.hidden}>
-        <p>Legend</p>
-        {props.items?.map((item) => {
-          return (
-            <div key={`${item.color}-${item.text}`}>
-              <p>
-                <span
-                  className={styles.legendColor}
-                  style={{ backgroundColor: item.color }}
-                />
-                {item.text}
-              </p>
-            </div>
-          );
-        })}
+      <div id={elementId} className={styles.container} hidden={props.hidden}>
+        <div className={styles.header}>
+          <p>Legend</p>
+          <Checkbox
+            className={styles.toggle}
+            checked={expanded}
+            onChange={(event) => setExpanded(event.target.checked)}
+          />
+        </div>
+        <Box sx={{ height: expanded ? undefined : 0, marginTop: "-18px" }}>
+          {props.items?.map((item) => {
+            return (
+              <div key={`${item.color}-${item.text}`}>
+                <p>
+                  <span
+                    className={styles.color}
+                    style={{ backgroundColor: item.color }}
+                  />
+                  {item.text}
+                </p>
+              </div>
+            );
+          })}
+        </Box>
       </div>
     </>
   );
