@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import ControlPosition = google.maps.ControlPosition;
 import { v4 as uuidV4 } from "uuid";
 import { makeStyles } from "@mui/styles";
-import { Checkbox, useMediaQuery } from "@mui/material";
+import { Switch, useMediaQuery } from "@mui/material";
 import { Box } from "@mui/system";
 import theme from "../../../Theme";
 
@@ -35,8 +35,11 @@ const useStyles = makeStyles({
   header: {
     display: "flex",
   },
+  togglePadding: {
+    width: "18px",
+  },
   toggle: {
-    margin: "0 0 0 auto",
+    margin: "auto 0 auto auto",
   },
   color: {
     height: "16px",
@@ -75,7 +78,8 @@ export const MapLegend: React.FC<MapLegendProps> = (props) => {
       <div id={elementId} className={styles.container} hidden={props.hidden}>
         <div className={styles.header}>
           <p>Legend</p>
-          <Checkbox
+          <div className={styles.togglePadding} />
+          <Switch
             className={styles.toggle}
             checked={expanded}
             onChange={(event) => setToggle(event.target.checked)}
