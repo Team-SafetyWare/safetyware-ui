@@ -6,8 +6,6 @@ import {
   usePersonLocations,
 } from "../../../util/queryService";
 import {
-  DEFAULT_MAP_CENTER,
-  DEFAULT_MAP_ZOOM,
   getCurrentUser,
   MAP_RESTRICTION,
   modularIndex,
@@ -45,6 +43,12 @@ const SATELLITE_PALETTE = [
   "#bfef45", // Lime
   "#fffac8", // Beige
 ];
+
+const DEFAULT_MAP_CENTER: LatLngLiteral = {
+  lat: 51.045,
+  lng: -114.072,
+};
+const DEFAULT_MAP_ZOOM = 11;
 
 enum MapTypeId {
   Satellite = "satellite",

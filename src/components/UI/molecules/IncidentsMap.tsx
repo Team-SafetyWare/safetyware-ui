@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from "react";
 import {
-  DEFAULT_MAP_CENTER,
-  DEFAULT_MAP_ZOOM,
   getCurrentUser,
   MAP_RESTRICTION,
   sortPeople,
@@ -26,6 +24,12 @@ import GenericIcon from "../../../assets/generic.png";
 import { makeStyles } from "@mui/styles";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import { MapTooltip } from "./MapTooltip";
+
+export const DEFAULT_MAP_CENTER: LatLngLiteral = {
+  lat: 51.045,
+  lng: -114.072,
+};
+export const DEFAULT_MAP_ZOOM = 11;
 
 interface IncidentMarker {
   person: Person;
