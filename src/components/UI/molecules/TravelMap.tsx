@@ -16,8 +16,6 @@ import {
 } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
-import ControlPosition = google.maps.ControlPosition;
-import { v4 as uuidV4 } from "uuid";
 import { Filter, shouldFilterPerson } from "./FilterBar";
 import { makeStyles } from "@mui/styles";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
@@ -26,10 +24,11 @@ import OverlayStyles from "../../styling/OverlayStyles";
 import MapMouseEvent = google.maps.MapMouseEvent;
 import { MapTooltip } from "./MapTooltip";
 import { quadtree, Quadtree } from "d3-quadtree";
+import { LegendItem, MapLegend } from "./MapLegend";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
-const ROADMAP_TRAIL_COLORS = [
+const ROADMAP_PALETTE = [
   "#e6194b", // Red
   "#4363d8", // Blue
   "#808000", // Olive
@@ -38,7 +37,7 @@ const ROADMAP_TRAIL_COLORS = [
   "#f58231", // Orange
 ];
 
-const SATELLITE_TRAIL_COLORS = [
+const SATELLITE_PALETTE = [
   "#aaffc3", // Mint
   "#fabed4", // Pink
   "#ffd8b1", // Apricot
@@ -73,32 +72,6 @@ interface TravelMapProps {
 }
 
 const useStyles = makeStyles({
-  legend: {
-    background: "rgb(255, 255, 255) none repeat scroll 0% 0% padding-box",
-    border: "0px none",
-    marginLeft: "10px",
-    padding: "0px 17px",
-    textTransform: "none",
-    appearance: "none",
-    cursor: "pointer",
-    userSelect: "none",
-    direction: "ltr",
-    overflow: "hidden",
-    verticalAlign: "middle",
-    color: "rgb(86, 86, 86)",
-    fontFamily: "Roboto, Arial, sans-serif",
-    fontSize: "18px",
-    borderBottomRightRadius: "2px",
-    borderTopRightRadius: "2px",
-    boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px",
-  },
-  legendColor: {
-    height: "16px",
-    width: "16px",
-    borderRadius: "50%",
-    display: "inline-block",
-    marginRight: "8px",
-  },
   tooltipText: {
     margin: "8px",
     whiteSpace: "nowrap",
@@ -119,18 +92,10 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
 
   const [map, setMap] = useState<google.maps.Map | undefined>();
 
-  const [legendElementId] = useState(uuidV4().toString());
-  const [showLegend, setShowLegend] = useState(false);
+  const [tilesLoaded, setTilesLoaded] = useState(false);
 
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map);
-    const controls = map.controls[ControlPosition.LEFT_TOP];
-    const legend = document.getElementById(legendElementId);
-    controls.push(legend);
-  }, []);
-
-  const onTilesLoaded = useCallback(() => {
-    setShowLegend(true);
   }, []);
 
   const [mapTypeId, setMapTypeId] = useState<string>();
@@ -171,9 +136,10 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     MapTypeId.Satellite.toString(),
     MapTypeId.Hybrid.toString(),
   ].includes(mapTypeId ?? "");
-  const trailColors = satelliteView
-    ? SATELLITE_TRAIL_COLORS
-    : ROADMAP_TRAIL_COLORS;
+  const palette = satelliteView ? SATELLITE_PALETTE : ROADMAP_PALETTE;
+
+  const legendItems = intoLegendItems(people, palette);
+  const showLegend = tilesLoaded && legendItems.length !== 0;
 
   const styles = useStyles();
 
@@ -187,27 +153,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
         >
           <EmptyDataMessage />
         </Backdrop>
-        <div
-          id={legendElementId}
-          className={styles.legend}
-          hidden={!showLegend && people.length > 0}
-        >
-          <p>Legend</p>
-          {people.map((person, personIndex) => {
-            const color = modularIndex(trailColors, personIndex);
-            return (
-              <div key={`${person.id}-${color}`}>
-                <p>
-                  <span
-                    className={styles.legendColor}
-                    style={{ backgroundColor: color }}
-                  />
-                  {person.name}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+        <MapLegend map={map} items={legendItems} hidden={!showLegend} />
         <GoogleMap
           mapContainerStyle={{
             height: "100%",
@@ -220,7 +166,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
           zoom={DEFAULT_MAP_ZOOM}
           center={DEFAULT_MAP_CENTER}
           onLoad={onMapLoad}
-          onTilesLoaded={onTilesLoaded}
+          onTilesLoaded={() => setTilesLoaded(true)}
           onMapTypeIdChanged={onMapTypeIdChanged}
         >
           {trails.map((trail) => (
@@ -228,7 +174,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
               key={trailKey(trail)}
               path={trail.path}
               options={{
-                strokeColor: modularIndex(trailColors, trail.personIndex),
+                strokeColor: modularIndex(palette, trail.personIndex),
                 strokeOpacity: 1,
                 strokeWeight: 6,
               }}
@@ -373,3 +319,9 @@ const nearestPoint = (
   location: LatLngLiteral,
   tree: Quadtree<QuadPoint>
 ): QuadPoint | undefined => tree.find(location.lat, location.lng);
+
+const intoLegendItems = (people: Person[], palette: string[]): LegendItem[] =>
+  people.map((person, index) => ({
+    color: modularIndex(palette, index),
+    text: person.name,
+  }));
