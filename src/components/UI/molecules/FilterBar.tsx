@@ -111,6 +111,8 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
 
   const showFullLabels = useMediaQuery(theme.breakpoints.not("lg"));
 
+  const maxDateTime = tomorrow();
+
   const layoutSx = {
     display: "flex",
     flexDirection: { xs: "column", lg: "row" },
@@ -138,7 +140,8 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
                 renderInput={(props) => <TextField {...props} />}
                 value={props.filter.minTimestamp || null}
                 onChange={minTimestampChanged}
-                maxDateTime={tomorrow()}
+                maxDateTime={maxDateTime}
+                clearable={true}
               />
             </FormControl>
           </div>
@@ -154,7 +157,8 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
                 renderInput={(props) => <TextField {...props} />}
                 value={props.filter.maxTimestamp || null}
                 onChange={maxTimestampChanged}
-                maxDateTime={tomorrow()}
+                maxDateTime={maxDateTime}
+                clearable={true}
               />
             </FormControl>
           </div>
