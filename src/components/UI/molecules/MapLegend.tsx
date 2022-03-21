@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import ControlPosition = google.maps.ControlPosition;
 import { v4 as uuidV4 } from "uuid";
 import { makeStyles } from "@mui/styles";
-import { Checkbox } from "@mui/material";
+import { Checkbox, useMediaQuery } from "@mui/material";
 import { Box } from "@mui/system";
+import theme from "../../../Theme";
 
 export interface LegendItem {
   color: string;
@@ -63,7 +64,9 @@ export const MapLegend: React.FC<MapLegendProps> = (props) => {
     }
   }
 
-  const [expanded, setExpanded] = useState<boolean>(true);
+  const [toggle, setToggle] = useState<boolean | undefined>(undefined);
+  const defaultExpanded = useMediaQuery(theme.breakpoints.up("md"));
+  const expanded = toggle ?? defaultExpanded;
 
   const styles = useStyles();
 
@@ -75,7 +78,7 @@ export const MapLegend: React.FC<MapLegendProps> = (props) => {
           <Checkbox
             className={styles.toggle}
             checked={expanded}
-            onChange={(event) => setExpanded(event.target.checked)}
+            onChange={(event) => setToggle(event.target.checked)}
           />
         </div>
         <Box sx={{ height: expanded ? undefined : 0, marginTop: "-18px" }}>
