@@ -1,6 +1,5 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import { TeamSelect } from "../atoms/TeamSelect";
 import { TeamTable } from "../atoms/TeamTable";
 
 interface TeamInfoProps {
@@ -10,13 +9,6 @@ interface TeamInfoProps {
 }
 
 const useStyles = makeStyles({
-  teamInfoDropdown: {
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        display: "flex",
-        justifyContent: "center",
-      },
-  },
   teamInfo: {
     marginTop: "5vh",
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
@@ -32,9 +24,6 @@ export const TeamInfo: React.FC<TeamInfoProps> = (props) => {
 
   return (
     <div className={styles.teamInfo}>
-      <div className={styles.teamInfoDropdown}>
-        <TeamSelect />
-      </div>
       <TeamTable
         userPhoto={props.userPhoto}
         userName={props.userName}
