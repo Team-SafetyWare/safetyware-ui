@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  DEFAULT_MAP_CENTER,
-  DEFAULT_MAP_ZOOM,
-  getCurrentUser,
-  MAP_RESTRICTION,
-  User,
-} from "../../../index";
+import { getCurrentUser, MAP_RESTRICTION, User } from "../../../index";
 import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
 import { Filter, shouldFilterPerson } from "./FilterBar";
 import {
@@ -18,6 +12,13 @@ import LatLng = google.maps.LatLng;
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
+import LatLngLiteral = google.maps.LatLngLiteral;
+
+export const DEFAULT_MAP_CENTER: LatLngLiteral = {
+  lat: 51.045,
+  lng: -114.072,
+};
+export const DEFAULT_MAP_ZOOM = 11;
 
 interface HazardMapProps {
   filter?: Filter;

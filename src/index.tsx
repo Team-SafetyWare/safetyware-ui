@@ -6,16 +6,10 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
-import LatLngLiteral = google.maps.LatLngLiteral;
 import { Person } from "./util/queryService";
 import MapRestriction = google.maps.MapRestriction;
 
 export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
-export const DEFAULT_MAP_CENTER: LatLngLiteral = {
-  lat: 51.045,
-  lng: -114.072,
-};
-export const DEFAULT_MAP_ZOOM = 11;
 export const MAP_RESTRICTION: MapRestriction = {
   latLngBounds: {
     north: 85,
