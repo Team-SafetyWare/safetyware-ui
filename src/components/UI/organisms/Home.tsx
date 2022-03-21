@@ -42,7 +42,11 @@ export const Home: React.FC<HomeProps> = (props) => {
     {
       widgetName: "Travel History Trail",
       widget: (
-        <TravelMap filter={defaultFilter()} legendDefaultCollapsed={true} />
+        <TravelMap
+          filter={defaultFilter()}
+          legendDefaultCollapsed={true}
+          legendCompact={true}
+        />
       ),
     },
   ]);
