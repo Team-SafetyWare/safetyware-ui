@@ -141,6 +141,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
                 value={props.filter.minTimestamp || null}
                 onChange={minTimestampChanged}
                 maxDateTime={maxDateTime}
+                clearable={true}
               />
             </FormControl>
           </div>
@@ -157,6 +158,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
                 value={props.filter.maxTimestamp || null}
                 onChange={maxTimestampChanged}
                 maxDateTime={maxDateTime}
+                clearable={true}
               />
             </FormControl>
           </div>
