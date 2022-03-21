@@ -38,10 +38,10 @@ const ROADMAP_PALETTE = [
 ];
 
 const SATELLITE_PALETTE = [
-  "#aaffc3", // Mint
   "#fabed4", // Pink
-  "#ffd8b1", // Apricot
   "#42d4f4", // Cyan
+  "#ffd8b1", // Apricot
+  "#aaffc3", // Mint
   "#bfef45", // Lime
   "#fffac8", // Beige
 ];
