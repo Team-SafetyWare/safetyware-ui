@@ -43,26 +43,6 @@ const useStyles = makeStyles({
         textAlign: "center",
       },
   },
-  editBox: {
-    alignItems: "center",
-    display: "flex",
-    margin: "0 auto 0 calc(0.5 * 256px)",
-    transform: "translate(-50%)",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        backgroundColor: "white",
-        borderRadius: "16px",
-        boxShadow: "0px 2px 2px #aaa",
-        fontWeight: "bold",
-        margin: "0 auto",
-        padding: "12px 48px 12px 48px",
-        transform: "translate(0%, -50%)",
-      },
-  },
-  editText: {
-    height: "100%",
-    marginLeft: "4px",
-  },
 });
 
 export const UserInfo: React.FC<UserInfoProps> = (props) => {
@@ -83,10 +63,6 @@ export const UserInfo: React.FC<UserInfoProps> = (props) => {
             userTeam={props.userTeam}
           ></UserDetails>
         </div>
-      </div>
-      <div className={styles.editBox}>
-        <EditOutlinedIcon />
-        <div className={styles.editText}>Edit</div>
       </div>
     </>
   );
