@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { DateTimePicker } from "@mui/lab";
 import {
+  Divider,
   Grid,
   InputLabel,
   Select,
@@ -185,11 +186,15 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
           </div>
         </Box>
       </Grid>
+      <Grid item container sx={{ display: { lg: "none" } }}>
+        <Divider style={{ width: "100%" }} />
+      </Grid>
       <Grid item lg={true} xs={12} container justifyContent="flex-end">
         <Button
           sx={{ width: { xs: "100%", lg: "192px" } }}
           className={styles.button}
-          variant="contained"
+          variant={props.closeable ? "outlined" : "contained"}
+          color={props.closeable ? "inherit" : "primary"}
           disableElevation={true}
           onClick={resetPressed}
         >
@@ -201,8 +206,7 @@ export const FilterBar: React.FC<FilterBarProps> = (props) => {
           <Button
             sx={{ width: { xs: "100%" } }}
             className={styles.button}
-            variant="outlined"
-            color="inherit"
+            variant="contained"
             disableElevation={true}
             onClick={props.onClose}
           >
