@@ -6,8 +6,6 @@ import {
   usePersonLocations,
 } from "../../../util/queryService";
 import {
-  DEFAULT_MAP_CENTER,
-  DEFAULT_MAP_ZOOM,
   getCurrentUser,
   MAP_RESTRICTION,
   modularIndex,
@@ -46,10 +44,18 @@ const SATELLITE_PALETTE = [
   "#fffac8", // Beige
 ];
 
+const DEFAULT_MAP_CENTER: LatLngLiteral = {
+  lat: 51.03,
+  lng: -114.466,
+};
+const DEFAULT_MAP_ZOOM = 9;
+
 enum MapTypeId {
   Satellite = "satellite",
   Hybrid = "hybrid",
 }
+
+const DEFAULT_MAP_TYPE_ID = MapTypeId.Hybrid;
 
 interface TrailPoint extends LatLngLiteral {
   time: Date;
@@ -95,11 +101,15 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
 
   const [tilesLoaded, setTilesLoaded] = useState(false);
 
-  const onMapLoad = useCallback((map: google.maps.Map) => {
-    setMap(map);
-  }, []);
+  const [mapTypeId, setMapTypeId] = useState<string>(DEFAULT_MAP_TYPE_ID);
 
-  const [mapTypeId, setMapTypeId] = useState<string>();
+  const onMapLoad = useCallback(
+    (map: google.maps.Map) => {
+      map.setMapTypeId(mapTypeId);
+      setMap(map);
+    },
+    [mapTypeId]
+  );
 
   const onMapTypeIdChanged = useCallback(() => {
     const mapTypeId = map?.getMapTypeId();
@@ -173,6 +183,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
           center={DEFAULT_MAP_CENTER}
           onLoad={onMapLoad}
           onTilesLoaded={() => setTilesLoaded(true)}
+          mapTypeId={mapTypeId}
           onMapTypeIdChanged={onMapTypeIdChanged}
         >
           {trails.map((trail) => (
