@@ -18,6 +18,7 @@ import {
 import {getCurrentUser, MAP_RESTRICTION, sortPeople} from "../../../index";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import {makeStyles} from "@mui/styles";
+import {MapTooltip} from "../molecules/MapTooltip";
 
 interface GasDotMapProps {
     filter?: Filter;
@@ -60,8 +61,6 @@ export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
         useGasReadingsInCompany(user?.company.id || "", filter, !!filter.person),
     ].flat();
 
-    console.log(people)
-
     const markers: GasMarker[] = intoMarkers(people);
     const [hoveredMarker, setHoveredMarker] = useState<
         GasMarker | undefined
@@ -102,6 +101,22 @@ export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
                         onMouseOut={() => onMarkerMouseOut(marker)}
                     />
                 ))}
+                {hoveredMarker && (
+                    <MapTooltip location={hoveredMarker.location} hoverDistance={"20px"}>
+                        <h3 className={styles.tooltipText}>
+                            Gas: {hoveredMarker.gas}
+                        </h3>
+                        <p className={styles.tooltipText}>
+                            Name: {hoveredMarker.person.name}
+                        </p>
+                        <p className={styles.tooltipText}>
+                            Time: {hoveredMarker.time.toISOString()}
+                        </p>
+                        <p className={styles.tooltipText}>
+                            Density: {hoveredMarker.density}{hoveredMarker.densityUnits}
+                        </p>
+                    </MapTooltip>
+                )}
             </GoogleMap>
         </>
     );
