@@ -92,7 +92,7 @@ export const Incidents: React.FC<IncidentsProps> = (props) => {
 
       <Card className={styles.pageCard}>
         <CardHeader
-          title="Incident map"
+          title="Incidents map"
           subheader="Investigate field incidents that may have put your people at risk."
         />
         <CardMedia>
