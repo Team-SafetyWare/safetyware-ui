@@ -10,12 +10,12 @@ import {useAppSelector} from "../../../store/store";
 import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
-import {Filter} from "../molecules/FilterBar";
+import {Filter, shouldFilterPerson} from "../molecules/FilterBar";
 import {
     GasReading, Incident, Person, PersonWithGasReadings,
     useCompanyGasReadings
 } from "../../../util/queryService";
-import {getCurrentUser, MAP_RESTRICTION, sortPeople} from "../../../index";
+import {getCurrentUser, MAP_RESTRICTION, sortPeople, User} from "../../../index";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import {makeStyles} from "@mui/styles";
 import {MapTooltip} from "../molecules/MapTooltip";
@@ -56,15 +56,10 @@ export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
     const styles = useStyles();
     const user = getCurrentUser();
     const filter: Filter = props.filter ?? {};
-    const people: PersonWithGasReadings[] = [
-        //   usePersonAsPeople(filter.person?.id || "", filter, !filter.person),
-        useGasReadingsInCompany(user?.company.id || "", filter, !!filter.person),
-    ].flat();
+    const people: PersonWithGasReadings[] = usePeople(user, filter);
 
     const markers: GasMarker[] = intoMarkers(people);
-    const [hoveredMarker, setHoveredMarker] = useState<
-        GasMarker | undefined
-        >();
+    const [hoveredMarker, setHoveredMarker] = useState<GasMarker | undefined>();
 
     const onMarkerMouseOver = useCallback((marker: GasMarker) => {
         setHoveredMarker(marker);
@@ -123,6 +118,17 @@ export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
 };
 
 export default React.memo(GasDotMap);
+
+const usePeople = (user: User | null, filter: Filter) =>
+    sortPeople(
+        [
+            useGasReadingsInCompany(
+                user?.company.id || "",
+                filter,
+                !shouldFilterPerson(filter)
+            ),
+        ].flat()
+    );
 
 const useGasReadingsInCompany = (
     companyId: string,
