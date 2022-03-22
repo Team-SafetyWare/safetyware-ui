@@ -1,24 +1,18 @@
-import {GoogleMap, HeatmapLayer, InfoWindow, Marker} from "@react-google-maps/api";
-import React, {useCallback, useEffect, useState} from "react";
+import {GoogleMap, Marker} from "@react-google-maps/api";
+import React, {useCallback, useState} from "react";
 import GenericIcon from "../../../assets/generic.png";
-import {
-    selectGasPageEndDate,
-    selectGasPageName,
-    selectGasPageStartDate,
-} from "../../../store/slices/gasPageSlice";
-import {useAppSelector} from "../../../store/store";
-import EmptyDataMessage from "../atoms/EmptyDataMessage";
-import Backdrop from "@mui/material/Backdrop";
-import OverlayStyles from "../../styling/OverlayStyles";
 import {Filter, shouldFilterPerson} from "../molecules/FilterBar";
 import {
-    GasReading, Incident, Person, PersonWithGasReadings,
-    useCompanyGasReadings
+    GasReading,
+    Person,
+    PersonWithGasReadings,
+    PersonWithIncidents,
+    useCompanyGasReadings, usePersonGasReadings, usePersonIncidents
 } from "../../../util/queryService";
 import {getCurrentUser, MAP_RESTRICTION, sortPeople, User} from "../../../index";
-import LatLngLiteral = google.maps.LatLngLiteral;
 import {makeStyles} from "@mui/styles";
 import {MapTooltip} from "../molecules/MapTooltip";
+import LatLngLiteral = google.maps.LatLngLiteral;
 
 interface GasDotMapProps {
     filter?: Filter;
@@ -122,6 +116,11 @@ export default React.memo(GasDotMap);
 const usePeople = (user: User | null, filter: Filter) =>
     sortPeople(
         [
+            usePersonAsPeople(
+                filter.person?.id || "",
+                filter,
+                shouldFilterPerson(filter)
+            ),
             useGasReadingsInCompany(
                 user?.company.id || "",
                 filter,
@@ -129,6 +128,24 @@ const usePeople = (user: User | null, filter: Filter) =>
             ),
         ].flat()
     );
+
+const usePersonAsPeople = (
+    personId: string,
+    filter: Filter,
+    execute = true
+): PersonWithGasReadings[] => {
+    const { data } = usePersonGasReadings(
+        {
+            personId: personId,
+            filter: {
+                minTimestamp: filter.minTimestamp,
+                maxTimestamp: filter.maxTimestamp,
+            },
+        },
+        execute
+    );
+    return (data && [data.person]) || [];
+};
 
 const useGasReadingsInCompany = (
     companyId: string,
