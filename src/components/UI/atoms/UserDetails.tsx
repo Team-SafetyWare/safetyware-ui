@@ -12,7 +12,7 @@ interface UserDetailsProps {
 const useStyles = makeStyles({
   userName: {
     fontSize: "30px",
-    margin: "5px 0",
+    margin: "8px 0",
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
         fontSize: "12px",

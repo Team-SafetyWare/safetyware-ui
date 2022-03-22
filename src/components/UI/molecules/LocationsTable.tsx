@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { Filter } from "./FilterBar";
+import React, { useCallback, useEffect, useState } from "react";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -11,10 +11,14 @@ import {
   useCompanyLocations,
   usePersonLocations,
 } from "../../../util/queryService";
-import { getCurrentUser, sortPeople } from "../../../index";
+import { getCurrentUser, sortPeople, User } from "../../../index";
 import { TablePagination } from "@mui/material";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import OverlayStyles from "../../styling/OverlayStyles";
 
 const NUM_COORD_DIGITS = 5;
+const NUM_COLS = 3;
 const ROWS_PER_PAGE = 10;
 
 interface PersonLocation {
@@ -34,13 +38,13 @@ const useStyles = makeStyles({
 });
 
 export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
+  const overlayStyles = OverlayStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
+
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const locations: PersonLocation[] = [
-    useLocationsInPerson(filter.person?.id || "", filter, !filter.person),
-    useLocationsInCompany(user?.company.id || "", filter, !!filter.person),
-  ].flat();
+  const locations: PersonLocation[] = useLocations(user, filter);
 
   // eslint-disable-next-line prefer-const
   let [page, setPage] = useState(0);
@@ -68,59 +72,90 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
     adjustedPage * ROWS_PER_PAGE + ROWS_PER_PAGE
   );
 
-  const colWidth = `${100 / 3}%`;
+  const colWidth = `${100 / NUM_COLS}%`;
 
   const styles = useStyles();
 
+  useEffect(() => {
+    if (locations.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [locations]);
+
   return (
     <>
-      <TableContainer>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell className={styles.header} width={colWidth}>
-                Name
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
-                Time
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
-                Coordinates
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pageLocations.map((location, index) => (
-              <TableRow key={index}>
-                <TableCell>{location.name}</TableCell>
-                <TableCell>{location.time}</TableCell>
-                <TableCell>{location.coordinates}</TableCell>
+      <div className={overlayStyles.parent}>
+        <Backdrop
+          className={overlayStyles.backdrop}
+          open={isEmpty}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <EmptyDataMessage />
+        </Backdrop>
+        <TableContainer>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell className={styles.header} width={colWidth}>
+                  Name
+                </TableCell>
+                <TableCell className={styles.header} width={colWidth}>
+                  Time
+                </TableCell>
+                <TableCell className={styles.header} width={colWidth}>
+                  Coordinates
+                </TableCell>
               </TableRow>
-            ))}
-            {emptyRowCount > 0 && (
-              <TableRow style={{ height: 53 * emptyRowCount }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        rowsPerPageOptions={[ROWS_PER_PAGE]}
-        rowsPerPage={ROWS_PER_PAGE}
-        count={rowCount}
-        onPageChange={pageChanged}
-        page={adjustedPage}
-      />
+            </TableHead>
+            <TableBody>
+              {pageLocations.map((location, index) => (
+                <TableRow key={index}>
+                  <TableCell>{location.name}</TableCell>
+                  <TableCell>{location.time}</TableCell>
+                  <TableCell>{location.coordinates}</TableCell>
+                </TableRow>
+              ))}
+              {emptyRowCount > 0 && (
+                <TableRow style={{ height: 53 * emptyRowCount }}>
+                  <TableCell colSpan={NUM_COLS} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          component="div"
+          rowsPerPageOptions={[ROWS_PER_PAGE]}
+          rowsPerPage={ROWS_PER_PAGE}
+          count={rowCount}
+          onPageChange={pageChanged}
+          page={adjustedPage}
+        />
+      </div>
     </>
   );
 };
 
+const useLocations = (user: User | null, filter: Filter) =>
+  [
+    useLocationsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useLocationsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
+  ].flat();
+
 const useLocationsInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonLocation[] => {
   const { data } = useCompanyLocations(
     {
@@ -130,15 +165,18 @@ const useLocationsInCompany = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
-  return sortPeople(data?.company.people ?? [])
+  return sortPeople(data?.company.people || [])
     .map((person) =>
-      person.locationReadings.map((location) => ({
-        name: person.name,
-        time: new Date(location.timestamp).toISOString(),
-        coordinates: formatCoordinates(location.coordinates),
-      }))
+      person.locationReadings
+        .slice()
+        .reverse()
+        .map((location) => ({
+          name: person.name,
+          time: new Date(location.timestamp).toISOString(),
+          coordinates: formatCoordinates(location.coordinates),
+        }))
     )
     .flat();
 };
@@ -146,7 +184,7 @@ const useLocationsInCompany = (
 const useLocationsInPerson = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonLocation[] => {
   const { data } = usePersonLocations(
     {
@@ -156,7 +194,7 @@ const useLocationsInPerson = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
   return (
     data?.person.locationReadings.map((location) => ({

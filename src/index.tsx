@@ -6,15 +6,19 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
-import LatLngLiteral = google.maps.LatLngLiteral;
 import { Person } from "./util/queryService";
+import MapRestriction = google.maps.MapRestriction;
 
 export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
-export const DEFAULT_MAP_CENTER: LatLngLiteral = {
-  lat: 51.045,
-  lng: -114.072,
+export const MAP_RESTRICTION: MapRestriction = {
+  latLngBounds: {
+    north: 85,
+    south: -85,
+    west: -180,
+    east: 180,
+  },
+  strictBounds: true,
 };
-export const DEFAULT_MAP_ZOOM = 11;
 
 const CURRENT_USER_KEY = "current_user";
 
@@ -41,6 +45,9 @@ export const setCurrentUser = (user: User): void => {
 
 export const sortPeople = <T extends Person>(people: T[]): T[] =>
   people.slice().sort((a, b) => a.name.localeCompare(b.name));
+
+export const modularIndex = <T,>(arr: T[], index: number): T =>
+  arr[index % arr.length];
 
 const client = new ApolloClient({
   uri: `${API_URL}/graphql`,

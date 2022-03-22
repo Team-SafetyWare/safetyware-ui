@@ -33,6 +33,20 @@ const center = {
   lng: -114.1283,
 };
 
+
+//remove this later
+export interface GasReading {
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  density: number;
+  densityUnits: string;
+  gas: string;
+  personName: string;
+  timestamp: Date;
+}
+
 const useStyles = makeStyles({
   filterBar: {
     position: "sticky",

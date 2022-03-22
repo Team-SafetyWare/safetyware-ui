@@ -13,8 +13,13 @@ import OverlayStyles from "../../styling/OverlayStyles";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
+export interface BarItem {
+  x: string;
+  y: number;
+}
+
 interface BarGraphProps {
-  data?: any;
+  data?: BarItem[];
   xAxisTitle: string;
   yAxisTitle: string;
 }
@@ -22,11 +27,11 @@ interface BarGraphProps {
 export const BarGraph: React.FC<BarGraphProps> = (props) => {
   const overlayStyles = OverlayStyles();
 
-  const labels: any[] = [];
-  const data: any[] = [];
+  const labels: string[] = [];
+  const data: number[] = [];
   const [isEmpty, setIsEmpty] = React.useState(false);
 
-  props.data.map((datum: any) => {
+  props.data?.map((datum) => {
     labels.push(datum.x);
     data.push(datum.y);
   });

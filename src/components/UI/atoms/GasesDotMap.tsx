@@ -15,7 +15,7 @@ import {
     GasReading, Incident, Person,
     useCompanyGasReadings
 } from "../../../util/queryService";
-import {DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM, getCurrentUser, sortPeople} from "../../../index";
+import {getCurrentUser, sortPeople} from "../../../index";
 import LatLngLiteral = google.maps.LatLngLiteral;
 
 interface GasDotMapProps {
@@ -27,10 +27,16 @@ interface GasReadingPoint {
     person: Person;
 }
 
+const DEFAULT_MAP_CENTER: LatLngLiteral = {
+    lat: 51.03,
+    lng: -114.466,
+};
+const DEFAULT_MAP_ZOOM = 11;
+
 export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
     const user = getCurrentUser();
     const filter: Filter = props.filter ?? {};
-    let gasReadingPoints: GasReadingPoint[] = [
+    const gasReadingPoints: GasReadingPoint[] = [
         //   usePersonAsPeople(filter.person?.id || "", filter, !filter.person),
         useGasReadingsInCompany(user?.company.id || "", filter, !!filter.person),
     ].flat();
