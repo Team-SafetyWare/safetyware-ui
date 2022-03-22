@@ -3,13 +3,10 @@ import React, { useCallback, useState } from "react";
 import GenericIcon from "../../../assets/generic.png";
 import { Filter, shouldFilterPerson } from "../molecules/FilterBar";
 import {
-  GasReading,
   Person,
   PersonWithGasReadings,
-  PersonWithIncidents,
   useCompanyGasReadings,
   usePersonGasReadings,
-  usePersonIncidents,
 } from "../../../util/queryService";
 import {
   getCurrentUser,
@@ -23,11 +20,6 @@ import LatLngLiteral = google.maps.LatLngLiteral;
 
 interface GasDotMapProps {
   filter?: Filter;
-}
-
-interface GasReadingPoint {
-  gasReading: GasReading;
-  person: Person;
 }
 
 interface GasMarker {
@@ -116,8 +108,6 @@ export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
     </>
   );
 };
-
-export default React.memo(GasDotMap);
 
 const usePeople = (user: User | null, filter: Filter) =>
   sortPeople(
