@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Person,
   PersonWithLocationReadings,
@@ -6,33 +6,56 @@ import {
   usePersonLocations,
 } from "../../../util/queryService";
 import {
-  DEFAULT_MAP_CENTER,
-  DEFAULT_MAP_ZOOM,
   getCurrentUser,
+  MAP_RESTRICTION,
+  modularIndex,
   sortPeople,
+  User,
 } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import LatLngLiteral = google.maps.LatLngLiteral;
-import ControlPosition = google.maps.ControlPosition;
-import { v4 as uuidV4 } from "uuid";
-import { Filter } from "./FilterBar";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import { makeStyles } from "@mui/styles";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import OverlayStyles from "../../styling/OverlayStyles";
+import MapMouseEvent = google.maps.MapMouseEvent;
+import { MapTooltip } from "./MapTooltip";
+import { quadtree, Quadtree } from "d3-quadtree";
+import { LegendItem, MapLegend } from "./MapLegend";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
-const TRAIL_COLORS = [
+const ROADMAP_PALETTE = [
   "#e6194b", // Red
-  "#3cb44b", // Green
   "#4363d8", // Blue
-  "#008080", // Cyan
+  "#808000", // Olive
+  "#3cb44b", // Green
   "#911eb4", // Purple
   "#f58231", // Orange
-  "#800000", // Brown red
-  "#f032e6", // Pink
-  "#9a6324", // Brown
-  "#808000", // Olive
-  "#000075", // Dark blue
 ];
+
+const SATELLITE_PALETTE = [
+  "#fabed4", // Pink
+  "#42d4f4", // Cyan
+  "#ffd8b1", // Apricot
+  "#aaffc3", // Mint
+  "#bfef45", // Lime
+  "#fffac8", // Beige
+];
+
+const DEFAULT_MAP_CENTER: LatLngLiteral = {
+  lat: 51.03,
+  lng: -114.466,
+};
+const DEFAULT_MAP_ZOOM = 9;
+
+enum MapTypeId {
+  Satellite = "satellite",
+  Hybrid = "hybrid",
+}
+
+const DEFAULT_MAP_TYPE_ID = MapTypeId.Hybrid;
 
 interface TrailPoint extends LatLngLiteral {
   time: Date;
@@ -41,120 +64,178 @@ interface TrailPoint extends LatLngLiteral {
 interface Trail {
   path: TrailPoint[];
   person: Person;
-  color: string;
+  personIndex: number;
+}
+
+interface QuadPoint {
+  location: LatLngLiteral;
+  person: Person;
+  time: Date;
 }
 
 interface TravelMapProps {
   filter?: Filter;
+  legendDefaultCollapsed?: boolean;
+  legendCompact?: boolean;
 }
 
 const useStyles = makeStyles({
-  legend: {
-    background: "rgb(255, 255, 255) none repeat scroll 0% 0% padding-box",
-    border: "0px none",
-    marginLeft: "10px",
-    padding: "0px 17px",
-    textTransform: "none",
-    appearance: "none",
-    cursor: "pointer",
-    userSelect: "none",
-    direction: "ltr",
-    overflow: "hidden",
-    verticalAlign: "middle",
-    color: "rgb(86, 86, 86)",
-    fontFamily: "Roboto, Arial, sans-serif",
-    fontSize: "18px",
-    borderBottomRightRadius: "2px",
-    borderTopRightRadius: "2px",
-    boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px",
-  },
-  legendColor: {
-    height: "16px",
-    width: "16px",
-    borderRadius: "50%",
-    display: "inline-block",
-    marginRight: "8px",
+  tooltipText: {
+    margin: "8px",
+    whiteSpace: "nowrap",
   },
 });
 
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
+  const overlayStyles = OverlayStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
+
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  let people: PersonWithLocationReadings[] = [
-    usePersonAsPeople(filter.person?.id || "", filter, !filter.person),
-    usePeopleInCompany(user?.company.id || "", filter, !!filter.person),
-  ].flat();
-  people = sortPeople(people);
+  const people: PersonWithLocationReadings[] = usePeople(user, filter);
 
   const trails: Trail[] = intoTrails(people);
+  const pointTree = intoPointTree(trails);
 
-  const [legendElementId] = useState(uuidV4().toString());
-  const [showLegend, setShowLegend] = useState(false);
+  const [map, setMap] = useState<google.maps.Map | undefined>();
+
+  const [tilesLoaded, setTilesLoaded] = useState(false);
+
+  const [mapTypeId, setMapTypeId] = useState<string>(DEFAULT_MAP_TYPE_ID);
+
+  const onMapLoad = useCallback(
+    (map: google.maps.Map) => {
+      map.setMapTypeId(mapTypeId);
+      setMap(map);
+    },
+    [mapTypeId]
+  );
+
+  const onMapTypeIdChanged = useCallback(() => {
+    const mapTypeId = map?.getMapTypeId();
+    mapTypeId && setMapTypeId(mapTypeId);
+  }, [map]);
+
+  const [tooltipPoint, setTooltipPoint] = useState<QuadPoint | undefined>();
+
+  const onTrailMouseOver = useCallback(
+    (event: MapMouseEvent) => {
+      const location = eventIntoLocation(event);
+      const nearest = location && nearestPoint(location, pointTree);
+      const tooltipPoint = nearest && {
+        ...nearest,
+        location: location,
+      };
+      setTooltipPoint(tooltipPoint);
+    },
+    [pointTree]
+  );
+
+  const onTrailMouseOut = useCallback(() => {
+    setTooltipPoint(undefined);
+  }, []);
+
+  useEffect(() => {
+    if (trails.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [trails]);
+
+  const satelliteView = [
+    MapTypeId.Satellite.toString(),
+    MapTypeId.Hybrid.toString(),
+  ].includes(mapTypeId ?? "");
+  const palette = satelliteView ? SATELLITE_PALETTE : ROADMAP_PALETTE;
+
+  const legendItems = intoLegendItems(people, palette);
+  const showLegend = tilesLoaded && legendItems.length !== 0;
 
   const styles = useStyles();
 
   return (
     <>
-      <div
-        id={legendElementId}
-        className={styles.legend}
-        hidden={!showLegend && people.length > 0}
-      >
-        <p>Legend</p>
-        {people.map((person, personIndex) => {
-          const color = indexToColor(personIndex);
-          return (
-            <div key={`${person.id}-${color}`}>
-              <p>
-                <span
-                  className={styles.legendColor}
-                  style={{ backgroundColor: color }}
-                />
-                {person.name}
+      <div className={overlayStyles.parent}>
+        <Backdrop
+          className={overlayStyles.backdrop}
+          open={isEmpty}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <EmptyDataMessage />
+        </Backdrop>
+        <MapLegend
+          map={map}
+          items={legendItems}
+          hidden={!showLegend}
+          defaultCollapsed={props.legendDefaultCollapsed}
+          compact={props.legendCompact}
+        />
+        <GoogleMap
+          mapContainerStyle={{
+            height: "100%",
+            width: "100%",
+          }}
+          options={{
+            gestureHandling: "greedy",
+            restriction: MAP_RESTRICTION,
+          }}
+          zoom={DEFAULT_MAP_ZOOM}
+          center={DEFAULT_MAP_CENTER}
+          onLoad={onMapLoad}
+          onTilesLoaded={() => setTilesLoaded(true)}
+          mapTypeId={mapTypeId}
+          onMapTypeIdChanged={onMapTypeIdChanged}
+        >
+          {trails.map((trail) => (
+            <Polyline
+              key={trailKey(trail)}
+              path={trail.path}
+              options={{
+                strokeColor: modularIndex(palette, trail.personIndex),
+                strokeOpacity: 1,
+                strokeWeight: 6,
+              }}
+              onMouseOver={onTrailMouseOver}
+              onMouseMove={onTrailMouseOver}
+              onMouseOut={onTrailMouseOut}
+            />
+          ))}
+          {tooltipPoint && (
+            <MapTooltip location={tooltipPoint.location}>
+              <h3 className={styles.tooltipText}>{tooltipPoint.person.name}</h3>
+              <p className={styles.tooltipText}>
+                {tooltipPoint.time.toLocaleString()}
               </p>
-            </div>
-          );
-        })}
+            </MapTooltip>
+          )}
+        </GoogleMap>
       </div>
-      <GoogleMap
-        mapContainerStyle={{
-          height: "100%",
-          width: "100%",
-        }}
-        options={{ gestureHandling: "greedy" }}
-        zoom={DEFAULT_MAP_ZOOM}
-        center={DEFAULT_MAP_CENTER}
-        onLoad={(map) => {
-          const controls = map.controls[ControlPosition.LEFT_TOP];
-          const legend = document.getElementById(legendElementId);
-          controls.push(legend);
-        }}
-        onTilesLoaded={() => {
-          setShowLegend(true);
-        }}
-      >
-        {trails.map((trail: any) => (
-          <Polyline
-            key={trailKey(trail)}
-            path={trail.path}
-            options={{
-              strokeColor: trail.color,
-              strokeOpacity: 1,
-              strokeWeight: 4,
-              clickable: false,
-            }}
-          />
-        ))}
-      </GoogleMap>
     </>
   );
 };
 
+const usePeople = (user: User | null, filter: Filter) =>
+  sortPeople(
+    [
+      usePersonAsPeople(
+        filter.person?.id || "",
+        filter,
+        shouldFilterPerson(filter)
+      ),
+      usePeopleInCompany(
+        user?.company.id || "",
+        filter,
+        !shouldFilterPerson(filter)
+      ),
+    ].flat()
+  );
+
 const usePeopleInCompany = (
   companyId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonWithLocationReadings[] => {
   const { data } = useCompanyLocations(
     {
@@ -164,7 +245,7 @@ const usePeopleInCompany = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
   return data?.company.people || [];
 };
@@ -172,7 +253,7 @@ const usePeopleInCompany = (
 const usePersonAsPeople = (
   personId: string,
   filter: Filter,
-  skip = false
+  execute = true
 ): PersonWithLocationReadings[] => {
   const { data } = usePersonLocations(
     {
@@ -182,14 +263,14 @@ const usePersonAsPeople = (
         maxTimestamp: filter.maxTimestamp,
       },
     },
-    skip
+    execute
   );
   return (data && [data.person]) || [];
 };
 
 const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
   people
-    .map((person, person_index) => {
+    .map((person, personIndex) => {
       const locations: TrailPoint[] = person.locationReadings.map(
         (location) => ({
           lat: Number(location.coordinates[1]),
@@ -207,7 +288,7 @@ const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
           id: person.id,
           name: person.name,
         },
-        color: indexToColor(person_index),
+        personIndex: personIndex,
       }));
     })
     .flat();
@@ -226,12 +307,40 @@ const splitWhen = <T,>(arr: T[], split: (a: T, b: T) => boolean): T[][] => {
   return segments;
 };
 
-const indexToColor = (index: number): string =>
-  TRAIL_COLORS[index % TRAIL_COLORS.length];
-
 const trailKey = (trail: Trail): string => {
   const personId = trail.person.id;
   const start = trail.path[0].time.toISOString();
   const end = trail.path[trail.path.length - 1].time.toISOString();
   return `${personId}-${start}-${end}`;
 };
+
+const eventIntoLocation = (event: MapMouseEvent): LatLngLiteral | undefined =>
+  (event.latLng && {
+    lat: event.latLng.lat(),
+    lng: event.latLng.lng(),
+  }) ||
+  undefined;
+
+const intoPointTree = (trails: Trail[]): Quadtree<QuadPoint> =>
+  quadtree<QuadPoint>()
+    .x((d) => d.location.lat)
+    .y((d) => d.location.lng)
+    .addAll(trails.map(trailIntoQuadPoints).flat());
+
+const trailIntoQuadPoints = (trail: Trail): QuadPoint[] =>
+  trail.path.map((point) => ({
+    location: point,
+    person: trail.person,
+    time: point.time,
+  }));
+
+const nearestPoint = (
+  location: LatLngLiteral,
+  tree: Quadtree<QuadPoint>
+): QuadPoint | undefined => tree.find(location.lat, location.lng);
+
+const intoLegendItems = (people: Person[], palette: string[]): LegendItem[] =>
+  people.map((person, index) => ({
+    color: modularIndex(palette, index),
+    text: person.name,
+  }));

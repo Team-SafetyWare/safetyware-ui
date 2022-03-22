@@ -35,6 +35,7 @@ export interface GetCompanyPeopleVars {
 export const GET_COMPANY_PEOPLE = gql`
   query ($companyId: ID!) {
     company(id: $companyId) {
+      id
       people {
         id
         name
@@ -81,6 +82,7 @@ export interface GetCompanyLocationsVars {
 export const GET_COMPANY_LOCATIONS = gql`
   query ($companyId: ID!, $filter: LocationReadingFilter) {
     company(id: $companyId) {
+      id
       people {
         id
         name
@@ -94,16 +96,16 @@ export const GET_COMPANY_LOCATIONS = gql`
 `;
 
 export const useCompanyLocations = (
-    variables: GetCompanyLocationsVars,
-    skip = false
+  variables: GetCompanyLocationsVars,
+  execute = true
 ): QueryResult<CompanyLocationsData, GetCompanyLocationsVars> => {
-    return useQuery<CompanyLocationsData, GetCompanyLocationsVars>(
-        GET_COMPANY_LOCATIONS,
-        {
-            variables: variables,
-            skip: skip,
-        }
-    );
+  return useQuery<CompanyLocationsData, GetCompanyLocationsVars>(
+    GET_COMPANY_LOCATIONS,
+    {
+      variables: variables,
+      skip: !execute,
+    }
+  );
 };
 
 export const GET_PERSON_LOCATIONS = gql`
@@ -129,24 +131,27 @@ export interface GetPersonLocationsVars {
 }
 
 export const usePersonLocations = (
-    variables: GetPersonLocationsVars,
-    skip = false
+  variables: GetPersonLocationsVars,
+  execute = true
 ): QueryResult<PersonLocationsData, GetPersonLocationsVars> => {
-    return useQuery<PersonLocationsData, GetPersonLocationsVars>(
-        GET_PERSON_LOCATIONS,
-        {
-            variables: variables,
-            skip: skip,
-        }
-    );
+  return useQuery<PersonLocationsData, GetPersonLocationsVars>(
+    GET_PERSON_LOCATIONS,
+    {
+      variables: variables,
+      skip: !execute,
+    }
+  );
 };
 
 export const GET_COMPANY_INCIDENTS = gql`
   query ($companyId: ID!, $filter: IncidentFilter) {
     company(id: $companyId) {
+      id
       people {
+        id
         name
         incidents(filter: $filter) {
+          id
           coordinates
           timestamp
           type
@@ -185,16 +190,16 @@ export interface GetCompanyIncidentsVars {
 }
 
 export const useCompanyIncidents = (
-    variables: GetCompanyIncidentsVars,
-    skip = false
+  variables: GetCompanyIncidentsVars,
+  execute = true
 ): QueryResult<CompanyIncidentsData, GetCompanyIncidentsVars> => {
-    return useQuery<CompanyIncidentsData, GetCompanyIncidentsVars>(
-        GET_COMPANY_INCIDENTS,
-        {
-            variables: variables,
-            skip: skip,
-        }
-    );
+  return useQuery<CompanyIncidentsData, GetCompanyIncidentsVars>(
+    GET_COMPANY_INCIDENTS,
+    {
+      variables: variables,
+      skip: !execute,
+    }
+  );
 };
 
 export const GET_PERSON_INCIDENTS = gql`
@@ -203,6 +208,7 @@ export const GET_PERSON_INCIDENTS = gql`
       id
       name
       incidents(filter: $filter) {
+        id
         coordinates
         timestamp
         type
@@ -221,21 +227,22 @@ export interface GetPersonIncidentsVars {
 }
 
 export const usePersonIncidents = (
-    variables: GetPersonIncidentsVars,
-    skip = false
+  variables: GetPersonIncidentsVars,
+  execute = true
 ): QueryResult<PersonIncidentsData, GetPersonIncidentsVars> => {
-    return useQuery<PersonIncidentsData, GetPersonIncidentsVars>(
-        GET_PERSON_INCIDENTS,
-        {
-            variables: variables,
-            skip: skip,
-        }
-    );
+  return useQuery<PersonIncidentsData, GetPersonIncidentsVars>(
+    GET_PERSON_INCIDENTS,
+    {
+      variables: variables,
+      skip: !execute,
+    }
+  );
 };
 
-export const GET_INCIDENT_STATS_FOR_COMPANY = gql`
+export const GET_COMPANY_INCIDENT_STATS = gql`
   query ($companyId: ID!, $filter: IncidentStatsFilter) {
     company(id: $companyId) {
+      id
       incidentStats(filter: $filter) {
         type
         count
@@ -244,10 +251,44 @@ export const GET_INCIDENT_STATS_FOR_COMPANY = gql`
   }
 `;
 
-export const GET_INCIDENT_STATS_FOR_PERSON = gql`
+export interface IncidentStat {
+  type: string;
+  count: number;
+}
+
+export interface IncidentStatsFilter {
+  minTimestamp?: Date;
+  maxTimestamp?: Date;
+}
+
+export interface CompanyIncidentStatsData {
+  company: {
+    incidentStats: IncidentStat[];
+  };
+}
+
+export interface CompanyIncidentStatsVars {
+  companyId: string;
+  filter: IncidentStatsFilter;
+}
+
+export const useCompanyIncidentStats = (
+  variables: GetCompanyIncidentsVars,
+  execute = true
+): QueryResult<CompanyIncidentStatsData, CompanyIncidentStatsVars> => {
+  return useQuery<CompanyIncidentStatsData, CompanyIncidentStatsVars>(
+    GET_COMPANY_INCIDENT_STATS,
+    {
+      variables: variables,
+      skip: !execute,
+    }
+  );
+};
+
+export const GET_PERSON_INCIDENT_STATS = gql`
   query ($personId: ID!, $filter: IncidentStatsFilter) {
     person(id: $personId) {
-      name
+      id
       incidentStats(filter: $filter) {
         type
         count
@@ -255,10 +296,35 @@ export const GET_INCIDENT_STATS_FOR_PERSON = gql`
     }
   }
 `;
+
+export interface PersonIncidentStatsData {
+  person: {
+    incidentStats: IncidentStat[];
+  };
+}
+
+export interface PersonIncidentStatsVars {
+  personId: string;
+  filter: IncidentStatsFilter;
+}
+
+export const usePersonIncidentStats = (
+  variables: GetPersonIncidentsVars,
+  execute = true
+): QueryResult<PersonIncidentStatsData, PersonIncidentStatsVars> => {
+  return useQuery<PersonIncidentStatsData, PersonIncidentStatsVars>(
+    GET_PERSON_INCIDENT_STATS,
+    {
+      variables: variables,
+      skip: !execute,
+    }
+  );
+};
 
 export const GET_GAS_READINGS_FOR_COMPANY = gql`
   query ($companyId: ID!, $filter: GasReadingFilter) {
     company(id: $companyId) {
+      id
       people {
         id
         name
@@ -320,6 +386,7 @@ export const useCompanyGasReadings = (
 export const GET_GAS_READINGS_FOR_PERSON = gql`
   query ($personId: ID!, $filter: GasReadingFilter) {
     person(id: $personId) {
+      id
       name
       gasReadings(filter: $filter) {
         coordinates

@@ -2,11 +2,19 @@ import React, { useCallback, useState } from "react";
 import { TravelMap } from "../molecules/TravelMap";
 import { Filter, FilterBar } from "../molecules/FilterBar";
 import { makeStyles } from "@mui/styles";
-import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  useMediaQuery,
+} from "@mui/material";
 import { PageHeader } from "../atoms/PageHeader";
 import { HazardMap } from "../molecules/HazardMap";
 import { LocationsTable } from "../molecules/LocationsTable";
-
+import theme from "../../../Theme";
+import { FilterFab } from "../molecules/FilterFab";
+import { FilterModal } from "../molecules/FilterModal";
 export const LOCATION_PAGE_LABEL = "locationPage";
 
 const useStyles = makeStyles({
@@ -16,23 +24,35 @@ const useStyles = makeStyles({
     zIndex: "1",
     width: "100%",
   },
+  filterBarContainer: {
+    marginBottom: "-8px",
+  },
   topMargin: {
     height: "104px",
   },
   pageCard: {
     marginBottom: "16px",
   },
+  fabPadding: {
+    height: "56px",
+  },
 });
 
-export const Locations: React.FC = () => {
-  const [filter, setFilter] = useState<Filter>({});
+interface LocationsProps {
+  filter: Filter;
+  onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
+}
 
-  const filterChange = useCallback(
+export const Locations: React.FC<LocationsProps> = (props) => {
+  const filterChanged = useCallback(
     (updateFilter: (prevFilter: Filter) => Filter) => {
-      setFilter((filter) => updateFilter(filter));
+      props.onFilterChange(updateFilter);
     },
     []
   );
+
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const showFilterBar = useMediaQuery(theme.breakpoints.up("lg"));
 
   const styles = useStyles();
 
@@ -45,15 +65,29 @@ export const Locations: React.FC = () => {
         }
       />
 
-      <div className={[styles.pageCard, styles.filterBar].join(" ")}>
-        <Card elevation={2}>
-          <CardContent>
-            <div style={{ marginBottom: "-8px" }}>
-              <FilterBar filter={filter} onChange={filterChange} />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {showFilterBar && (
+        <div className={[styles.pageCard, styles.filterBar].join(" ")}>
+          <Card elevation={2}>
+            <CardContent>
+              <div className={styles.filterBarContainer}>
+                <FilterBar filter={props.filter} onChange={filterChanged} />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {!showFilterBar && (
+        <>
+          <FilterFab onClick={() => setFilterModalOpen(true)} />
+          <FilterModal
+            filter={props.filter}
+            onChange={props.onFilterChange}
+            open={filterModalOpen}
+            onClose={() => setFilterModalOpen(false)}
+          />
+        </>
+      )}
 
       <Card className={styles.pageCard}>
         <CardHeader
@@ -62,7 +96,7 @@ export const Locations: React.FC = () => {
         />
         <CardMedia>
           <div style={{ height: "600px" }}>
-            <TravelMap filter={filter} />
+            <TravelMap filter={props.filter} />
           </div>
         </CardMedia>
       </Card>
@@ -74,7 +108,7 @@ export const Locations: React.FC = () => {
         />
         <CardMedia>
           <div style={{ height: "600px" }}>
-            <HazardMap filter={filter} />
+            <HazardMap filter={props.filter} />
           </div>
         </CardMedia>
       </Card>
@@ -85,9 +119,10 @@ export const Locations: React.FC = () => {
           subheader="View individual location readings."
         />
         <CardMedia>
-          <LocationsTable filter={filter} />
+          <LocationsTable filter={props.filter} />
         </CardMedia>
       </Card>
+      {!showFilterBar && <div className={styles.fabPadding} />}
     </>
   );
 };
