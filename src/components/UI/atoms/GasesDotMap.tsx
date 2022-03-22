@@ -1,5 +1,5 @@
 import {GoogleMap, HeatmapLayer, InfoWindow, Marker} from "@react-google-maps/api";
-import React, {useEffect} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import GenericIcon from "../../../assets/generic.png";
 import {
     selectGasPageEndDate,
@@ -12,11 +12,12 @@ import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
 import {Filter} from "../molecules/FilterBar";
 import {
-    GasReading, Incident, Person,
+    GasReading, Incident, Person, PersonWithGasReadings,
     useCompanyGasReadings
 } from "../../../util/queryService";
-import {getCurrentUser, sortPeople} from "../../../index";
+import {getCurrentUser, MAP_RESTRICTION, sortPeople} from "../../../index";
 import LatLngLiteral = google.maps.LatLngLiteral;
+import {makeStyles} from "@mui/styles";
 
 interface GasDotMapProps {
     filter?: Filter;
@@ -27,23 +28,56 @@ interface GasReadingPoint {
     person: Person;
 }
 
+interface GasMarker {
+    person: Person;
+    location: LatLngLiteral;
+    density: string;
+    densityUnits: string,
+    gas: string,
+    time: Date;
+    icon: string;
+}
+
 const DEFAULT_MAP_CENTER: LatLngLiteral = {
     lat: 51.03,
     lng: -114.466,
 };
 const DEFAULT_MAP_ZOOM = 11;
 
+const useStyles = makeStyles({
+    tooltipText: {
+        margin: "8px",
+        whiteSpace: "nowrap",
+    },
+});
+
 export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
+    const styles = useStyles();
     const user = getCurrentUser();
     const filter: Filter = props.filter ?? {};
-    const gasReadingPoints: GasReadingPoint[] = [
+    const people: PersonWithGasReadings[] = [
         //   usePersonAsPeople(filter.person?.id || "", filter, !filter.person),
         useGasReadingsInCompany(user?.company.id || "", filter, !!filter.person),
     ].flat();
 
-    console.log(gasReadingPoints)
+    console.log(people)
 
-    // const points: GasPoint[] = intoPoints(incidents);
+    const markers: GasMarker[] = intoMarkers(people);
+    const [hoveredMarker, setHoveredMarker] = useState<
+        GasMarker | undefined
+        >();
+
+    const onMarkerMouseOver = useCallback((marker: GasMarker) => {
+        setHoveredMarker(marker);
+    }, []);
+
+    const onMarkerMouseOut = useCallback((marker: GasMarker) => {
+        setHoveredMarker((prevMarker) =>
+            JSON.stringify(marker) === JSON.stringify(prevMarker)
+                ? undefined
+                : prevMarker
+        );
+    }, []);
 
     return (
         <>
@@ -52,10 +86,22 @@ export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
                     height: "100%",
                     width: "100%",
                 }}
-                options={{gestureHandling: "greedy"}}
+                options={{
+                    gestureHandling: "greedy",
+                    restriction: MAP_RESTRICTION,
+                }}
                 zoom={DEFAULT_MAP_ZOOM}
                 center={DEFAULT_MAP_CENTER}
             >
+                {markers.map((marker) => (
+                    <Marker
+                        key={markerKey(marker)}
+                        position={marker.location}
+                        icon={marker.icon}
+                        onMouseOver={() => onMarkerMouseOver(marker)}
+                        onMouseOut={() => onMarkerMouseOut(marker)}
+                    />
+                ))}
             </GoogleMap>
         </>
     );
@@ -66,8 +112,8 @@ export default React.memo(GasDotMap);
 const useGasReadingsInCompany = (
     companyId: string,
     filter: Filter,
-    skip = false
-): GasReadingPoint[] => {
+    execute = true
+): PersonWithGasReadings[] => {
     const {data} = useCompanyGasReadings(
         {
             companyId: companyId,
@@ -76,19 +122,33 @@ const useGasReadingsInCompany = (
                 maxTimestamp: filter.maxTimestamp,
             },
         },
-        skip
+        execute
     );
-    return data?.company.people.map((person) => {
-        return person.gasReadings.map((gasReading) => (
-            {
-                gasReading: gasReading,
-                person: {
-                    id: person.id,
-                    name: person.name,
-                }
-            }
-        ))
-    }).flat() || [];
+    return data?.company.people || [];
+};
+
+const intoMarkers = (people: PersonWithGasReadings[]): GasMarker[] =>
+    people
+        .map((person) =>
+            person.gasReadings.map((gasReading) => ({
+                person: person,
+                location: {
+                    lat: Number(gasReading.coordinates[1]),
+                    lng: Number(gasReading.coordinates[0]),
+                },
+                icon: GenericIcon,
+                time: new Date(gasReading.timestamp),
+                density: gasReading.density,
+                densityUnits: gasReading.densityUnits,
+                gas: gasReading.gas,
+            }))
+        )
+        .flat();
+
+const markerKey = (marker: GasMarker): string => {
+    const personId = marker.person.id;
+    const time = marker.time.toISOString();
+    return `${personId}-${time}`;
 };
 
 // const intoPoints = (gasReadings: GasReading[]): GasPoint[] => {
