@@ -372,13 +372,13 @@ export interface CompanyGasReadingsData {
 
 export const useCompanyGasReadings = (
     variables: GetCompanyGasReadingVars,
-    skip = false
+    execute = true
 ): QueryResult<CompanyGasReadingsData, GetCompanyGasReadingVars> => {
     return useQuery<CompanyGasReadingsData, GetCompanyGasReadingVars>(
         GET_GAS_READINGS_FOR_COMPANY,
         {
             variables: variables,
-            skip: skip,
+            skip: !execute,
         }
     );
 };
@@ -398,3 +398,25 @@ export const GET_GAS_READINGS_FOR_PERSON = gql`
     }
   }
 `;
+
+export interface GetPersonGasReadingVars {
+    personId: string;
+    filter: GasReadingFilter;
+}
+
+export interface PersonGasReadingsData {
+    person: PersonWithGasReadings;
+}
+
+export const usePersonGasReadings = (
+    variables: GetPersonGasReadingVars,
+    execute = true
+): QueryResult<PersonGasReadingsData, GetPersonGasReadingVars> => {
+    return useQuery<PersonGasReadingsData, GetPersonGasReadingVars>(
+        GET_GAS_READINGS_FOR_PERSON,
+        {
+            variables: variables,
+            skip: !execute,
+        }
+    );
+};
