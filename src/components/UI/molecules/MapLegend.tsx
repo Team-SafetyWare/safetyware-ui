@@ -56,8 +56,7 @@ export const MapLegend: React.FC<MapLegendProps> = (props) => {
       color: "rgb(86, 86, 86)",
       fontFamily: "Roboto, Arial, sans-serif",
       fontSize: "18px",
-      borderBottomRightRadius: "2px",
-      borderTopRightRadius: "2px",
+      borderRadius: "2px",
       boxShadow: "rgba(0, 0, 0, 0.3) 0px 1px 4px -1px",
     },
     header: {
