@@ -20,9 +20,6 @@ import theme from "../../../Theme";
 import {
   GET_GAS_READINGS_FOR_COMPANY,
   GET_GAS_READINGS_FOR_PERSON,
-  Person,
-  PersonWithGasReadings,
-  PersonWithIncidents,
 } from "../../../util/queryService";
 import { CustomAccordion } from "../atoms/CustomAccordion";
 import { GasDotMap } from "../atoms/GasesDotMap";
@@ -31,13 +28,6 @@ import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { Filter, FilterBar } from "../molecules/FilterBar";
-import LatLngLiteral = google.maps.LatLngLiteral;
-import GenericIcon from "../../../assets/generic.png";
-
-const center = {
-  lat: 51.049999,
-  lng: -114.1283,
-};
 
 //remove this later
 export interface GasReading {
@@ -98,13 +88,6 @@ const useStyles = makeStyles({
     marginBottom: "16px",
   },
 });
-
-interface GasReadingMarker {
-  person: Person;
-  location: LatLngLiteral;
-  time: Date;
-  icon: string;
-}
 
 export const GASES_PAGE_LABEL = "gasesPage";
 
