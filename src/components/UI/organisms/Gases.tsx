@@ -1,16 +1,14 @@
 import { useQuery } from "@apollo/client";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
   Card,
+  CardContent,
   CardHeader,
   CardMedia,
-  IconButton,
-  Modal,
   useMediaQuery,
 } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getCurrentUser } from "../../..";
 import {
   selectGasPageEndDate,
@@ -29,14 +27,29 @@ import GasesTable from "../atoms/GasesTable";
 import { PageHeader } from "../atoms/PageHeader";
 import { PageSectionHeader } from "../atoms/PageSectionHeader";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
-import { CustomBoxReduced } from "../molecules/CustomBoxReduced";
+import { Filter, FilterBar } from "../molecules/FilterBar";
 
-const center = {
-  lat: 51.049999,
-  lng: -114.1283,
-};
+//remove this later
+export interface GasReading {
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  density: number;
+  densityUnits: string;
+  gas: string;
+  personName: string;
+  timestamp: Date;
+}
 
 const useStyles = makeStyles({
+  filterBar: {
+    position: "sticky",
+    top: "16px",
+    zIndex: "1",
+    width: "100%",
+  },
+
   gasesDropdown: {
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
@@ -76,18 +89,6 @@ const useStyles = makeStyles({
   },
 });
 
-export interface GasReading {
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-  density: number;
-  densityUnits: string;
-  gas: string;
-  personName: string;
-  timestamp: Date;
-}
-
 export const GASES_PAGE_LABEL = "gasesPage";
 
 export const Gases: React.FC = () => {
@@ -99,6 +100,15 @@ export const Gases: React.FC = () => {
   const startDate = useAppSelector(selectGasPageStartDate);
   const endDate = useAppSelector(selectGasPageEndDate);
   const filterId = useAppSelector(selectGasPagePersonId);
+
+  const [filter, setFilter] = useState<Filter>({});
+
+  const filterChange = useCallback(
+    (updateFilter: (prevFilter: Filter) => Filter) => {
+      setFilter((filter) => updateFilter(filter));
+    },
+    []
+  );
 
   const { data: companyGasReadingsData } = useQuery(
     GET_GAS_READINGS_FOR_COMPANY,
@@ -181,9 +191,6 @@ export const Gases: React.FC = () => {
   const visualizations = ["Raw Gases Data Table", "Gases Dot Map"];
 
   const [visualization, setVisualization] = useState(visualizations[0]);
-  const [openFilterbox, setOpenFilterbox] = useState(false);
-  const handleOpenFilterBox = () => setOpenFilterbox(true);
-  const handleCloseFilterBox = () => setOpenFilterbox(false);
 
   return (
     <StyledEngineProvider injectFirst>
@@ -196,6 +203,17 @@ export const Gases: React.FC = () => {
                 "Analyze data based on gases using a gas dot map."
               }
             />
+
+            <div className={[styles.pageCard, styles.filterBar].join(" ")}>
+              <Card elevation={2}>
+                <CardContent>
+                  <div style={{ marginBottom: "-8px" }}>
+                    <FilterBar filter={filter} onChange={filterChange} />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
             <Card className={styles.pageCard}>
               <CardHeader
                 title="Gases Dot Map"
@@ -203,7 +221,7 @@ export const Gases: React.FC = () => {
               />
               <CardMedia>
                 <div style={{ height: "600px" }}>
-                  <GasDotMap gases={gasReadings} center={center} zoom={10} />
+                  <GasDotMap filter={filter} />
                 </div>
               </CardMedia>
             </Card>
@@ -233,33 +251,8 @@ export const Gases: React.FC = () => {
                 <GasesTable gasReadings={gasReadings} />
               </div>
             )}
-            {visualization == visualizations[1] && (
-              <div className={styles.visualization}>
-                <GasDotMap gases={gasReadings} center={center} zoom={10} />
-              </div>
-            )}
           </>
         )}
-        <IconButton
-          className={styles.filterButton}
-          onClick={handleOpenFilterBox}
-          size="large"
-        >
-          <FilterAltIcon fontSize="inherit" />
-        </IconButton>
-        <Modal
-          open={openFilterbox}
-          onClose={handleCloseFilterBox}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <CustomBoxReduced
-            user={user}
-            startDate={startDate}
-            endDate={endDate}
-            pageLabel={GASES_PAGE_LABEL}
-          />
-        </Modal>
       </>
     </StyledEngineProvider>
   );

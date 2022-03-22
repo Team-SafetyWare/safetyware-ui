@@ -340,6 +340,49 @@ export const GET_GAS_READINGS_FOR_COMPANY = gql`
   }
 `;
 
+export interface GasReading {
+  coordinates: string[];
+  timestamp: string;
+  density: string;
+  densityUnits: string;
+  gas: string;
+}
+
+export interface PersonWithGasReadings {
+  id: string;
+  name: string;
+  gasReadings: GasReading[];
+}
+
+export interface GasReadingFilter {
+  minTimestamp?: Date;
+  maxTimestamp?: Date;
+}
+
+export interface GetCompanyGasReadingVars {
+  companyId: string;
+  filter: GasReadingFilter;
+}
+
+export interface CompanyGasReadingsData {
+  company: {
+    people: PersonWithGasReadings[];
+  };
+}
+
+export const useCompanyGasReadings = (
+  variables: GetCompanyGasReadingVars,
+  execute = true
+): QueryResult<CompanyGasReadingsData, GetCompanyGasReadingVars> => {
+  return useQuery<CompanyGasReadingsData, GetCompanyGasReadingVars>(
+    GET_GAS_READINGS_FOR_COMPANY,
+    {
+      variables: variables,
+      skip: !execute,
+    }
+  );
+};
+
 export const GET_GAS_READINGS_FOR_PERSON = gql`
   query ($personId: ID!, $filter: GasReadingFilter) {
     person(id: $personId) {
@@ -355,3 +398,25 @@ export const GET_GAS_READINGS_FOR_PERSON = gql`
     }
   }
 `;
+
+export interface GetPersonGasReadingVars {
+  personId: string;
+  filter: GasReadingFilter;
+}
+
+export interface PersonGasReadingsData {
+  person: PersonWithGasReadings;
+}
+
+export const usePersonGasReadings = (
+  variables: GetPersonGasReadingVars,
+  execute = true
+): QueryResult<PersonGasReadingsData, GetPersonGasReadingVars> => {
+  return useQuery<PersonGasReadingsData, GetPersonGasReadingVars>(
+    GET_GAS_READINGS_FOR_PERSON,
+    {
+      variables: variables,
+      skip: !execute,
+    }
+  );
+};
