@@ -1,33 +1,12 @@
-import { useQuery } from "@apollo/client";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  useMediaQuery,
-} from "@mui/material";
-import { StyledEngineProvider } from "@mui/material/styles";
-import { makeStyles } from "@mui/styles";
-import React, { useCallback, useEffect, useState } from "react";
-import { getCurrentUser } from "../../..";
-import {
-  selectGasPageEndDate,
-  selectGasPagePersonId,
-  selectGasPageStartDate,
-} from "../../../store/slices/gasPageSlice";
-import { useAppSelector } from "../../../store/store";
+import {Card, CardContent, CardHeader, CardMedia,} from "@mui/material";
+import {StyledEngineProvider} from "@mui/material/styles";
+import {makeStyles} from "@mui/styles";
+import React, {useCallback, useState} from "react";
 import theme from "../../../Theme";
-import {
-  GET_GAS_READINGS_FOR_COMPANY,
-  GET_GAS_READINGS_FOR_PERSON,
-} from "../../../util/queryService";
-import { CustomAccordion } from "../atoms/CustomAccordion";
-import { GasDotMap } from "../atoms/GasesDotMap";
-import GasesTable from "../atoms/GasesTable";
-import { PageHeader } from "../atoms/PageHeader";
-import { PageSectionHeader } from "../atoms/PageSectionHeader";
-import { VisualizationSelect } from "../atoms/VisualizationSelect";
-import { Filter, FilterBar } from "../molecules/FilterBar";
+import {GasDotMap} from "../atoms/GasesDotMap";
+import {PageHeader} from "../atoms/PageHeader";
+import {PageSectionHeader} from "../atoms/PageSectionHeader";
+import {Filter, FilterBar} from "../molecules/FilterBar";
 
 //remove this later
 export interface GasReading {
@@ -92,14 +71,7 @@ const useStyles = makeStyles({
 export const GASES_PAGE_LABEL = "gasesPage";
 
 export const Gases: React.FC = () => {
-  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
-
-  const user = getCurrentUser();
-
-  const startDate = useAppSelector(selectGasPageStartDate);
-  const endDate = useAppSelector(selectGasPageEndDate);
-  const filterId = useAppSelector(selectGasPagePersonId);
 
   const [filter, setFilter] = useState<Filter>({});
 
@@ -110,92 +82,9 @@ export const Gases: React.FC = () => {
     []
   );
 
-  const { data: companyGasReadingsData } = useQuery(
-    GET_GAS_READINGS_FOR_COMPANY,
-    {
-      variables: {
-        companyId: user?.company.id,
-        filter: {
-          minTimestamp: startDate !== "" ? new Date(startDate) : null,
-          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
-        },
-      },
-    }
-  );
-
-  const { data: personGasReadingsData } = useQuery(
-    GET_GAS_READINGS_FOR_PERSON,
-    {
-      variables: {
-        personId: filterId,
-        filter: {
-          minTimestamp: startDate !== "" ? new Date(startDate) : null,
-          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
-        },
-      },
-    }
-  );
-
-  const [gasReadings, setGasReadings] = useState<any>([]);
-
-  useEffect(() => {
-    if (filterId !== "") {
-      if (personGasReadingsData && personGasReadingsData.person !== null) {
-        const gasReadings: any[] =
-          personGasReadingsData.person.gasReadings
-            .map((gasReading: any) => {
-              return {
-                coordinates: {
-                  lat: gasReading.coordinates[1],
-                  lng: gasReading.coordinates[0],
-                },
-                density: gasReading.density,
-                densityUnits: gasReading.densityUnits,
-                gas: gasReading.gas,
-                personName: personGasReadingsData.person.name,
-                timestamp: new Date(gasReading.timestamp),
-              };
-            })
-            .flat() ?? [];
-        setGasReadings(gasReadings);
-      }
-    } else {
-      const gasReadings: any[] =
-        companyGasReadingsData?.company.people
-          .map((person: any) =>
-            person.gasReadings.map((gasReading: any) => {
-              return {
-                coordinates: {
-                  lat: gasReading.coordinates[1],
-                  lng: gasReading.coordinates[0],
-                },
-                density: gasReading.density,
-                densityUnits: gasReading.densityUnits,
-                gas: gasReading.gas,
-                personName: person.name,
-                timestamp: new Date(gasReading.timestamp),
-              };
-            })
-          )
-          .flat() ?? [];
-      setGasReadings(gasReadings);
-    }
-  }, [
-    companyGasReadingsData,
-    personGasReadingsData,
-    startDate,
-    endDate,
-    filterId,
-  ]);
-
-  const visualizations = ["Raw Gases Data Table", "Gases Dot Map"];
-
-  const [visualization, setVisualization] = useState(visualizations[0]);
-
   return (
     <StyledEngineProvider injectFirst>
       <>
-        {matches ? (
           <>
             <PageHeader
               pageTitle={"Gases"}
@@ -225,34 +114,16 @@ export const Gases: React.FC = () => {
                 </div>
               </CardMedia>
             </Card>
-            <PageSectionHeader
-              sectionTitle={"Raw Gases Data"}
-              sectionDescription={
-                "Explore raw gas readings data through a date-filtered data table."
-              }
-            />
-            <CustomAccordion
-              accordionHeight={"auto"}
-              accordionWidth={""}
-              accordionTitle={visualizations[0]}
-              component={<GasesTable gasReadings={gasReadings} />}
-            />
-          </>
-        ) : (
-          <>
-            <div className={styles.gasesDropdown}>
-              <VisualizationSelect
-                visualizations={visualizations}
-                setVisualization={setVisualization}
+            <Card className={styles.pageCard}>
+              <CardHeader
+                  title="Gases table"
+                  subheader="View individual gas reading data."
               />
-            </div>
-            {visualization == visualizations[0] && (
-              <div className={styles.visualization}>
-                <GasesTable gasReadings={gasReadings} />
-              </div>
-            )}
+              {/*<CardMedia>*/}
+              {/*  <IncidentsTable filter={props.filter} />*/}
+              {/*</CardMedia>*/}
+            </Card>
           </>
-        )}
       </>
     </StyledEngineProvider>
   );
