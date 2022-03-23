@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { getCurrentUser, MAP_RESTRICTION, User } from "../../../index";
+import {
+  getCurrentUser,
+  MAP_RESTRICTION,
+  useMapGestureHandling,
+  User,
+} from "../../../index";
 import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
 import { Filter, shouldFilterPerson } from "./FilterBar";
 import {
@@ -57,7 +62,7 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
           width: "100%",
         }}
         options={{
-          gestureHandling: "greedy",
+          gestureHandling: useMapGestureHandling(),
           restriction: MAP_RESTRICTION,
         }}
         zoom={DEFAULT_MAP_ZOOM}

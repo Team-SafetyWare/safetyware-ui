@@ -8,6 +8,8 @@ import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 import { Person } from "./util/queryService";
 import MapRestriction = google.maps.MapRestriction;
+import { useMediaQuery } from "@mui/material";
+import theme from "./Theme";
 
 export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
 export const MAP_RESTRICTION: MapRestriction = {
@@ -48,6 +50,9 @@ export const sortPeople = <T extends Person>(people: T[]): T[] =>
 
 export const modularIndex = <T,>(arr: T[], index: number): T =>
   arr[index % arr.length];
+
+export const useMapGestureHandling = () =>
+  useMediaQuery(theme.breakpoints.down("md")) ? "cooperative" : "greedy";
 
 const client = new ApolloClient({
   uri: `${API_URL}/graphql`,
