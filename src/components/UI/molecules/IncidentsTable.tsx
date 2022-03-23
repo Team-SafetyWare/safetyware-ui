@@ -78,13 +78,13 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = (props) => {
           <TableHead>
             <TableRow>
               <TableCell className={styles.header} width={colWidth}>
-                Time
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
                 Incident
               </TableCell>
               <TableCell className={styles.header} width={colWidth}>
                 Name
+              </TableCell>
+              <TableCell className={styles.header} width={colWidth}>
+                Time
               </TableCell>
               <TableCell className={styles.header} width={colWidth}>
                 Coordinates
@@ -94,9 +94,9 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = (props) => {
           <TableBody>
             {pageIncidents.map((incident, index) => (
               <TableRow key={index}>
-                <TableCell>{incident.time}</TableCell>
                 <TableCell>{incident.incident}</TableCell>
                 <TableCell>{incident.name}</TableCell>
+                <TableCell>{incident.time}</TableCell>
                 <TableCell>{incident.coordinates}</TableCell>
               </TableRow>
             ))}
