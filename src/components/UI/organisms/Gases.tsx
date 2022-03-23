@@ -91,8 +91,9 @@ const useStyles = makeStyles({
 
 export const GASES_PAGE_LABEL = "gasesPage";
 
+const visualizations = ["Gases map", "Gases table"];
+
 export const Gases: React.FC = () => {
-  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
   const user = getCurrentUser();
@@ -109,6 +110,9 @@ export const Gases: React.FC = () => {
     },
     []
   );
+
+  const [visualization, setVisualization] = useState(visualizations[0]);
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { data: companyGasReadingsData } = useQuery(
     GET_GAS_READINGS_FOR_COMPANY,
@@ -188,14 +192,10 @@ export const Gases: React.FC = () => {
     filterId,
   ]);
 
-  const visualizations = ["Raw Gases Data Table", "Gases Dot Map"];
-
-  const [visualization, setVisualization] = useState(visualizations[0]);
-
   return (
     <StyledEngineProvider injectFirst>
       <>
-        {matches ? (
+        {!mobile ? (
           <>
             <PageHeader
               pageTitle={"Gases"}
@@ -216,7 +216,7 @@ export const Gases: React.FC = () => {
 
             <Card className={styles.pageCard}>
               <CardHeader
-                title="Gases Dot Map"
+                title={visualizations[0]}
                 subheader="Become aware of the gas concentrations across multiple locations. "
               />
               <CardMedia>
@@ -234,7 +234,7 @@ export const Gases: React.FC = () => {
             <CustomAccordion
               accordionHeight={"auto"}
               accordionWidth={""}
-              accordionTitle={visualizations[0]}
+              accordionTitle={visualizations[1]}
               component={<GasesTable gasReadings={gasReadings} />}
             />
           </>
@@ -247,6 +247,11 @@ export const Gases: React.FC = () => {
               />
             </div>
             {visualization == visualizations[0] && (
+              <div className={styles.visualization}>
+                <GasDotMap filter={filter} />
+              </div>
+            )}
+            {visualization == visualizations[1] && (
               <div className={styles.visualization}>
                 <GasesTable gasReadings={gasReadings} />
               </div>

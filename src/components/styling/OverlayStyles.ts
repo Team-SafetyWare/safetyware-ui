@@ -3,7 +3,7 @@ import { makeStyles } from "@mui/styles";
 const OverlayStyles = makeStyles({
   parent: {
     position: "relative",
-    height: "600px",
+    height: "100%",
     zIndex: 0,
   },
   backdrop: {
