@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { getCurrentUser, MAP_RESTRICTION, User } from "../../../index";
+import {
+  getCurrentUser,
+  MAP_RESTRICTION,
+  useMapGestureHandling,
+  User,
+} from "../../../index";
 import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
 import { Filter, shouldFilterPerson } from "./FilterBar";
 import {
@@ -13,8 +18,6 @@ import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
 import LatLngLiteral = google.maps.LatLngLiteral;
-import { useMediaQuery } from "@mui/material";
-import theme from "../../../Theme";
 
 export const DEFAULT_MAP_CENTER: LatLngLiteral = {
   lat: 51.045,
@@ -35,10 +38,6 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
 
   const incidents: Incident[] = useIncidents(user, filter);
   const points: WeightedLocation[] = intoPoints(incidents);
-
-  const gestureHandling = useMediaQuery(theme.breakpoints.down("md"))
-    ? "cooperative"
-    : "greedy";
 
   useEffect(() => {
     if (incidents.length === 0) {
@@ -63,7 +62,7 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
           width: "100%",
         }}
         options={{
-          gestureHandling: gestureHandling,
+          gestureHandling: useMapGestureHandling(),
           restriction: MAP_RESTRICTION,
         }}
         zoom={DEFAULT_MAP_ZOOM}
