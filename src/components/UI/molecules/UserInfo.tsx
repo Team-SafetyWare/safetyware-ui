@@ -10,7 +10,6 @@ interface UserInfoProps {
   userTitle?: string;
   userPhone?: string;
   userEmail?: string;
-  userTeam?: string;
 }
 
 const useStyles = makeStyles({
@@ -59,7 +58,6 @@ export const UserInfo: React.FC<UserInfoProps> = (props) => {
             userTitle={props.userTitle}
             userPhone={props.userPhone}
             userEmail={props.userEmail}
-            userTeam={props.userTeam}
           ></UserDetails>
         </div>
       </div>

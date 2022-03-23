@@ -6,7 +6,6 @@ interface UserDetailsProps {
   userTitle?: string;
   userPhone?: string;
   userEmail?: string;
-  userTeam?: string;
 }
 
 const useStyles = makeStyles({
@@ -34,14 +33,6 @@ const useStyles = makeStyles({
         fontSize: "12px",
       },
   },
-  userTeam: {
-    fontSize: "18px",
-    margin: 0,
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        fontSize: "12px",
-      },
-  },
 });
 
 export const UserDetails: React.FC<UserDetailsProps> = (props) => {
@@ -51,10 +42,8 @@ export const UserDetails: React.FC<UserDetailsProps> = (props) => {
     <>
       <h1 className={styles.userName}>{props.userName}</h1>
       <p className={styles.userTitle}>{props.userTitle}</p>
-      <p className={styles.userContact}>
-        {props.userPhone} | {props.userEmail}
-      </p>
-      <p className={styles.userTeam}>{props.userTeam}</p>
+      <p className={styles.userContact}>{props.userPhone}</p>
+      <p className={styles.userContact}>{props.userEmail}</p>
     </>
   );
 };
