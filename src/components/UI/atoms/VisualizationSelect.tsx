@@ -11,14 +11,15 @@ interface VisualizationSelectProps {
 }
 
 const BootstrapInput = styled(InputBase)(() => ({
-  backgroundColor: "white",
-  borderRadius: "8px",
-  padding: "8px 12px 8px 12px",
+  zIndex: 1,
 
   "& .MuiSelect-select": {
+    color: "white",
     fontWeight: "bold",
+  },
 
-    "&:focus": { backgroundColor: "white" },
+  "& .MuiSvgIcon-root": {
+    color: "white",
   },
 }));
 
@@ -26,12 +27,10 @@ export const VisualizationSelect: React.FC<VisualizationSelectProps> = (
   props
 ) => {
   return (
-    <FormControl variant="standard" sx={{ minWidth: 240 }}>
+    <FormControl variant="standard">
       <Select
-        autoWidth={true}
         defaultValue={props.visualizations[0]}
         input={<BootstrapInput />}
-        disableUnderline
         onChange={(e) => {
           const selectedVisualization = e.target.value;
           props.setVisualization(selectedVisualization);
@@ -39,9 +38,7 @@ export const VisualizationSelect: React.FC<VisualizationSelectProps> = (
       >
         {props.visualizations.map((visualization) => (
           // eslint-disable-next-line react/jsx-key
-          <MenuItem value={visualization} sx={{ minWidth: 240 }}>
-            {visualization}
-          </MenuItem>
+          <MenuItem value={visualization}>{visualization}</MenuItem>
         ))}
       </Select>
     </FormControl>
