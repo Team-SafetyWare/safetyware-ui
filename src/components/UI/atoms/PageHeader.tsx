@@ -10,10 +10,22 @@ interface PageHeaderProps {
 const useStyles = makeStyles({
   container: {
     margin: "-16px -24px 16px",
+
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        margin: "0px",
+      },
   },
+
   content: {
     padding: "24px",
+
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        padding: "16px",
+      },
   },
+
   text: {
     margin: 0,
   },
