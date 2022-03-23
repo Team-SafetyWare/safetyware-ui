@@ -1,6 +1,5 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import { TeamInfo } from "../UI/molecules/TeamInfo";
 import { UserInfo } from "../UI/molecules/UserInfo";
 
 interface UserAccountTemplateProps {
@@ -9,8 +8,6 @@ interface UserAccountTemplateProps {
   userTitle?: string;
   userPhone?: string;
   userEmail?: string;
-  userTeam?: string;
-  teamData?: string[][][];
 }
 
 const useStyles = makeStyles({
@@ -41,12 +38,6 @@ export const UserAccountTemplate: React.FC<UserAccountTemplateProps> = (
         userTitle={props.userTitle}
         userPhone={props.userPhone}
         userEmail={props.userEmail}
-        userTeam={props.userTeam}
-      />
-      <TeamInfo
-        userPhoto={props.userPhoto}
-        userName={props.userName}
-        teamData={props.teamData}
       />
     </div>
   );
