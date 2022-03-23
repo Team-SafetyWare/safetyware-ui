@@ -77,18 +77,6 @@ export const Locations: React.FC<LocationsProps> = (props) => {
         </div>
       )}
 
-      {!showFilterBar && (
-        <>
-          <FilterFab onClick={() => setFilterModalOpen(true)} />
-          <FilterModal
-            filter={props.filter}
-            onChange={props.onFilterChange}
-            open={filterModalOpen}
-            onClose={() => setFilterModalOpen(false)}
-          />
-        </>
-      )}
-
       <Card className={styles.pageCard}>
         <CardHeader
           title="Travel history"
@@ -122,7 +110,19 @@ export const Locations: React.FC<LocationsProps> = (props) => {
           <LocationsTable filter={props.filter} />
         </CardMedia>
       </Card>
-      {!showFilterBar && <div className={styles.fabPadding} />}
+
+      {!showFilterBar && (
+        <>
+          <div className={styles.fabPadding} />
+          <FilterFab onClick={() => setFilterModalOpen(true)} />
+          <FilterModal
+            filter={props.filter}
+            onChange={props.onFilterChange}
+            open={filterModalOpen}
+            onClose={() => setFilterModalOpen(false)}
+          />
+        </>
+      )}
     </>
   );
 };

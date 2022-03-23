@@ -78,18 +78,6 @@ export const Incidents: React.FC<IncidentsProps> = (props) => {
         </div>
       )}
 
-      {!showFilterBar && (
-        <>
-          <FilterFab onClick={() => setFilterModalOpen(true)} />
-          <FilterModal
-            filter={props.filter}
-            onChange={props.onFilterChange}
-            open={filterModalOpen}
-            onClose={() => setFilterModalOpen(false)}
-          />
-        </>
-      )}
-
       <Card className={styles.pageCard}>
         <CardHeader
           title="Incidents map"
@@ -123,7 +111,19 @@ export const Incidents: React.FC<IncidentsProps> = (props) => {
           <IncidentsTable filter={props.filter} />
         </CardMedia>
       </Card>
-      {!showFilterBar && <div className={styles.fabPadding} />}
+
+      {!showFilterBar && (
+        <>
+          <div className={styles.fabPadding} />
+          <FilterFab onClick={() => setFilterModalOpen(true)} />
+          <FilterModal
+            filter={props.filter}
+            onChange={props.onFilterChange}
+            open={filterModalOpen}
+            onClose={() => setFilterModalOpen(false)}
+          />
+        </>
+      )}
     </>
   );
 };
