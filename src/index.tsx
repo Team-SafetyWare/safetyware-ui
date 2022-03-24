@@ -23,6 +23,7 @@ export const MAP_RESTRICTION: MapRestriction = {
 };
 
 const CURRENT_USER_KEY = "current_user";
+const TOKEN_KEY = "token";
 
 export interface User {
   id: string;
@@ -43,6 +44,10 @@ export const getCurrentUser = (): User | null => {
 
 export const setCurrentUser = (user: User): void => {
   localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+};
+
+export const setToken = (token: string): void => {
+  localStorage.setItem(TOKEN_KEY, token);
 };
 
 export const sortPeople = <T extends Person>(people: T[]): T[] =>
