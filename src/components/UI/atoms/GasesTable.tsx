@@ -76,9 +76,6 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
           <TableHead>
             <TableRow>
               <TableCell className={styles.header} width={colWidth}>
-                Time
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
                 Gas
               </TableCell>
               <TableCell className={styles.header} width={colWidth}>
@@ -88,6 +85,9 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
                 Name
               </TableCell>
               <TableCell className={styles.header} width={colWidth}>
+                Time
+              </TableCell>
+              <TableCell className={styles.header} width={colWidth}>
                 Coordinates
               </TableCell>
             </TableRow>
@@ -95,12 +95,12 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
           <TableBody>
             {pageGasReadings.map((gasReading, index) => (
               <TableRow key={index}>
-                <TableCell>{gasReading.time}</TableCell>
                 <TableCell>{gasReading.gas}</TableCell>
                 <TableCell>
                   {gasReading.density + " " + gasReading.densityUnits}
                 </TableCell>
                 <TableCell>{gasReading.name}</TableCell>
+                <TableCell>{gasReading.time}</TableCell>
                 <TableCell>{gasReading.coordinates}</TableCell>
               </TableRow>
             ))}
