@@ -64,6 +64,7 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
         },
       },
       y: {
+        grace: 1,
         ticks: {
           stepSize: 1,
         },
