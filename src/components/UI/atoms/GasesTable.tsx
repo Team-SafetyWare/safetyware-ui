@@ -1,92 +1,203 @@
-import { useMediaQuery } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import React, { useCallback, useState } from "react";
+import { Filter, shouldFilterPerson } from "../molecules/FilterBar";
+import { makeStyles } from "@mui/styles";
+import { getCurrentUser, User } from "../../../index";
+import {
+  useCompanyGasReadings,
+  usePersonGasReadings,
+} from "../../../util/queryService";
 import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import React, { Fragment, useEffect } from "react";
-import { GasReading } from "../organisms/Gases";
-import EmptyDataMessage from "../atoms/EmptyDataMessage";
-import Backdrop from "@mui/material/Backdrop";
-import OverlayStyles from "../../styling/OverlayStyles";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import { TablePagination } from "@mui/material";
+
+const NUM_COORD_DIGITS = 5;
+const NUM_COLS = 5;
+const ROWS_PER_PAGE = 10;
+
+interface PersonGasReading {
+  name: string;
+  gas: string;
+  time: string;
+  coordinates: string;
+  density: string;
+  densityUnits: string;
+}
 
 interface GasesTableProps {
-  gasReadings: GasReading[];
+  filter?: Filter;
 }
 
-function Row(props: { row: GasReading; matches: boolean }) {
-  const row = props.row;
+const useStyles = makeStyles({
+  header: {
+    fontWeight: "bold",
+  },
+});
 
-  return (
-    <Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell>{row.gas}</TableCell>
-        <TableCell>
-          {row.density} {row.densityUnits}
-        </TableCell>
-        <TableCell>{row.personName}</TableCell>
-        <TableCell>
-          {row.timestamp?.toLocaleString([], {
-            dateStyle: props.matches ? "full" : "medium",
-            timeStyle: props.matches ? "short" : undefined,
-          })}
-        </TableCell>
-        {props.matches && (
-          <TableCell>
-            {row.coordinates.lng.toFixed(5)}, {row.coordinates.lat.toFixed(5)}
-          </TableCell>
-        )}
-      </TableRow>
-    </Fragment>
+export const GasesTable: React.FC<GasesTableProps> = (props) => {
+  const user = getCurrentUser();
+  const filter: Filter = props.filter ?? {};
+  const gasReadings: PersonGasReading[] = useGasReadings(user, filter);
+
+  const [page, setPage] = useState(0);
+  const pageChanged = useCallback((_: any, page: number) => {
+    setPage(page);
+  }, []);
+
+  const rowCount = gasReadings.length;
+  const maxPage = Math.floor(rowCount / ROWS_PER_PAGE);
+  const adjustedPage = Math.min(page, maxPage);
+
+  if (adjustedPage < page) {
+    setPage(adjustedPage);
+  }
+
+  const emptyRowCount = Math.max(
+    0,
+    (1 + adjustedPage) * ROWS_PER_PAGE - rowCount
   );
-}
 
-export default function GasesTable(props: GasesTableProps): any {
-  const overlayStyles = OverlayStyles();
-  const [isEmpty, setIsEmpty] = React.useState(false);
-  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
+  const pageGasReadings = gasReadings.slice(
+    adjustedPage * ROWS_PER_PAGE,
+    adjustedPage * ROWS_PER_PAGE + ROWS_PER_PAGE
+  );
 
-  const rows: GasReading[] = [];
-  props.gasReadings.map((gasReading: GasReading) => rows.push(gasReading));
+  const colWidth = `${100 / NUM_COLS}%`;
 
-  useEffect(() => {
-    if (props.gasReadings.length === 0) {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
-    }
-  }, [props.gasReadings]);
+  const styles = useStyles();
 
   return (
-    <div className={overlayStyles.parent}>
-      <Backdrop
-        className={overlayStyles.backdrop}
-        open={isEmpty}
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
-        <EmptyDataMessage />
-      </Backdrop>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
+    <>
+      <TableContainer>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Gas</TableCell>
-              <TableCell>Density</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Time</TableCell>
-              {matches && <TableCell>Coordinates</TableCell>}
+              <TableCell className={styles.header} width={colWidth}>
+                Time
+              </TableCell>
+              <TableCell className={styles.header} width={colWidth}>
+                Gas
+              </TableCell>
+              <TableCell className={styles.header} width={colWidth}>
+                Density
+              </TableCell>
+              <TableCell className={styles.header} width={colWidth}>
+                Name
+              </TableCell>
+              <TableCell className={styles.header} width={colWidth}>
+                Coordinates
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              // eslint-disable-next-line react/jsx-key
-              <Row row={row} matches={matches} />
+            {pageGasReadings.map((gasReading, index) => (
+              <TableRow key={index}>
+                <TableCell>{gasReading.time}</TableCell>
+                <TableCell>{gasReading.gas}</TableCell>
+                <TableCell>
+                  {gasReading.density + " " + gasReading.densityUnits}
+                </TableCell>
+                <TableCell>{gasReading.name}</TableCell>
+                <TableCell>{gasReading.coordinates}</TableCell>
+              </TableRow>
             ))}
+            {emptyRowCount > 0 && (
+              <TableRow style={{ height: 53 * emptyRowCount }}>
+                <TableCell colSpan={NUM_COLS} />
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+      <TablePagination
+        component="div"
+        rowsPerPageOptions={[ROWS_PER_PAGE]}
+        rowsPerPage={ROWS_PER_PAGE}
+        count={rowCount}
+        onPageChange={pageChanged}
+        page={adjustedPage}
+      />
+    </>
   );
-}
+};
+
+const useGasReadings = (user: User | null, filter: Filter) =>
+  [
+    useGasReadingsInPerson(
+      filter.person?.id || "",
+      filter,
+      shouldFilterPerson(filter)
+    ),
+    useGasReadingsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    ),
+  ].flat();
+
+const useGasReadingsInPerson = (
+  personId: string,
+  filter: Filter,
+  execute = true
+): PersonGasReading[] => {
+  const { data } = usePersonGasReadings(
+    {
+      personId: personId,
+      filter: {
+        minTimestamp: filter.minTimestamp,
+        maxTimestamp: filter.maxTimestamp,
+      },
+    },
+    execute
+  );
+  console.log(data);
+  return (
+    data?.person.gasReadings.map((gasReading) => ({
+      name: data.person.name,
+      gas: gasReading.gas,
+      time: gasReading.timestamp,
+      coordinates: formatCoordinates(gasReading.coordinates),
+      density: gasReading.density,
+      densityUnits: gasReading.densityUnits,
+    })) ?? []
+  );
+};
+
+const useGasReadingsInCompany = (
+  companyId: string,
+  filter: Filter,
+  execute = true
+): PersonGasReading[] => {
+  const { data } = useCompanyGasReadings(
+    {
+      companyId: companyId,
+      filter: {
+        minTimestamp: filter.minTimestamp,
+        maxTimestamp: filter.maxTimestamp,
+      },
+    },
+    execute
+  );
+  return (
+    data?.company.people
+      .map((person) =>
+        person.gasReadings.map((gasReading) => ({
+          name: person.name,
+          gas: gasReading.gas,
+          time: gasReading.timestamp,
+          coordinates: formatCoordinates(gasReading.coordinates),
+          density: gasReading.density,
+          densityUnits: gasReading.densityUnits,
+        }))
+      )
+      .flat()
+      .reverse() ?? []
+  );
+};
+
+const formatCoordinates = (coordinates: string[]): string =>
+  `${Number(coordinates[1]).toFixed(NUM_COORD_DIGITS)},
+  ${Number(coordinates[0]).toFixed(NUM_COORD_DIGITS)}`;

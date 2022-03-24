@@ -1,4 +1,3 @@
-import { useQuery } from "@apollo/client";
 import {
   Card,
   CardContent,
@@ -8,39 +7,15 @@ import {
 } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React, { useCallback, useEffect, useState } from "react";
-import { getCurrentUser } from "../../..";
-import {
-  selectGasPageEndDate,
-  selectGasPagePersonId,
-  selectGasPageStartDate,
-} from "../../../store/slices/gasPageSlice";
-import { useAppSelector } from "../../../store/store";
+import React, { useCallback, useState } from "react";
 import theme from "../../../Theme";
-import {
-  GET_GAS_READINGS_FOR_COMPANY,
-  GET_GAS_READINGS_FOR_PERSON,
-} from "../../../util/queryService";
-import { CustomAccordion } from "../atoms/CustomAccordion";
 import { GasDotMap } from "../atoms/GasesDotMap";
-import GasesTable from "../atoms/GasesTable";
 import { PageHeader } from "../atoms/PageHeader";
-import { PageSectionHeader } from "../atoms/PageSectionHeader";
-import { VisualizationSelect } from "../atoms/VisualizationSelect";
 import { Filter, FilterBar } from "../molecules/FilterBar";
-
-//remove this later
-export interface GasReading {
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-  density: number;
-  densityUnits: string;
-  gas: string;
-  personName: string;
-  timestamp: Date;
-}
+import { GasesTable } from "../atoms/GasesTable";
+import { FilterFab } from "../molecules/FilterFab";
+import { FilterModal } from "../molecules/FilterModal";
+import { VisualizationSelect } from "../atoms/VisualizationSelect";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -87,20 +62,41 @@ const useStyles = makeStyles({
   pageCard: {
     marginBottom: "16px",
   },
+
+  fabPadding: {
+    height: "56px",
+  },
+  mobileVisualizationDropdown: {
+    [theme.breakpoints.down("sm")]: {
+      display: "flex",
+      justifyContent: "center",
+      left: "50%",
+      marginBottom: "20px",
+      position: "absolute",
+      top: "calc(0.5 * 60px)",
+      transform: "translate(-50%, -50%)",
+    },
+  },
+  mobileVisualization: {
+    height: "calc(100vh - 60px)",
+    left: "0",
+    position: "absolute",
+    top: "60px",
+    width: "100vw",
+  },
 });
+
+interface GasesProps {
+  filter: Filter;
+  onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
+}
 
 export const GASES_PAGE_LABEL = "gasesPage";
 
-const visualizations = ["Gases map", "Gases table"];
+const visualizations = ["Gases Dot Map", "Gases Table"];
 
-export const Gases: React.FC = () => {
+export const Gases: React.FC<GasesProps> = () => {
   const styles = useStyles();
-
-  const user = getCurrentUser();
-
-  const startDate = useAppSelector(selectGasPageStartDate);
-  const endDate = useAppSelector(selectGasPageEndDate);
-  const filterId = useAppSelector(selectGasPagePersonId);
 
   const [filter, setFilter] = useState<Filter>({});
 
@@ -111,86 +107,10 @@ export const Gases: React.FC = () => {
     []
   );
 
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [visualization, setVisualization] = useState(visualizations[0]);
+  const showFilterBar = useMediaQuery(theme.breakpoints.up("lg"));
   const mobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const { data: companyGasReadingsData } = useQuery(
-    GET_GAS_READINGS_FOR_COMPANY,
-    {
-      variables: {
-        companyId: user?.company.id,
-        filter: {
-          minTimestamp: startDate !== "" ? new Date(startDate) : null,
-          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
-        },
-      },
-    }
-  );
-
-  const { data: personGasReadingsData } = useQuery(
-    GET_GAS_READINGS_FOR_PERSON,
-    {
-      variables: {
-        personId: filterId,
-        filter: {
-          minTimestamp: startDate !== "" ? new Date(startDate) : null,
-          maxTimestamp: endDate !== "" ? new Date(endDate) : null,
-        },
-      },
-    }
-  );
-
-  const [gasReadings, setGasReadings] = useState<any>([]);
-
-  useEffect(() => {
-    if (filterId !== "") {
-      if (personGasReadingsData && personGasReadingsData.person !== null) {
-        const gasReadings: any[] =
-          personGasReadingsData.person.gasReadings
-            .map((gasReading: any) => {
-              return {
-                coordinates: {
-                  lat: gasReading.coordinates[1],
-                  lng: gasReading.coordinates[0],
-                },
-                density: gasReading.density,
-                densityUnits: gasReading.densityUnits,
-                gas: gasReading.gas,
-                personName: personGasReadingsData.person.name,
-                timestamp: new Date(gasReading.timestamp),
-              };
-            })
-            .flat() ?? [];
-        setGasReadings(gasReadings);
-      }
-    } else {
-      const gasReadings: any[] =
-        companyGasReadingsData?.company.people
-          .map((person: any) =>
-            person.gasReadings.map((gasReading: any) => {
-              return {
-                coordinates: {
-                  lat: gasReading.coordinates[1],
-                  lng: gasReading.coordinates[0],
-                },
-                density: gasReading.density,
-                densityUnits: gasReading.densityUnits,
-                gas: gasReading.gas,
-                personName: person.name,
-                timestamp: new Date(gasReading.timestamp),
-              };
-            })
-          )
-          .flat() ?? [];
-      setGasReadings(gasReadings);
-    }
-  }, [
-    companyGasReadingsData,
-    personGasReadingsData,
-    startDate,
-    endDate,
-    filterId,
-  ]);
 
   return (
     <StyledEngineProvider injectFirst>
@@ -225,37 +145,46 @@ export const Gases: React.FC = () => {
                 </div>
               </CardMedia>
             </Card>
-            <PageSectionHeader
-              sectionTitle={"Raw Gases Data"}
-              sectionDescription={
-                "Explore raw gas readings data through a date-filtered data table."
-              }
-            />
-            <CustomAccordion
-              accordionHeight={"auto"}
-              accordionWidth={""}
-              accordionTitle={visualizations[1]}
-              component={<GasesTable gasReadings={gasReadings} />}
-            />
+            <Card className={styles.pageCard}>
+              <CardHeader
+                title={visualizations[1]}
+                subheader="View individual gas reading data."
+              />
+              <CardMedia>
+                <GasesTable filter={filter} />
+              </CardMedia>
+            </Card>
           </>
         ) : (
           <>
-            <div className={styles.gasesDropdown}>
+            <div className={styles.mobileVisualizationDropdown}>
               <VisualizationSelect
                 visualizations={visualizations}
                 setVisualization={setVisualization}
               />
             </div>
             {visualization == visualizations[0] && (
-              <div className={styles.visualization}>
+              <div className={styles.mobileVisualization}>
                 <GasDotMap filter={filter} />
               </div>
             )}
             {visualization == visualizations[1] && (
-              <div className={styles.visualization}>
-                <GasesTable gasReadings={gasReadings} />
+              <div className={styles.mobileVisualization}>
+                <GasesTable filter={filter} />
               </div>
             )}
+          </>
+        )}
+        {!showFilterBar && (
+          <>
+            <div className={styles.fabPadding} />
+            <FilterFab onClick={() => setFilterModalOpen(true)} />
+            <FilterModal
+              filter={filter}
+              onChange={filterChange}
+              open={filterModalOpen}
+              onClose={() => setFilterModalOpen(false)}
+            />
           </>
         )}
       </>
