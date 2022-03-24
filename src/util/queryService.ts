@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, MutationTuple, useMutation, useQuery } from "@apollo/client";
 import { QueryResult } from "@apollo/client/react/types/types";
 
 export const GET_USERS = gql`
@@ -419,4 +419,23 @@ export const usePersonGasReadings = (
       skip: !execute,
     }
   );
+};
+
+export const LOGIN = gql`
+  mutation ($userAccountId: ID!, $password: String!) {
+    login(userAccountId: $userAccountId, password: $password)
+  }
+`;
+
+export interface LoginVars {
+  userAccountId: string;
+  password: string;
+}
+
+export interface LoginData {
+  login: string;
+}
+
+export const useLogin = (): MutationTuple<LoginData, LoginVars> => {
+  return useMutation<LoginData, LoginVars>(LOGIN);
 };
