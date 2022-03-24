@@ -126,7 +126,7 @@ export const Gases: React.FC<GasesProps> = (props) => {
                   subheader="View individual gas reading data."
               />
               <CardMedia>
-                <GasesTable filter={props.filter} />
+                <GasesTable filter={filter} />
               </CardMedia>
             </Card>
           </>

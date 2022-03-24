@@ -140,6 +140,7 @@ const usePersonAsPeople = (
     },
     execute
   );
+  console.log(data)
   return (data && [data.person]) || [];
 };
 
@@ -184,12 +185,3 @@ const markerKey = (marker: GasMarker): string => {
   const time = marker.time.toISOString();
   return `${personId}-${time}`;
 };
-
-// const intoPoints = (gasReadings: GasReading[]): GasPoint[] => {
-//     return gasReadings.map((gasReading) => ({
-//         location: new LatLng(
-//             Number(gasReading.coordinates[1]),
-//             Number(gasReading.coordinates[0])
-//         )
-//     }));
-// };
