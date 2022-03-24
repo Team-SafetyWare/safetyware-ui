@@ -16,9 +16,6 @@ import { GasesTable } from "../atoms/GasesTable";
 import { FilterFab } from "../molecules/FilterFab";
 import { FilterModal } from "../molecules/FilterModal";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
-import { IncidentsMap } from "../molecules/IncidentsMap";
-import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
-import { GasMeter } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -98,7 +95,7 @@ export const GASES_PAGE_LABEL = "gasesPage";
 
 const visualizations = ["Gases Dot Map", "Gases Table"];
 
-export const Gases: React.FC<GasesProps> = (props) => {
+export const Gases: React.FC<GasesProps> = () => {
   const styles = useStyles();
 
   const [filter, setFilter] = useState<Filter>({});
