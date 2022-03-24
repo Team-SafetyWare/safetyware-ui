@@ -1,10 +1,9 @@
 import { Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
-  loginEmailButton: {
+  button: {
     borderColor: "white",
     color: "white",
     height: "56px",
@@ -18,17 +17,21 @@ const useStyles = makeStyles({
   },
 });
 
-export const LoginEmailButton: React.FC = () => {
+interface LoginProps {
+  text: string;
+  onClick: () => void;
+}
+
+export const LoginButton: React.FC<LoginProps> = (props) => {
   const styles = useStyles();
 
   return (
     <Button
-      className={styles.loginEmailButton}
-      component={Link}
-      to="/home"
+      className={styles.button}
       variant="outlined"
+      onClick={props.onClick}
     >
-      Log In with Email
+      {props.text}
     </Button>
   );
 };
