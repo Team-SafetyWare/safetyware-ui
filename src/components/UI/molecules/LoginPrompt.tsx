@@ -10,7 +10,7 @@ import { Box } from "@mui/system";
 import { default as React, useCallback, useState } from "react";
 import Logo from "../../../assets/logo.png";
 import { setCurrentUser, User } from "../../../index";
-import { GET_USERS } from "../../../util/queryService";
+import { GET_USERS, useLogin } from "../../../util/queryService";
 import { LoginButton } from "../atoms/LoginButton";
 
 const useStyles = makeStyles({
@@ -79,13 +79,31 @@ export const LoginPrompt: React.FC = () => {
     setAndStoreUser(user);
   }
 
+  const [login, { data: loginData, loading: loginLoading, error: loginError }] =
+    useLogin();
+
   const onLogInClick = useCallback(() => {
     // Todo: Log in.
-  }, []);
+  }, [users]);
 
   const onLogInDemoClick = useCallback(() => {
     // Todo: Log in with demo account.
-  }, []);
+    if (users.length == 0) {
+      alert(
+        "Users did not load. Please refresh, wait a moment, and try again."
+      );
+    }
+    // Assume demo account is the first in users.
+    const user = users[0];
+    login({
+      variables: {
+        userAccountId: user.id,
+        password: "",
+      },
+    }).then((result) => {
+      console.log(result.data?.login);
+    });
+  }, [users]);
 
   const userSelectLabel = "User";
   const passwordSelectLabel = "Password";
