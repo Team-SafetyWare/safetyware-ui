@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
@@ -20,6 +20,7 @@ const useStyles = makeStyles({
 interface LoginProps {
   text: string;
   onClick: () => void;
+  loading?: boolean;
 }
 
 export const LoginButton: React.FC<LoginProps> = (props) => {
@@ -29,9 +30,13 @@ export const LoginButton: React.FC<LoginProps> = (props) => {
     <Button
       className={styles.button}
       variant="outlined"
-      onClick={props.onClick}
+      onClick={props.loading ? undefined : props.onClick}
     >
-      {props.text}
+      {props.loading ? (
+        <CircularProgress size={24} sx={{ color: "white" }} />
+      ) : (
+        props.text
+      )}
     </Button>
   );
 };

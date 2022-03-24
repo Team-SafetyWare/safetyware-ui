@@ -120,6 +120,7 @@ export const LoginPrompt: React.FC = () => {
 
   const userSelectLabel = "User";
   const passwordSelectLabel = "Password";
+  const isLoading = users.length === 0;
 
   return (
     <StyledEngineProvider injectFirst>
@@ -129,6 +130,7 @@ export const LoginPrompt: React.FC = () => {
           <LoginButton
             text="Log In with Demo Account"
             onClick={onLogInDemoClick}
+            loading={isLoading}
           />
           <Divider className={styles.loginOptionDivider}>OR</Divider>
           <FormControl sx={{ maxWidth: 300 }}>
@@ -166,7 +168,11 @@ export const LoginPrompt: React.FC = () => {
               style: { color: "white" },
             }}
           />
-          <LoginButton text="Log In" onClick={onLogInClick} />
+          <LoginButton
+            text="Log In"
+            onClick={onLogInClick}
+            loading={isLoading}
+          />
         </div>
       </Box>
     </StyledEngineProvider>
