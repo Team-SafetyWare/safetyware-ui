@@ -1,4 +1,10 @@
-import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  useMediaQuery,
+} from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React, { useCallback, useState } from "react";
@@ -7,6 +13,12 @@ import { GasDotMap } from "../atoms/GasesDotMap";
 import { PageHeader } from "../atoms/PageHeader";
 import { Filter, FilterBar } from "../molecules/FilterBar";
 import { GasesTable } from "../atoms/GasesTable";
+import { FilterFab } from "../molecules/FilterFab";
+import { FilterModal } from "../molecules/FilterModal";
+import { VisualizationSelect } from "../atoms/VisualizationSelect";
+import { IncidentsMap } from "../molecules/IncidentsMap";
+import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
+import { GasMeter } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -53,6 +65,28 @@ const useStyles = makeStyles({
   pageCard: {
     marginBottom: "16px",
   },
+
+  fabPadding: {
+    height: "56px",
+  },
+  mobileVisualizationDropdown: {
+    [theme.breakpoints.down("sm")]: {
+      display: "flex",
+      justifyContent: "center",
+      left: "50%",
+      marginBottom: "20px",
+      position: "absolute",
+      top: "calc(0.5 * 60px)",
+      transform: "translate(-50%, -50%)",
+    },
+  },
+  mobileVisualization: {
+    height: "calc(100vh - 60px)",
+    left: "0",
+    position: "absolute",
+    top: "60px",
+    width: "100vw",
+  },
 });
 
 interface GasesProps {
@@ -61,6 +95,8 @@ interface GasesProps {
 }
 
 export const GASES_PAGE_LABEL = "gasesPage";
+
+const visualizations = ["Gases Dot Map", "Gases Table"];
 
 export const Gases: React.FC<GasesProps> = (props) => {
   const styles = useStyles();
@@ -74,46 +110,86 @@ export const Gases: React.FC<GasesProps> = (props) => {
     []
   );
 
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [visualization, setVisualization] = useState(visualizations[0]);
+  const showFilterBar = useMediaQuery(theme.breakpoints.up("lg"));
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <StyledEngineProvider injectFirst>
       <>
-        <>
-          <PageHeader
-            pageTitle={"Gases"}
-            pageDescription={"Analyze data based on gases using a gas dot map."}
-          />
-
-          <div className={[styles.pageCard, styles.filterBar].join(" ")}>
-            <Card elevation={2}>
-              <CardContent>
-                <div style={{ marginBottom: "-8px" }}>
-                  <FilterBar filter={filter} onChange={filterChange} />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card className={styles.pageCard}>
-            <CardHeader
-              title="Gases Dot Map"
-              subheader="Become aware of the gas concentrations across multiple locations. "
+        {!mobile ? (
+          <>
+            <PageHeader
+              pageTitle={"Gases"}
+              pageDescription={
+                "Analyze data based on gases using a gas dot map."
+              }
             />
-            <CardMedia>
-              <div style={{ height: "600px" }}>
+
+            <div className={[styles.pageCard, styles.filterBar].join(" ")}>
+              <Card elevation={2}>
+                <CardContent>
+                  <div style={{ marginBottom: "-8px" }}>
+                    <FilterBar filter={filter} onChange={filterChange} />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className={styles.pageCard}>
+              <CardHeader
+                title={visualizations[0]}
+                subheader="Become aware of the gas concentrations across multiple locations. "
+              />
+              <CardMedia>
+                <div style={{ height: "600px" }}>
+                  <GasDotMap filter={filter} />
+                </div>
+              </CardMedia>
+            </Card>
+            <Card className={styles.pageCard}>
+              <CardHeader
+                title={visualizations[1]}
+                subheader="View individual gas reading data."
+              />
+              <CardMedia>
+                <GasesTable filter={filter} />
+              </CardMedia>
+            </Card>
+          </>
+        ) : (
+          <>
+            <div className={styles.mobileVisualizationDropdown}>
+              <VisualizationSelect
+                visualizations={visualizations}
+                setVisualization={setVisualization}
+              />
+            </div>
+            {visualization == visualizations[0] && (
+              <div className={styles.mobileVisualization}>
                 <GasDotMap filter={filter} />
               </div>
-            </CardMedia>
-          </Card>
-          <Card className={styles.pageCard}>
-            <CardHeader
-              title="Gases table"
-              subheader="View individual gas reading data."
+            )}
+            {visualization == visualizations[1] && (
+              <div className={styles.mobileVisualization}>
+                <GasesTable filter={filter} />
+              </div>
+            )}
+          </>
+        )}
+        {!showFilterBar && (
+          <>
+            <div className={styles.fabPadding} />
+            <FilterFab onClick={() => setFilterModalOpen(true)} />
+            <FilterModal
+              filter={filter}
+              onChange={filterChange}
+              open={filterModalOpen}
+              onClose={() => setFilterModalOpen(false)}
             />
-            <CardMedia>
-              <GasesTable filter={filter} />
-            </CardMedia>
-          </Card>
-        </>
+          </>
+        )}
       </>
     </StyledEngineProvider>
   );
