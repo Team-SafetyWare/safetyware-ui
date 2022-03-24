@@ -2,7 +2,7 @@ import React, {useCallback, useState} from "react";
 import {Filter, shouldFilterPerson} from "../molecules/FilterBar";
 import {makeStyles} from "@mui/styles";
 import {getCurrentUser, User} from "../../../index";
-import {PersonWithGasReadings, useCompanyGasReadings} from "../../../util/queryService";
+import {PersonWithGasReadings, useCompanyGasReadings, usePersonGasReadings} from "../../../util/queryService";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
@@ -100,8 +100,8 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
                             </TableRow>
                         ))}
                         {emptyRowCount > 0 && (
-                            <TableRow style={{ height: 53 * emptyRowCount }}>
-                                <TableCell colSpan={NUM_COLS} />
+                            <TableRow style={{height: 53 * emptyRowCount}}>
+                                <TableCell colSpan={NUM_COLS}/>
                             </TableRow>
                         )}
                     </TableBody>
@@ -121,6 +121,11 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
 
 const useGasReadings = (user: User | null, filter: Filter) =>
     [
+        useGasReadingsInPerson(
+            filter.person?.id || "",
+            filter,
+            shouldFilterPerson(filter)
+        ),
         useGasReadingsInCompany(
             user?.company.id || "",
             filter,
@@ -128,12 +133,40 @@ const useGasReadings = (user: User | null, filter: Filter) =>
         ),
     ].flat()
 
+const useGasReadingsInPerson = (
+    personId: string,
+    filter: Filter,
+    execute = true
+): PersonGasReading[] => {
+    const { data } = usePersonGasReadings(
+        {
+            personId: personId,
+            filter: {
+                minTimestamp: filter.minTimestamp,
+                maxTimestamp: filter.maxTimestamp,
+            },
+        },
+        execute
+    );
+    console.log(data)
+    return (
+        data?.person.gasReadings.map((gasReading) => ({
+            name: data.person.name,
+            gas: gasReading.gas,
+            time: gasReading.timestamp,
+            coordinates: formatCoordinates(gasReading.coordinates),
+            density: gasReading.density,
+            densityUnits: gasReading.densityUnits,
+        })) ?? []
+    );
+};
+
 const useGasReadingsInCompany = (
     companyId: string,
     filter: Filter,
     execute = true
 ): PersonGasReading[] => {
-    const { data } = useCompanyGasReadings(
+    const {data} = useCompanyGasReadings(
         {
             companyId: companyId,
             filter: {
