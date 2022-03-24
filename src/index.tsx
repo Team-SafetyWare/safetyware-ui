@@ -42,12 +42,20 @@ export const getCurrentUser = (): User | null => {
   return json && JSON.parse(json);
 };
 
-export const setCurrentUser = (user: User): void => {
-  localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+export const setCurrentUser = (user: User | undefined): void => {
+  if (user) {
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+  } else {
+    localStorage.removeItem(CURRENT_USER_KEY);
+  }
 };
 
-export const setToken = (token: string): void => {
-  localStorage.setItem(TOKEN_KEY, token);
+export const setToken = (token: string | undefined): void => {
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(TOKEN_KEY);
+  }
 };
 
 export const sortPeople = <T extends Person>(people: T[]): T[] =>
