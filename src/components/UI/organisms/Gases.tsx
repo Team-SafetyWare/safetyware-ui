@@ -7,6 +7,7 @@ import {GasDotMap} from "../atoms/GasesDotMap";
 import {PageHeader} from "../atoms/PageHeader";
 import {PageSectionHeader} from "../atoms/PageSectionHeader";
 import {Filter, FilterBar} from "../molecules/FilterBar";
+import {GasesTable} from "../atoms/GasesTable";
 
 //remove this later
 export interface GasReading {
@@ -68,9 +69,14 @@ const useStyles = makeStyles({
   },
 });
 
+interface GasesProps {
+    filter: Filter;
+    onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
+}
+
 export const GASES_PAGE_LABEL = "gasesPage";
 
-export const Gases: React.FC = () => {
+export const Gases: React.FC<GasesProps> = (props) => {
   const styles = useStyles();
 
   const [filter, setFilter] = useState<Filter>({});
@@ -119,9 +125,9 @@ export const Gases: React.FC = () => {
                   title="Gases table"
                   subheader="View individual gas reading data."
               />
-              {/*<CardMedia>*/}
-              {/*  <IncidentsTable filter={props.filter} />*/}
-              {/*</CardMedia>*/}
+              <CardMedia>
+                <GasesTable filter={props.filter} />
+              </CardMedia>
             </Card>
           </>
       </>
