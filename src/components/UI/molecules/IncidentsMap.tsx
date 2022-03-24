@@ -3,7 +3,6 @@ import {
   getCurrentUser,
   MAP_RESTRICTION,
   sortPeople,
-  useMapGestureHandling,
   User,
 } from "../../../index";
 import { GoogleMap, Marker } from "@react-google-maps/api";
@@ -84,7 +83,7 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
           width: "100%",
         }}
         options={{
-          gestureHandling: useMapGestureHandling(),
+          gestureHandling: "greedy",
           restriction: MAP_RESTRICTION,
         }}
         zoom={DEFAULT_MAP_ZOOM}
