@@ -1,3 +1,4 @@
+import { Theme, useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import {
@@ -6,6 +7,7 @@ import {
   GridItem,
   swap,
 } from "react-grid-dnd";
+import theme from "../../../Theme";
 import { DashboardWidgetTile } from "./DashboardWidgetTile";
 
 interface DashboardWidgetWrapperProps {
@@ -14,21 +16,31 @@ interface DashboardWidgetWrapperProps {
   removeWidget?: any;
 }
 
-const useStyles = makeStyles({
-  largeContainer: {
+export interface StyleProps {
+  mobile: boolean;
+  numberOfWidgets: number;
+}
+
+const WIDGET_HEIGHT = 410;
+const PX_STRING = "px";
+
+const useStyles = makeStyles<Theme, StyleProps>({
+  container: {
     display: "flex",
     touchAction: "none",
     paddingTop: "5px",
     width: "100%",
-    height: "850px",
-    overflow: "hidden",
-  },
-  smallContainer: {
-    display: "flex",
-    touchAction: "none",
-    paddingTop: "5px",
-    width: "100%",
-    height: "400px",
+    height: (props) => {
+      if (!props.mobile) {
+        if (props.numberOfWidgets > 2) {
+          return (2 * WIDGET_HEIGHT).toString() + PX_STRING;
+        } else {
+          return WIDGET_HEIGHT.toString() + PX_STRING;
+        }
+      } else {
+        return (props.numberOfWidgets * WIDGET_HEIGHT).toString() + PX_STRING;
+      }
+    },
     overflow: "hidden",
   },
   dropzone: {
@@ -45,58 +57,42 @@ const useStyles = makeStyles({
 export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
   props
 ) => {
-  const styles = useStyles();
-
   const onChange = (sourceId: any, sourceIndex: any, targetIndex: any) => {
     const nextState = swap(props.widgetState, sourceIndex, targetIndex);
     props.setWidgetState(nextState);
   };
 
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const styleProps = {
+    mobile: mobile,
+    numberOfWidgets: props.widgetState.length,
+  };
+
+  const styles = useStyles(styleProps);
+
   return (
     <GridContextProvider onChange={onChange}>
-      {props.widgetState.length > 2 ? (
-        <div className={styles.largeContainer}>
-          <GridDropZone
-            className={styles.dropzone}
-            id="drop-zone"
-            boxesPerRow={2}
-            rowHeight={410}
-          >
-            {props.widgetState.map((widget: any) => (
-              <GridItem
-                key={widget.widgetName}
-                className={styles.widgetTileContainer}
-              >
-                <DashboardWidgetTile
-                  widget={widget}
-                  removeWidget={props.removeWidget}
-                />
-              </GridItem>
-            ))}
-          </GridDropZone>
-        </div>
-      ) : (
-        <div className={styles.smallContainer}>
-          <GridDropZone
-            className={styles.dropzone}
-            id="drop-zone"
-            boxesPerRow={2}
-            rowHeight={410}
-          >
-            {props.widgetState.map((widget: any) => (
-              <GridItem
-                key={widget.widgetName}
-                className={styles.widgetTileContainer}
-              >
-                <DashboardWidgetTile
-                  widget={widget}
-                  removeWidget={props.removeWidget}
-                />
-              </GridItem>
-            ))}
-          </GridDropZone>
-        </div>
-      )}
+      <div className={styles.container}>
+        <GridDropZone
+          className={styles.dropzone}
+          id="drop-zone"
+          boxesPerRow={!mobile ? 2 : 1}
+          rowHeight={WIDGET_HEIGHT}
+        >
+          {props.widgetState.map((widget: any) => (
+            <GridItem
+              key={widget.widgetName}
+              className={styles.widgetTileContainer}
+            >
+              <DashboardWidgetTile
+                widget={widget}
+                removeWidget={props.removeWidget}
+              />
+            </GridItem>
+          ))}
+        </GridDropZone>
+      </div>
     </GridContextProvider>
   );
 };
