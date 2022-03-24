@@ -1,26 +1,12 @@
-import {Card, CardContent, CardHeader, CardMedia,} from "@mui/material";
-import {StyledEngineProvider} from "@mui/material/styles";
-import {makeStyles} from "@mui/styles";
-import React, {useCallback, useState} from "react";
+import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
+import { StyledEngineProvider } from "@mui/material/styles";
+import { makeStyles } from "@mui/styles";
+import React, { useCallback, useState } from "react";
 import theme from "../../../Theme";
-import {GasDotMap} from "../atoms/GasesDotMap";
-import {PageHeader} from "../atoms/PageHeader";
-import {PageSectionHeader} from "../atoms/PageSectionHeader";
-import {Filter, FilterBar} from "../molecules/FilterBar";
-import {GasesTable} from "../atoms/GasesTable";
-
-//remove this later
-export interface GasReading {
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-  density: number;
-  densityUnits: string;
-  gas: string;
-  personName: string;
-  timestamp: Date;
-}
+import { GasDotMap } from "../atoms/GasesDotMap";
+import { PageHeader } from "../atoms/PageHeader";
+import { Filter, FilterBar } from "../molecules/FilterBar";
+import { GasesTable } from "../atoms/GasesTable";
 
 const useStyles = makeStyles({
   filterBar: {
@@ -70,8 +56,8 @@ const useStyles = makeStyles({
 });
 
 interface GasesProps {
-    filter: Filter;
-    onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
+  filter: Filter;
+  onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
 }
 
 export const GASES_PAGE_LABEL = "gasesPage";
@@ -91,45 +77,43 @@ export const Gases: React.FC<GasesProps> = (props) => {
   return (
     <StyledEngineProvider injectFirst>
       <>
-          <>
-            <PageHeader
-              pageTitle={"Gases"}
-              pageDescription={
-                "Analyze data based on gases using a gas dot map."
-              }
-            />
+        <>
+          <PageHeader
+            pageTitle={"Gases"}
+            pageDescription={"Analyze data based on gases using a gas dot map."}
+          />
 
-            <div className={[styles.pageCard, styles.filterBar].join(" ")}>
-              <Card elevation={2}>
-                <CardContent>
-                  <div style={{ marginBottom: "-8px" }}>
-                    <FilterBar filter={filter} onChange={filterChange} />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card className={styles.pageCard}>
-              <CardHeader
-                title="Gases Dot Map"
-                subheader="Become aware of the gas concentrations across multiple locations. "
-              />
-              <CardMedia>
-                <div style={{ height: "600px" }}>
-                  <GasDotMap filter={filter} />
+          <div className={[styles.pageCard, styles.filterBar].join(" ")}>
+            <Card elevation={2}>
+              <CardContent>
+                <div style={{ marginBottom: "-8px" }}>
+                  <FilterBar filter={filter} onChange={filterChange} />
                 </div>
-              </CardMedia>
+              </CardContent>
             </Card>
-            <Card className={styles.pageCard}>
-              <CardHeader
-                  title="Gases table"
-                  subheader="View individual gas reading data."
-              />
-              <CardMedia>
-                <GasesTable filter={filter} />
-              </CardMedia>
-            </Card>
-          </>
+          </div>
+
+          <Card className={styles.pageCard}>
+            <CardHeader
+              title="Gases Dot Map"
+              subheader="Become aware of the gas concentrations across multiple locations. "
+            />
+            <CardMedia>
+              <div style={{ height: "600px" }}>
+                <GasDotMap filter={filter} />
+              </div>
+            </CardMedia>
+          </Card>
+          <Card className={styles.pageCard}>
+            <CardHeader
+              title="Gases table"
+              subheader="View individual gas reading data."
+            />
+            <CardMedia>
+              <GasesTable filter={filter} />
+            </CardMedia>
+          </Card>
+        </>
       </>
     </StyledEngineProvider>
   );
