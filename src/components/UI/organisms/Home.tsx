@@ -16,7 +16,13 @@ interface HomeProps {
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
-  dashboardContent: {},
+  dashboardContent: {
+    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+      {
+        marginLeft: "16px",
+        marginRight: "16px",
+      },
+  },
 });
 
 export const Home: React.FC<HomeProps> = (props) => {
