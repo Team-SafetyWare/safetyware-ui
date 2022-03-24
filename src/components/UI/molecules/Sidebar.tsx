@@ -15,12 +15,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useCallback } from "react";
+import { NavLink, useHistory } from "react-router-dom";
 import Logo from "../../../assets/logo.png";
 import theme from "../../../Theme";
 import { SidebarUserName } from "../atoms/SidebarUserName";
 import { SidebarUserPicture } from "../atoms/SidebarUserPicture";
+import { setCurrentUser, setToken } from "../../../index";
 
 interface SidebarProps {
   userPhoto?: string;
@@ -122,6 +123,14 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const history = useHistory();
+
+  const onLogout = useCallback(() => {
+    setCurrentUser(undefined);
+    setToken(undefined);
+    history.push("/");
+  }, [history]);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -174,11 +183,12 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
           </div>
         </ListItemButton>
         <ListItemButton
-          component={NavLink}
-          to="/"
-          exact
-          activeClassName={styles.sidebarItemSelected}
-          onClick={matches ? undefined : handleDrawerToggle}
+          onClick={() => {
+            if (matches) {
+              handleDrawerToggle();
+            }
+            onLogout();
+          }}
         >
           <ListItemIcon>
             <LogoutIcon />
