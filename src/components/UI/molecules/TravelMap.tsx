@@ -10,7 +10,6 @@ import {
   MAP_RESTRICTION,
   modularIndex,
   sortPeople,
-  useMapGestureHandling,
   User,
 } from "../../../index";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
@@ -179,7 +178,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
             width: "100%",
           }}
           options={{
-            gestureHandling: useMapGestureHandling(),
+            gestureHandling: "greedy",
             restriction: MAP_RESTRICTION,
           }}
           zoom={DEFAULT_MAP_ZOOM}

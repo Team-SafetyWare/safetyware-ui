@@ -13,8 +13,6 @@ import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 import { Person } from "./util/queryService";
 import MapRestriction = google.maps.MapRestriction;
-import { useMediaQuery } from "@mui/material";
-import theme from "./Theme";
 import { setContext } from "@apollo/client/link/context";
 
 export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
@@ -63,9 +61,6 @@ export const sortPeople = <T extends Person>(people: T[]): T[] =>
 
 export const modularIndex = <T,>(arr: T[], index: number): T =>
   arr[index % arr.length];
-
-export const useMapGestureHandling = () =>
-  useMediaQuery(theme.breakpoints.down("md")) ? "cooperative" : "greedy";
 
 const httpLink = createHttpLink({
   uri: `${API_URL}/graphql`,
