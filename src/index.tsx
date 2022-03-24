@@ -58,14 +58,6 @@ export const setCurrentUser = (user: User | undefined): void => {
 
 export const getToken = (): string | null => localStorage.getItem(TOKEN_KEY);
 
-export const setToken = (token: string | undefined): void => {
-  if (token) {
-    localStorage.setItem(TOKEN_KEY, token);
-  } else {
-    localStorage.removeItem(TOKEN_KEY);
-  }
-};
-
 export const sortPeople = <T extends Person>(people: T[]): T[] =>
   people.slice().sort((a, b) => a.name.localeCompare(b.name));
 
@@ -93,6 +85,16 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
+
+export const setToken = (token: string | undefined): void => {
+  // noinspection JSIgnoredPromiseFromCall
+  client.resetStore();
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+  } else {
+    localStorage.removeItem(TOKEN_KEY);
+  }
+};
 
 ReactDOM.render(
   <React.StrictMode>
