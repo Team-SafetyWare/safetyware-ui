@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   getCurrentUser,
   MAP_RESTRICTION,
@@ -24,6 +24,10 @@ import GenericIcon from "../../../assets/generic.png";
 import { makeStyles } from "@mui/styles";
 import LatLngLiteral = google.maps.LatLngLiteral;
 import { MapTooltip } from "./MapTooltip";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import OverlayStyles from "../../styling/OverlayStyles";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const DEFAULT_MAP_CENTER: LatLngLiteral = {
   lat: 51.045,
@@ -51,6 +55,10 @@ const useStyles = makeStyles({
 });
 
 export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
+  const overlayStyles = OverlayStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
@@ -75,43 +83,71 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
 
   const styles = useStyles();
 
+  useEffect(() => {
+    if (people.length === 0) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [people]);
+
+  useEffect(() => {
+    if (markers.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [markers]);
+
   return (
     <>
-      <GoogleMap
-        mapContainerStyle={{
-          height: "100%",
-          width: "100%",
-        }}
-        options={{
-          gestureHandling: "greedy",
-          restriction: MAP_RESTRICTION,
-        }}
-        zoom={DEFAULT_MAP_ZOOM}
-        center={DEFAULT_MAP_CENTER}
-      >
-        {markers.map((marker) => (
-          <Marker
-            key={markerKey(marker)}
-            position={marker.location}
-            icon={marker.icon}
-            onMouseOver={() => onMarkerMouseOver(marker)}
-            onMouseOut={() => onMarkerMouseOut(marker)}
-          />
-        ))}
-        {hoveredMarker && (
-          <MapTooltip location={hoveredMarker.location} hoverDistance={"20px"}>
-            <h3 className={styles.tooltipText}>
-              Incident: {hoveredMarker.type}
-            </h3>
-            <p className={styles.tooltipText}>
-              Name: {hoveredMarker.person.name}
-            </p>
-            <p className={styles.tooltipText}>
-              Time: {hoveredMarker.time.toISOString()}
-            </p>
-          </MapTooltip>
-        )}
-      </GoogleMap>
+      <div className={overlayStyles.parent}>
+        <Backdrop
+          className={overlayStyles.backdrop}
+          open={isEmpty || isLoading}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          {isLoading ? <CircularProgress /> : <EmptyDataMessage />}
+        </Backdrop>
+        <GoogleMap
+          mapContainerStyle={{
+            height: "100%",
+            width: "100%",
+          }}
+          options={{
+            gestureHandling: "greedy",
+            restriction: MAP_RESTRICTION,
+          }}
+          zoom={DEFAULT_MAP_ZOOM}
+          center={DEFAULT_MAP_CENTER}
+        >
+          {markers.map((marker) => (
+            <Marker
+              key={markerKey(marker)}
+              position={marker.location}
+              icon={marker.icon}
+              onMouseOver={() => onMarkerMouseOver(marker)}
+              onMouseOut={() => onMarkerMouseOut(marker)}
+            />
+          ))}
+          {hoveredMarker && (
+            <MapTooltip
+              location={hoveredMarker.location}
+              hoverDistance={"20px"}
+            >
+              <h3 className={styles.tooltipText}>
+                Incident: {hoveredMarker.type}
+              </h3>
+              <p className={styles.tooltipText}>
+                Name: {hoveredMarker.person.name}
+              </p>
+              <p className={styles.tooltipText}>
+                Time: {hoveredMarker.time.toISOString()}
+              </p>
+            </MapTooltip>
+          )}
+        </GoogleMap>
+      </div>
     </>
   );
 };

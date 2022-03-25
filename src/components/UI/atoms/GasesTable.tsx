@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Filter, shouldFilterPerson } from "../molecules/FilterBar";
 import { makeStyles } from "@mui/styles";
 import { getCurrentUser, User } from "../../../index";
@@ -13,6 +13,9 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import { TablePagination } from "@mui/material";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import Backdrop from "@mui/material/Backdrop";
+import OverlayStyles from "../../styling/OverlayStyles";
 
 const NUM_COORD_DIGITS = 5;
 const NUM_COLS = 5;
@@ -38,6 +41,9 @@ const useStyles = makeStyles({
 });
 
 export const GasesTable: React.FC<GasesTableProps> = (props) => {
+  const overlayStyles = OverlayStyles();
+  const [isEmpty, setIsEmpty] = React.useState(false);
+
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
   const gasReadings: PersonGasReading[] = useGasReadings(user, filter);
@@ -69,57 +75,74 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
 
   const styles = useStyles();
 
+  useEffect(() => {
+    if (gasReadings.length === 0) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  }, [gasReadings]);
+
   return (
     <>
-      <TableContainer>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell className={styles.header} width={colWidth}>
-                Gas
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
-                Density
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
-                Name
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
-                Time
-              </TableCell>
-              <TableCell className={styles.header} width={colWidth}>
-                Coordinates
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pageGasReadings.map((gasReading, index) => (
-              <TableRow key={index}>
-                <TableCell>{gasReading.gas}</TableCell>
-                <TableCell>
-                  {gasReading.density + " " + gasReading.densityUnits}
+      <div className={overlayStyles.parent}>
+        <Backdrop
+          className={overlayStyles.backdrop}
+          open={isEmpty}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <EmptyDataMessage />
+        </Backdrop>
+        <TableContainer>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell className={styles.header} width={colWidth}>
+                  Gas
                 </TableCell>
-                <TableCell>{gasReading.name}</TableCell>
-                <TableCell>{gasReading.time}</TableCell>
-                <TableCell>{gasReading.coordinates}</TableCell>
+                <TableCell className={styles.header} width={colWidth}>
+                  Density
+                </TableCell>
+                <TableCell className={styles.header} width={colWidth}>
+                  Name
+                </TableCell>
+                <TableCell className={styles.header} width={colWidth}>
+                  Time
+                </TableCell>
+                <TableCell className={styles.header} width={colWidth}>
+                  Coordinates
+                </TableCell>
               </TableRow>
-            ))}
-            {emptyRowCount > 0 && (
-              <TableRow style={{ height: 53 * emptyRowCount }}>
-                <TableCell colSpan={NUM_COLS} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        rowsPerPageOptions={[ROWS_PER_PAGE]}
-        rowsPerPage={ROWS_PER_PAGE}
-        count={rowCount}
-        onPageChange={pageChanged}
-        page={adjustedPage}
-      />
+            </TableHead>
+            <TableBody>
+              {pageGasReadings.map((gasReading, index) => (
+                <TableRow key={index}>
+                  <TableCell>{gasReading.gas}</TableCell>
+                  <TableCell>
+                    {gasReading.density + " " + gasReading.densityUnits}
+                  </TableCell>
+                  <TableCell>{gasReading.name}</TableCell>
+                  <TableCell>{gasReading.time}</TableCell>
+                  <TableCell>{gasReading.coordinates}</TableCell>
+                </TableRow>
+              ))}
+              {emptyRowCount > 0 && (
+                <TableRow style={{ height: 53 * emptyRowCount }}>
+                  <TableCell colSpan={NUM_COLS} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          component="div"
+          rowsPerPageOptions={[ROWS_PER_PAGE]}
+          rowsPerPage={ROWS_PER_PAGE}
+          count={rowCount}
+          onPageChange={pageChanged}
+          page={adjustedPage}
+        />
+      </div>
     </>
   );
 };
