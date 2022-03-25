@@ -23,6 +23,7 @@ import MapMouseEvent = google.maps.MapMouseEvent;
 import { MapTooltip } from "./MapTooltip";
 import { quadtree, Quadtree } from "d3-quadtree";
 import { LegendItem, MapLegend } from "./MapLegend";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -89,12 +90,12 @@ const useStyles = makeStyles({
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const overlayStyles = OverlayStyles();
   const [isEmpty, setIsEmpty] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
   const people: PersonWithLocationReadings[] = usePeople(user, filter);
-
   const trails: Trail[] = intoTrails(people);
   const pointTree = intoPointTree(trails);
 
@@ -103,6 +104,14 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const [tilesLoaded, setTilesLoaded] = useState(false);
 
   const [mapTypeId, setMapTypeId] = useState<string>(DEFAULT_MAP_TYPE_ID);
+
+  useEffect(() => {
+    if (people.length === 0) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [people]);
 
   const onMapLoad = useCallback(
     (map: google.maps.Map) => {
@@ -160,10 +169,10 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isEmpty}
+          open={isEmpty || isLoading}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          <EmptyDataMessage />
+          {isLoading ? <CircularProgress /> : <EmptyDataMessage />}
         </Backdrop>
         <MapLegend
           map={map}
