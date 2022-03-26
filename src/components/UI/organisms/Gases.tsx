@@ -17,6 +17,8 @@ import { FilterFab } from "../molecules/FilterFab";
 import { FilterModal } from "../molecules/FilterModal";
 import { VisualizationSelect } from "../atoms/VisualizationSelect";
 
+export const GASES_PAGE_LABEL = "gasesPage";
+
 const useStyles = makeStyles({
   filterBar: {
     position: "sticky",
@@ -94,8 +96,6 @@ interface GasesProps {
   filter: Filter;
   onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
 }
-
-export const GASES_PAGE_LABEL = "gasesPage";
 
 const visualizations = ["Gases map", "Gases table"];
 
