@@ -21,6 +21,10 @@ import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
 import CircularProgress from "@mui/material/CircularProgress";
+import {
+  DEFAULT_MAP_CENTER,
+  DEFAULT_MAP_ZOOM,
+} from "../molecules/IncidentsMap";
 
 interface GasDotMapProps {
   filter?: Filter;
@@ -35,12 +39,6 @@ interface GasMarker {
   time: Date;
   icon: string;
 }
-
-const DEFAULT_MAP_CENTER: LatLngLiteral = {
-  lat: 51.03,
-  lng: -114.466,
-};
-const DEFAULT_MAP_ZOOM = 11;
 
 const useStyles = makeStyles({
   tooltipText: {
