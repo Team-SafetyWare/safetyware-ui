@@ -82,13 +82,15 @@ const client = new ApolloClient({
 });
 
 export const setToken = (token: string | undefined): void => {
-  // noinspection JSIgnoredPromiseFromCall
-  client.resetStore();
   if (token) {
     localStorage.setItem(TOKEN_KEY, token);
   } else {
     localStorage.removeItem(TOKEN_KEY);
   }
+  // noinspection JSIgnoredPromiseFromCall
+  client.resetStore().catch(() => {
+    // Ignore.
+  });
 };
 
 ReactDOM.render(
