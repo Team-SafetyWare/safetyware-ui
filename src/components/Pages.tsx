@@ -90,7 +90,9 @@ export const Pages: React.FC = () => {
                   exact
                   path="/gases"
                   title="Blackline Safety | Gases"
-                  component={Gases}
+                  render={() => (
+                    <Gases filter={filter} onFilterChange={filterChanged} />
+                  )}
                 />
                 <Page
                   exact
