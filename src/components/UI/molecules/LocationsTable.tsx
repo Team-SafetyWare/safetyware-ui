@@ -46,10 +46,8 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
 
   const locations: PersonLocation[] = useLocations(user, filter);
 
-  // eslint-disable-next-line prefer-const
-  let [page, setPage] = useState(0);
+  const [page, setPage] = useState(0);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const pageChanged = useCallback((_: any, page: number) => {
     setPage(page);
   }, []);
