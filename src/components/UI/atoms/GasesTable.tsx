@@ -176,7 +176,6 @@ const useGasReadingsInPerson = (
     },
     execute
   );
-  console.log(data);
   return (
     data?.person.gasReadings.map((gasReading) => ({
       name: data.person.name,
