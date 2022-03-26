@@ -8,7 +8,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import React, { useCallback, useState } from "react";
 import theme from "../../../Theme";
-import { GasDotMap } from "../atoms/GasesDotMap";
+import { GasesMap } from "../atoms/GasesMap";
 import { PageHeader } from "../atoms/PageHeader";
 import { Filter, FilterBar } from "../molecules/FilterBar";
 import { GasesTable } from "../atoms/GasesTable";
@@ -107,7 +107,7 @@ export const Gases: React.FC<GasesProps> = (props) => {
             />
             <CardMedia>
               <div style={{ height: "600px" }}>
-                <GasDotMap filter={props.filter} />
+                <GasesMap filter={props.filter} />
               </div>
             </CardMedia>
           </Card>
@@ -132,7 +132,7 @@ export const Gases: React.FC<GasesProps> = (props) => {
           </div>
           {visualization == visualizations[0] && (
             <div className={styles.mobileVisualization}>
-              <GasDotMap filter={props.filter} />
+              <GasesMap filter={props.filter} />
             </div>
           )}
           {visualization == visualizations[1] && (
