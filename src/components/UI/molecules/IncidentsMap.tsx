@@ -81,8 +81,6 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
     );
   }, []);
 
-  const styles = useStyles();
-
   useEffect(() => {
     if (people.length === 0) {
       setIsLoading(true);
@@ -98,6 +96,8 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
       setIsEmpty(false);
     }
   }, [markers]);
+
+  const styles = useStyles();
 
   return (
     <>
