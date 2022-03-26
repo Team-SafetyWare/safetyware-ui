@@ -63,6 +63,10 @@ const useStyles = makeStyles({
     marginBottom: "16px",
   },
 
+  filterBarContainer: {
+    marginBottom: "-8px",
+  },
+
   fabPadding: {
     height: "56px",
   },
@@ -93,16 +97,13 @@ interface GasesProps {
 
 export const GASES_PAGE_LABEL = "gasesPage";
 
-const visualizations = ["Gases Dot Map", "Gases Table"];
+const visualizations = ["Gases map", "Gases table"];
 
-export const Gases: React.FC<GasesProps> = () => {
+export const Gases: React.FC<GasesProps> = (props) => {
   const styles = useStyles();
-
-  const [filter, setFilter] = useState<Filter>({});
-
-  const filterChange = useCallback(
+  const onFilterChange = useCallback(
     (updateFilter: (prevFilter: Filter) => Filter) => {
-      setFilter((filter) => updateFilter(filter));
+      props.onFilterChange(updateFilter);
     },
     []
   );
@@ -124,15 +125,20 @@ export const Gases: React.FC<GasesProps> = () => {
               }
             />
 
-            <div className={[styles.pageCard, styles.filterBar].join(" ")}>
-              <Card elevation={2}>
-                <CardContent>
-                  <div style={{ marginBottom: "-8px" }}>
-                    <FilterBar filter={filter} onChange={filterChange} />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            {showFilterBar && (
+              <div className={[styles.pageCard, styles.filterBar].join(" ")}>
+                <Card elevation={2}>
+                  <CardContent>
+                    <div className={styles.filterBarContainer}>
+                      <FilterBar
+                        filter={props.filter}
+                        onChange={onFilterChange}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
 
             <Card className={styles.pageCard}>
               <CardHeader
@@ -141,7 +147,7 @@ export const Gases: React.FC<GasesProps> = () => {
               />
               <CardMedia>
                 <div style={{ height: "600px" }}>
-                  <GasDotMap filter={filter} />
+                  <GasDotMap filter={props.filter} />
                 </div>
               </CardMedia>
             </Card>
@@ -151,7 +157,7 @@ export const Gases: React.FC<GasesProps> = () => {
                 subheader="View individual gas reading data."
               />
               <CardMedia>
-                <GasesTable filter={filter} />
+                <GasesTable filter={props.filter} />
               </CardMedia>
             </Card>
           </>
@@ -165,12 +171,12 @@ export const Gases: React.FC<GasesProps> = () => {
             </div>
             {visualization == visualizations[0] && (
               <div className={styles.mobileVisualization}>
-                <GasDotMap filter={filter} />
+                <GasDotMap filter={props.filter} />
               </div>
             )}
             {visualization == visualizations[1] && (
               <div className={styles.mobileVisualization}>
-                <GasesTable filter={filter} />
+                <GasesTable filter={props.filter} />
               </div>
             )}
           </>
@@ -180,8 +186,8 @@ export const Gases: React.FC<GasesProps> = () => {
             <div className={styles.fabPadding} />
             <FilterFab onClick={() => setFilterModalOpen(true)} />
             <FilterModal
-              filter={filter}
-              onChange={filterChange}
+              filter={props.filter}
+              onChange={onFilterChange}
               open={filterModalOpen}
               onClose={() => setFilterModalOpen(false)}
             />
