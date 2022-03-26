@@ -46,9 +46,11 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
+
   const gasReadings: PersonGasReading[] = useGasReadings(user, filter);
 
   const [page, setPage] = useState(0);
+
   const pageChanged = useCallback((_: any, page: number) => {
     setPage(page);
   }, []);
