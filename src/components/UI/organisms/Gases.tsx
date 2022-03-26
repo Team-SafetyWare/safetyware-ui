@@ -93,7 +93,7 @@ interface GasesProps {
 
 export const GASES_PAGE_LABEL = "gasesPage";
 
-const visualizations = ["Gases Dot Map", "Gases Table"];
+const visualizations = ["Gases map", "Gases table"];
 
 export const Gases: React.FC<GasesProps> = () => {
   const styles = useStyles();

@@ -176,7 +176,6 @@ const usePersonAsPeople = (
     },
     execute
   );
-  console.log(data);
   return (data && [data.person]) || [];
 };
 
