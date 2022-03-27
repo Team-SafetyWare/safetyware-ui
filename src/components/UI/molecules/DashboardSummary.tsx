@@ -35,7 +35,6 @@ const useStyles = makeStyles({
     display: "flex",
     width: "100%",
     height: "200px",
-    touchAction: "none",
     [theme.breakpoints.down("sm")]: {
       height: "600px",
     },
@@ -131,7 +130,10 @@ export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
 
   return (
     <GridContextProvider onChange={onChange}>
-      <div className={styles.container}>
+      <div
+        className={styles.container}
+        style={{ touchAction: !props.editDashboardMode ? "auto" : "none" }}
+      >
         <GridDropZone
           className={styles.summaryDropzone}
           id="summary-drop-zone"
