@@ -7,7 +7,6 @@ import React from "react";
 interface DashboardSummaryTileProps {
   widget?: any;
   removeWidget?: any;
-  editDashboardMode?: any;
 }
 
 const BootstrapButton = styled(Button)({
@@ -44,19 +43,6 @@ const useStyles = makeStyles({
     color: "rgba(0, 0, 0, 0.87)",
     padding: "0px 16px 16px 16px",
   },
-  widgetTileAnimated: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    backgroundColor: "white",
-    height: "400px",
-    width: "100%",
-    boxShadow:
-      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
-    color: "rgba(0, 0, 0, 0.87)",
-    padding: "0px 16px 16px 16px",
-    animation: "$shake .25s infinite",
-  },
   widgetInfo: {
     display: "flex",
     alignItems: "center",
@@ -73,10 +59,6 @@ const useStyles = makeStyles({
     width: "100%",
     overflow: "hidden",
   },
-  "@keyframes shake": {
-    "0%": { transform: "translate(0px, 0px) rotate(.25deg)" },
-    "50%": { transform: "translate(0px, 0px) rotate(-.25deg) " },
-  },
 });
 
 export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
@@ -86,26 +68,18 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
 
   return (
     <>
-      <div
-        className={
-          props.editDashboardMode
-            ? styles.widgetTileAnimated
-            : styles.widgetTile
-        }
-      >
+      <div className={styles.widgetTile}>
         <div className={styles.widgetInfo}>
           <p className={styles.widgetName}>{props.widget.widgetName}</p>
-          {props.editDashboardMode && (
-            <div className={styles.removeButton}>
-              <BootstrapButton
-                variant="outlined"
-                endIcon={<RemoveIcon />}
-                onClick={() => props.removeWidget(props.widget)}
-              >
-                Remove Widget
-              </BootstrapButton>
-            </div>
-          )}
+          <div className={styles.removeButton}>
+            <BootstrapButton
+              variant="outlined"
+              endIcon={<RemoveIcon />}
+              onClick={() => props.removeWidget(props.widget)}
+            >
+              Remove Widget
+            </BootstrapButton>
+          </div>
         </div>
         {props.widget.widget}
       </div>

@@ -2,14 +2,8 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import BubbleChartOutlinedIcon from "@mui/icons-material/BubbleChartOutlined";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@mui/styles";
-import {
-  GridContextProvider,
-  GridDropZone,
-  GridItem,
-  swap,
-} from "react-grid-dnd";
-import { DashboardSummaryTile } from "../atoms/DashboardSummaryTile";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { HorizontalColumn } from "../atoms/HorizontalColumn";
 import {
   useCompanyLocations,
   useCompanyIncidents,
@@ -18,26 +12,23 @@ import {
 import { getCurrentUser } from "../../../index";
 import { Filter } from "./FilterBar";
 
-interface DashboardSummaryTileProps {
-  editDashboardMode: boolean;
+interface DashboardSummaryTileData {
+  summaryName: string;
+  summaryNumber: string;
+  summaryTileIcon: any;
 }
 
-const useStyles = makeStyles({
-  container: {
-    display: "flex",
-    width: "100%",
-    height: "200px",
-  },
-  summaryTileContainer: {
-    paddingTop: "5px",
-    paddingLeft: "5px",
-    paddingRight: "5px",
-  },
-  summaryDropzone: {
-    flex: 1,
-    height: "100%",
-  },
-});
+const reorder = (
+  list: DashboardSummaryTileData[],
+  startIndex: number,
+  endIndex: number
+): DashboardSummaryTileData[] => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
 
 const filter: Filter = {
   // 2 days ago since no 24 hour data
@@ -45,10 +36,7 @@ const filter: Filter = {
   maxTimestamp: new Date(),
 };
 
-export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
-  props
-) => {
-  const styles = useStyles();
+export const DashboardSummary = (): JSX.Element => {
   const user = getCurrentUser();
 
   const locationData = useCompanyLocations({
@@ -134,36 +122,24 @@ export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
     ]);
   }, [locationCount, incidentCount, gasCount]);
 
-  const onChange = (sourceId: any, sourceIndex: any, targetIndex: any) => {
-    const nextState = swap(state, sourceIndex, targetIndex);
-    setState(nextState);
+  const onDragEnd = (result: DropResult): void => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const items: DashboardSummaryTileData[] = reorder(
+      state,
+      result.source.index,
+      result.destination.index
+    );
+
+    setState(items);
   };
 
   return (
-    <GridContextProvider onChange={onChange}>
-      <div className={styles.container}>
-        <GridDropZone
-          className={styles.summaryDropzone}
-          id="summary-drop-zone"
-          boxesPerRow={3}
-          rowHeight={200}
-          disableDrag={!props.editDashboardMode}
-        >
-          {state.map((widget: any) => (
-            <GridItem
-              key={widget.summaryName}
-              className={styles.summaryTileContainer}
-            >
-              <DashboardSummaryTile
-                summaryTileIcon={widget.summaryTileIcon}
-                summaryName={widget.summaryName}
-                summaryNumber={widget.summaryNumber}
-                editDashboardMode={props.editDashboardMode}
-              />
-            </GridItem>
-          ))}
-        </GridDropZone>
-      </div>
-    </GridContextProvider>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <HorizontalColumn state={state} />
+    </DragDropContext>
   );
 };

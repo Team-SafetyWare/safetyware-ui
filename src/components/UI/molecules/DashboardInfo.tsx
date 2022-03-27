@@ -8,8 +8,6 @@ interface DashboardInfoProps {
   inactiveWidgetState?: any;
   addWidget?: any;
   userName?: string;
-  editDashboardMode?: any;
-  setEditDashboardMode?: any;
 }
 
 export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
@@ -30,8 +28,6 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
         inactiveWidgetState={props.inactiveWidgetState}
         addWidget={props.addWidget}
         userName={props.userName?.substring(0, props.userName.indexOf(" "))}
-        editDashboardMode={props.editDashboardMode}
-        setEditDashboardMode={props.setEditDashboardMode}
       />
     </>
   );

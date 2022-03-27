@@ -14,7 +14,6 @@ interface DashboardWidgetWrapperProps {
   widgetState?: any;
   setWidgetState: any;
   removeWidget?: any;
-  editDashboardMode?: any;
 }
 
 export interface StyleProps {
@@ -58,6 +57,11 @@ const useStyles = makeStyles<Theme, StyleProps>({
 export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
   props
 ) => {
+  const onChange = (sourceId: any, sourceIndex: any, targetIndex: any) => {
+    const nextState = swap(props.widgetState, sourceIndex, targetIndex);
+    props.setWidgetState(nextState);
+  };
+
   const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const styleProps = {
@@ -67,20 +71,14 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
 
   const styles = useStyles(styleProps);
 
-  const onChange = (sourceId: any, sourceIndex: any, targetIndex: any) => {
-    const nextState = swap(props.widgetState, sourceIndex, targetIndex);
-    props.setWidgetState(nextState);
-  };
-
   return (
     <GridContextProvider onChange={onChange}>
       <div className={styles.container}>
         <GridDropZone
           className={styles.dropzone}
-          id="widget-drop-zone"
+          id="drop-zone"
           boxesPerRow={!mobile ? 2 : 1}
           rowHeight={WIDGET_HEIGHT}
-          disableDrag={!props.editDashboardMode}
         >
           {props.widgetState.map((widget: any) => (
             <GridItem
@@ -90,7 +88,6 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
               <DashboardWidgetTile
                 widget={widget}
                 removeWidget={props.removeWidget}
-                editDashboardMode={props.editDashboardMode}
               />
             </GridItem>
           ))}

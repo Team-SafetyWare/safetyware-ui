@@ -1,7 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -20,8 +19,6 @@ interface HomeGreetingProps {
   inactiveWidgetState?: any;
   addWidget?: any;
   userName?: string;
-  editDashboardMode?: any;
-  setEditDashboardMode?: any;
 }
 
 const BootstrapButton = styled(Button)({
@@ -67,12 +64,6 @@ const useStyles = makeStyles({
     fontSize: "16px",
     margin: 0,
   },
-  editDashboard: {},
-  saveDashboard: {
-    backgroundColor: "rgb(173, 23, 43)",
-    color: "white",
-    animation: "$wiggle 2s linear infinite",
-  },
   buttons: {
     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
       {
@@ -90,29 +81,6 @@ const useStyles = makeStyles({
         {
           flexGrow: "1",
         },
-    },
-  },
-  "@keyframes wiggle": {
-    "0%, 7%": {
-      transform: "rotateZ(0)",
-    },
-    "15%": {
-      transform: "rotateZ(-10deg)",
-    },
-    "20%": {
-      transform: "rotateZ(6deg)",
-    },
-    "25%": {
-      transform: "rotateZ(-6deg)",
-    },
-    "30%": {
-      transform: "rotateZ(2deg)",
-    },
-    "35%": {
-      transform: "rotateZ(-1deg)",
-    },
-    "40%, 100%": {
-      transform: "rotateZ(0)",
     },
   },
 });
@@ -167,25 +135,9 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
           >
             Add Widget
           </BootstrapButton>
-          {props.editDashboardMode ? (
-            <BootstrapButton
-              className={styles.saveDashboard}
-              variant="outlined"
-              onClick={props.setEditDashboardMode}
-              endIcon={<SaveOutlinedIcon />}
-            >
-              Save Dashboard
-            </BootstrapButton>
-          ) : (
-            <BootstrapButton
-              className={styles.editDashboard}
-              variant="outlined"
-              onClick={props.setEditDashboardMode}
-              endIcon={<EditOutlinedIcon />}
-            >
-              Edit Dashboard
-            </BootstrapButton>
-          )}
+          <BootstrapButton variant="outlined" endIcon={<SaveOutlinedIcon />}>
+            Save Dashboard
+          </BootstrapButton>
           <SimpleDialog
             activeWidgetState={props.activeWidgetState}
             inactiveWidgetState={props.inactiveWidgetState}
