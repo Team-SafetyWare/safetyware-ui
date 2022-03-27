@@ -24,8 +24,8 @@ export const LandscapeMobileView: React.FC = () => {
   return (
     <div className={styles.content}>
       <h1 className={styles.message}>
-        SafteyWare is intended to be used in portrait mode on mobile devices.
-        Please rotate your device.
+        SafteyWare is intended to be used in portrait orientation on mobile
+        devices. Please rotate your device.
       </h1>
     </div>
   );
