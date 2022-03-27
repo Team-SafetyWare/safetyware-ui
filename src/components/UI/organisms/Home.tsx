@@ -1,16 +1,8 @@
 import { makeStyles } from "@mui/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
-import { defaultFilter } from "../molecules/FilterBar";
-import { HazardMap } from "../molecules/HazardMap";
-import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
-import { IncidentsMap } from "../molecules/IncidentsMap";
-import { TravelMap } from "../molecules/TravelMap";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import BubbleChartOutlinedIcon from "@mui/icons-material/BubbleChartOutlined";
-import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 
 interface HomeProps {
   userName?: string;
@@ -35,52 +27,104 @@ export const Home: React.FC<HomeProps> = (props) => {
   const [summaryWidgets, setSummaryWidgets] = useState([
     {
       summaryName: "New Location Updates",
-      summaryNumber: "-",
-      summaryTileIcon: <ExploreOutlinedIcon style={{ fontSize: 42 }} />,
+      summary: "NewLocationUpdates",
     },
     {
       summaryName: "New Incidents",
-      summaryNumber: "-",
-      summaryTileIcon: <BarChartOutlinedIcon style={{ fontSize: 42 }} />,
+      summary: "NewIncidents",
     },
     {
       summaryName: "New Gas Readings",
-      summaryNumber: "-",
-      summaryTileIcon: <BubbleChartOutlinedIcon style={{ fontSize: 42 }} />,
+      summary: "NewGasReadings",
     },
   ]);
 
   const [inactiveWidgets, setInactiveWidgets] = useState([
     {
       widgetName: "Hazardous Area Heat Map",
-      widget: <HazardMap filter={defaultFilter()} />,
+      widget: "HazardMap",
     },
     {
       widgetName: "Incident Bar Graph",
-      widget: <IncidentsBarGraph filter={defaultFilter()} />,
+      widget: "IncidentsBarGraph",
     },
   ]);
 
   const [activeWidgets, setActiveWidgets] = useState([
     {
       widgetName: "Incident Dot Map",
-      widget: <IncidentsMap filter={defaultFilter()} />,
+      widget: "IncidentsMap",
     },
     {
       widgetName: "Travel History Trail",
-      widget: (
-        <TravelMap
-          filter={defaultFilter()}
-          legendDefaultCollapsed={true}
-          legendCompact={true}
-        />
-      ),
+      widget: "TravelMap",
     },
   ]);
 
+  const saveState = () => {
+    const state = JSON.stringify({
+      summaryWidgets: summaryWidgets,
+      inactiveWidgets: inactiveWidgets,
+      activeWidgets: activeWidgets,
+    });
+    localStorage.setItem("dashboardState", state);
+    console.log("Saving State!");
+  };
+
+  const loadState = () => {
+    console.log("Loading State!");
+    const dashboardState = localStorage.getItem("dashboardState");
+    if (dashboardState === null) {
+      setSummaryWidgets([
+        {
+          summaryName: "New Location Updates",
+          summary: "NewLocationUpdates",
+        },
+        {
+          summaryName: "New Incidents",
+          summary: "NewIncidents",
+        },
+        {
+          summaryName: "New Gas Readings",
+          summary: "NewGasReadings",
+        },
+      ]);
+      setInactiveWidgets([
+        {
+          widgetName: "Hazardous Area Heat Map",
+          widget: "HazardMap",
+        },
+        {
+          widgetName: "Incident Bar Graph",
+          widget: "IncidentsBarGraph",
+        },
+      ]);
+      setActiveWidgets([
+        {
+          widgetName: "Incident Dot Map",
+          widget: "IncidentsMap",
+        },
+        {
+          widgetName: "Travel History Trail",
+          widget: "TravelMap",
+        },
+      ]);
+    } else {
+      const result = JSON.parse(dashboardState);
+      setSummaryWidgets(result["summaryWidgets"]);
+      setInactiveWidgets(result["inactiveWidgets"]);
+      setActiveWidgets(result["activeWidgets"]);
+    }
+  };
+
+  useEffect(() => loadState(), []);
+  useEffect(
+    () => saveState(),
+    [editDashboardMode, summaryWidgets, activeWidgets]
+  );
+
   const dashboardEditToggle = () => {
     setEditDashboardMode((prevEditDashboardMode) => !prevEditDashboardMode);
-    console.log(editDashboardMode);
   };
 
   const addWidget = (selectedWidget: any) => {
@@ -109,12 +153,18 @@ export const Home: React.FC<HomeProps> = (props) => {
         editDashboardMode={editDashboardMode}
         setEditDashboardMode={dashboardEditToggle}
       />
-      <DashboardSummary editDashboardMode={editDashboardMode} />
+      <DashboardSummary
+        summaryWidgets={summaryWidgets}
+        editSummaryWidgets={setSummaryWidgets}
+        editDashboardMode={editDashboardMode}
+        saveState={saveState}
+      />
       <DashboardWidgetWrapper
         widgetState={activeWidgets}
         setWidgetState={setActiveWidgets}
         removeWidget={removeWidget}
         editDashboardMode={editDashboardMode}
+        saveState={saveState}
       />
     </div>
   );

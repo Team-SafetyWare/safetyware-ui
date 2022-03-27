@@ -1,6 +1,3 @@
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import BubbleChartOutlinedIcon from "@mui/icons-material/BubbleChartOutlined";
-import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import {
@@ -19,7 +16,16 @@ import { getCurrentUser } from "../../../index";
 import { Filter } from "./FilterBar";
 
 interface DashboardSummaryTileProps {
+  summaryWidgets: any;
+  editSummaryWidgets: any;
   editDashboardMode: boolean;
+  saveState: any;
+}
+
+interface numberTable {
+  NewLocationUpdates: any;
+  NewIncidents: any;
+  NewGasReadings: any;
 }
 
 const useStyles = makeStyles({
@@ -96,47 +102,24 @@ export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
     }
   }
 
-  const [state, setState] = useState([
-    {
-      summaryName: "New Location Updates",
-      summaryNumber: locationCount.toString(),
-      summaryTileIcon: <ExploreOutlinedIcon style={{ fontSize: 42 }} />,
-    },
-    {
-      summaryName: "New Incidents",
-      summaryNumber: incidentCount.toString(),
-      summaryTileIcon: <BarChartOutlinedIcon style={{ fontSize: 42 }} />,
-    },
-    {
-      summaryName: "New Gas Readings",
-      summaryNumber: "0",
-      summaryTileIcon: <BubbleChartOutlinedIcon style={{ fontSize: 42 }} />,
-    },
-  ]);
+  const [summaryValues, setSummaryValues] = useState({
+    NewLocationUpdates: "-",
+    NewIncidents: "-",
+    NewGasReadings: "-",
+  });
 
   useEffect(() => {
-    setState([
-      {
-        summaryName: state[0].summaryName,
-        summaryNumber: locationCount.toString(),
-        summaryTileIcon: state[0].summaryTileIcon,
-      },
-      {
-        summaryName: state[1].summaryName,
-        summaryNumber: incidentCount.toString(),
-        summaryTileIcon: state[1].summaryTileIcon,
-      },
-      {
-        summaryName: state[2].summaryName,
-        summaryNumber: gasCount.toString(),
-        summaryTileIcon: state[2].summaryTileIcon,
-      },
-    ]);
+    setSummaryValues({
+      NewLocationUpdates: locationCount.toString(),
+      NewIncidents: incidentCount.toString(),
+      NewGasReadings: gasCount.toString(),
+    });
   }, [locationCount, incidentCount, gasCount]);
 
   const onChange = (sourceId: any, sourceIndex: any, targetIndex: any) => {
-    const nextState = swap(state, sourceIndex, targetIndex);
-    setState(nextState);
+    const nextState = swap(props.summaryWidgets, sourceIndex, targetIndex);
+    props.editSummaryWidgets(nextState);
+    props.saveState();
   };
 
   return (
@@ -149,15 +132,17 @@ export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
           rowHeight={200}
           disableDrag={!props.editDashboardMode}
         >
-          {state.map((widget: any) => (
+          {props.summaryWidgets.map((widget: any) => (
             <GridItem
               key={widget.summaryName}
               className={styles.summaryTileContainer}
             >
               <DashboardSummaryTile
-                summaryTileIcon={widget.summaryTileIcon}
+                summaryTileIcon={widget.summary}
                 summaryName={widget.summaryName}
-                summaryNumber={widget.summaryNumber}
+                summaryNumber={
+                  summaryValues[widget.summary as keyof numberTable]
+                }
                 editDashboardMode={props.editDashboardMode}
               />
             </GridItem>

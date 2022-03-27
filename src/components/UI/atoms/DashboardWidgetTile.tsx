@@ -3,11 +3,23 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import { defaultFilter } from "../molecules/FilterBar";
+import { HazardMap } from "../molecules/HazardMap";
+import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
+import { IncidentsMap } from "../molecules/IncidentsMap";
+import { TravelMap } from "../molecules/TravelMap";
 
 interface DashboardSummaryTileProps {
   widget?: any;
   removeWidget?: any;
   editDashboardMode?: any;
+}
+
+interface WidgetTable {
+  HazardMap: any;
+  IncidentsBarGraph: any;
+  IncidentsMap: any;
+  TravelMap: any;
 }
 
 const BootstrapButton = styled(Button)({
@@ -86,6 +98,19 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
 ) => {
   const styles = useStyles();
 
+  const widgetTable = {
+    HazardMap: <HazardMap filter={defaultFilter()} />,
+    IncidentsBarGraph: <IncidentsBarGraph filter={defaultFilter()} />,
+    IncidentsMap: <IncidentsMap filter={defaultFilter()} />,
+    TravelMap: (
+      <TravelMap
+        filter={defaultFilter()}
+        legendDefaultCollapsed={true}
+        legendCompact={true}
+      />
+    ),
+  };
+
   return (
     <>
       <div
@@ -109,7 +134,7 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
             </div>
           )}
         </div>
-        {props.widget.widget}
+        {widgetTable[props.widget.widget as keyof WidgetTable]}
       </div>
     </>
   );
