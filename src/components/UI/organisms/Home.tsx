@@ -24,6 +24,9 @@ export const Home: React.FC<HomeProps> = (props) => {
 
   const [editDashboardMode, setEditDashboardMode] = useState(false);
 
+  // Is there a way to just leave this state as empty?
+  // If we do leave the state as empty, it throws an error saying that every mapped object
+  // in different components need to have keys
   const [summaryWidgets, setSummaryWidgets] = useState([
     {
       summaryName: "New Location Updates",
@@ -39,6 +42,9 @@ export const Home: React.FC<HomeProps> = (props) => {
     },
   ]);
 
+  // Is there a way to just leave this state as empty?
+  // If we do leave the state as empty, it throws an error saying that every mapped object
+  // in different components need to have keys
   const [inactiveWidgets, setInactiveWidgets] = useState([
     {
       widgetName: "Hazardous Area Heat Map",
@@ -50,6 +56,9 @@ export const Home: React.FC<HomeProps> = (props) => {
     },
   ]);
 
+  // Is there a way to just leave this state as empty?
+  // If we do leave the state as empty, it throws an error saying that every mapped object
+  // in different components need to have keys
   const [activeWidgets, setActiveWidgets] = useState([
     {
       widgetName: "Incident Dot Map",

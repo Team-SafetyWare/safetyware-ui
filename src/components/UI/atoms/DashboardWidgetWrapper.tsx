@@ -88,7 +88,7 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
 
   return (
     <div className={styles.container}>
-      {Object.keys(props.widgetState).length === 0 ? (
+      {props.widgetState && Object.keys(props.widgetState).length === 0 ? (
         <div className={styles.emptyDashboard}>
           <AddIcon fontSize={"large"} />
           <p className={styles.emptyDashboardMessage}>
