@@ -1,4 +1,3 @@
-import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
