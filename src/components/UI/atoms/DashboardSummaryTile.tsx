@@ -1,11 +1,20 @@
 import { makeStyles } from "@mui/styles";
+import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+import BubbleChartOutlinedIcon from "@mui/icons-material/BubbleChartOutlined";
+import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import React from "react";
 
 interface DashboardSummaryTileProps {
   summaryTileIcon?: any;
   summaryName?: string;
-  summaryNumber?: string;
+  summaryNumber?: any;
   editDashboardMode?: boolean;
+}
+
+interface SummaryTable {
+  NewLocationUpdates: any;
+  NewIncidents: any;
+  NewGasReadings: any;
 }
 
 const useStyles = makeStyles({
@@ -62,6 +71,12 @@ export const DashboardSummaryTile: React.FC<DashboardSummaryTileProps> = (
 ) => {
   const styles = useStyles();
 
+  const summaryTable = {
+    NewLocationUpdates: <ExploreOutlinedIcon style={{ fontSize: 42 }} />,
+    NewIncidents: <BarChartOutlinedIcon style={{ fontSize: 42 }} />,
+    NewGasReadings: <BubbleChartOutlinedIcon style={{ fontSize: 42 }} />,
+  };
+
   return (
     <div
       className={
@@ -71,7 +86,7 @@ export const DashboardSummaryTile: React.FC<DashboardSummaryTileProps> = (
       }
     >
       <div className={styles.summaryInfo}>
-        {props.summaryTileIcon}
+        {summaryTable[props.summaryTileIcon as keyof SummaryTable]}
         <p className={styles.summaryName}>{props.summaryName}:</p>
       </div>
       <p className={styles.summaryNumber}>{props.summaryNumber}</p>
