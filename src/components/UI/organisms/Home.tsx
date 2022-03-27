@@ -1,4 +1,3 @@
-import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
@@ -26,8 +25,9 @@ const useStyles = makeStyles({
 });
 
 export const Home: React.FC<HomeProps> = (props) => {
-  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
+
+  const [editDashboardMode, setEditDashboardMode] = useState(false);
 
   const [inactiveWidgets, setInactiveWidgets] = useState([
     {
@@ -57,6 +57,11 @@ export const Home: React.FC<HomeProps> = (props) => {
     },
   ]);
 
+  const dashboardEditToggle = () => {
+    setEditDashboardMode((prevEditDashboardMode) => !prevEditDashboardMode);
+    console.log(editDashboardMode);
+  };
+
   const addWidget = (selectedWidget: any) => {
     setActiveWidgets([...activeWidgets, selectedWidget]);
 
@@ -80,12 +85,15 @@ export const Home: React.FC<HomeProps> = (props) => {
         inactiveWidgetState={inactiveWidgets}
         addWidget={addWidget}
         userName={props.userName}
+        editDashboardMode={editDashboardMode}
+        setEditDashboardMode={dashboardEditToggle}
       />
-      {matches && <DashboardSummary />}
+      <DashboardSummary editDashboardMode={editDashboardMode} />
       <DashboardWidgetWrapper
         widgetState={activeWidgets}
         setWidgetState={setActiveWidgets}
         removeWidget={removeWidget}
+        editDashboardMode={editDashboardMode}
       />
     </div>
   );

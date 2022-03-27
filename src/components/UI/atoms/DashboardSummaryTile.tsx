@@ -5,7 +5,7 @@ interface DashboardSummaryTileProps {
   summaryTileIcon?: any;
   summaryName?: string;
   summaryNumber?: string;
-  innerRef?: any;
+  editDashboardMode?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -14,12 +14,23 @@ const useStyles = makeStyles({
     flexDirection: "column",
     justifyContent: "space-evenly",
     backgroundColor: "white",
-    height: "200px",
-    width: "100%",
+    height: "100%",
     boxShadow:
       "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
     color: "rgba(0, 0, 0, 0.87)",
     padding: "0px 16px 16px 16px",
+  },
+  summaryTileAnimated: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    backgroundColor: "white",
+    height: "100%",
+    boxShadow:
+      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
+    color: "rgba(0, 0, 0, 0.87)",
+    padding: "0px 16px 16px 16px",
+    animation: "$shake .25s infinite",
   },
   summaryInfo: {
     display: "flex",
@@ -38,6 +49,10 @@ const useStyles = makeStyles({
   summaryUnit: {
     margin: 0,
   },
+  "@keyframes shake": {
+    "0%": { transform: "translate(-1px, 0px) rotate(.3deg)" },
+    "50%": { transform: "translate(1px, 0px) rotate(-.3deg) " },
+  },
 });
 
 export const DashboardSummaryTile: React.FC<DashboardSummaryTileProps> = (
@@ -46,15 +61,19 @@ export const DashboardSummaryTile: React.FC<DashboardSummaryTileProps> = (
   const styles = useStyles();
 
   return (
-    <>
-      <div className={styles.summaryTile}>
-        <div className={styles.summaryInfo}>
-          {props.summaryTileIcon}
-          <p className={styles.summaryName}>{props.summaryName}:</p>
-        </div>
-        <p className={styles.summaryNumber}>{props.summaryNumber}</p>
-        <p className={styles.summaryUnit}>Since Yesterday</p>
+    <div
+      className={
+        props.editDashboardMode
+          ? styles.summaryTileAnimated
+          : styles.summaryTile
+      }
+    >
+      <div className={styles.summaryInfo}>
+        {props.summaryTileIcon}
+        <p className={styles.summaryName}>{props.summaryName}:</p>
       </div>
-    </>
+      <p className={styles.summaryNumber}>{props.summaryNumber}</p>
+      <p className={styles.summaryUnit}>Since Yesterday</p>
+    </div>
   );
 };
