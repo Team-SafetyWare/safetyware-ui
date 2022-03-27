@@ -1,34 +1,33 @@
 import { makeStyles } from "@mui/styles";
 import React, { useCallback, useState } from "react";
 import { Switch, useLocation } from "react-router-dom";
+import { API_URL, getCurrentUser } from "../index";
+import theme from "../Theme";
 import { Page } from "./UI/atoms/Page";
+import { defaultFilter, Filter } from "./UI/molecules/FilterBar";
+import { Prefetch } from "./UI/molecules/Prefetch";
 import { Sidebar } from "./UI/molecules/Sidebar";
 import { Gases } from "./UI/organisms/Gases";
 import { Home } from "./UI/organisms/Home";
+import { Incidents } from "./UI/organisms/Incidents";
+import { Locations } from "./UI/organisms/Locations";
 import { Login } from "./UI/organisms/Login";
 import { UserAccount } from "./UI/organisms/UserAccount";
-import { API_URL, getCurrentUser } from "../index";
-import { Locations } from "./UI/organisms/Locations";
-import { Incidents } from "./UI/organisms/Incidents";
-import { defaultFilter, Filter } from "./UI/molecules/FilterBar";
-import { Prefetch } from "./UI/molecules/Prefetch";
 
 const useStyles = makeStyles({
   content: {
     paddingLeft: "240px",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        paddingLeft: "0",
-      },
+    [theme.breakpoints.down("sm")]: {
+      paddingLeft: "0",
+    },
   },
   innerContent: {
     height: "100%",
     width: "100%",
     padding: "16px 24px",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        padding: "0",
-      },
+    [theme.breakpoints.down("sm")]: {
+      padding: "0",
+    },
   },
 });
 
@@ -52,12 +51,7 @@ export const Pages: React.FC = () => {
     <>
       <Prefetch filter={filter} />
       {location.pathname === "/" ? (
-        <Page
-          exact
-          path="/"
-          title="Blackline Safety | Login"
-          component={Login}
-        />
+        <Page exact path="/" title="SafetyWare | Login" component={Login} />
       ) : (
         <>
           <Sidebar userName={user?.name} userPhoto={profileImageUrl} />
@@ -67,13 +61,13 @@ export const Pages: React.FC = () => {
                 <Page
                   exact
                   path="/home"
-                  title="Blackline Safety | Home"
+                  title="SafetyWare | Home"
                   render={() => <Home userName={user?.name} />}
                 />
                 <Page
                   exact
                   path="/locations"
-                  title="Blackline Safety | Locations"
+                  title="SafetyWare | Locations"
                   render={() => (
                     <Locations filter={filter} onFilterChange={filterChanged} />
                   )}
@@ -81,7 +75,7 @@ export const Pages: React.FC = () => {
                 <Page
                   exact
                   path="/incidents"
-                  title="Blackline Safety | Incidents"
+                  title="SafetyWare | Incidents"
                   render={() => (
                     <Incidents filter={filter} onFilterChange={filterChanged} />
                   )}
@@ -89,7 +83,7 @@ export const Pages: React.FC = () => {
                 <Page
                   exact
                   path="/gases"
-                  title="Blackline Safety | Gases"
+                  title="SafetyWare | Gases"
                   render={() => (
                     <Gases filter={filter} onFilterChange={filterChanged} />
                   )}
@@ -97,7 +91,7 @@ export const Pages: React.FC = () => {
                 <Page
                   exact
                   path="/user-account"
-                  title="Blackline Safety | My Account"
+                  title="SafetyWare | My Account"
                   component={UserAccount}
                 />
               </Switch>

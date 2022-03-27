@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
+import theme from "../../../Theme";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
@@ -11,11 +12,10 @@ interface HomeProps {
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
   dashboardContent: {
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        marginLeft: "16px",
-        marginRight: "16px",
-      },
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: "16px",
+      marginRight: "16px",
+    },
   },
 });
 
