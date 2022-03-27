@@ -21,10 +21,12 @@ import EmptyDataMessage from "../atoms/EmptyDataMessage";
 import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
 import CircularProgress from "@mui/material/CircularProgress";
-import {
-  DEFAULT_MAP_CENTER,
-  DEFAULT_MAP_ZOOM,
-} from "../molecules/IncidentsMap";
+
+export const DEFAULT_MAP_CENTER: LatLngLiteral = {
+  lat: 51.045,
+  lng: -114.072,
+};
+export const DEFAULT_MAP_ZOOM = 11;
 
 interface GasDotMapProps {
   filter?: Filter;
@@ -47,17 +49,17 @@ const useStyles = makeStyles({
   },
 });
 
-export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
+export const GasesMap: React.FC<GasDotMapProps> = (props) => {
   const overlayStyles = OverlayStyles();
   const [isEmpty, setIsEmpty] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const styles = useStyles();
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
-  const people: PersonWithGasReadings[] = usePeople(user, filter);
 
+  const people: PersonWithGasReadings[] = usePeople(user, filter);
   const markers: GasMarker[] = intoMarkers(people);
+
   const [hoveredMarker, setHoveredMarker] = useState<GasMarker | undefined>();
 
   const onMarkerMouseOver = useCallback((marker: GasMarker) => {
@@ -87,6 +89,8 @@ export const GasDotMap: React.FC<GasDotMapProps> = (props) => {
       setIsEmpty(false);
     }
   }, [markers]);
+
+  const styles = useStyles();
 
   return (
     <>
