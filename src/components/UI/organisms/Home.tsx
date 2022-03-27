@@ -26,7 +26,6 @@ const useStyles = makeStyles({
 });
 
 export const Home: React.FC<HomeProps> = (props) => {
-  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
   const styles = useStyles();
 
   const [editDashboardMode, setEditDashboardMode] = useState(false);
