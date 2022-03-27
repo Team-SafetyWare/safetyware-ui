@@ -30,7 +30,6 @@ const CONTAINER_PADDING = 24;
 const useStyles = makeStyles<Theme, StyleProps>({
   container: {
     display: "flex",
-    touchAction: "none",
     paddingTop: "5px",
     width: "100%",
     height: (props) => {
@@ -94,7 +93,10 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={{ touchAction: !props.editDashboardMode ? "auto" : "none" }}
+    >
       {props.widgetState && Object.keys(props.widgetState).length === 0 ? (
         <div className={styles.emptyDashboard}>
           <AddIcon fontSize={"large"} />
