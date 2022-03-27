@@ -1,7 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -14,6 +14,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import theme from "../../../Theme";
 
 interface HomeGreetingProps {
   activeWidgetState?: any;
@@ -52,11 +53,10 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     margin: "16px 0",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        alignItems: "normal",
-        flexDirection: "column",
-      },
+    [theme.breakpoints.down("sm")]: {
+      alignItems: "normal",
+      flexDirection: "column",
+    },
   },
   greetingDetails: {},
   greeting: {
@@ -72,22 +72,19 @@ const useStyles = makeStyles({
     animation: "$wiggle 2s linear infinite",
   },
   buttons: {
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        marginTop: "12px",
-        width: "100%",
-      },
+    [theme.breakpoints.down("sm")]: {
+      marginTop: "12px",
+      width: "100%",
+    },
     "& .MuiStack-root": {
-      "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-        {
-          display: "flex",
-        },
+      [theme.breakpoints.down("sm")]: {
+        display: "flex",
+      },
     },
     "& .MuiButton-root": {
-      "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-        {
-          flexGrow: "1",
-        },
+      [theme.breakpoints.down("sm")]: {
+        flexGrow: "1",
+      },
     },
   },
   "@keyframes wiggle": {

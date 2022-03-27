@@ -1,6 +1,7 @@
+import Paper from "@mui/material/Paper";
 import { makeStyles } from "@mui/styles";
 import React from "react";
-import Paper from "@mui/material/Paper";
+import theme from "../../../Theme";
 
 interface PageHeaderProps {
   pageTitle?: string;
@@ -11,19 +12,17 @@ const useStyles = makeStyles({
   container: {
     margin: "-16px -24px 16px",
 
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        margin: "0px",
-      },
+    [theme.breakpoints.down("sm")]: {
+      margin: "0px",
+    },
   },
 
   content: {
     padding: "24px",
 
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        padding: "16px",
-      },
+    [theme.breakpoints.down("sm")]: {
+      padding: "16px",
+    },
   },
 
   text: {

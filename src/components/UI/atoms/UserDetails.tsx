@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import theme from "../../../Theme";
 
 interface UserDetailsProps {
   userName?: string;
@@ -12,26 +13,23 @@ const useStyles = makeStyles({
   userName: {
     fontSize: "30px",
     margin: "8px 0",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        fontSize: "12px",
-      },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "12px",
+    },
   },
   userTitle: {
     fontSize: "18px",
     margin: 0,
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        fontSize: "12px",
-      },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "12px",
+    },
   },
   userContact: {
     fontSize: "18px",
     margin: 0,
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        fontSize: "12px",
-      },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "12px",
+    },
   },
 });
 
