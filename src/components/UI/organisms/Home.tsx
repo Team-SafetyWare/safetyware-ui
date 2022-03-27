@@ -32,24 +32,6 @@ export const Home: React.FC<HomeProps> = (props) => {
 
   const [editDashboardMode, setEditDashboardMode] = useState(false);
 
-  const [summaryWidgets, setSummaryWidgets] = useState([
-    {
-      summaryName: "New Location Updates",
-      summaryNumber: "-",
-      summaryTileIcon: <ExploreOutlinedIcon style={{ fontSize: 42 }} />,
-    },
-    {
-      summaryName: "New Incidents",
-      summaryNumber: "-",
-      summaryTileIcon: <BarChartOutlinedIcon style={{ fontSize: 42 }} />,
-    },
-    {
-      summaryName: "New Gas Readings",
-      summaryNumber: "-",
-      summaryTileIcon: <BubbleChartOutlinedIcon style={{ fontSize: 42 }} />,
-    },
-  ]);
-
   const [inactiveWidgets, setInactiveWidgets] = useState([
     {
       widgetName: "Hazardous Area Heat Map",
