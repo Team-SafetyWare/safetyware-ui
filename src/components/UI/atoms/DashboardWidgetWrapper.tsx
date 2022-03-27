@@ -15,6 +15,7 @@ interface DashboardWidgetWrapperProps {
   setWidgetState: any;
   removeWidget?: any;
   editDashboardMode?: any;
+  saveState: any;
 }
 
 export interface StyleProps {
@@ -70,6 +71,7 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
   const onChange = (sourceId: any, sourceIndex: any, targetIndex: any) => {
     const nextState = swap(props.widgetState, sourceIndex, targetIndex);
     props.setWidgetState(nextState);
+    props.saveState();
   };
 
   return (
