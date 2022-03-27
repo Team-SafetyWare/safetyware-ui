@@ -8,6 +8,9 @@ import { HazardMap } from "../molecules/HazardMap";
 import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
 import { IncidentsMap } from "../molecules/IncidentsMap";
 import { TravelMap } from "../molecules/TravelMap";
+import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+import BubbleChartOutlinedIcon from "@mui/icons-material/BubbleChartOutlined";
+import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 
 interface HomeProps {
   userName?: string;
@@ -28,6 +31,24 @@ export const Home: React.FC<HomeProps> = (props) => {
   const styles = useStyles();
 
   const [editDashboardMode, setEditDashboardMode] = useState(false);
+
+  const [summaryWidgets, setSummaryWidgets] = useState([
+    {
+      summaryName: "New Location Updates",
+      summaryNumber: "-",
+      summaryTileIcon: <ExploreOutlinedIcon style={{ fontSize: 42 }} />,
+    },
+    {
+      summaryName: "New Incidents",
+      summaryNumber: "-",
+      summaryTileIcon: <BarChartOutlinedIcon style={{ fontSize: 42 }} />,
+    },
+    {
+      summaryName: "New Gas Readings",
+      summaryNumber: "-",
+      summaryTileIcon: <BubbleChartOutlinedIcon style={{ fontSize: 42 }} />,
+    },
+  ]);
 
   const [inactiveWidgets, setInactiveWidgets] = useState([
     {

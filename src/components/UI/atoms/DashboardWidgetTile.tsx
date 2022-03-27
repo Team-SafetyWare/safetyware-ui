@@ -43,6 +43,7 @@ const useStyles = makeStyles({
       "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
     color: "rgba(0, 0, 0, 0.87)",
     padding: "0px 16px 16px 16px",
+    cursor: "default",
   },
   widgetTileAnimated: {
     display: "flex",
@@ -56,6 +57,7 @@ const useStyles = makeStyles({
     color: "rgba(0, 0, 0, 0.87)",
     padding: "0px 16px 16px 16px",
     animation: "$shake .25s infinite",
+    cursor: "grab",
   },
   widgetInfo: {
     display: "flex",
