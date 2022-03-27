@@ -16,6 +16,7 @@ import { FilterModal } from "../molecules/FilterModal";
 import { HazardMap } from "../molecules/HazardMap";
 import { LocationsTable } from "../molecules/LocationsTable";
 import { TravelMap } from "../molecules/TravelMap";
+
 export const LOCATION_PAGE_LABEL = "locationPage";
 
 const useStyles = makeStyles({

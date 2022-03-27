@@ -17,6 +17,8 @@ import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
 import { IncidentsMap } from "../molecules/IncidentsMap";
 import { IncidentsTable } from "../molecules/IncidentsTable";
 
+export const INCIDENTS_PAGE_LABEL = "incidentsPage";
+
 const useStyles = makeStyles({
   filterBar: {
     position: "sticky",
@@ -55,8 +57,6 @@ const useStyles = makeStyles({
     width: "100vw",
   },
 });
-
-export const INCIDENTS_PAGE_LABEL = "incidentsPage";
 
 interface IncidentsProps {
   filter: Filter;
