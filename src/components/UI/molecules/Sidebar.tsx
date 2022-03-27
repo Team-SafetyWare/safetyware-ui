@@ -141,7 +141,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
   const drawer = (
     <div className={styles.sidebarDiv}>
       <Toolbar>
-        <img className={styles.sidebarlogo} src={Logo} alt="Blackline Safety" />
+        <img className={styles.sidebarlogo} src={Logo} alt="SafetyWare" />
       </Toolbar>
       <Box className={styles.sidebarMenu}>
         <List>

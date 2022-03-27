@@ -126,7 +126,7 @@ export const LoginPrompt: React.FC = () => {
     <StyledEngineProvider injectFirst>
       <Box className={styles.loginBox}>
         <div className={styles.loginDiv}>
-          <img src={Logo} alt="Blackline Safety" />
+          <img src={Logo} alt="SafetyWare" />
           <LoginButton
             text="Log In with Demo Account"
             onClick={onLogInDemoClick}

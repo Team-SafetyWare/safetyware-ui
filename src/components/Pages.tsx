@@ -51,12 +51,7 @@ export const Pages: React.FC = () => {
     <>
       <Prefetch filter={filter} />
       {location.pathname === "/" ? (
-        <Page
-          exact
-          path="/"
-          title="Blackline Safety | Login"
-          component={Login}
-        />
+        <Page exact path="/" title="SafetyWare | Login" component={Login} />
       ) : (
         <>
           <Sidebar userName={user?.name} userPhoto={profileImageUrl} />
@@ -66,13 +61,13 @@ export const Pages: React.FC = () => {
                 <Page
                   exact
                   path="/home"
-                  title="Blackline Safety | Home"
+                  title="SafetyWare | Home"
                   render={() => <Home userName={user?.name} />}
                 />
                 <Page
                   exact
                   path="/locations"
-                  title="Blackline Safety | Locations"
+                  title="SafetyWare | Locations"
                   render={() => (
                     <Locations filter={filter} onFilterChange={filterChanged} />
                   )}
@@ -80,7 +75,7 @@ export const Pages: React.FC = () => {
                 <Page
                   exact
                   path="/incidents"
-                  title="Blackline Safety | Incidents"
+                  title="SafetyWare | Incidents"
                   render={() => (
                     <Incidents filter={filter} onFilterChange={filterChanged} />
                   )}
@@ -88,7 +83,7 @@ export const Pages: React.FC = () => {
                 <Page
                   exact
                   path="/gases"
-                  title="Blackline Safety | Gases"
+                  title="SafetyWare | Gases"
                   render={() => (
                     <Gases filter={filter} onFilterChange={filterChanged} />
                   )}
@@ -96,7 +91,7 @@ export const Pages: React.FC = () => {
                 <Page
                   exact
                   path="/user-account"
-                  title="Blackline Safety | My Account"
+                  title="SafetyWare | My Account"
                   component={UserAccount}
                 />
               </Switch>
