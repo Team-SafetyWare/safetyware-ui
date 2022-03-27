@@ -69,8 +69,6 @@ const useStyles = makeStyles({
   },
   editDashboard: {},
   saveDashboard: {
-    backgroundColor: "rgb(173, 23, 43)",
-    color: "white",
     animation: "$wiggle 2s linear infinite",
   },
   buttons: {
