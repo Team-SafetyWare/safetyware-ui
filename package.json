@@ -41,7 +41,6 @@
     "react-beautiful-dnd": "^13.1.0",
     "react-chartjs-2": "^4.0.1",
     "react-collapsible": "^2.8.4",
-    "react-device-detect": "^2.1.2",
     "react-dom": "^17.0.2",
     "react-draggable": "^4.4.4",
     "react-gesture-responder": "^2.1.0",
