@@ -9,6 +9,7 @@ import {
 } from "react-grid-dnd";
 import theme from "../../../Theme";
 import { DashboardWidgetTile } from "./DashboardWidgetTile";
+import AddIcon from "@mui/icons-material/Add";
 
 interface DashboardWidgetWrapperProps {
   widgetState?: any;
@@ -54,6 +55,17 @@ const useStyles = makeStyles<Theme, StyleProps>({
     paddingLeft: "5px",
     paddingRight: "5px",
   },
+  emptyDashboard: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "0 auto",
+  },
+  emptyDashboardMessage: {
+    marginTop: "15px",
+    fontSize: "18px",
+  },
 });
 
 export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
@@ -75,29 +87,39 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
   };
 
   return (
-    <GridContextProvider onChange={onChange}>
-      <div className={styles.container}>
-        <GridDropZone
-          className={styles.dropzone}
-          id="widget-drop-zone"
-          boxesPerRow={!mobile ? 2 : 1}
-          rowHeight={WIDGET_HEIGHT}
-          disableDrag={!props.editDashboardMode}
-        >
-          {props.widgetState.map((widget: any) => (
-            <GridItem
-              key={widget.widgetName}
-              className={styles.widgetTileContainer}
-            >
-              <DashboardWidgetTile
-                widget={widget}
-                removeWidget={props.removeWidget}
-                editDashboardMode={props.editDashboardMode}
-              />
-            </GridItem>
-          ))}
-        </GridDropZone>
-      </div>
-    </GridContextProvider>
+    <div className={styles.container}>
+      {Object.keys(props.widgetState).length === 0 ? (
+        <div className={styles.emptyDashboard}>
+          <AddIcon fontSize={"large"} />
+          <p className={styles.emptyDashboardMessage}>
+            You have no widgets on your dashboard! Press the Add Widget button
+            to place widgets on the dashboard.
+          </p>
+        </div>
+      ) : (
+        <GridContextProvider onChange={onChange}>
+          <GridDropZone
+            className={styles.dropzone}
+            id="widget-drop-zone"
+            boxesPerRow={!mobile ? 2 : 1}
+            rowHeight={WIDGET_HEIGHT}
+            disableDrag={!props.editDashboardMode}
+          >
+            {props.widgetState.map((widget: any) => (
+              <GridItem
+                key={widget.widgetName}
+                className={styles.widgetTileContainer}
+              >
+                <DashboardWidgetTile
+                  widget={widget}
+                  removeWidget={props.removeWidget}
+                  editDashboardMode={props.editDashboardMode}
+                />
+              </GridItem>
+            ))}
+          </GridDropZone>
+        </GridContextProvider>
+      )}
+    </div>
   );
 };
