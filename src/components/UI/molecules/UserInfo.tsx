@@ -16,13 +16,12 @@ const useStyles = makeStyles({
   userInfo: {
     display: "flex",
     alignItems: "center",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        backgroundColor: theme.palette.primary.main,
-        color: "white",
-        flexDirection: "column",
-        paddingBottom: "48px",
-      },
+    [theme.breakpoints.down("sm")]: {
+      backgroundColor: theme.palette.primary.main,
+      color: "white",
+      flexDirection: "column",
+      paddingBottom: "48px",
+    },
   },
   userPhoto: {
     display: "flex",
@@ -30,16 +29,14 @@ const useStyles = makeStyles({
     alignItems: "center",
     alignContent: "center",
     marginRight: "24px",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        marginRight: "0",
-      },
+    [theme.breakpoints.down("sm")]: {
+      marginRight: "0",
+    },
   },
   userDetails: {
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        textAlign: "center",
-      },
+    [theme.breakpoints.down("sm")]: {
+      textAlign: "center",
+    },
   },
 });
 

@@ -2,6 +2,7 @@ import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import Draggable from "react-draggable";
+import theme from "../../../Theme";
 import { CustomBoxDates } from "../atoms/CustomBoxDates";
 import { CustomBoxUserSelect } from "../atoms/CustomBoxUserSelect";
 
@@ -25,10 +26,9 @@ const useStyles = makeStyles({
     top: "50%",
     transform: "translate(-50%, -50%)",
 
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        width: "calc(100vw - 60px)",
-      },
+    [theme.breakpoints.down("sm")]: {
+      width: "calc(100vw - 60px)",
+    },
 
     "@media only screen and (max-height: 599px)": {
       flexDirection: "row",

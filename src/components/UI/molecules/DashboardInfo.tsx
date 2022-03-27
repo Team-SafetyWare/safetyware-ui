@@ -1,5 +1,6 @@
 import { useMediaQuery } from "@mui/material";
 import React from "react";
+import theme from "../../../Theme";
 import { HomeGreeting } from "../atoms/HomeGreeting";
 import { PageHeader } from "../atoms/PageHeader";
 
@@ -13,11 +14,11 @@ interface DashboardInfoProps {
 }
 
 export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
-  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <>
-      {matches && (
+      {!mobile && (
         <PageHeader
           pageTitle={"Home"}
           pageDescription={

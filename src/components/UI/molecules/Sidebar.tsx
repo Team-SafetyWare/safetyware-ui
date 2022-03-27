@@ -18,10 +18,10 @@ import { makeStyles } from "@mui/styles";
 import React, { useCallback } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import Logo from "../../../assets/logo.png";
+import { setCurrentUser, setToken } from "../../../index";
 import theme from "../../../Theme";
 import { SidebarUserName } from "../atoms/SidebarUserName";
 import { SidebarUserPicture } from "../atoms/SidebarUserPicture";
-import { setCurrentUser, setToken } from "../../../index";
 
 interface SidebarProps {
   userPhoto?: string;
@@ -31,19 +31,17 @@ interface SidebarProps {
 const useStyles = makeStyles({
   sidebar: {
     display: "flex",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        backgroundColor: theme.palette.primary.main,
-      },
+    [theme.breakpoints.down("sm")]: {
+      backgroundColor: theme.palette.primary.main,
+    },
 
     "& .MuiDrawer-root": {
       flexShrink: 0,
       width: 240,
       zIndex: 1,
-      "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-        {
-          display: "none",
-        },
+      [theme.breakpoints.down("sm")]: {
+        display: "none",
+      },
     },
 
     "& .MuiListItemIcon-root": {
@@ -61,19 +59,17 @@ const useStyles = makeStyles({
   sidebarButton: {
     display: "none",
     padding: 16,
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        color: "white",
-        display: "inline-flex",
-      },
+    [theme.breakpoints.down("sm")]: {
+      color: "white",
+      display: "inline-flex",
+    },
   },
 
   sidebarDrawerMobile: {
     display: "none",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        display: "block",
-      },
+    [theme.breakpoints.down("sm")]: {
+      display: "block",
+    },
 
     "& .MuiListItemIcon-root": {
       color: "white",
@@ -118,7 +114,7 @@ const useStyles = makeStyles({
 });
 
 export const Sidebar: React.FC<SidebarProps> = (props) => {
-  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
   const styles = useStyles();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -156,7 +152,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
               to={sidebarItem.link}
               exact
               activeClassName={styles.sidebarItemSelected}
-              onClick={matches ? undefined : handleDrawerToggle}
+              onClick={!mobile ? undefined : handleDrawerToggle}
             >
               <ListItemIcon>
                 <sidebarItem.icon />
@@ -172,7 +168,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
           to="/user-account"
           exact
           activeClassName={styles.sidebarItemSelected}
-          onClick={matches ? undefined : handleDrawerToggle}
+          onClick={!mobile ? undefined : handleDrawerToggle}
         >
           <div className={styles.sidebarUser}>
             <SidebarUserPicture
@@ -184,7 +180,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
         </ListItemButton>
         <ListItemButton
           onClick={() => {
-            if (matches) {
+            if (!mobile) {
               handleDrawerToggle();
             }
             onLogout();

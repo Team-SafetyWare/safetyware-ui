@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import theme from "../../Theme";
 import { UserInfo } from "../UI/molecules/UserInfo";
 
 interface UserAccountTemplateProps {
@@ -16,12 +17,11 @@ const useStyles = makeStyles({
     flexDirection: "column",
     marginLeft: "5vw",
     width: "65vw",
-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
-      {
-        marginLeft: "0",
-        marginBottom: "24px",
-        width: "auto",
-      },
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: "0",
+      marginBottom: "24px",
+      width: "auto",
+    },
   },
 });
 
