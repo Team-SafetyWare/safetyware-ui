@@ -1,6 +1,7 @@
 import { useMediaQuery } from "@mui/material";
 import React from "react";
 import { API_URL, getCurrentUser } from "../../../index";
+import theme from "../../../Theme";
 import { UserAccountTemplate } from "../../templates/UserAccountTemplate";
 import { PageHeader } from "../atoms/PageHeader";
 
@@ -9,11 +10,11 @@ export const UserAccount: React.FC = () => {
   const profileImageUrl =
     (user && `${API_URL}/v1/userAccount/${user.id}/profile.png`) || undefined;
 
-  const matches = useMediaQuery("(min-width:600px) and (min-height:600px)");
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <>
-      {matches && (
+      {!mobile && (
         <PageHeader
           pageTitle={"User Information"}
           pageDescription={
