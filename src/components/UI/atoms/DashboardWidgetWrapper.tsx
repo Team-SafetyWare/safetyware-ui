@@ -1,3 +1,4 @@
+import AddIcon from "@mui/icons-material/Add";
 import { Theme, useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
@@ -9,7 +10,6 @@ import {
 } from "react-grid-dnd";
 import theme from "../../../Theme";
 import { DashboardWidgetTile } from "./DashboardWidgetTile";
-import AddIcon from "@mui/icons-material/Add";
 
 interface DashboardWidgetWrapperProps {
   widgetState?: any;
@@ -25,7 +25,7 @@ export interface StyleProps {
 }
 
 const WIDGET_HEIGHT = 410;
-const PX_STRING = "px";
+const CONTAINER_PADDING = 24;
 
 const useStyles = makeStyles<Theme, StyleProps>({
   container: {
@@ -34,15 +34,21 @@ const useStyles = makeStyles<Theme, StyleProps>({
     paddingTop: "5px",
     width: "100%",
     height: (props) => {
+      let containerHeight = CONTAINER_PADDING;
       if (!props.mobile) {
         if (props.numberOfWidgets > 2) {
-          return (2 * WIDGET_HEIGHT).toString() + PX_STRING;
+          containerHeight += 2 * WIDGET_HEIGHT;
         } else {
-          return WIDGET_HEIGHT.toString() + PX_STRING;
+          containerHeight += WIDGET_HEIGHT;
         }
       } else {
-        return (props.numberOfWidgets * WIDGET_HEIGHT).toString() + PX_STRING;
+        if (props.numberOfWidgets > 0) {
+          containerHeight += props.numberOfWidgets * WIDGET_HEIGHT;
+        } else {
+          containerHeight += WIDGET_HEIGHT;
+        }
       }
+      return containerHeight.toString() + "px";
     },
     overflow: "hidden",
   },
@@ -65,6 +71,7 @@ const useStyles = makeStyles<Theme, StyleProps>({
   emptyDashboardMessage: {
     marginTop: "15px",
     fontSize: "18px",
+    textAlign: "center",
   },
 });
 

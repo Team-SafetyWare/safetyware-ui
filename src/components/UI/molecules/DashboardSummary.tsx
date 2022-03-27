@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
+import { useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import React, { useEffect, useState } from "react";
 import {
   GridContextProvider,
   GridDropZone,
   GridItem,
   swap,
 } from "react-grid-dnd";
-import { DashboardSummaryTile } from "../atoms/DashboardSummaryTile";
-import {
-  useCompanyLocations,
-  useCompanyIncidents,
-  useCompanyGasReadings,
-} from "../../../util/queryService";
 import { getCurrentUser } from "../../../index";
+import theme from "../../../Theme";
+import {
+  useCompanyGasReadings,
+  useCompanyIncidents,
+  useCompanyLocations,
+} from "../../../util/queryService";
+import { DashboardSummaryTile } from "../atoms/DashboardSummaryTile";
 import { Filter } from "./FilterBar";
 
 interface DashboardSummaryTileProps {
@@ -33,6 +35,10 @@ const useStyles = makeStyles({
     display: "flex",
     width: "100%",
     height: "200px",
+    touchAction: "none",
+    [theme.breakpoints.down("sm")]: {
+      height: "600px",
+    },
   },
   summaryTileContainer: {
     paddingTop: "5px",
@@ -54,6 +60,7 @@ const filter: Filter = {
 export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
   props
 ) => {
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
   const styles = useStyles();
   const user = getCurrentUser();
 
@@ -128,7 +135,7 @@ export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
         <GridDropZone
           className={styles.summaryDropzone}
           id="summary-drop-zone"
-          boxesPerRow={3}
+          boxesPerRow={!mobile ? 3 : 1}
           rowHeight={200}
           disableDrag={!props.editDashboardMode}
         >
