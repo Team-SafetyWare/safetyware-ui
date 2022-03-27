@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   tooltipContent: {
     position: "absolute",
     bottom: "16px",
-    translate: "-50%",
+    transform: "translate(-50%)",
     padding: "8px",
     fontSize: "1rem",
     backgroundColor: "white",
@@ -25,8 +25,7 @@ const useStyles = makeStyles({
     position: "absolute",
     backgroundColor: "white",
     borderRadius: "4px",
-    transform: "rotate(45deg)",
-    translate: "-50%",
+    transform: "translate(-50%) rotate(45deg)",
     left: "50%",
     bottom: "calc(0.2071 * 32px)",
   },
