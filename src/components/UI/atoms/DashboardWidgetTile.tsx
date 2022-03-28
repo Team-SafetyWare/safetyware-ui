@@ -1,8 +1,10 @@
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useMediaQuery } from "@mui/material";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import theme from "../../../Theme";
 import { defaultFilter } from "../molecules/FilterBar";
 import { HazardMap } from "../molecules/HazardMap";
 import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
@@ -97,14 +99,26 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
   props
 ) => {
   const styles = useStyles();
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const widgetTable = {
-    HazardMap: <HazardMap filter={defaultFilter()} />,
+    HazardMap: (
+      <HazardMap
+        filter={defaultFilter()}
+        gestureHandling={mobile ? "cooperative" : undefined}
+      />
+    ),
     IncidentsBarGraph: <IncidentsBarGraph filter={defaultFilter()} />,
-    IncidentsMap: <IncidentsMap filter={defaultFilter()} />,
+    IncidentsMap: (
+      <IncidentsMap
+        filter={defaultFilter()}
+        gestureHandling={mobile ? "cooperative" : undefined}
+      />
+    ),
     TravelMap: (
       <TravelMap
         filter={defaultFilter()}
+        gestureHandling={mobile ? "cooperative" : undefined}
         legendDefaultCollapsed={true}
         legendCompact={true}
       />

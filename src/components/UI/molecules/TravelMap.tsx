@@ -76,6 +76,7 @@ interface QuadPoint {
 
 interface TravelMapProps {
   filter?: Filter;
+  gestureHandling?: string;
   legendDefaultCollapsed?: boolean;
   legendCompact?: boolean;
 }
@@ -187,7 +188,9 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
             width: "100%",
           }}
           options={{
-            gestureHandling: "greedy",
+            gestureHandling: props.gestureHandling
+              ? props.gestureHandling
+              : "greedy",
             restriction: MAP_RESTRICTION,
           }}
           zoom={DEFAULT_MAP_ZOOM}
