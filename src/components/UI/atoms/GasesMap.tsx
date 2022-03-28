@@ -128,17 +128,14 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
               location={hoveredMarker.location}
               hoverDistance={"20px"}
             >
-              <h3 className={styles.tooltipText}>Gas: {hoveredMarker.gas}</h3>
+              <h3 className={styles.tooltipText}>{hoveredMarker.gas}</h3>
               <p className={styles.tooltipText}>
-                Name: {hoveredMarker.person.name}
+                {hoveredMarker.density} {hoveredMarker.densityUnits}
               </p>
               <p className={styles.tooltipText}>
-                Time: {hoveredMarker.time.toISOString()}
+                {hoveredMarker.time.toLocaleString()}
               </p>
-              <p className={styles.tooltipText}>
-                Density: {hoveredMarker.density}
-                {hoveredMarker.densityUnits}
-              </p>
+              <p className={styles.tooltipText}>{hoveredMarker.person.name}</p>
             </MapTooltip>
           )}
         </GoogleMap>
