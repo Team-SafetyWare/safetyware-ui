@@ -37,7 +37,7 @@ export enum Access {
 export interface User {
   id: string;
   name: string;
-  access: Access,
+  access: Access;
   title: string;
   email: string;
   phone: string;
