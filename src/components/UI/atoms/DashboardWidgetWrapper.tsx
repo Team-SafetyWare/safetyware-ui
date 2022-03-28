@@ -50,6 +50,10 @@ const useStyles = makeStyles<Theme, StyleProps>({
       return containerHeight.toString() + "px";
     },
     overflow: "hidden",
+    [theme.breakpoints.down("sm")]: {
+      paddingLeft: "16px",
+      paddingRight: "16px",
+    },
   },
   dropzone: {
     flex: 1,

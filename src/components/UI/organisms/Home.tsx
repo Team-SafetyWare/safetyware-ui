@@ -11,10 +11,10 @@ interface HomeProps {
 
 /* see https://mui.com/styles/basics/ */
 const useStyles = makeStyles({
-  dashboardContent: {
+  scrollableContent: {
     [theme.breakpoints.down("sm")]: {
-      marginLeft: "16px",
-      marginRight: "16px",
+      maxHeight: "calc(100vh - 202.5px)",
+      overflow: "auto",
     },
   },
 });
@@ -153,7 +153,7 @@ export const Home: React.FC<HomeProps> = (props) => {
   };
 
   return (
-    <div className={styles.dashboardContent}>
+    <>
       <DashboardInfo
         activeWidgetState={activeWidgets}
         inactiveWidgetState={inactiveWidgets}
@@ -162,19 +162,21 @@ export const Home: React.FC<HomeProps> = (props) => {
         editDashboardMode={editDashboardMode}
         setEditDashboardMode={dashboardEditToggle}
       />
-      <DashboardSummary
-        summaryWidgets={summaryWidgets}
-        editSummaryWidgets={setSummaryWidgets}
-        editDashboardMode={editDashboardMode}
-        saveState={saveState}
-      />
-      <DashboardWidgetWrapper
-        widgetState={activeWidgets}
-        setWidgetState={setActiveWidgets}
-        removeWidget={removeWidget}
-        editDashboardMode={editDashboardMode}
-        saveState={saveState}
-      />
-    </div>
+      <div className={styles.scrollableContent}>
+        <DashboardSummary
+          summaryWidgets={summaryWidgets}
+          editSummaryWidgets={setSummaryWidgets}
+          editDashboardMode={editDashboardMode}
+          saveState={saveState}
+        />
+        <DashboardWidgetWrapper
+          widgetState={activeWidgets}
+          setWidgetState={setActiveWidgets}
+          removeWidget={removeWidget}
+          editDashboardMode={editDashboardMode}
+          saveState={saveState}
+        />
+      </div>
+    </>
   );
 };

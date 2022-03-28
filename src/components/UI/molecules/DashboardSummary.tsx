@@ -37,6 +37,8 @@ const useStyles = makeStyles({
     height: "200px",
     [theme.breakpoints.down("sm")]: {
       height: "600px",
+      paddingLeft: "16px",
+      paddingRight: "16px",
     },
   },
   summaryTileContainer: {
