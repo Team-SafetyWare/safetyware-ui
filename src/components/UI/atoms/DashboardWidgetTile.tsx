@@ -1,7 +1,5 @@
-import RemoveIcon from "@mui/icons-material/Remove";
-import { useMediaQuery } from "@mui/material";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import { IconButton, useMediaQuery } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import theme from "../../../Theme";
@@ -23,27 +21,6 @@ interface WidgetTable {
   IncidentsMap: any;
   TravelMap: any;
 }
-
-const BootstrapButton = styled(Button)({
-  boxShadow: "none",
-  textTransform: "none",
-  padding: "6px 12px",
-  border: ".5px solid",
-  borderColor: "black",
-  color: "black",
-  fontFamily: [
-    "-apple-system",
-    "BlinkMacSystemFont",
-    '"Segoe UI"',
-    "Roboto",
-    '"Helvetica Neue"',
-    "Arial",
-    "sans-serif",
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(","),
-});
 
 const useStyles = makeStyles({
   widgetTile: {
@@ -83,7 +60,9 @@ const useStyles = makeStyles({
     fontSize: "24px",
     margin: "12px 0px 12px 8px",
   },
-  removeButton: {},
+  removeButton: {
+    color: theme.palette.primary.main,
+  },
   widget: {
     height: "100%",
     width: "100%",
@@ -137,15 +116,12 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
         <div className={styles.widgetInfo}>
           <p className={styles.widgetName}>{props.widget.widgetName}</p>
           {props.editDashboardMode && (
-            <div className={styles.removeButton}>
-              <BootstrapButton
-                variant="outlined"
-                endIcon={<RemoveIcon />}
-                onClick={() => props.removeWidget(props.widget)}
-              >
-                Remove Widget
-              </BootstrapButton>
-            </div>
+            <IconButton
+              className={styles.removeButton}
+              onClick={() => props.removeWidget(props.widget)}
+            >
+              <RemoveCircleIcon />
+            </IconButton>
           )}
         </div>
         {widgetTable[props.widget.widget as keyof WidgetTable]}
