@@ -138,14 +138,10 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
               location={hoveredMarker.location}
               hoverDistance={"20px"}
             >
-              <h3 className={styles.tooltipText}>
-                Incident: {hoveredMarker.type}
-              </h3>
+              <h3 className={styles.tooltipText}>{hoveredMarker.type}</h3>
+              <p className={styles.tooltipText}>{hoveredMarker.person.name}</p>
               <p className={styles.tooltipText}>
-                Name: {hoveredMarker.person.name}
-              </p>
-              <p className={styles.tooltipText}>
-                Time: {hoveredMarker.time.toLocaleString()}
+                {hoveredMarker.time.toLocaleString()}
               </p>
             </MapTooltip>
           )}
