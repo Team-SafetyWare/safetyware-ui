@@ -12,7 +12,7 @@ import { Home } from "./UI/organisms/Home";
 import { Incidents } from "./UI/organisms/Incidents";
 import { Locations } from "./UI/organisms/Locations";
 import { Login } from "./UI/organisms/Login";
-import { UserAccount } from "./UI/organisms/UserAccount";
+import { Profile } from "./UI/organisms/Profile";
 
 const useStyles = makeStyles({
   content: {
@@ -92,7 +92,7 @@ export const Pages: React.FC = () => {
                   exact
                   path="/user-account"
                   title="SafetyWare | My Account"
-                  component={UserAccount}
+                  component={Profile}
                 />
               </Switch>
             </div>
