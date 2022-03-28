@@ -45,6 +45,7 @@ interface IncidentMarker {
 
 interface IncidentsMapProps {
   filter?: Filter;
+  gestureHandling?: string;
 }
 
 const useStyles = makeStyles({
@@ -115,7 +116,9 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
             width: "100%",
           }}
           options={{
-            gestureHandling: "greedy",
+            gestureHandling: props.gestureHandling
+              ? props.gestureHandling
+              : "greedy",
             restriction: MAP_RESTRICTION,
           }}
           zoom={DEFAULT_MAP_ZOOM}
