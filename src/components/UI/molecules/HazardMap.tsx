@@ -22,6 +22,7 @@ export const DEFAULT_MAP_ZOOM = 11;
 
 interface HazardMapProps {
   filter?: Filter;
+  gestureHandling?: string;
 }
 
 export const HazardMap: React.FC<HazardMapProps> = (props) => {
@@ -57,7 +58,9 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
           width: "100%",
         }}
         options={{
-          gestureHandling: "greedy",
+          gestureHandling: props.gestureHandling
+            ? props.gestureHandling
+            : "greedy",
           restriction: MAP_RESTRICTION,
         }}
         zoom={DEFAULT_MAP_ZOOM}
