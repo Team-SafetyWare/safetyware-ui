@@ -145,7 +145,7 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
                 Name: {hoveredMarker.person.name}
               </p>
               <p className={styles.tooltipText}>
-                Time: {hoveredMarker.time.toISOString()}
+                Time: {hoveredMarker.time.toLocaleString()}
               </p>
             </MapTooltip>
           )}

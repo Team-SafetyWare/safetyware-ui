@@ -133,7 +133,7 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
                 Name: {hoveredMarker.person.name}
               </p>
               <p className={styles.tooltipText}>
-                Time: {hoveredMarker.time.toISOString()}
+                Time: {hoveredMarker.time.toLocaleString()}
               </p>
               <p className={styles.tooltipText}>
                 Density: {hoveredMarker.density}
