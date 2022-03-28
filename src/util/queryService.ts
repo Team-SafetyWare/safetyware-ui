@@ -6,6 +6,7 @@ export const GET_USERS = gql`
     userAccounts {
       id
       name
+      access
       title
       email
       phone

@@ -29,9 +29,15 @@ export const MAP_RESTRICTION: MapRestriction = {
 const CURRENT_USER_KEY = "current_user";
 const TOKEN_KEY = "token";
 
+export enum Access {
+  View = "VIEW",
+  Admin = "ADMIN",
+}
+
 export interface User {
   id: string;
   name: string;
+  access: Access,
   title: string;
   email: string;
   phone: string;
