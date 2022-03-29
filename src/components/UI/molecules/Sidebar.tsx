@@ -165,7 +165,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
       <List className={styles.sidebarFooter}>
         <ListItemButton
           component={NavLink}
-          to="/user-account"
+          to="/profile"
           exact
           activeClassName={styles.sidebarItemSelected}
           onClick={!mobile ? undefined : handleDrawerToggle}

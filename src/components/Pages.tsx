@@ -90,8 +90,8 @@ export const Pages: React.FC = () => {
                 />
                 <Page
                   exact
-                  path="/user-account"
-                  title="SafetyWare | My Account"
+                  path="/profile"
+                  title="SafetyWare | Profile"
                   component={Profile}
                 />
               </Switch>
