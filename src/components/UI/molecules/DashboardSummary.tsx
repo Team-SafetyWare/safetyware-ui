@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     display: "flex",
     width: "100%",
     height: "200px",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("md")]: {
       height: "600px",
       paddingLeft: "16px",
       paddingRight: "16px",
@@ -61,7 +61,7 @@ const filter: Filter = {
 export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
   props
 ) => {
-  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const mediumScreen = useMediaQuery(theme.breakpoints.down("md"));
   const styles = useStyles();
   const user = getCurrentUser();
 
@@ -139,7 +139,7 @@ export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
         <GridDropZone
           className={styles.summaryDropzone}
           id="summary-drop-zone"
-          boxesPerRow={!mobile ? 3 : 1}
+          boxesPerRow={!mediumScreen ? 3 : 1}
           rowHeight={200}
           disableDrag={!props.editDashboardMode}
         >

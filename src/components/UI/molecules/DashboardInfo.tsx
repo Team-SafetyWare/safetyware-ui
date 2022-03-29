@@ -31,7 +31,7 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
     <div className={styles.content}>
       {!mobile && (
         <PageHeader
-          pageTitle={"Home"}
+          pageTitle={"Dashboard"}
           pageDescription={
             "Welcome to SafetyWare's safety visualization web application. Add widgets to your dashboard, or explore each visualization type individually."
           }

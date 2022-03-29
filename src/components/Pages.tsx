@@ -7,12 +7,12 @@ import { Page } from "./UI/atoms/Page";
 import { defaultFilter, Filter } from "./UI/molecules/FilterBar";
 import { Prefetch } from "./UI/molecules/Prefetch";
 import { Sidebar } from "./UI/molecules/Sidebar";
+import { Dashboard } from "./UI/organisms/Dashboard";
 import { Gases } from "./UI/organisms/Gases";
-import { Home } from "./UI/organisms/Home";
 import { Incidents } from "./UI/organisms/Incidents";
 import { Locations } from "./UI/organisms/Locations";
 import { Login } from "./UI/organisms/Login";
-import { UserAccount } from "./UI/organisms/UserAccount";
+import { Profile } from "./UI/organisms/Profile";
 
 const useStyles = makeStyles({
   content: {
@@ -60,9 +60,9 @@ export const Pages: React.FC = () => {
               <Switch>
                 <Page
                   exact
-                  path="/home"
-                  title="SafetyWare | Home"
-                  render={() => <Home userName={user?.name} />}
+                  path="/dashboard"
+                  title="SafetyWare | Dashboard"
+                  render={() => <Dashboard userName={user?.name} />}
                 />
                 <Page
                   exact
@@ -90,9 +90,9 @@ export const Pages: React.FC = () => {
                 />
                 <Page
                   exact
-                  path="/user-account"
-                  title="SafetyWare | My Account"
-                  component={UserAccount}
+                  path="/profile"
+                  title="SafetyWare | Profile"
+                  component={Profile}
                 />
               </Switch>
             </div>

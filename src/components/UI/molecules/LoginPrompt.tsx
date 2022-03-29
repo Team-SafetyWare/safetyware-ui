@@ -84,7 +84,7 @@ export const LoginPrompt: React.FC = () => {
         })();
       setCurrentUser(user);
       setToken(token);
-      history.push("/home");
+      history.push("/dashboard");
     },
     [history]
   );
@@ -133,7 +133,7 @@ export const LoginPrompt: React.FC = () => {
             loading={isLoading}
           />
           <Divider className={styles.loginOptionDivider}>OR</Divider>
-          <FormControl sx={{ maxWidth: 300 }}>
+          <FormControl sx={{ minWidth: 300 }}>
             <InputLabel className={styles.inputLabel}>
               {userSelectLabel}
             </InputLabel>

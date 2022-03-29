@@ -20,7 +20,7 @@ interface DashboardWidgetWrapperProps {
 }
 
 export interface StyleProps {
-  mobile: boolean;
+  mediumScreen: boolean;
   numberOfWidgets: number;
 }
 
@@ -34,7 +34,7 @@ const useStyles = makeStyles<Theme, StyleProps>({
     width: "100%",
     height: (props) => {
       let containerHeight = CONTAINER_PADDING;
-      if (!props.mobile) {
+      if (!props.mediumScreen) {
         if (props.numberOfWidgets > 2) {
           containerHeight += 2 * WIDGET_HEIGHT;
         } else {
@@ -50,7 +50,7 @@ const useStyles = makeStyles<Theme, StyleProps>({
       return containerHeight.toString() + "px";
     },
     overflow: "hidden",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("md")]: {
       paddingLeft: "16px",
       paddingRight: "16px",
     },
@@ -81,10 +81,10 @@ const useStyles = makeStyles<Theme, StyleProps>({
 export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
   props
 ) => {
-  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const mediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const styleProps = {
-    mobile: mobile,
+    mediumScreen: mediumScreen,
     numberOfWidgets: props.widgetState.length,
   };
 
@@ -114,7 +114,7 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
           <GridDropZone
             className={styles.dropzone}
             id="widget-drop-zone"
-            boxesPerRow={!mobile ? 2 : 1}
+            boxesPerRow={!mediumScreen ? 2 : 1}
             rowHeight={WIDGET_HEIGHT}
             disableDrag={!props.editDashboardMode}
           >

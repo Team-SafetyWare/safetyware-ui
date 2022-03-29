@@ -63,7 +63,7 @@ interface LocationsProps {
   onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
 }
 
-const visualizations = ["Travel history", "Hazardous areas", "Locations table"];
+const visualizations = ["Travel History", "Hazardous Areas", "Locations Table"];
 
 export const Locations: React.FC<LocationsProps> = (props) => {
   const filterChanged = useCallback(
