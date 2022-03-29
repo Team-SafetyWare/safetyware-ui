@@ -64,9 +64,9 @@ interface IncidentsProps {
 }
 
 const visualizations = [
-  "Incidents map",
-  "Incidents bar graph",
-  "Incidents table",
+  "Incidents Map",
+  "Incidents Bar Graph",
+  "Incidents Table",
 ];
 
 export const Incidents: React.FC<IncidentsProps> = (props) => {

@@ -62,7 +62,7 @@ interface GasesProps {
   onFilterChange: (updateFilter: (prevFilter: Filter) => Filter) => void;
 }
 
-const visualizations = ["Gases map", "Gases table"];
+const visualizations = ["Gases Map", "Gases Table"];
 
 export const Gases: React.FC<GasesProps> = (props) => {
   const filterChanged = useCallback(
