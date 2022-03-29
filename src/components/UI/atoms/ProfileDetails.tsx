@@ -76,7 +76,11 @@ export const ProfileDetails: React.FC<ProfileDetailsProps> = (props) => {
   const [updatedEmail, setUpdatedEmail] = useState(props.email);
   const [updatedPhone, setUpdatedPhone] = useState(props.phone);
 
-  const [updateProfile] = useReplaceUserAccount();
+  const onCompletedCallback = () => {
+    window.location.reload();
+  };
+
+  const [updateProfile] = useReplaceUserAccount(onCompletedCallback);
 
   const handleUpdateProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

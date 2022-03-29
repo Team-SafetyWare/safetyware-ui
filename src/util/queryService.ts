@@ -479,11 +479,15 @@ export interface ReplaceUserAccountData {
   company: string;
 }
 
-export const useReplaceUserAccount = (): MutationTuple<
-  ReplaceUserAccountData,
-  ReplaceUserAccountVars
-> => {
+export const useReplaceUserAccount = (
+  onCompletedCallback: any
+): MutationTuple<ReplaceUserAccountData, ReplaceUserAccountVars> => {
   return useMutation<ReplaceUserAccountData, ReplaceUserAccountVars>(
-    REPLACE_USER_ACCOUNT
+    REPLACE_USER_ACCOUNT,
+    {
+      onCompleted() {
+        onCompletedCallback();
+      },
+    }
   );
 };
