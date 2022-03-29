@@ -29,7 +29,7 @@ export const LoginMicrosoftButton: React.FC = () => {
     <Button
       className={styles.loginMicrosoftButton}
       component={Link}
-      to="/home"
+      to="/dashboard"
       variant="outlined"
     >
       <svg

@@ -84,7 +84,7 @@ export const LoginPrompt: React.FC = () => {
         })();
       setCurrentUser(user);
       setToken(token);
-      history.push("/home");
+      history.push("/dashboard");
     },
     [history]
   );

@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const Home: React.FC<HomeProps> = (props) => {
+export const Dashboard: React.FC<HomeProps> = (props) => {
   const styles = useStyles();
 
   const [editDashboardMode, setEditDashboardMode] = useState(false);

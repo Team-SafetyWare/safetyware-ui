@@ -132,7 +132,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
   };
 
   const sidebarHeaderItems = [
-    { text: "Home", icon: HomeOutlinedIcon, link: "/home" },
+    { text: "Dashboard", icon: HomeOutlinedIcon, link: "/dashboard" },
     { text: "Locations", icon: ExploreOutlinedIcon, link: "/locations" },
     { text: "Incidents", icon: BarChartOutlinedIcon, link: "/incidents" },
     { text: "Gases", icon: BubbleChartOutlinedIcon, link: "/gases" },
