@@ -20,15 +20,19 @@ export const Profile: React.FC = () => {
           pageDescription={"View and manage your personal information."}
         />
       )}
-      <ProfileData
-        photo={profileImageUrl}
-        name={user?.name}
-        title={user?.title}
-        companyName={user?.company?.name}
-        email={user?.email}
-        phone={user?.phone}
-        access={user?.access}
-      />
+      {user && (
+        <ProfileData
+          photo={profileImageUrl}
+          id={user.id}
+          name={user.name}
+          title={user.title}
+          companyId={user.company.id}
+          companyName={user.company.name}
+          email={user.email}
+          phone={user.phone}
+          access={user.access}
+        />
+      )}
     </>
   );
 };

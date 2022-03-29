@@ -440,3 +440,50 @@ export interface LoginData {
 export const useLogin = (): MutationTuple<LoginData, LoginVars> => {
   return useMutation<LoginData, LoginVars>(LOGIN);
 };
+
+export const REPLACE_USER_ACCOUNT = gql`
+  mutation replaceUserAccount($id: ID!, $input: UserAccountInput!) {
+    replaceUserAccount(id: $id, input: $input) {
+      id
+      name
+      title
+      email
+      phone
+      company {
+        name
+      }
+    }
+  }
+`;
+
+export interface UserAccountInput {
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+  companyId: string;
+  access: string;
+}
+
+export interface ReplaceUserAccountVars {
+  id: string;
+  input: UserAccountInput;
+}
+
+export interface ReplaceUserAccountData {
+  id: string;
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+  company: string;
+}
+
+export const useReplaceUserAccount = (): MutationTuple<
+  ReplaceUserAccountData,
+  ReplaceUserAccountVars
+> => {
+  return useMutation<ReplaceUserAccountData, ReplaceUserAccountVars>(
+    REPLACE_USER_ACCOUNT
+  );
+};
