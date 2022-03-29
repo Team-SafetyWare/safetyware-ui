@@ -103,7 +103,7 @@ export const Gases: React.FC<GasesProps> = (props) => {
           <Card className={styles.pageCard}>
             <CardHeader
               title={visualizations[0]}
-              subheader="Become aware of the gas concentrations across multiple locations. "
+              subheader="Become aware of the gas concentrations across multiple locations."
             />
             <CardMedia>
               <div style={{ height: "600px" }}>
@@ -115,7 +115,7 @@ export const Gases: React.FC<GasesProps> = (props) => {
           <Card className={styles.pageCard}>
             <CardHeader
               title={visualizations[1]}
-              subheader="View individual gas reading data."
+              subheader="View individual gas readings."
             />
             <CardMedia>
               <GasesTable filter={props.filter} />
