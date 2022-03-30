@@ -90,8 +90,8 @@ const useStyles = makeStyles({
 
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isEmpty, setIsEmpty] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
