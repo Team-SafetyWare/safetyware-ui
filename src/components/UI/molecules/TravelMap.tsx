@@ -1,10 +1,9 @@
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import { makeStyles } from "@mui/styles";
+import { GoogleMap, Polyline } from "@react-google-maps/api";
+import { quadtree, Quadtree } from "d3-quadtree";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Person,
-  PersonWithLocationReadings,
-  useCompanyLocations,
-  usePersonLocations,
-} from "../../../util/queryService";
 import {
   getCurrentUser,
   MAP_RESTRICTION,
@@ -12,18 +11,19 @@ import {
   sortPeople,
   User,
 } from "../../../index";
-import { GoogleMap, Polyline } from "@react-google-maps/api";
-import LatLngLiteral = google.maps.LatLngLiteral;
-import { Filter, shouldFilterPerson } from "./FilterBar";
-import { makeStyles } from "@mui/styles";
-import EmptyDataMessage from "../atoms/EmptyDataMessage";
-import Backdrop from "@mui/material/Backdrop";
+import {
+  Person,
+  PersonWithLocationReadings,
+  useCompanyLocations,
+  usePersonLocations,
+} from "../../../util/queryService";
 import OverlayStyles from "../../styling/OverlayStyles";
-import MapMouseEvent = google.maps.MapMouseEvent;
-import { MapTooltip } from "./MapTooltip";
-import { quadtree, Quadtree } from "d3-quadtree";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 import { LegendItem, MapLegend } from "./MapLegend";
-import CircularProgress from "@mui/material/CircularProgress";
+import { MapTooltip } from "./MapTooltip";
+import LatLngLiteral = google.maps.LatLngLiteral;
+import MapMouseEvent = google.maps.MapMouseEvent;
 
 const TRAIL_SPLIT_MS = 10 * 60 * 1000;
 
@@ -90,13 +90,16 @@ const useStyles = makeStyles({
 
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isEmpty, setIsEmpty] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isEmpty, setIsEmpty] = React.useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const people: PersonWithLocationReadings[] = usePeople(user, filter);
+  const [personAsPeopleLoading, peopleInCompanyLoading, people] = usePeople(
+    user,
+    filter
+  );
   const trails: Trail[] = intoTrails(people);
   const pointTree = intoPointTree(trails);
 
@@ -107,12 +110,17 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const [mapTypeId, setMapTypeId] = useState<string>(DEFAULT_MAP_TYPE_ID);
 
   useEffect(() => {
-    if (people.length === 0) {
+    if (personAsPeopleLoading || peopleInCompanyLoading) {
       setIsLoading(true);
+      setIsEmpty(false);
     } else {
       setIsLoading(false);
+
+      if (trails.length === 0) {
+        setIsEmpty(true);
+      }
     }
-  }, [people]);
+  }, [personAsPeopleLoading, peopleInCompanyLoading, trails]);
 
   const onMapLoad = useCallback(
     (map: google.maps.Map) => {
@@ -146,14 +154,6 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
     setTooltipPoint(undefined);
   }, []);
 
-  useEffect(() => {
-    if (trails.length === 0) {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
-    }
-  }, [trails]);
-
   const satelliteView = [
     MapTypeId.Satellite.toString(),
     MapTypeId.Hybrid.toString(),
@@ -170,10 +170,11 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isEmpty || isLoading}
+          open={isLoading || isEmpty}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          {isLoading ? <CircularProgress /> : <EmptyDataMessage />}
+          {isLoading && <CircularProgress />}
+          {!isLoading && isEmpty && <EmptyDataMessage />}
         </Backdrop>
         <MapLegend
           map={map}
@@ -228,28 +229,33 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
   );
 };
 
-const usePeople = (user: User | null, filter: Filter) =>
-  sortPeople(
-    [
-      usePersonAsPeople(
-        filter.person?.id || "",
-        filter,
-        shouldFilterPerson(filter)
-      ),
-      usePeopleInCompany(
-        user?.company.id || "",
-        filter,
-        !shouldFilterPerson(filter)
-      ),
-    ].flat()
+const usePeople = (
+  user: User | null,
+  filter: Filter
+): [boolean, boolean, PersonWithLocationReadings[]] => {
+  const [personAsPeopleLoading, personAsPeopleData] = usePersonAsPeople(
+    filter.person?.id || "",
+    filter,
+    shouldFilterPerson(filter)
   );
+  const [peopleInCompanyLoading, peopleInCompanyData] = usePeopleInCompany(
+    user?.company.id || "",
+    filter,
+    !shouldFilterPerson(filter)
+  );
+  return [
+    personAsPeopleLoading,
+    peopleInCompanyLoading,
+    sortPeople([personAsPeopleData, peopleInCompanyData].flat()),
+  ];
+};
 
 const usePeopleInCompany = (
   companyId: string,
   filter: Filter,
   execute = true
-): PersonWithLocationReadings[] => {
-  const { data } = useCompanyLocations(
+): [boolean, PersonWithLocationReadings[]] => {
+  const { loading, data } = useCompanyLocations(
     {
       companyId: companyId,
       filter: {
@@ -259,15 +265,15 @@ const usePeopleInCompany = (
     },
     execute
   );
-  return data?.company.people || [];
+  return [loading, data?.company.people || []];
 };
 
 const usePersonAsPeople = (
   personId: string,
   filter: Filter,
   execute = true
-): PersonWithLocationReadings[] => {
-  const { data } = usePersonLocations(
+): [boolean, PersonWithLocationReadings[]] => {
+  const { loading, data } = usePersonLocations(
     {
       personId: personId,
       filter: {
@@ -277,7 +283,7 @@ const usePersonAsPeople = (
     },
     execute
   );
-  return (data && [data.person]) || [];
+  return [loading, (data && [data.person]) || []];
 };
 
 const intoTrails = (people: PersonWithLocationReadings[]): Trail[] =>
