@@ -77,11 +77,9 @@ export const Dashboard: React.FC<HomeProps> = (props) => {
       activeWidgets: activeWidgets,
     });
     localStorage.setItem("dashboardState", state);
-    console.log("Saving State!");
   };
 
   const loadState = () => {
-    console.log("Loading State!");
     const dashboardState = localStorage.getItem("dashboardState");
     if (dashboardState === null) {
       setSummaryWidgets([
