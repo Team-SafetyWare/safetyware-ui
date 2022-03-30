@@ -4,12 +4,9 @@ import {
   Chart as ChartJS,
   LinearScale,
 } from "chart.js";
-import React, { useEffect } from "react";
+import React from "react";
 import { Bar } from "react-chartjs-2";
 import theme from "../../../Theme";
-import EmptyDataMessage from "../atoms/EmptyDataMessage";
-import Backdrop from "@mui/material/Backdrop";
-import OverlayStyles from "../../styling/OverlayStyles";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
@@ -25,24 +22,13 @@ interface BarGraphProps {
 }
 
 export const BarGraph: React.FC<BarGraphProps> = (props) => {
-  const overlayStyles = OverlayStyles();
-
   const labels: string[] = [];
   const data: number[] = [];
-  const [isEmpty, setIsEmpty] = React.useState(false);
 
   props.data?.map((datum) => {
     labels.push(datum.x);
     data.push(datum.y);
   });
-
-  useEffect(() => {
-    if (data.length === 0) {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
-    }
-  }, [data]);
 
   const barData = {
     labels: labels,
@@ -84,18 +70,5 @@ export const BarGraph: React.FC<BarGraphProps> = (props) => {
     },
   };
 
-  return (
-    <>
-      <div className={overlayStyles.parent}>
-        <Backdrop
-          className={overlayStyles.backdrop}
-          open={isEmpty}
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        >
-          <EmptyDataMessage />
-        </Backdrop>
-        <Bar data={barData} options={options} />
-      </div>
-    </>
-  );
+  return <Bar data={barData} options={options} />;
 };

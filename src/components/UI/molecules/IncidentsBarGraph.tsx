@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
-import { Filter, shouldFilterPerson } from "./FilterBar";
-import { BarGraph, BarItem } from "../atoms/BarGraph";
+import { CircularProgress } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
+import React, { useEffect, useState } from "react";
+import { getCurrentUser, User } from "../../../index";
 import {
   IncidentStat,
   useCompanyIncidentStats,
   usePersonIncidentStats,
 } from "../../../util/queryService";
-import { getCurrentUser, User } from "../../../index";
-import EmptyDataMessage from "../atoms/EmptyDataMessage";
-import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
+import { BarGraph, BarItem } from "../atoms/BarGraph";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 
 export const X_AXIS_TITLE = "Incident Type";
 export const Y_AXIS_TITLE = "Occurrences";
@@ -20,30 +21,40 @@ interface IncidentsBarGraphProps {
 
 export const IncidentsBarGraph: React.FC<IncidentsBarGraphProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isEmpty, setIsEmpty] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const stats: IncidentStat[] = useIncidentStats(user, filter);
+  const [statsInPersonLoading, statsInCompanyLoading, stats] = useIncidentStats(
+    user,
+    filter
+  );
   const graphData = intoChartData(stats);
 
   useEffect(() => {
-    if (graphData.length === 0) {
-      setIsEmpty(true);
-    } else {
+    if (statsInPersonLoading || statsInCompanyLoading) {
+      setIsLoading(true);
       setIsEmpty(false);
+    } else {
+      setIsLoading(false);
+
+      if (graphData.length === 0) {
+        setIsEmpty(true);
+      }
     }
-  }, [graphData]);
+  }, [statsInPersonLoading, statsInCompanyLoading, graphData]);
 
   return (
     <div className={overlayStyles.parent}>
       <Backdrop
         className={overlayStyles.backdrop}
-        open={isEmpty}
+        open={isLoading || isEmpty}
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
-        <EmptyDataMessage />
+        {isLoading && <CircularProgress />}
+        {!isLoading && isEmpty && <EmptyDataMessage />}
       </Backdrop>
       <BarGraph
         data={graphData}
@@ -54,28 +65,33 @@ export const IncidentsBarGraph: React.FC<IncidentsBarGraphProps> = (props) => {
   );
 };
 
-const useIncidentStats = (user: User | null, filter: Filter) =>
-  sortByOccurances(
-    [
-      useStatsInPerson(
-        filter.person?.id || "",
-        filter,
-        shouldFilterPerson(filter)
-      ),
-      useStatsInCompany(
-        user?.company.id || "",
-        filter,
-        !shouldFilterPerson(filter)
-      ),
-    ].flat()
+const useIncidentStats = (
+  user: User | null,
+  filter: Filter
+): [boolean, boolean, IncidentStat[]] => {
+  const [statsInPersonLoading, statsInPersonData] = useStatsInPerson(
+    filter.person?.id || "",
+    filter,
+    shouldFilterPerson(filter)
   );
+  const [statsInCompanyLoading, statsInCompanyData] = useStatsInCompany(
+    user?.company.id || "",
+    filter,
+    !shouldFilterPerson(filter)
+  );
+  return [
+    statsInPersonLoading,
+    statsInCompanyLoading,
+    sortByOccurances([statsInPersonData, statsInCompanyData].flat()),
+  ];
+};
 
 const useStatsInCompany = (
   companyId: string,
   filter: Filter,
   execute = true
-): IncidentStat[] => {
-  const { data } = useCompanyIncidentStats(
+): [boolean, IncidentStat[]] => {
+  const { loading, data } = useCompanyIncidentStats(
     {
       companyId: companyId,
       filter: {
@@ -85,15 +101,15 @@ const useStatsInCompany = (
     },
     execute
   );
-  return data?.company.incidentStats || [];
+  return [loading, data?.company.incidentStats || []];
 };
 
 const useStatsInPerson = (
   personId: string,
   filter: Filter,
   execute = true
-): IncidentStat[] => {
-  const { data } = usePersonIncidentStats(
+): [boolean, IncidentStat[]] => {
+  const { loading, data } = usePersonIncidentStats(
     {
       personId: personId,
       filter: {
@@ -103,7 +119,7 @@ const useStatsInPerson = (
     },
     execute
   );
-  return data?.person.incidentStats || [];
+  return [loading, data?.person.incidentStats || []];
 };
 
 const sortByOccurances = (stats: IncidentStat[]): IncidentStat[] =>

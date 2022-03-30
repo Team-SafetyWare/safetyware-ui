@@ -1,26 +1,26 @@
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import { makeStyles } from "@mui/styles";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import React, { useCallback, useEffect, useState } from "react";
 import GenericIcon from "../../../assets/generic.png";
-import { Filter, shouldFilterPerson } from "../molecules/FilterBar";
-import {
-  Person,
-  PersonWithGasReadings,
-  useCompanyGasReadings,
-  usePersonGasReadings,
-} from "../../../util/queryService";
 import {
   getCurrentUser,
   MAP_RESTRICTION,
   sortPeople,
   User,
 } from "../../../index";
-import { makeStyles } from "@mui/styles";
+import {
+  Person,
+  PersonWithGasReadings,
+  useCompanyGasReadings,
+  usePersonGasReadings,
+} from "../../../util/queryService";
+import OverlayStyles from "../../styling/OverlayStyles";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import { Filter, shouldFilterPerson } from "../molecules/FilterBar";
 import { MapTooltip } from "../molecules/MapTooltip";
 import LatLngLiteral = google.maps.LatLngLiteral;
-import EmptyDataMessage from "../atoms/EmptyDataMessage";
-import Backdrop from "@mui/material/Backdrop";
-import OverlayStyles from "../../styling/OverlayStyles";
-import CircularProgress from "@mui/material/CircularProgress";
 
 export const DEFAULT_MAP_CENTER: LatLngLiteral = {
   lat: 51.045,
@@ -57,7 +57,8 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const people: PersonWithGasReadings[] = usePeople(user, filter);
+  const [personAsPeopleLoading, gasReadingsInCompanyLoading, people] =
+    usePeople(user, filter);
   const markers: GasMarker[] = intoMarkers(people);
 
   const [hoveredMarker, setHoveredMarker] = useState<GasMarker | undefined>();
@@ -75,20 +76,17 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (people.length === 0) {
+    if (personAsPeopleLoading || gasReadingsInCompanyLoading) {
       setIsLoading(true);
+      setIsEmpty(false);
     } else {
       setIsLoading(false);
-    }
-  }, [people]);
 
-  useEffect(() => {
-    if (markers.length === 0) {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
+      if (markers.length === 0) {
+        setIsEmpty(true);
+      }
     }
-  }, [markers]);
+  }, [personAsPeopleLoading, gasReadingsInCompanyLoading, markers]);
 
   const styles = useStyles();
 
@@ -97,10 +95,11 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isEmpty || isLoading}
+          open={isLoading || isEmpty}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          {isLoading ? <CircularProgress /> : <EmptyDataMessage />}
+          {isLoading && <CircularProgress />}
+          {!isLoading && isEmpty && <EmptyDataMessage />}
         </Backdrop>
         <GoogleMap
           mapContainerStyle={{
@@ -144,28 +143,34 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
   );
 };
 
-const usePeople = (user: User | null, filter: Filter) =>
-  sortPeople(
-    [
-      usePersonAsPeople(
-        filter.person?.id || "",
-        filter,
-        shouldFilterPerson(filter)
-      ),
-      useGasReadingsInCompany(
-        user?.company.id || "",
-        filter,
-        !shouldFilterPerson(filter)
-      ),
-    ].flat()
+const usePeople = (
+  user: User | null,
+  filter: Filter
+): [boolean, boolean, PersonWithGasReadings[]] => {
+  const [personAsPeopleLoading, personAsPeopleData] = usePersonAsPeople(
+    filter.person?.id || "",
+    filter,
+    shouldFilterPerson(filter)
   );
+  const [gasReadingsInCompanyLoading, gasReadingsInCompanyData] =
+    useGasReadingsInCompany(
+      user?.company.id || "",
+      filter,
+      !shouldFilterPerson(filter)
+    );
+  return [
+    personAsPeopleLoading,
+    gasReadingsInCompanyLoading,
+    sortPeople([personAsPeopleData, gasReadingsInCompanyData].flat()),
+  ];
+};
 
 const usePersonAsPeople = (
   personId: string,
   filter: Filter,
   execute = true
-): PersonWithGasReadings[] => {
-  const { data } = usePersonGasReadings(
+): [boolean, PersonWithGasReadings[]] => {
+  const { loading, data } = usePersonGasReadings(
     {
       personId: personId,
       filter: {
@@ -175,15 +180,15 @@ const usePersonAsPeople = (
     },
     execute
   );
-  return (data && [data.person]) || [];
+  return [loading, (data && [data.person]) || []];
 };
 
 const useGasReadingsInCompany = (
   companyId: string,
   filter: Filter,
   execute = true
-): PersonWithGasReadings[] => {
-  const { data } = useCompanyGasReadings(
+): [boolean, PersonWithGasReadings[]] => {
+  const { loading, data } = useCompanyGasReadings(
     {
       companyId: companyId,
       filter: {
@@ -193,7 +198,7 @@ const useGasReadingsInCompany = (
     },
     execute
   );
-  return data?.company.people || [];
+  return [loading, data?.company.people || []];
 };
 
 const intoMarkers = (people: PersonWithGasReadings[]): GasMarker[] =>
