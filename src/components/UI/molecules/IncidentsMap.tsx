@@ -1,33 +1,33 @@
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import { makeStyles } from "@mui/styles";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import React, { useCallback, useEffect, useState } from "react";
+import BatteryIcon from "../../../assets/battery.png";
+import DeathIcon from "../../../assets/death.png";
+import FallIcon from "../../../assets/fall.png";
+import GasIcon from "../../../assets/gas.png";
+import GenericIcon from "../../../assets/generic.png";
+import LatchIcon from "../../../assets/latch.png";
+import SignalIcon from "../../../assets/signal.png";
 import {
   getCurrentUser,
   MAP_RESTRICTION,
   sortPeople,
   User,
 } from "../../../index";
-import { GoogleMap, Marker } from "@react-google-maps/api";
-
-import { Filter, shouldFilterPerson } from "./FilterBar";
 import {
   Person,
   PersonWithIncidents,
   useCompanyIncidents,
   usePersonIncidents,
 } from "../../../util/queryService";
-import BatteryIcon from "../../../assets/battery.png";
-import FallIcon from "../../../assets/fall.png";
-import GasIcon from "../../../assets/gas.png";
-import LatchIcon from "../../../assets/latch.png";
-import SignalIcon from "../../../assets/signal.png";
-import DeathIcon from "../../../assets/death.png";
-import GenericIcon from "../../../assets/generic.png";
-import { makeStyles } from "@mui/styles";
-import LatLngLiteral = google.maps.LatLngLiteral;
-import { MapTooltip } from "./MapTooltip";
-import EmptyDataMessage from "../atoms/EmptyDataMessage";
-import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
-import CircularProgress from "@mui/material/CircularProgress";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import { Filter, shouldFilterPerson } from "./FilterBar";
+import { MapTooltip } from "./MapTooltip";
+
+import LatLngLiteral = google.maps.LatLngLiteral;
 
 export const DEFAULT_MAP_CENTER: LatLngLiteral = {
   lat: 51.045,
@@ -63,8 +63,24 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const people: PersonWithIncidents[] = usePeople(user, filter);
+  const [personAsPeopleLoading, peopleInCompanyLoading, people] = usePeople(
+    user,
+    filter
+  );
   const markers: IncidentMarker[] = intoMarkers(people);
+
+  useEffect(() => {
+    if (personAsPeopleLoading || peopleInCompanyLoading) {
+      setIsLoading(true);
+      setIsEmpty(false);
+    } else {
+      setIsLoading(false);
+
+      if (markers.length === 0) {
+        setIsEmpty(true);
+      }
+    }
+  }, [personAsPeopleLoading, peopleInCompanyLoading, markers]);
 
   const [hoveredMarker, setHoveredMarker] = useState<
     IncidentMarker | undefined
@@ -82,22 +98,6 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
     );
   }, []);
 
-  useEffect(() => {
-    if (people.length === 0) {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
-  }, [people]);
-
-  useEffect(() => {
-    if (markers.length === 0) {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
-    }
-  }, [markers]);
-
   const styles = useStyles();
 
   return (
@@ -105,10 +105,11 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isEmpty || isLoading}
+          open={isLoading || isEmpty}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          {isLoading ? <CircularProgress /> : <EmptyDataMessage />}
+          {isLoading && <CircularProgress />}
+          {!isLoading && isEmpty && <EmptyDataMessage />}
         </Backdrop>
         <GoogleMap
           mapContainerStyle={{
@@ -151,28 +152,33 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
   );
 };
 
-const usePeople = (user: User | null, filter: Filter) =>
-  sortPeople(
-    [
-      usePersonAsPeople(
-        filter.person?.id || "",
-        filter,
-        shouldFilterPerson(filter)
-      ),
-      usePeopleInCompany(
-        user?.company.id || "",
-        filter,
-        !shouldFilterPerson(filter)
-      ),
-    ].flat()
+const usePeople = (
+  user: User | null,
+  filter: Filter
+): [boolean, boolean, PersonWithIncidents[]] => {
+  const [personAsPeopleLoading, personAsPeopleData] = usePersonAsPeople(
+    filter.person?.id || "",
+    filter,
+    shouldFilterPerson(filter)
   );
+  const [peopleInCompanyLoading, peopleInCompanyData] = usePeopleInCompany(
+    user?.company.id || "",
+    filter,
+    !shouldFilterPerson(filter)
+  );
+  return [
+    personAsPeopleLoading,
+    peopleInCompanyLoading,
+    sortPeople([personAsPeopleData, peopleInCompanyData].flat()),
+  ];
+};
 
 const usePeopleInCompany = (
   companyId: string,
   filter: Filter,
   execute = true
-): PersonWithIncidents[] => {
-  const { data } = useCompanyIncidents(
+): [boolean, PersonWithIncidents[]] => {
+  const { loading, data } = useCompanyIncidents(
     {
       companyId: companyId,
       filter: {
@@ -182,15 +188,15 @@ const usePeopleInCompany = (
     },
     execute
   );
-  return data?.company.people || [];
+  return [loading, data?.company.people || []];
 };
 
 const usePersonAsPeople = (
   personId: string,
   filter: Filter,
   execute = true
-): PersonWithIncidents[] => {
-  const { data } = usePersonIncidents(
+): [boolean, PersonWithIncidents[]] => {
+  const { loading, data } = usePersonIncidents(
     {
       personId: personId,
       filter: {
@@ -200,7 +206,7 @@ const usePersonAsPeople = (
     },
     execute
   );
-  return (data && [data.person]) || [];
+  return [loading, (data && [data.person]) || []];
 };
 
 const intoMarkers = (people: PersonWithIncidents[]): IncidentMarker[] =>
