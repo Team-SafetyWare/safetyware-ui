@@ -196,7 +196,7 @@ const useIncidentsInCompany = (
         person.incidents.map((incident) => ({
           name: person.name,
           incident: incident.type,
-          time: new Date(incident.timestamp).toISOString(),
+          time: new Date(incident.timestamp).toLocaleString(),
           coordinates: formatCoordinates(incident.coordinates),
         }))
       )
@@ -225,7 +225,7 @@ const useIncidentsInPerson = (
     data?.person.incidents.map((incident) => ({
       name: data.person.name,
       incident: incident.type,
-      time: new Date(incident.timestamp).toISOString(),
+      time: new Date(incident.timestamp).toLocaleString(),
       coordinates: formatCoordinates(incident.coordinates),
     })) ?? [],
   ];
