@@ -191,7 +191,7 @@ const useLocationsInCompany = (
           .reverse()
           .map((location) => ({
             name: person.name,
-            time: new Date(location.timestamp).toISOString(),
+            time: new Date(location.timestamp).toLocaleString(),
             coordinates: formatCoordinates(location.coordinates),
           }))
       )
@@ -218,7 +218,7 @@ const useLocationsInPerson = (
     loading,
     data?.person.locationReadings.map((location) => ({
       name: data.person.name,
-      time: new Date(location.timestamp).toISOString(),
+      time: new Date(location.timestamp).toLocaleString(),
       coordinates: formatCoordinates(location.coordinates),
     })) ?? [],
   ];
