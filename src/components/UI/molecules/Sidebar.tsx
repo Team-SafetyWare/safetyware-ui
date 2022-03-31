@@ -3,6 +3,7 @@ import BubbleChartOutlinedIcon from "@mui/icons-material/BubbleChartOutlined";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PeopleIcon from "@mui/icons-material/People";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Toolbar, useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -136,6 +137,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
     { text: "Locations", icon: ExploreOutlinedIcon, link: "/locations" },
     { text: "Incidents", icon: BarChartOutlinedIcon, link: "/incidents" },
     { text: "Gases", icon: BubbleChartOutlinedIcon, link: "/gases" },
+    { text: "People", icon: PeopleIcon, link: "/people" },
   ];
 
   const drawer = (
