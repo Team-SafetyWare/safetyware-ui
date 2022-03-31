@@ -5,7 +5,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PeopleIcon from "@mui/icons-material/People";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Toolbar, useMediaQuery } from "@mui/material";
+import { Divider, Toolbar, useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
@@ -27,6 +27,14 @@ import { SidebarUserPicture } from "../atoms/SidebarUserPicture";
 interface SidebarProps {
   userPhoto?: string;
   userName?: string;
+}
+
+// text: "Dashboard", icon: HomeOutlinedIcon, link: "/dashboard"
+
+interface MenuItem {
+  text: string;
+  icon: any;
+  link: string;
 }
 
 const useStyles = makeStyles({
@@ -132,11 +140,13 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
     setMobileOpen(!mobileOpen);
   };
 
-  const sidebarHeaderItems = [
+  const sidebarHeaderItems: (MenuItem | null)[] = [
     { text: "Dashboard", icon: HomeOutlinedIcon, link: "/dashboard" },
+    null,
     { text: "Locations", icon: ExploreOutlinedIcon, link: "/locations" },
     { text: "Incidents", icon: BarChartOutlinedIcon, link: "/incidents" },
     { text: "Gases", icon: BubbleChartOutlinedIcon, link: "/gases" },
+    null,
     { text: "People", icon: PeopleIcon, link: "/people" },
   ];
 
@@ -147,21 +157,27 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
       </Toolbar>
       <Box className={styles.sidebarMenu}>
         <List>
-          {sidebarHeaderItems.map((sidebarItem) => (
-            <ListItemButton
-              component={NavLink}
-              key={sidebarItem.text}
-              to={sidebarItem.link}
-              exact
-              activeClassName={styles.sidebarItemSelected}
-              onClick={!mobile ? undefined : handleDrawerToggle}
-            >
-              <ListItemIcon>
-                <sidebarItem.icon />
-              </ListItemIcon>
-              <ListItemText primary={sidebarItem.text} />
-            </ListItemButton>
-          ))}
+          {sidebarHeaderItems.map((sidebarItem) =>
+            sidebarItem !== null ? (
+              <ListItemButton
+                component={NavLink}
+                key={sidebarItem.text}
+                to={sidebarItem.link}
+                exact
+                activeClassName={styles.sidebarItemSelected}
+                onClick={!mobile ? undefined : handleDrawerToggle}
+              >
+                <ListItemIcon>
+                  <sidebarItem.icon />
+                </ListItemIcon>
+                <ListItemText primary={sidebarItem.text} />
+              </ListItemButton>
+            ) : (
+              <>
+                <Divider variant="middle" light={false} />
+              </>
+            )
+          )}
         </List>
       </Box>
       <List className={styles.sidebarFooter}>
