@@ -6,8 +6,7 @@ export default function EmptyDataMessage(): any {
   return (
     <Alert severity="warning">
       <AlertTitle>No data to show</AlertTitle>
-      Your filter did not match anything in the database. Try a different
-      filter.
+      Your filter did not match anything.
     </Alert>
   );
 }

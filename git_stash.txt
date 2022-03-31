@@ -1,0 +1,101 @@
+diff --git a/src/components/UI/molecules/UserInfo.tsx b/src/components/UI/molecules/UserInfo.tsx
+index 2669fd2..115ddce 100644
+--- a/src/components/UI/molecules/UserInfo.tsx
++++ b/src/components/UI/molecules/UserInfo.tsx
+@@ -1,3 +1,4 @@
++import { Card, CardContent } from "@mui/material";
+ import { makeStyles } from "@mui/styles";
+ import React from "react";
+ import theme from "../../../Theme";
+@@ -13,17 +14,25 @@ interface UserInfoProps {
+ }
+ 
+ const useStyles = makeStyles({
++  userInfoCardContent: {
++    "&:last-child": {
++      padding: "32px",
++    },
++  },
++
+   userInfo: {
+-    display: "flex",
+     alignItems: "center",
+-    "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+-      {
+-        backgroundColor: theme.palette.primary.main,
+-        color: "white",
+-        flexDirection: "column",
+-        paddingBottom: "48px",
+-      },
++    display: "flex",
++    justifyContent: "center",
++    // "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
++    //   {
++    //     backgroundColor: theme.palette.primary.main,
++    //     color: "white",
++    //     flexDirection: "column",
++    //     paddingBottom: "48px",
++    //   },
+   },
++
+   userPhoto: {
+     display: "flex",
+     flexDirection: "column",
+@@ -35,6 +44,7 @@ const useStyles = makeStyles({
+         marginRight: "0",
+       },
+   },
++
+   userDetails: {
+     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+       {
+@@ -47,20 +57,22 @@ export const UserInfo: React.FC<UserInfoProps> = (props) => {
+   const styles = useStyles();
+ 
+   return (
+-    <>
+-      <div className={styles.userInfo}>
+-        <div className={styles.userPhoto}>
+-          <UserPicture userPhoto={props.userPhoto}></UserPicture>
+-        </div>
+-        <div className={styles.userDetails}>
+-          <UserDetails
+-            userName={props.userName}
+-            userTitle={props.userTitle}
+-            userPhone={props.userPhone}
+-            userEmail={props.userEmail}
+-          ></UserDetails>
++    <Card elevation={2}>
++      <CardContent className={styles.userInfoCardContent}>
++        <div className={styles.userInfo}>
++          <div className={styles.userPhoto}>
++            <UserPicture userPhoto={props.userPhoto}></UserPicture>
++          </div>
++          <div className={styles.userDetails}>
++            <UserDetails
++              userName={props.userName}
++              userTitle={props.userTitle}
++              userPhone={props.userPhone}
++              userEmail={props.userEmail}
++            ></UserDetails>
++          </div>
+         </div>
+-      </div>
+-    </>
++      </CardContent>
++    </Card>
+   );
+ };
+diff --git a/src/components/templates/UserAccountTemplate.tsx b/src/components/templates/UserAccountTemplate.tsx
+index a2819b6..1daf2b6 100644
+--- a/src/components/templates/UserAccountTemplate.tsx
++++ b/src/components/templates/UserAccountTemplate.tsx
+@@ -14,8 +14,6 @@ const useStyles = makeStyles({
+   userAccountTemplateBody: {
+     display: "flex",
+     flexDirection: "column",
+-    marginLeft: "5vw",
+-    width: "65vw",
+     "@media only screen and (max-height: 599px), only screen and (max-width: 599px)":
+       {
+         marginLeft: "0",

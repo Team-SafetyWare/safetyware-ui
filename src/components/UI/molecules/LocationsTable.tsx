@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Filter, shouldFilterPerson } from "./FilterBar";
+import { CircularProgress, TablePagination } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
 import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import TableContainer from "@mui/material/TableContainer";
 import { makeStyles } from "@mui/styles";
+import React, { useCallback, useEffect, useState } from "react";
+import { getCurrentUser, sortPeople, User } from "../../../index";
 import {
   useCompanyLocations,
   usePersonLocations,
 } from "../../../util/queryService";
-import { getCurrentUser, sortPeople, User } from "../../../index";
-import { TablePagination } from "@mui/material";
-import EmptyDataMessage from "../atoms/EmptyDataMessage";
-import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import { Filter, shouldFilterPerson } from "./FilterBar";
 
 const NUM_COORD_DIGITS = 5;
 const NUM_COLS = 3;
@@ -39,12 +39,27 @@ const useStyles = makeStyles({
 
 export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isEmpty, setIsEmpty] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const locations: PersonLocation[] = useLocations(user, filter);
+  const [locationsInPersonLoading, locationsInCompanyLoading, locations] =
+    useLocations(user, filter);
+
+  useEffect(() => {
+    if (locationsInPersonLoading || locationsInCompanyLoading) {
+      setIsLoading(true);
+      setIsEmpty(false);
+    } else {
+      setIsLoading(false);
+
+      if (locations.length === 0) {
+        setIsEmpty(true);
+      }
+    }
+  }, [locationsInPersonLoading, locationsInCompanyLoading, locations]);
 
   const [page, setPage] = useState(0);
 
@@ -74,23 +89,16 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
 
   const styles = useStyles();
 
-  useEffect(() => {
-    if (locations.length === 0) {
-      setIsEmpty(true);
-    } else {
-      setIsEmpty(false);
-    }
-  }, [locations]);
-
   return (
     <>
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isEmpty}
+          open={isLoading || isEmpty}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          <EmptyDataMessage />
+          {isLoading && <CircularProgress />}
+          {!isLoading && isEmpty && <EmptyDataMessage />}
         </Backdrop>
         <TableContainer>
           <Table stickyHeader>
@@ -136,26 +144,35 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   );
 };
 
-const useLocations = (user: User | null, filter: Filter) =>
-  [
+const useLocations = (
+  user: User | null,
+  filter: Filter
+): [boolean, boolean, PersonLocation[]] => {
+  const [locationsInPersonLoading, locationsInPersonData] =
     useLocationsInPerson(
       filter.person?.id || "",
       filter,
       shouldFilterPerson(filter)
-    ),
+    );
+  const [locationsInCompanyLoading, locationsInCompanyData] =
     useLocationsInCompany(
       user?.company.id || "",
       filter,
       !shouldFilterPerson(filter)
-    ),
-  ].flat();
+    );
+  return [
+    locationsInPersonLoading,
+    locationsInCompanyLoading,
+    [locationsInPersonData, locationsInCompanyData].flat(),
+  ];
+};
 
 const useLocationsInCompany = (
   companyId: string,
   filter: Filter,
   execute = true
-): PersonLocation[] => {
-  const { data } = useCompanyLocations(
+): [boolean, PersonLocation[]] => {
+  const { loading, data } = useCompanyLocations(
     {
       companyId: companyId,
       filter: {
@@ -165,26 +182,29 @@ const useLocationsInCompany = (
     },
     execute
   );
-  return sortPeople(data?.company.people || [])
-    .map((person) =>
-      person.locationReadings
-        .slice()
-        .reverse()
-        .map((location) => ({
-          name: person.name,
-          time: new Date(location.timestamp).toLocaleString(),
-          coordinates: formatCoordinates(location.coordinates),
-        }))
-    )
-    .flat();
+  return [
+    loading,
+    sortPeople(data?.company.people || [])
+      .map((person) =>
+        person.locationReadings
+          .slice()
+          .reverse()
+          .map((location) => ({
+            name: person.name,
+            time: new Date(location.timestamp).toISOString(),
+            coordinates: formatCoordinates(location.coordinates),
+          }))
+      )
+      .flat(),
+  ];
 };
 
 const useLocationsInPerson = (
   personId: string,
   filter: Filter,
   execute = true
-): PersonLocation[] => {
-  const { data } = usePersonLocations(
+): [boolean, PersonLocation[]] => {
+  const { loading, data } = usePersonLocations(
     {
       personId: personId,
       filter: {
@@ -194,13 +214,14 @@ const useLocationsInPerson = (
     },
     execute
   );
-  return (
+  return [
+    loading,
     data?.person.locationReadings.map((location) => ({
       name: data.person.name,
-      time: new Date(location.timestamp).toLocaleString(),
+      time: new Date(location.timestamp).toISOString(),
       coordinates: formatCoordinates(location.coordinates),
-    })) ?? []
-  );
+    })) ?? [],
+  ];
 };
 
 const formatCoordinates = (coordinates: string[]): string =>

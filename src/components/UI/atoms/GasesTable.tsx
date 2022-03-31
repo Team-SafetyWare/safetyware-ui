@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Filter, shouldFilterPerson } from "../molecules/FilterBar";
+import { CircularProgress, TablePagination } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import { makeStyles } from "@mui/styles";
+import React, { useCallback, useEffect, useState } from "react";
 import { getCurrentUser, User } from "../../../index";
 import {
   useCompanyGasReadings,
   usePersonGasReadings,
 } from "../../../util/queryService";
-import TableContainer from "@mui/material/TableContainer";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import { TablePagination } from "@mui/material";
-import EmptyDataMessage from "../atoms/EmptyDataMessage";
-import Backdrop from "@mui/material/Backdrop";
 import OverlayStyles from "../../styling/OverlayStyles";
+import EmptyDataMessage from "../atoms/EmptyDataMessage";
+import { Filter, shouldFilterPerson } from "../molecules/FilterBar";
 
 const NUM_COORD_DIGITS = 5;
 const NUM_COLS = 5;
@@ -42,12 +42,14 @@ const useStyles = makeStyles({
 
 export const GasesTable: React.FC<GasesTableProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isEmpty, setIsEmpty] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const gasReadings: PersonGasReading[] = useGasReadings(user, filter);
+  const [gasReadingsInPersonLoading, gasReadingsInCompanyLoading, gasReadings] =
+    useGasReadings(user, filter);
 
   const [page, setPage] = useState(0);
 
@@ -78,22 +80,28 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
   const styles = useStyles();
 
   useEffect(() => {
-    if (gasReadings.length === 0) {
-      setIsEmpty(true);
-    } else {
+    if (gasReadingsInPersonLoading || gasReadingsInCompanyLoading) {
+      setIsLoading(true);
       setIsEmpty(false);
+    } else {
+      setIsLoading(false);
+
+      if (gasReadings.length === 0) {
+        setIsEmpty(true);
+      }
     }
-  }, [gasReadings]);
+  }, [gasReadingsInPersonLoading, gasReadingsInCompanyLoading, gasReadings]);
 
   return (
     <>
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isEmpty}
+          open={isLoading || isEmpty}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          <EmptyDataMessage />
+          {isLoading && <CircularProgress />}
+          {!isLoading && isEmpty && <EmptyDataMessage />}
         </Backdrop>
         <TableContainer>
           <Table stickyHeader>
@@ -151,26 +159,35 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
   );
 };
 
-const useGasReadings = (user: User | null, filter: Filter) =>
-  [
+const useGasReadings = (
+  user: User | null,
+  filter: Filter
+): [boolean, boolean, PersonGasReading[]] => {
+  const [gasReadingsInPersonLoading, gasReadingsInPersonData] =
     useGasReadingsInPerson(
       filter.person?.id || "",
       filter,
       shouldFilterPerson(filter)
-    ),
+    );
+  const [gasReadingsInCompanyLoading, gasReadingsInCompanyData] =
     useGasReadingsInCompany(
       user?.company.id || "",
       filter,
       !shouldFilterPerson(filter)
-    ),
-  ].flat();
+    );
+  return [
+    gasReadingsInPersonLoading,
+    gasReadingsInCompanyLoading,
+    [gasReadingsInPersonData, gasReadingsInCompanyData].flat(),
+  ];
+};
 
 const useGasReadingsInPerson = (
   personId: string,
   filter: Filter,
   execute = true
-): PersonGasReading[] => {
-  const { data } = usePersonGasReadings(
+): [boolean, PersonGasReading[]] => {
+  const { loading, data } = usePersonGasReadings(
     {
       personId: personId,
       filter: {
@@ -180,7 +197,8 @@ const useGasReadingsInPerson = (
     },
     execute
   );
-  return (
+  return [
+    loading,
     data?.person.gasReadings.map((gasReading) => ({
       name: data.person.name,
       gas: gasReading.gas,
@@ -188,16 +206,16 @@ const useGasReadingsInPerson = (
       coordinates: formatCoordinates(gasReading.coordinates),
       density: gasReading.density,
       densityUnits: gasReading.densityUnits,
-    })) ?? []
-  );
+    })) ?? [],
+  ];
 };
 
 const useGasReadingsInCompany = (
   companyId: string,
   filter: Filter,
   execute = true
-): PersonGasReading[] => {
-  const { data } = useCompanyGasReadings(
+): [boolean, PersonGasReading[]] => {
+  const { loading, data } = useCompanyGasReadings(
     {
       companyId: companyId,
       filter: {
@@ -207,7 +225,8 @@ const useGasReadingsInCompany = (
     },
     execute
   );
-  return (
+  return [
+    loading,
     data?.company.people
       .map((person) =>
         person.gasReadings.map((gasReading) => ({
@@ -220,8 +239,8 @@ const useGasReadingsInCompany = (
         }))
       )
       .flat()
-      .reverse() ?? []
-  );
+      .reverse() ?? [],
+  ];
 };
 
 const formatCoordinates = (coordinates: string[]): string =>

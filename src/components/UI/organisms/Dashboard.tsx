@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const Home: React.FC<HomeProps> = (props) => {
+export const Dashboard: React.FC<HomeProps> = (props) => {
   const styles = useStyles();
 
   const [editDashboardMode, setEditDashboardMode] = useState(false);
@@ -47,11 +47,11 @@ export const Home: React.FC<HomeProps> = (props) => {
   // in different components need to have keys
   const [inactiveWidgets, setInactiveWidgets] = useState([
     {
-      widgetName: "Hazardous Area Heat Map",
+      widgetName: "Hazardous Areas",
       widget: "HazardMap",
     },
     {
-      widgetName: "Incident Bar Graph",
+      widgetName: "Incidents Bar Graph",
       widget: "IncidentsBarGraph",
     },
   ]);
@@ -61,11 +61,11 @@ export const Home: React.FC<HomeProps> = (props) => {
   // in different components need to have keys
   const [activeWidgets, setActiveWidgets] = useState([
     {
-      widgetName: "Incident Dot Map",
+      widgetName: "Incidents Map",
       widget: "IncidentsMap",
     },
     {
-      widgetName: "Travel History Trail",
+      widgetName: "Travel History",
       widget: "TravelMap",
     },
   ]);
@@ -77,11 +77,9 @@ export const Home: React.FC<HomeProps> = (props) => {
       activeWidgets: activeWidgets,
     });
     localStorage.setItem("dashboardState", state);
-    console.log("Saving State!");
   };
 
   const loadState = () => {
-    console.log("Loading State!");
     const dashboardState = localStorage.getItem("dashboardState");
     if (dashboardState === null) {
       setSummaryWidgets([
@@ -100,21 +98,21 @@ export const Home: React.FC<HomeProps> = (props) => {
       ]);
       setInactiveWidgets([
         {
-          widgetName: "Hazardous Area Heat Map",
+          widgetName: "Hazardous Areas",
           widget: "HazardMap",
         },
         {
-          widgetName: "Incident Bar Graph",
+          widgetName: "Incidents Bar Graph",
           widget: "IncidentsBarGraph",
         },
       ]);
       setActiveWidgets([
         {
-          widgetName: "Incident Dot Map",
+          widgetName: "Incidents Map",
           widget: "IncidentsMap",
         },
         {
-          widgetName: "Travel History Trail",
+          widgetName: "Travel History",
           widget: "TravelMap",
         },
       ]);
