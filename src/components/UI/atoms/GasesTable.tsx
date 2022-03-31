@@ -124,7 +124,9 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
                     {gasReading.density + " " + gasReading.densityUnits}
                   </TableCell>
                   <TableCell>{gasReading.name}</TableCell>
-                  <TableCell>{gasReading.time}</TableCell>
+                  <TableCell>
+                    {new Date(gasReading.time).toLocaleString()}
+                  </TableCell>
                   <TableCell>{gasReading.coordinates}</TableCell>
                 </TableRow>
               ))}
