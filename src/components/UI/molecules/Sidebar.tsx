@@ -29,8 +29,6 @@ interface SidebarProps {
   userName?: string;
 }
 
-// text: "Dashboard", icon: HomeOutlinedIcon, link: "/dashboard"
-
 interface MenuItem {
   text: string;
   icon: any;
