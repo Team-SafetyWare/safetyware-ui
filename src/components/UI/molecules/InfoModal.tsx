@@ -27,6 +27,7 @@ const useStyles = makeStyles({
   infoModalButton: {
     marginTop: "16px",
     width: "100%",
+    textTransform: "none",
   },
 });
 
