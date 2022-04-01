@@ -1,9 +1,5 @@
 import { FetchResult, useQuery } from "@apollo/client";
 import { Divider, TextField } from "@mui/material";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
@@ -13,6 +9,11 @@ import { setCurrentUser, setToken, User } from "../../../index";
 import { GET_USERS, LoginData, useLogin } from "../../../util/queryService";
 import { LoginButton } from "../atoms/LoginButton";
 import { useHistory } from "react-router-dom";
+
+interface Creds {
+  email: string;
+  password: string;
+}
 
 const useStyles = makeStyles({
   loginBox: {
@@ -64,9 +65,9 @@ export const LoginPrompt: React.FC = () => {
   const styles = useStyles();
 
   // eslint-disable-next-line prefer-const
-  const [user, setUser] = useState<User>({} as User);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [incorrectPassword, setIncorrectPassword] = useState(false);
+  const [invalidCredentials, setInvalidCredentials] = useState(false);
 
   const { data: usersData } = useQuery(GET_USERS);
   let users: User[] = usersData?.userAccounts ?? [];
@@ -89,37 +90,50 @@ export const LoginPrompt: React.FC = () => {
     [history]
   );
 
-  const loginFail = useCallback(() => {
-    setIncorrectPassword(true);
+  const loginFailed = useCallback(() => {
+    setInvalidCredentials(true);
   }, []);
 
-  const onLogInClick = useCallback(() => {
-    login({
-      variables: {
-        userAccountId: user.id,
-        password: password,
-      },
-    }).then((result) => loginSuccess(user, result), loginFail);
-  }, [users, loginSuccess]);
+  const attemptLogin = useCallback(
+    (creds: Creds | undefined = undefined) => {
+      console.log(email);
+      console.log(password);
+      console.log(users);
+      const user = users.find((u) => u.email === (creds?.email ?? email));
+      console.log(user);
+      if (!user) {
+        loginFailed();
+      } else {
+        login({
+          variables: {
+            userAccountId: user.id,
+            password: creds?.password ?? password,
+          },
+        }).then((result) => loginSuccess(user, result), loginFailed);
+      }
+    },
+    [users, loginSuccess, loginFailed, email, password]
+  );
 
-  const onLogInDemoClick = useCallback(() => {
+  const onDemoUserLogin = useCallback(() => {
     if (users.length == 0) {
       alert(
         "Users did not load. Please refresh, wait a moment, and try again."
       );
+    } else {
+      // Assume demo account is the first in users and has no password.
+      const user = users[0];
+      attemptLogin({ email: user.email, password: "" });
     }
-    // Assume demo account is the first in users.
-    const user = users[0];
-    login({
-      variables: {
-        userAccountId: user.id,
-        password: "",
-      },
-    }).then((result) => loginSuccess(user, result), loginFail);
-  }, [users, loginSuccess]);
+  }, [users, attemptLogin]);
 
-  const userSelectLabel = "User";
+  const emailSelectLabel = "Email";
   const passwordSelectLabel = "Password";
+
+  const helperText = invalidCredentials
+    ? "Incorrect email or password."
+    : undefined;
+
   const isLoading = users.length === 0;
 
   return (
@@ -129,26 +143,28 @@ export const LoginPrompt: React.FC = () => {
           <img src={Logo} alt="SafetyWare" />
           <LoginButton
             text="Log In with Demo Account"
-            onClick={onLogInDemoClick}
+            onClick={onDemoUserLogin}
             loading={isLoading}
           />
           <Divider className={styles.loginOptionDivider}>OR</Divider>
-          <FormControl sx={{ minWidth: 300 }}>
-            <InputLabel className={styles.inputLabel}>
-              {userSelectLabel}
-            </InputLabel>
-            <Select
-              label={userSelectLabel}
-              className={styles.input}
-              onChange={(e) => setUser(e.target.value as User)}
-            >
-              {users.map((user) => (
-                <MenuItem key={user.id} value={user as any}>
-                  {user.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <TextField
+            className={styles.input}
+            type="text"
+            label={emailSelectLabel}
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            helperText={helperText}
+            InputLabelProps={{
+              style: { color: "white" },
+            }}
+            InputProps={{
+              style: { color: "white" },
+            }}
+            FormHelperTextProps={{
+              style: { color: "white" },
+            }}
+          />
           <div style={{ height: "24px" }} />
           <TextField
             className={styles.input}
@@ -157,7 +173,7 @@ export const LoginPrompt: React.FC = () => {
             variant="outlined"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            helperText={incorrectPassword ? "Incorrect password." : ""}
+            helperText={helperText}
             InputLabelProps={{
               style: { color: "white" },
             }}
@@ -170,7 +186,7 @@ export const LoginPrompt: React.FC = () => {
           />
           <LoginButton
             text="Log In"
-            onClick={onLogInClick}
+            onClick={attemptLogin}
             loading={isLoading}
           />
         </div>
