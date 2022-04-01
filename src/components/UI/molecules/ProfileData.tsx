@@ -32,7 +32,7 @@ export const ProfileData: React.FC<ProfileDataProps> = (props) => {
   const styles = useStyles();
 
   return (
-    <Card elevation={2}>
+    <Card elevation={2} sx={{ margin: { xs: "16px", sm: 0 } }}>
       <CardContent>
         <div className={styles.profileDataContent}>
           <div className={styles.profileDataPhoto}>
