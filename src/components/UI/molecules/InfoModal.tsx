@@ -1,9 +1,9 @@
-import { Button } from "@mui/material";
+import { Button, Link } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import * as React from "react";
 import { makeStyles } from "@mui/styles";
+import * as React from "react";
 
 interface InfoModalProps {
   open: boolean;
@@ -46,24 +46,26 @@ export const InfoModal: React.FC<InfoModalProps> = (props) => {
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Refer to our{" "}
-            <a
+            <Link
               href="https://func-api-nmisvbwuqreyq.azurewebsites.net/doc/"
               target="_blank"
+              underline="hover"
               rel="noreferrer"
             >
               documentation
-            </a>{" "}
+            </Link>{" "}
             to learn how to use our API.
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Visit our{" "}
-            <a
+            <Link
               href="https://func-api-nmisvbwuqreyq.azurewebsites.net/playground"
               target="_blank"
+              underline="hover"
               rel="noreferrer"
             >
               GraphQL Playground
-            </a>{" "}
+            </Link>{" "}
             to try our API.
           </Typography>
           <Button
