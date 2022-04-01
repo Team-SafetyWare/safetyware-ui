@@ -3,7 +3,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { makeStyles } from "@mui/styles";
 import { GoogleMap, Polyline } from "@react-google-maps/api";
 import { quadtree, Quadtree } from "d3-quadtree";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   getCurrentUser,
   MAP_RESTRICTION,
@@ -90,16 +90,11 @@ const useStyles = makeStyles({
 
 export const TravelMap: React.FC<TravelMapProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const [personAsPeopleLoading, peopleInCompanyLoading, people] = usePeople(
-    user,
-    filter
-  );
+  const [loading, people] = usePeople(user, filter);
   const trails: Trail[] = intoTrails(people);
   const pointTree = intoPointTree(trails);
 
@@ -109,18 +104,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
 
   const [mapTypeId, setMapTypeId] = useState<string>(DEFAULT_MAP_TYPE_ID);
 
-  useEffect(() => {
-    if (personAsPeopleLoading || peopleInCompanyLoading) {
-      setIsLoading(true);
-      setIsEmpty(false);
-    } else {
-      setIsLoading(false);
-
-      if (trails.length === 0) {
-        setIsEmpty(true);
-      }
-    }
-  }, [personAsPeopleLoading, peopleInCompanyLoading, trails]);
+  const warnNoData = !loading && trails.length === 0;
 
   const onMapLoad = useCallback(
     (map: google.maps.Map) => {
@@ -170,11 +154,11 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isLoading || isEmpty}
+          open={loading || warnNoData}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          {isLoading && <CircularProgress />}
-          {!isLoading && isEmpty && <EmptyDataMessage />}
+          {loading && <CircularProgress />}
+          {warnNoData && <EmptyDataMessage />}
         </Backdrop>
         <MapLegend
           map={map}
@@ -232,7 +216,7 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
 const usePeople = (
   user: User | null,
   filter: Filter
-): [boolean, boolean, PersonWithLocationReadings[]] => {
+): [boolean, PersonWithLocationReadings[]] => {
   const [personAsPeopleLoading, personAsPeopleData] = usePersonAsPeople(
     filter.person?.id || "",
     filter,
@@ -244,8 +228,7 @@ const usePeople = (
     !shouldFilterPerson(filter)
   );
   return [
-    personAsPeopleLoading,
-    peopleInCompanyLoading,
+    personAsPeopleLoading || peopleInCompanyLoading,
     sortPeople([personAsPeopleData, peopleInCompanyData].flat()),
   ];
 };
