@@ -1,11 +1,11 @@
 /// <reference types="cypress" />
 
-import Chance from "chance";
-const chance = new Chance();
+///import Chance from "chance";
+///const chance = new Chance();
 
 describe("LoginTests", () => {
-  const email = chance.email();
-  const pass = "Password";
+  ///const email = chance.email();
+  ///const pass = "Password";
 
   beforeEach(() => {
     cy.visit("http://localhost:3000/");
