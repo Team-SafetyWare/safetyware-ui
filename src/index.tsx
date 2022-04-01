@@ -15,7 +15,7 @@ import { Person } from "./util/queryService";
 import MapRestriction = google.maps.MapRestriction;
 import { setContext } from "@apollo/client/link/context";
 
-export const API_URL = "https://func-api-nmisvbwuqreyq.azurewebsites.net";
+export const API_URL = "https://func-api-cwkbxbamwpffi.azurewebsites.net";
 export const MAP_RESTRICTION: MapRestriction = {
   latLngBounds: {
     north: 85,

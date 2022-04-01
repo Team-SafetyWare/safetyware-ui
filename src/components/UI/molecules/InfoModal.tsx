@@ -48,7 +48,7 @@ export const InfoModal: React.FC<InfoModalProps> = (props) => {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Visit our{" "}
             <Link
-              href="https://func-api-nmisvbwuqreyq.azurewebsites.net/playground"
+              href="https://func-api-cwkbxbamwpffi.azurewebsites.net/playground"
               target="_blank"
               underline="hover"
               rel="noreferrer"
@@ -60,7 +60,7 @@ export const InfoModal: React.FC<InfoModalProps> = (props) => {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Refer to our{" "}
             <Link
-              href="https://func-api-nmisvbwuqreyq.azurewebsites.net/doc/"
+              href="https://func-api-cwkbxbamwpffi.azurewebsites.net/doc/"
               target="_blank"
               underline="hover"
               rel="noreferrer"
