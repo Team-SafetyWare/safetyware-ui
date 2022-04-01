@@ -27,6 +27,7 @@ const useStyles = makeStyles({
   infoModalButton: {
     marginTop: "16px",
     width: "100%",
+    textTransform: "none",
   },
 });
 
@@ -45,18 +46,6 @@ export const InfoModal: React.FC<InfoModalProps> = (props) => {
             Try Our API
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Refer to our{" "}
-            <Link
-              href="https://func-api-nmisvbwuqreyq.azurewebsites.net/doc/"
-              target="_blank"
-              underline="hover"
-              rel="noreferrer"
-            >
-              documentation
-            </Link>{" "}
-            to learn how to use our API.
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Visit our{" "}
             <Link
               href="https://func-api-nmisvbwuqreyq.azurewebsites.net/playground"
@@ -64,9 +53,21 @@ export const InfoModal: React.FC<InfoModalProps> = (props) => {
               underline="hover"
               rel="noreferrer"
             >
-              GraphQL Playground
+              API playground
             </Link>{" "}
             to try our API.
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Refer to our{" "}
+            <Link
+              href="https://func-api-nmisvbwuqreyq.azurewebsites.net/doc/"
+              target="_blank"
+              underline="hover"
+              rel="noreferrer"
+            >
+              API documentation
+            </Link>{" "}
+            to learn how to use our API.
           </Typography>
           <Button
             className={styles.infoModalButton}
