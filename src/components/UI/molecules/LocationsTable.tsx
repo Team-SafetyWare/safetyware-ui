@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { makeStyles } from "@mui/styles";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { getCurrentUser, sortPeople, User } from "../../../index";
 import theme from "../../../Theme";
 import {
@@ -45,27 +45,13 @@ const useStyles = makeStyles({
 
 export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const [locationsInPersonLoading, locationsInCompanyLoading, locations] =
-    useLocations(user, filter);
+  const [loading, locations] = useLocations(user, filter);
 
-  useEffect(() => {
-    if (locationsInPersonLoading || locationsInCompanyLoading) {
-      setIsLoading(true);
-      setIsEmpty(false);
-    } else {
-      setIsLoading(false);
-
-      if (locations.length === 0) {
-        setIsEmpty(true);
-      }
-    }
-  }, [locationsInPersonLoading, locationsInCompanyLoading, locations]);
+  const warnNoData = !loading && locations.length === 0;
 
   const [page, setPage] = useState(0);
 
@@ -100,11 +86,11 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isLoading || isEmpty}
+          open={loading || warnNoData}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          {isLoading && <CircularProgress />}
-          {!isLoading && isEmpty && <EmptyDataMessage />}
+          {loading && <CircularProgress />}
+          {warnNoData && <EmptyDataMessage />}
         </Backdrop>
         <TableContainer>
           <Table stickyHeader>
@@ -153,7 +139,7 @@ export const LocationsTable: React.FC<LocationsTableProps> = (props) => {
 const useLocations = (
   user: User | null,
   filter: Filter
-): [boolean, boolean, PersonLocation[]] => {
+): [boolean, PersonLocation[]] => {
   const [locationsInPersonLoading, locationsInPersonData] =
     useLocationsInPerson(
       filter.person?.id || "",
@@ -167,8 +153,7 @@ const useLocations = (
       !shouldFilterPerson(filter)
     );
   return [
-    locationsInPersonLoading,
-    locationsInCompanyLoading,
+    locationsInPersonLoading || locationsInCompanyLoading,
     [locationsInPersonData, locationsInCompanyData].flat(),
   ];
 };
