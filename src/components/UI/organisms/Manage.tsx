@@ -26,9 +26,7 @@ export const Manage: React.FC = () => {
           subheader="Register people to include their information."
         />
         <CardMedia>
-          <div style={{ height: "600px" }}>
-            <PeopleTable />
-          </div>
+          <PeopleTable />
         </CardMedia>
       </Card>
     </>

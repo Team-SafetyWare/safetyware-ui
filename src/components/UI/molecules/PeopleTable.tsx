@@ -10,7 +10,7 @@ import React, { useCallback, useState } from "react";
 import { Person } from "../../../util/queryService";
 
 const NUM_COLS = 2;
-const ROWS_PER_PAGE = 10;
+const ROWS_PER_PAGE = 8;
 
 const useStyles = makeStyles({
   header: {
