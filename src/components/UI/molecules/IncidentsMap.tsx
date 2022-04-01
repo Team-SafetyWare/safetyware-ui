@@ -2,7 +2,7 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { makeStyles } from "@mui/styles";
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import BatteryIcon from "../../../assets/battery.png";
 import DeathIcon from "../../../assets/death.png";
 import FallIcon from "../../../assets/fall.png";
@@ -57,30 +57,14 @@ const useStyles = makeStyles({
 
 export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const [personAsPeopleLoading, peopleInCompanyLoading, people] = usePeople(
-    user,
-    filter
-  );
+  const [loading, people] = usePeople(user, filter);
   const markers: IncidentMarker[] = intoMarkers(people);
 
-  useEffect(() => {
-    if (personAsPeopleLoading || peopleInCompanyLoading) {
-      setIsLoading(true);
-      setIsEmpty(false);
-    } else {
-      setIsLoading(false);
-
-      if (markers.length === 0) {
-        setIsEmpty(true);
-      }
-    }
-  }, [personAsPeopleLoading, peopleInCompanyLoading, markers]);
+  const warnNoData = !loading && markers.length === 0;
 
   const [hoveredMarker, setHoveredMarker] = useState<
     IncidentMarker | undefined
@@ -105,11 +89,11 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isLoading || isEmpty}
+          open={loading || warnNoData}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          {isLoading && <CircularProgress />}
-          {!isLoading && isEmpty && <EmptyDataMessage />}
+          {loading && <CircularProgress />}
+          {warnNoData && <EmptyDataMessage />}
         </Backdrop>
         <GoogleMap
           mapContainerStyle={{
@@ -155,7 +139,7 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
 const usePeople = (
   user: User | null,
   filter: Filter
-): [boolean, boolean, PersonWithIncidents[]] => {
+): [boolean, PersonWithIncidents[]] => {
   const [personAsPeopleLoading, personAsPeopleData] = usePersonAsPeople(
     filter.person?.id || "",
     filter,
@@ -167,8 +151,7 @@ const usePeople = (
     !shouldFilterPerson(filter)
   );
   return [
-    personAsPeopleLoading,
-    peopleInCompanyLoading,
+    personAsPeopleLoading || peopleInCompanyLoading,
     sortPeople([personAsPeopleData, peopleInCompanyData].flat()),
   ];
 };
