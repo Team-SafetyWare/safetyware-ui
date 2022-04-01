@@ -10,20 +10,20 @@ const useStyles = makeStyles({
   },
 });
 
-export const People: React.FC = () => {
+export const Manage: React.FC = () => {
   const styles = useStyles();
 
   return (
     <>
       <PageHeader
-        pageTitle={"People"}
+        pageTitle={"Manage"}
         pageDescription={"Manage people and devices."}
       />
 
       <Card className={styles.pageCard}>
         <CardHeader
           title={"People"}
-          subheader="Register people to analyze their information."
+          subheader="Register people to include their information."
         />
         <CardMedia>
           <div style={{ height: "600px" }}>

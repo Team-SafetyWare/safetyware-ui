@@ -145,7 +145,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
     { text: "Incidents", icon: BarChartOutlinedIcon, link: "/incidents" },
     { text: "Gases", icon: BubbleChartOutlinedIcon, link: "/gases" },
     null,
-    { text: "People", icon: PeopleIcon, link: "/people" },
+    { text: "People", icon: PeopleIcon, link: "/manage" },
   ];
 
   const drawer = (

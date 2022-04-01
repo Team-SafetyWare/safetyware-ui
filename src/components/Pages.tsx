@@ -13,7 +13,7 @@ import { Incidents } from "./UI/organisms/Incidents";
 import { Locations } from "./UI/organisms/Locations";
 import { Login } from "./UI/organisms/Login";
 import { Profile } from "./UI/organisms/Profile";
-import { People } from "./UI/organisms/People";
+import { Manage } from "./UI/organisms/Manage";
 
 const useStyles = makeStyles({
   content: {
@@ -91,9 +91,9 @@ export const Pages: React.FC = () => {
                 />
                 <Page
                   exact
-                  path="/people"
-                  title="SafetyWare | People"
-                  render={() => <People />}
+                  path="/manage"
+                  title="SafetyWare | Manage"
+                  render={() => <Manage />}
                 />
                 <Page
                   exact
