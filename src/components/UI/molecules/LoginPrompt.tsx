@@ -134,7 +134,7 @@ export const LoginPrompt: React.FC = () => {
     ? "Incorrect email or password."
     : undefined;
 
-  const isLoading = users.length === 0;
+  const loading = users.length === 0;
 
   return (
     <StyledEngineProvider injectFirst>
@@ -144,7 +144,7 @@ export const LoginPrompt: React.FC = () => {
           <LoginButton
             text="Log In with Demo Account"
             onClick={onDemoUserLogin}
-            loading={isLoading}
+            loading={loading}
           />
           <Divider className={styles.loginOptionDivider}>OR</Divider>
           <TextField
@@ -184,11 +184,7 @@ export const LoginPrompt: React.FC = () => {
               style: { color: "white" },
             }}
           />
-          <LoginButton
-            text="Log In"
-            onClick={attemptLogin}
-            loading={isLoading}
-          />
+          <LoginButton text="Log In" onClick={attemptLogin} loading={loading} />
         </div>
       </Box>
     </StyledEngineProvider>
