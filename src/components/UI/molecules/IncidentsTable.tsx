@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { makeStyles } from "@mui/styles";
 import React, { useCallback, useEffect, useState } from "react";
 import { getCurrentUser, User } from "../../../index";
+import theme from "../../../Theme";
 import {
   useCompanyIncidents,
   usePersonIncidents,
@@ -33,6 +34,11 @@ interface IncidentsTableProps {
 }
 
 const useStyles = makeStyles({
+  content: {
+    [theme.breakpoints.down("md")]: {
+      paddingBottom: "72px",
+    },
+  },
   header: {
     fontWeight: "bold",
   },
@@ -93,7 +99,7 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = (props) => {
   }, [incidentsInPersonLoading, incidentsInCompanyLoading, incidents]);
 
   return (
-    <>
+    <div className={styles.content}>
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
@@ -147,7 +153,7 @@ export const IncidentsTable: React.FC<IncidentsTableProps> = (props) => {
           page={adjustedPage}
         />
       </div>
-    </>
+    </div>
   );
 };
 
