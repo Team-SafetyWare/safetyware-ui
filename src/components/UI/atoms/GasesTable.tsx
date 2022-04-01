@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { makeStyles } from "@mui/styles";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { getCurrentUser, User } from "../../../index";
 import theme from "../../../Theme";
 import {
@@ -48,14 +48,11 @@ const useStyles = makeStyles({
 
 export const GasesTable: React.FC<GasesTableProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const [gasReadingsInPersonLoading, gasReadingsInCompanyLoading, gasReadings] =
-    useGasReadings(user, filter);
+  const [loading, gasReadings] = useGasReadings(user, filter);
 
   const [page, setPage] = useState(0);
 
@@ -85,29 +82,18 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
 
   const styles = useStyles();
 
-  useEffect(() => {
-    if (gasReadingsInPersonLoading || gasReadingsInCompanyLoading) {
-      setIsLoading(true);
-      setIsEmpty(false);
-    } else {
-      setIsLoading(false);
-
-      if (gasReadings.length === 0) {
-        setIsEmpty(true);
-      }
-    }
-  }, [gasReadingsInPersonLoading, gasReadingsInCompanyLoading, gasReadings]);
+  const warnNoData = !loading && gasReadings.length === 0;
 
   return (
     <div className={styles.content}>
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isLoading || isEmpty}
+          open={loading || warnNoData}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          {isLoading && <CircularProgress />}
-          {!isLoading && isEmpty && <EmptyDataMessage />}
+          {loading && <CircularProgress />}
+          {warnNoData && <EmptyDataMessage />}
         </Backdrop>
         <TableContainer>
           <Table stickyHeader>
@@ -168,7 +154,7 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
 const useGasReadings = (
   user: User | null,
   filter: Filter
-): [boolean, boolean, PersonGasReading[]] => {
+): [boolean, PersonGasReading[]] => {
   const [gasReadingsInPersonLoading, gasReadingsInPersonData] =
     useGasReadingsInPerson(
       filter.person?.id || "",
@@ -182,8 +168,7 @@ const useGasReadings = (
       !shouldFilterPerson(filter)
     );
   return [
-    gasReadingsInPersonLoading,
-    gasReadingsInCompanyLoading,
+    gasReadingsInPersonLoading || gasReadingsInCompanyLoading,
     [gasReadingsInPersonData, gasReadingsInCompanyData].flat(),
   ];
 };

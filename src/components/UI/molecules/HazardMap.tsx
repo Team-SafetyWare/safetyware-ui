@@ -1,7 +1,7 @@
 import { CircularProgress } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import { GoogleMap, HeatmapLayer } from "@react-google-maps/api";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { getCurrentUser, MAP_RESTRICTION, User } from "../../../index";
 import {
   Incident,
@@ -28,38 +28,24 @@ interface HazardMapProps {
 
 export const HazardMap: React.FC<HazardMapProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const [incidentsInPersonLoading, incidentsInCompanyLoading, incidents] =
-    useIncidents(user, filter);
+  const [loading, incidents] = useIncidents(user, filter);
   const points: WeightedLocation[] = intoPoints(incidents);
 
-  useEffect(() => {
-    if (incidentsInPersonLoading || incidentsInCompanyLoading) {
-      setIsLoading(true);
-      setIsEmpty(false);
-    } else {
-      setIsLoading(false);
-
-      if (incidents.length === 0) {
-        setIsEmpty(true);
-      }
-    }
-  }, [incidentsInPersonLoading, incidentsInCompanyLoading, incidents]);
+  const warnNoData = !loading && incidents.length === 0;
 
   return (
     <div className={overlayStyles.parent}>
       <Backdrop
         className={overlayStyles.backdrop}
-        open={isLoading || isEmpty}
+        open={loading || warnNoData}
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
-        {isLoading && <CircularProgress />}
-        {!isLoading && isEmpty && <EmptyDataMessage />}
+        {loading && <CircularProgress />}
+        {warnNoData && <EmptyDataMessage />}
       </Backdrop>
       <GoogleMap
         mapContainerStyle={{
@@ -89,7 +75,7 @@ export const HazardMap: React.FC<HazardMapProps> = (props) => {
 const useIncidents = (
   user: User | null,
   filter: Filter
-): [boolean, boolean, Incident[]] => {
+): [boolean, Incident[]] => {
   const [incidentsInPersonLoading, incidentsInPersonData] =
     useIncidentsInPerson(
       filter.person?.id || "",
@@ -103,8 +89,7 @@ const useIncidents = (
       !shouldFilterPerson(filter)
     );
   return [
-    incidentsInPersonLoading,
-    incidentsInCompanyLoading,
+    incidentsInPersonLoading || incidentsInCompanyLoading,
     [incidentsInPersonData, incidentsInCompanyData].flat(),
   ];
 };
