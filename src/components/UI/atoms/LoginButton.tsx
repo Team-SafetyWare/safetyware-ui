@@ -25,10 +25,13 @@ interface LoginProps {
 
 export const LoginButton: React.FC<LoginProps> = (props) => {
   const styles = useStyles();
-
+  let buttonID = "loginbutton";
+  if (props.text == "Log In with Demo Account") buttonID += "demo";
+  else if (props.text == "Log In") buttonID += "auth";
   return (
     <Button
       className={styles.button}
+      id={buttonID}
       variant="outlined"
       onClick={props.loading ? undefined : props.onClick}
     >
