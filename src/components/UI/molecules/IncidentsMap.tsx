@@ -3,13 +3,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { makeStyles } from "@mui/styles";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import React, { useCallback, useState } from "react";
-import BatteryIcon from "../../../assets/battery.png";
-import DeathIcon from "../../../assets/death.png";
 import FallIcon from "../../../assets/fall.png";
 import GasIcon from "../../../assets/gas.png";
 import GenericIcon from "../../../assets/generic.png";
 import LatchIcon from "../../../assets/latch.png";
-import SignalIcon from "../../../assets/signal.png";
 import {
   getCurrentUser,
   MAP_RESTRICTION,
@@ -122,7 +119,7 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
           {hoveredMarker && (
             <MapTooltip
               location={hoveredMarker.location}
-              hoverDistance={"20px"}
+              hoverDistance={"32px"}
             >
               <h3 className={styles.tooltipText}>{hoveredMarker.type}</h3>
               <p className={styles.tooltipText}>{hoveredMarker.person.name}</p>
@@ -211,23 +208,17 @@ const intoMarkers = (people: PersonWithIncidents[]): IncidentMarker[] =>
 
 const incidentIcon = (type: string): string => {
   switch (type) {
-    case "Low battery": {
-      return BatteryIcon;
-    }
-    case "Fall": {
+    case "Fall detected alert": {
       return FallIcon;
     }
-    case "Gas detected": {
+    case "Gas sensor over limit alert": {
       return GasIcon;
     }
-    case "Latch pulled": {
+    case "Low gas detected": {
+      return GasIcon;
+    }
+    case "Emergency alert": {
       return LatchIcon;
-    }
-    case "Signal lost": {
-      return SignalIcon;
-    }
-    case "Death": {
-      return DeathIcon;
     }
     default:
       return GenericIcon;
