@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { getCurrentUser, User } from "../../../index";
 import {
   IncidentStat,
@@ -21,40 +21,24 @@ interface IncidentsBarGraphProps {
 
 export const IncidentsBarGraph: React.FC<IncidentsBarGraphProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const [statsInPersonLoading, statsInCompanyLoading, stats] = useIncidentStats(
-    user,
-    filter
-  );
+  const [loading, stats] = useIncidentStats(user, filter);
   const graphData = intoChartData(stats);
 
-  useEffect(() => {
-    if (statsInPersonLoading || statsInCompanyLoading) {
-      setIsLoading(true);
-      setIsEmpty(false);
-    } else {
-      setIsLoading(false);
-
-      if (graphData.length === 0) {
-        setIsEmpty(true);
-      }
-    }
-  }, [statsInPersonLoading, statsInCompanyLoading, graphData]);
+  const warnNoData = !loading && graphData.length === 0;
 
   return (
     <div className={overlayStyles.parent}>
       <Backdrop
         className={overlayStyles.backdrop}
-        open={isLoading || isEmpty}
+        open={loading || warnNoData}
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
-        {isLoading && <CircularProgress />}
-        {!isLoading && isEmpty && <EmptyDataMessage />}
+        {loading && <CircularProgress />}
+        {warnNoData && <EmptyDataMessage />}
       </Backdrop>
       <BarGraph
         data={graphData}
@@ -68,7 +52,7 @@ export const IncidentsBarGraph: React.FC<IncidentsBarGraphProps> = (props) => {
 const useIncidentStats = (
   user: User | null,
   filter: Filter
-): [boolean, boolean, IncidentStat[]] => {
+): [boolean, IncidentStat[]] => {
   const [statsInPersonLoading, statsInPersonData] = useStatsInPerson(
     filter.person?.id || "",
     filter,
@@ -80,8 +64,7 @@ const useIncidentStats = (
     !shouldFilterPerson(filter)
   );
   return [
-    statsInPersonLoading,
-    statsInCompanyLoading,
+    statsInPersonLoading || statsInCompanyLoading,
     sortByOccurances([statsInPersonData, statsInCompanyData].flat()),
   ];
 };
