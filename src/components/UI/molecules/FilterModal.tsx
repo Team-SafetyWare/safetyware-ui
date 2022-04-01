@@ -7,7 +7,6 @@ import { makeStyles } from "@mui/styles";
 const useStyles = makeStyles({
   card: {
     position: "absolute",
-    margin: "16px",
     width: "100%",
     maxWidth: "320px",
     height: "fit-content",

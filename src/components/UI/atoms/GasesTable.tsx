@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { makeStyles } from "@mui/styles";
 import React, { useCallback, useEffect, useState } from "react";
 import { getCurrentUser, User } from "../../../index";
+import theme from "../../../Theme";
 import {
   useCompanyGasReadings,
   usePersonGasReadings,
@@ -35,6 +36,11 @@ interface GasesTableProps {
 }
 
 const useStyles = makeStyles({
+  content: {
+    [theme.breakpoints.down("md")]: {
+      paddingBottom: "72px",
+    },
+  },
   header: {
     fontWeight: "bold",
   },
@@ -93,7 +99,7 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
   }, [gasReadingsInPersonLoading, gasReadingsInCompanyLoading, gasReadings]);
 
   return (
-    <>
+    <div className={styles.content}>
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
@@ -155,7 +161,7 @@ export const GasesTable: React.FC<GasesTableProps> = (props) => {
           page={adjustedPage}
         />
       </div>
-    </>
+    </div>
   );
 };
 
