@@ -106,6 +106,7 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
               icon={marker.icon}
               onMouseOver={() => onMarkerMouseOver(marker)}
               onMouseOut={() => onMarkerMouseOut(marker)}
+              onClick={() => onMarkerMouseOver(marker)}
             />
           ))}
           {hoveredMarker && (
