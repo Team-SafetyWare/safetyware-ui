@@ -2,7 +2,7 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { makeStyles } from "@mui/styles";
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import GenericIcon from "../../../assets/generic.png";
 import {
   getCurrentUser,
@@ -51,14 +51,11 @@ const useStyles = makeStyles({
 
 export const GasesMap: React.FC<GasDotMapProps> = (props) => {
   const overlayStyles = OverlayStyles();
-  const [isEmpty, setIsEmpty] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
 
   const user = getCurrentUser();
   const filter: Filter = props.filter ?? {};
 
-  const [personAsPeopleLoading, gasReadingsInCompanyLoading, people] =
-    usePeople(user, filter);
+  const [loading, people] = usePeople(user, filter);
   const markers: GasMarker[] = intoMarkers(people);
 
   const [hoveredMarker, setHoveredMarker] = useState<GasMarker | undefined>();
@@ -75,18 +72,7 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
     );
   }, []);
 
-  useEffect(() => {
-    if (personAsPeopleLoading || gasReadingsInCompanyLoading) {
-      setIsLoading(true);
-      setIsEmpty(false);
-    } else {
-      setIsLoading(false);
-
-      if (markers.length === 0) {
-        setIsEmpty(true);
-      }
-    }
-  }, [personAsPeopleLoading, gasReadingsInCompanyLoading, markers]);
+  const warnNoData = !loading && markers.length === 0;
 
   const styles = useStyles();
 
@@ -95,11 +81,11 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
       <div className={overlayStyles.parent}>
         <Backdrop
           className={overlayStyles.backdrop}
-          open={isLoading || isEmpty}
+          open={loading || warnNoData}
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
-          {isLoading && <CircularProgress />}
-          {!isLoading && isEmpty && <EmptyDataMessage />}
+          {loading && <CircularProgress />}
+          {warnNoData && <EmptyDataMessage />}
         </Backdrop>
         <GoogleMap
           mapContainerStyle={{
@@ -146,7 +132,7 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
 const usePeople = (
   user: User | null,
   filter: Filter
-): [boolean, boolean, PersonWithGasReadings[]] => {
+): [boolean, PersonWithGasReadings[]] => {
   const [personAsPeopleLoading, personAsPeopleData] = usePersonAsPeople(
     filter.person?.id || "",
     filter,
@@ -159,8 +145,7 @@ const usePeople = (
       !shouldFilterPerson(filter)
     );
   return [
-    personAsPeopleLoading,
-    gasReadingsInCompanyLoading,
+    personAsPeopleLoading || gasReadingsInCompanyLoading,
     sortPeople([personAsPeopleData, gasReadingsInCompanyData].flat()),
   ];
 };
