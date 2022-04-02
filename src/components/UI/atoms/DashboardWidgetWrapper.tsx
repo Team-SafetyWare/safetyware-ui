@@ -35,17 +35,11 @@ const useStyles = makeStyles<Theme, StyleProps>({
     height: (props) => {
       let containerHeight = CONTAINER_PADDING;
       if (!props.mediumScreen) {
-        if (props.numberOfWidgets > 2) {
-          containerHeight += 2 * WIDGET_HEIGHT;
-        } else {
-          containerHeight += WIDGET_HEIGHT;
-        }
+        const rows = Math.max(1, Math.ceil(props.numberOfWidgets / 2));
+        containerHeight += rows * WIDGET_HEIGHT;
       } else {
-        if (props.numberOfWidgets > 0) {
-          containerHeight += props.numberOfWidgets * WIDGET_HEIGHT;
-        } else {
-          containerHeight += WIDGET_HEIGHT;
-        }
+        const rows = Math.max(1, props.numberOfWidgets);
+        containerHeight += rows * WIDGET_HEIGHT;
       }
       return containerHeight.toString() + "px";
     },
