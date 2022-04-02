@@ -8,6 +8,7 @@ import { HazardMap } from "../molecules/HazardMap";
 import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
 import { IncidentsMap } from "../molecules/IncidentsMap";
 import { TravelMap } from "../molecules/TravelMap";
+import { GasesMap } from "./GasesMap";
 
 interface DashboardSummaryTileProps {
   widget?: any;
@@ -20,6 +21,7 @@ interface WidgetTable {
   IncidentsBarGraph: any;
   IncidentsMap: any;
   TravelMap: any;
+  GasesMap: any;
 }
 
 const useStyles = makeStyles({
@@ -88,6 +90,7 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
       />
     ),
     IncidentsBarGraph: <IncidentsBarGraph filter={defaultFilter()} />,
+    GasesMap: <GasesMap filter={defaultFilter()} />,
     IncidentsMap: (
       <IncidentsMap
         filter={defaultFilter()}

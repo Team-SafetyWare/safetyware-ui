@@ -55,6 +55,10 @@ export const Dashboard: React.FC<HomeProps> = (props) => {
       widgetName: "Incidents Bar Graph",
       widget: "IncidentsBarGraph",
     },
+    {
+      widgetName: "Gases Map",
+      widget: "GasesMap",
+    },
   ]);
 
   // Is there a way to just leave this state as empty?
@@ -105,6 +109,10 @@ export const Dashboard: React.FC<HomeProps> = (props) => {
         {
           widgetName: "Incidents Bar Graph",
           widget: "IncidentsBarGraph",
+        },
+        {
+          widgetName: "Gases Map",
+          widget: "GasesMap",
         },
       ]);
       setActiveWidgets([
