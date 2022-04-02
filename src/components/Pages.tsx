@@ -13,6 +13,7 @@ import { Incidents } from "./UI/organisms/Incidents";
 import { Locations } from "./UI/organisms/Locations";
 import { Login } from "./UI/organisms/Login";
 import { Profile } from "./UI/organisms/Profile";
+import { NotFound } from "./UI/organisms/NotFound";
 
 const useStyles = makeStyles({
   content: {
@@ -94,6 +95,7 @@ export const Pages: React.FC = () => {
                   title="SafetyWare | Profile"
                   component={Profile}
                 />
+                <Page title="SafetyWare | Not Found" component={NotFound} />
               </Switch>
             </div>
           </div>
