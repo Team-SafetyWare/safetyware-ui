@@ -4,6 +4,7 @@ import theme from "../../../Theme";
 import { DashboardWidgetWrapper } from "../atoms/DashboardWidgetWrapper";
 import { DashboardInfo } from "../molecules/DashboardInfo";
 import { DashboardSummary } from "../molecules/DashboardSummary";
+import { Box } from "@mui/system";
 
 interface HomeProps {
   userName?: string;
@@ -161,6 +162,7 @@ export const Dashboard: React.FC<HomeProps> = (props) => {
         setEditDashboardMode={dashboardEditToggle}
       />
       <div className={styles.scrollableContent}>
+        <Box sx={{ height: { xs: "16px", sm: 0 } }} />
         <DashboardSummary
           summaryWidgets={summaryWidgets}
           editSummaryWidgets={setSummaryWidgets}

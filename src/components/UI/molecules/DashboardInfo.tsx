@@ -4,6 +4,8 @@ import React from "react";
 import theme from "../../../Theme";
 import { HomeGreeting } from "../atoms/HomeGreeting";
 import { PageHeader } from "../atoms/PageHeader";
+import Paper from "@mui/material/Paper";
+import { Box } from "@mui/system";
 
 interface DashboardInfoProps {
   activeWidgetState?: any;
@@ -27,7 +29,7 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
   const mobile = useMediaQuery(theme.breakpoints.down("sm"));
   const styles = useStyles();
 
-  return (
+  const content = (
     <div className={styles.content}>
       {!mobile && (
         <PageHeader
@@ -37,6 +39,7 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
           }
         />
       )}
+
       <HomeGreeting
         activeWidgetState={props.activeWidgetState}
         inactiveWidgetState={props.inactiveWidgetState}
@@ -46,5 +49,21 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
         setEditDashboardMode={props.setEditDashboardMode}
       />
     </div>
+  );
+
+  return mobile ? (
+    <Paper
+      elevation={2}
+      style={{
+        borderRadius: "0",
+        padding: "16px 0",
+        position: "sticky",
+        zIndex: 1,
+      }}
+    >
+      <Box sx={{ margin: "-16px 0" }}>{content}</Box>
+    </Paper>
+  ) : (
+    content
   );
 };
