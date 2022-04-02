@@ -96,11 +96,7 @@ export const LoginPrompt: React.FC = () => {
 
   const attemptLogin = useCallback(
     (creds: Creds | undefined = undefined) => {
-      console.log(email);
-      console.log(password);
-      console.log(users);
       const user = users.find((u) => u.email === (creds?.email ?? email));
-      console.log(user);
       if (!user) {
         loginFailed();
       } else {
