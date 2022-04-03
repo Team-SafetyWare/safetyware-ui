@@ -42,13 +42,12 @@ const useStyles = makeStyles({
     },
   },
   summaryTileContainer: {
-    paddingTop: "5px",
-    paddingLeft: "5px",
-    paddingRight: "5px",
+    padding: "8px 8px 0 8px",
   },
   summaryDropzone: {
     flex: 1,
     height: "100%",
+    margin: "-8px -8px 0 -8px",
   },
 });
 
