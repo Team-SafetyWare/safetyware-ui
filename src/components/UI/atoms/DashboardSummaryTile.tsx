@@ -3,6 +3,7 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import BubbleChartOutlinedIcon from "@mui/icons-material/BubbleChartOutlined";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import React from "react";
+import { Card, CardContent } from "@mui/material";
 
 interface DashboardSummaryTileProps {
   summaryTileIcon?: any;
@@ -18,30 +19,8 @@ interface SummaryTable {
 }
 
 const useStyles = makeStyles({
-  summaryTile: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    backgroundColor: "white",
-    height: "100%",
-    boxShadow:
-      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
-    color: "rgba(0, 0, 0, 0.87)",
-    padding: "0px 16px 16px 16px",
-    cursor: "default",
-  },
-  summaryTileAnimated: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    backgroundColor: "white",
-    height: "100%",
-    boxShadow:
-      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
-    color: "rgba(0, 0, 0, 0.87)",
-    padding: "0px 16px 16px 16px",
+  shake: {
     animation: "$shake .25s infinite",
-    cursor: "grab",
   },
   summaryInfo: {
     display: "flex",
@@ -78,19 +57,28 @@ export const DashboardSummaryTile: React.FC<DashboardSummaryTileProps> = (
   };
 
   return (
-    <div
-      className={
-        props.editDashboardMode
-          ? styles.summaryTileAnimated
-          : styles.summaryTile
-      }
+    <Card
+      className={props.editDashboardMode ? styles.shake : undefined}
+      sx={{
+        height: "100%",
+        cursor: props.editDashboardMode ? "grab" : "default",
+      }}
     >
-      <div className={styles.summaryInfo}>
-        {summaryTable[props.summaryTileIcon as keyof SummaryTable]}
-        <p className={styles.summaryName}>{props.summaryName}:</p>
-      </div>
-      <p className={styles.summaryNumber}>{props.summaryNumber}</p>
-      <p className={styles.summaryUnit}>Since Yesterday</p>
-    </div>
+      <CardContent
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <div className={styles.summaryInfo}>
+          {summaryTable[props.summaryTileIcon as keyof SummaryTable]}
+          <p className={styles.summaryName}>{props.summaryName}:</p>
+        </div>
+        <p className={styles.summaryNumber}>{props.summaryNumber}</p>
+        <p className={styles.summaryUnit}>Since Yesterday</p>
+      </CardContent>
+    </Card>
   );
 };
