@@ -43,7 +43,6 @@ const useStyles = makeStyles<Theme, StyleProps>({
       }
       return containerHeight.toString() + "px";
     },
-    overflow: "hidden",
     [theme.breakpoints.down("md")]: {
       paddingLeft: "16px",
       paddingRight: "16px",

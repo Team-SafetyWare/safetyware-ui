@@ -50,7 +50,6 @@ const useStyles = makeStyles({
   widget: {
     height: "100%",
     width: "100%",
-    overflow: "hidden",
   },
   "@keyframes shake": {
     "0%": { transform: "translate(0px, 0px) rotate(.25deg)" },
