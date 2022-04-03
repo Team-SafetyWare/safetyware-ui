@@ -79,6 +79,8 @@ interface TravelMapProps {
   gestureHandling?: string;
   legendDefaultCollapsed?: boolean;
   legendCompact?: boolean;
+  center?: LatLngLiteral;
+  zoom?: number;
 }
 
 const useStyles = makeStyles({
@@ -178,8 +180,8 @@ export const TravelMap: React.FC<TravelMapProps> = (props) => {
               : "greedy",
             restriction: MAP_RESTRICTION,
           }}
-          zoom={DEFAULT_MAP_ZOOM}
-          center={DEFAULT_MAP_CENTER}
+          zoom={props.zoom ?? DEFAULT_MAP_ZOOM}
+          center={props.center ?? DEFAULT_MAP_CENTER}
           onLoad={onMapLoad}
           onTilesLoaded={() => setTilesLoaded(true)}
           mapTypeId={mapTypeId}

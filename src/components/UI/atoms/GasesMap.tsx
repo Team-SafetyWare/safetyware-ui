@@ -22,14 +22,16 @@ import { Filter, shouldFilterPerson } from "../molecules/FilterBar";
 import { MapTooltip } from "../molecules/MapTooltip";
 import LatLngLiteral = google.maps.LatLngLiteral;
 
-export const DEFAULT_MAP_CENTER: LatLngLiteral = {
+const DEFAULT_MAP_CENTER: LatLngLiteral = {
   lat: 51.045,
   lng: -114.072,
 };
-export const DEFAULT_MAP_ZOOM = 11;
+const DEFAULT_MAP_ZOOM = 11;
 
 interface GasDotMapProps {
   filter?: Filter;
+  center?: LatLngLiteral;
+  zoom?: number;
 }
 
 interface GasMarker {
@@ -96,8 +98,8 @@ export const GasesMap: React.FC<GasDotMapProps> = (props) => {
             gestureHandling: "greedy",
             restriction: MAP_RESTRICTION,
           }}
-          zoom={DEFAULT_MAP_ZOOM}
-          center={DEFAULT_MAP_CENTER}
+          zoom={props.zoom ?? DEFAULT_MAP_ZOOM}
+          center={props.center ?? DEFAULT_MAP_CENTER}
         >
           {markers.map((marker) => (
             <Marker
