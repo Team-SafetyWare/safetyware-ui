@@ -26,11 +26,11 @@ import { MapTooltip } from "./MapTooltip";
 
 import LatLngLiteral = google.maps.LatLngLiteral;
 
-export const DEFAULT_MAP_CENTER: LatLngLiteral = {
+const DEFAULT_MAP_CENTER: LatLngLiteral = {
   lat: 51.045,
   lng: -114.072,
 };
-export const DEFAULT_MAP_ZOOM = 11;
+const DEFAULT_MAP_ZOOM = 11;
 
 interface IncidentMarker {
   person: Person;
@@ -43,6 +43,8 @@ interface IncidentMarker {
 interface IncidentsMapProps {
   filter?: Filter;
   gestureHandling?: string;
+  center?: LatLngLiteral;
+  zoom?: number;
 }
 
 const useStyles = makeStyles({
@@ -103,8 +105,8 @@ export const IncidentsMap: React.FC<IncidentsMapProps> = (props) => {
               : "greedy",
             restriction: MAP_RESTRICTION,
           }}
-          zoom={DEFAULT_MAP_ZOOM}
-          center={DEFAULT_MAP_CENTER}
+          zoom={props.zoom ?? DEFAULT_MAP_ZOOM}
+          center={props.center ?? DEFAULT_MAP_CENTER}
         >
           {markers.map((marker) => (
             <Marker

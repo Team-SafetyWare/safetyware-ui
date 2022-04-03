@@ -15,6 +15,13 @@ import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
 import { IncidentsMap } from "../molecules/IncidentsMap";
 import { TravelMap } from "../molecules/TravelMap";
 import { GasesMap } from "./GasesMap";
+import LatLngLiteral = google.maps.LatLngLiteral;
+
+const DEFAULT_MAP_CENTER: LatLngLiteral = {
+  lat: 51.045,
+  lng: -114.072,
+};
+const DEFAULT_MAP_ZOOM = 10;
 
 interface DashboardSummaryTileProps {
   widget?: any;
@@ -68,14 +75,24 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
       <HazardMap
         filter={defaultFilter()}
         gestureHandling={mobile ? "cooperative" : undefined}
+        center={DEFAULT_MAP_CENTER}
+        zoom={DEFAULT_MAP_ZOOM}
       />
     ),
     IncidentsBarGraph: <IncidentsBarGraph filter={defaultFilter()} />,
-    GasesMap: <GasesMap filter={defaultFilter()} />,
+    GasesMap: (
+      <GasesMap
+        filter={defaultFilter()}
+        center={DEFAULT_MAP_CENTER}
+        zoom={DEFAULT_MAP_ZOOM}
+      />
+    ),
     IncidentsMap: (
       <IncidentsMap
         filter={defaultFilter()}
         gestureHandling={mobile ? "cooperative" : undefined}
+        center={DEFAULT_MAP_CENTER}
+        zoom={DEFAULT_MAP_ZOOM}
       />
     ),
     TravelMap: (
@@ -84,6 +101,8 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
         gestureHandling={mobile ? "cooperative" : undefined}
         legendDefaultCollapsed={true}
         legendCompact={true}
+        center={DEFAULT_MAP_CENTER}
+        zoom={DEFAULT_MAP_ZOOM}
       />
     ),
   };
