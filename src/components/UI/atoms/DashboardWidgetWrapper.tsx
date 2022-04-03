@@ -24,13 +24,13 @@ export interface StyleProps {
   numberOfWidgets: number;
 }
 
-const WIDGET_HEIGHT = 410;
+const WIDGET_HEIGHT = 416;
 const CONTAINER_PADDING = 24;
 
 const useStyles = makeStyles<Theme, StyleProps>({
   container: {
     display: "flex",
-    paddingTop: "5px",
+    paddingTop: "16px",
     width: "100%",
     height: (props) => {
       let containerHeight = CONTAINER_PADDING;
@@ -52,11 +52,10 @@ const useStyles = makeStyles<Theme, StyleProps>({
   dropzone: {
     flex: 1,
     height: "100%",
+    margin: "0 -8px 0 -8px",
   },
   widgetTileContainer: {
-    paddingTop: "5px",
-    paddingLeft: "5px",
-    paddingRight: "5px",
+    padding: "0 8px 0 8px",
   },
   emptyDashboard: {
     display: "flex",
