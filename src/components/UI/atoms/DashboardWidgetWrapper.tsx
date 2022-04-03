@@ -30,7 +30,6 @@ const CONTAINER_PADDING = 24;
 const useStyles = makeStyles<Theme, StyleProps>({
   container: {
     display: "flex",
-    paddingTop: "16px",
     width: "100%",
     height: (props) => {
       let containerHeight = CONTAINER_PADDING;

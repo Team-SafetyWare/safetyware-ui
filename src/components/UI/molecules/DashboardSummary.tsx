@@ -42,7 +42,7 @@ const useStyles = makeStyles({
     },
   },
   summaryTileContainer: {
-    padding: "0 8px 0 8px",
+    padding: "0 8px 16px 8px",
   },
   summaryDropzone: {
     flex: 1,
