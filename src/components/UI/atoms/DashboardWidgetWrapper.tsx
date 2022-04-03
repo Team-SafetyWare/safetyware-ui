@@ -25,7 +25,7 @@ export interface StyleProps {
 }
 
 const WIDGET_HEIGHT = 416;
-const CONTAINER_PADDING = 24;
+const CONTAINER_PADDING = 16;
 
 const useStyles = makeStyles<Theme, StyleProps>({
   container: {
@@ -63,7 +63,7 @@ const useStyles = makeStyles<Theme, StyleProps>({
     margin: "0 auto",
   },
   emptyDashboardMessage: {
-    marginTop: "15px",
+    marginTop: "8px",
     fontSize: "18px",
     textAlign: "center",
   },
