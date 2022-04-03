@@ -9,7 +9,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import theme from "../../../Theme";
-import { defaultFilter } from "../molecules/FilterBar";
+import { Filter } from "../molecules/FilterBar";
 import { HazardMap } from "../molecules/HazardMap";
 import { IncidentsBarGraph } from "../molecules/IncidentsBarGraph";
 import { IncidentsMap } from "../molecules/IncidentsMap";
@@ -70,26 +70,33 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
   const styles = useStyles();
   const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+
+  const filter: Filter = {
+    minTimestamp: weekAgo,
+  };
+
   const widgetTable = {
     HazardMap: (
       <HazardMap
-        filter={defaultFilter()}
+        filter={filter}
         gestureHandling={mobile ? "cooperative" : undefined}
         center={DEFAULT_MAP_CENTER}
         zoom={DEFAULT_MAP_ZOOM}
       />
     ),
-    IncidentsBarGraph: <IncidentsBarGraph filter={defaultFilter()} />,
+    IncidentsBarGraph: <IncidentsBarGraph filter={filter} />,
     GasesMap: (
       <GasesMap
-        filter={defaultFilter()}
+        filter={filter}
         center={DEFAULT_MAP_CENTER}
         zoom={DEFAULT_MAP_ZOOM}
       />
     ),
     IncidentsMap: (
       <IncidentsMap
-        filter={defaultFilter()}
+        filter={filter}
         gestureHandling={mobile ? "cooperative" : undefined}
         center={DEFAULT_MAP_CENTER}
         zoom={DEFAULT_MAP_ZOOM}
@@ -97,7 +104,7 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
     ),
     TravelMap: (
       <TravelMap
-        filter={defaultFilter()}
+        filter={filter}
         gestureHandling={mobile ? "cooperative" : undefined}
         legendDefaultCollapsed={true}
         legendCompact={true}
