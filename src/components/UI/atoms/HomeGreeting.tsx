@@ -92,19 +92,19 @@ const useStyles = makeStyles({
       transform: "rotateZ(0)",
     },
     "15%": {
-      transform: "rotateZ(-10deg)",
+      transform: "rotateZ(-5deg)",
     },
     "20%": {
-      transform: "rotateZ(6deg)",
+      transform: "rotateZ(3deg)",
     },
     "25%": {
-      transform: "rotateZ(-6deg)",
+      transform: "rotateZ(-3deg)",
     },
     "30%": {
-      transform: "rotateZ(2deg)",
+      transform: "rotateZ(1deg)",
     },
     "35%": {
-      transform: "rotateZ(-1deg)",
+      transform: "rotateZ(-0.5deg)",
     },
     "40%, 100%": {
       transform: "rotateZ(0)",
