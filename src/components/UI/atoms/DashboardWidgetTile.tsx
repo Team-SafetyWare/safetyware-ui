@@ -1,5 +1,11 @@
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import { IconButton, useMediaQuery } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import theme from "../../../Theme";
@@ -25,32 +31,8 @@ interface WidgetTable {
 }
 
 const useStyles = makeStyles({
-  widgetTile: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    backgroundColor: "white",
-    height: "400px",
-    width: "100%",
-    boxShadow:
-      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
-    color: "rgba(0, 0, 0, 0.87)",
-    padding: "0px 16px 16px 16px",
-    cursor: "default",
-  },
-  widgetTileAnimated: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
-    backgroundColor: "white",
-    height: "400px",
-    width: "100%",
-    boxShadow:
-      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
-    color: "rgba(0, 0, 0, 0.87)",
-    padding: "0px 16px 16px 16px",
+  shake: {
     animation: "$shake .25s infinite",
-    cursor: "grab",
   },
   widgetInfo: {
     display: "flex",
@@ -60,7 +42,7 @@ const useStyles = makeStyles({
   widgetName: {
     fontWeight: "bold",
     fontSize: "24px",
-    margin: "12px 0px 12px 8px",
+    margin: 0,
   },
   removeButton: {
     color: theme.palette.primary.main,
@@ -109,26 +91,32 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
 
   return (
     <>
-      <div
-        className={
-          props.editDashboardMode
-            ? styles.widgetTileAnimated
-            : styles.widgetTile
-        }
+      <Card
+        className={props.editDashboardMode ? styles.shake : undefined}
+        sx={{
+          height: "400px",
+          display: "flex",
+          flexDirection: "column",
+          cursor: props.editDashboardMode ? "grab" : "default",
+        }}
       >
-        <div className={styles.widgetInfo}>
-          <p className={styles.widgetName}>{props.widget.widgetName}</p>
-          {props.editDashboardMode && (
-            <IconButton
-              className={styles.removeButton}
-              onClick={() => props.removeWidget(props.widget)}
-            >
-              <RemoveCircleIcon />
-            </IconButton>
-          )}
-        </div>
-        {widgetTable[props.widget.widget as keyof WidgetTable]}
-      </div>
+        <CardContent>
+          <div className={styles.widgetInfo}>
+            <p className={styles.widgetName}>{props.widget.widgetName}</p>
+            {props.editDashboardMode && (
+              <IconButton
+                className={styles.removeButton}
+                onClick={() => props.removeWidget(props.widget)}
+              >
+                <RemoveCircleIcon />
+              </IconButton>
+            )}
+          </div>
+        </CardContent>
+        <CardMedia sx={{ height: "100%" }}>
+          {widgetTable[props.widget.widget as keyof WidgetTable]}
+        </CardMedia>
+      </Card>
     </>
   );
 };
