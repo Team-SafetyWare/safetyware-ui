@@ -22,6 +22,7 @@ interface DashboardSummaryTileProps {
   editSummaryWidgets: any;
   editDashboardMode: boolean;
   saveState: any;
+  date: Date;
 }
 
 interface numberTable {
@@ -51,18 +52,19 @@ const useStyles = makeStyles({
   },
 });
 
-const filter: Filter = {
-  // 2 days ago since no 24 hour data
-  minTimestamp: new Date(Date.now() - 2 * 86400000),
-  maxTimestamp: new Date(),
-};
-
 export const DashboardSummary: React.FC<DashboardSummaryTileProps> = (
   props
 ) => {
   const mediumScreen = useMediaQuery(theme.breakpoints.down("md"));
   const styles = useStyles();
   const user = getCurrentUser();
+
+  const weekAgo = new Date(props.date);
+  weekAgo.setDate(weekAgo.getDate() - 7);
+
+  const filter: Filter = {
+    minTimestamp: weekAgo,
+  };
 
   const locationData = useCompanyLocations({
     companyId: user?.company.id || "",

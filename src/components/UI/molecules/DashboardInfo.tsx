@@ -14,6 +14,7 @@ interface DashboardInfoProps {
   userName?: string;
   editDashboardMode?: any;
   setEditDashboardMode?: any;
+  date: Date;
 }
 
 const useStyles = makeStyles({
@@ -47,6 +48,7 @@ export const DashboardInfo: React.FC<DashboardInfoProps> = (props) => {
         userName={props.userName?.substring(0, props.userName.indexOf(" "))}
         editDashboardMode={props.editDashboardMode}
         setEditDashboardMode={props.setEditDashboardMode}
+        date={props.date}
       />
     </div>
   );

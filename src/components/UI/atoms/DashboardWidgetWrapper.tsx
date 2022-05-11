@@ -17,6 +17,7 @@ interface DashboardWidgetWrapperProps {
   removeWidget?: any;
   editDashboardMode?: any;
   saveState: any;
+  date: Date;
 }
 
 export interface StyleProps {
@@ -118,6 +119,7 @@ export const DashboardWidgetWrapper: React.FC<DashboardWidgetWrapperProps> = (
                   widget={widget}
                   removeWidget={props.removeWidget}
                   editDashboardMode={props.editDashboardMode}
+                  date={props.date}
                 />
               </GridItem>
             ))}

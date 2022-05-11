@@ -27,6 +27,7 @@ interface DashboardSummaryTileProps {
   widget?: any;
   removeWidget?: any;
   editDashboardMode?: any;
+  date: Date;
 }
 
 interface WidgetTable {
@@ -70,7 +71,7 @@ export const DashboardWidgetTile: React.FC<DashboardSummaryTileProps> = (
   const styles = useStyles();
   const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const weekAgo = new Date();
+  const weekAgo = new Date(props.date);
   weekAgo.setDate(weekAgo.getDate() - 7);
 
   const filter: Filter = {
