@@ -23,6 +23,11 @@ const useStyles = makeStyles({
 export const Dashboard: React.FC<HomeProps> = (props) => {
   const styles = useStyles();
 
+  // Date is pinned to the date of the capstone fair so visitors see what the judges saw.
+  // The time of day is dynamic.
+  const date = new Date();
+  date.setFullYear(2022, 3, 5);
+
   const [editDashboardMode, setEditDashboardMode] = useState(false);
 
   // Is there a way to just leave this state as empty?
@@ -168,6 +173,7 @@ export const Dashboard: React.FC<HomeProps> = (props) => {
         userName={props.userName}
         editDashboardMode={editDashboardMode}
         setEditDashboardMode={dashboardEditToggle}
+        date={date}
       />
       <div className={styles.scrollableContent}>
         <Box sx={{ height: { xs: "16px", sm: 0 } }} />
@@ -176,6 +182,7 @@ export const Dashboard: React.FC<HomeProps> = (props) => {
           editSummaryWidgets={setSummaryWidgets}
           editDashboardMode={editDashboardMode}
           saveState={saveState}
+          date={date}
         />
         <DashboardWidgetWrapper
           widgetState={activeWidgets}
@@ -183,6 +190,7 @@ export const Dashboard: React.FC<HomeProps> = (props) => {
           removeWidget={removeWidget}
           editDashboardMode={editDashboardMode}
           saveState={saveState}
+          date={date}
         />
       </div>
     </>

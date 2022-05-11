@@ -23,6 +23,7 @@ interface HomeGreetingProps {
   userName?: string;
   editDashboardMode?: any;
   setEditDashboardMode?: any;
+  date: Date;
 }
 
 const BootstrapButton = styled(Button)({
@@ -116,8 +117,7 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
   const styles = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const date = new Date();
-  const hours = date.getHours();
+  const hours = props.date.getHours();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -144,7 +144,7 @@ export const HomeGreeting: React.FC<HomeGreetingProps> = (props) => {
         )}
         <p className={styles.date}>
           Here is your update for{" "}
-          {date.toLocaleDateString(undefined, {
+          {props.date.toLocaleDateString(undefined, {
             weekday: "long",
             year: "numeric",
             month: "long",
